@@ -117,7 +117,7 @@ public class SocialReasonerComponent extends PluggableComponent {
         //Log4J.info(this, "SocialReasonerComponent. These objects have been updated at the blackboard: " + event.toString());
 
         if (event.getId()==SaraCons.MSG_NVB) {
-            //System.out.println(" ###################### Message from OpenFace");
+            System.out.println(" ###################### Message from OpenFace");
             updateNVB();
         }
         if (event.getId()==SaraCons.MSG_RPT) {

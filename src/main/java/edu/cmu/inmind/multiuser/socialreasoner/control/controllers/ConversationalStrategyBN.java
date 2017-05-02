@@ -26,7 +26,7 @@ public class ConversationalStrategyBN extends BehaviorNetworkController implemen
         name = "Conversational Strategy BN";
 
         if( load ){
-            network = Utils.fromJson("C:\\Users\\fpecune\\Desktop\\SARA\\inmind-development-master\\Server\\Multiuser\\SaraProject\\src\\main\\SocialReasonerBN.json", BehaviorNetworkPlus.class);
+            network = Utils.fromJson("src/main/SocialReasonerBN.json", BehaviorNetworkPlus.class);
             modules = network.getModules();
             NUM_BEHAVIORS = modules.size();
             NUM_VARIABLES = NUM_BEHAVIORS + 1; // +2 includes the threshold line and behavior activated

@@ -2,6 +2,7 @@ package edu.cmu.inmind.multiuser.sara.orchestrator;
 
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.common.Utils;
+import edu.cmu.inmind.multiuser.common.model.ASROutput;
 import edu.cmu.inmind.multiuser.common.model.SaraInput;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardSubscription;
@@ -29,7 +30,7 @@ public class SaraOrchestratorEx15 extends ProcessOrchestratorImpl {
 
         SessionMessage inputMessage = Utils.fromJson(message, SessionMessage.class);
         blackboard.post( this, inputMessage.getMessageId(), Utils.fromJson(inputMessage.getPayload(),
-                SaraInput.class));
+                ASROutput.class));
     }
 
     @Override
