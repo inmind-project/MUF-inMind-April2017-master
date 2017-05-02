@@ -18,21 +18,30 @@ import edu.cmu.inmind.multiuser.openface.output.ConsoleOutput;
 import edu.cmu.inmind.multiuser.openface.output.EventOutput;
 import edu.cmu.inmind.multiuser.openface.output.VHTOutput;
 
-@BlackboardSubscription(messages={SaraCons.MSG_StartOpenFace})
+@BlackboardSubscription(messages={"MSG_START_SESSION"})
 @StatefulComponent
 public class OpenFaceComponent extends PluggableComponent {
 
 	@Override
 	public void execute() {
+
+	} // we do the heavy lifting from an event, rather than in execute()
+
+	public void runOpenFace(){
 		System.out.println("Hello from OpenFace");
-		//String sessionID = getSessionId();
-		String sessionID = "54201342a4cfb96d"; // FIXME: Timo's phone hardwired for now
+		String sessionID = getSessionId();
+		//sessionID = "54201342a4cfb96d"; // FIXME: Timo's phone hardwired for now
 		String url = "rtsp://34.203.204.136:8554/live/myStream" + sessionID;
 		startupAndReturn(url);
-	} // we do the heavy lifting from an event, rather than in execute()
+	}
 
 	@Override
 	public void onEvent(BlackboardEvent event) {
+		if (event.getId().equals("MSG_START_SESSION")) {
+			System.out.println(" ###################### Message from OpenFace");
+			runOpenFace();
+		}
+
 	}
 
 	private void startupAndReturn(final String fileOrURL) {

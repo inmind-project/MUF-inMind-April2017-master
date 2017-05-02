@@ -1,6 +1,7 @@
 package edu.cmu.inmind.multiuser.sara.component;
 
 import edu.cmu.inmind.multiuser.common.SaraCons;
+import edu.cmu.inmind.multiuser.common.model.NonVerbalOutput;
 import edu.cmu.inmind.multiuser.common.model.RapportOutput;
 import edu.cmu.inmind.multiuser.common.model.SaraInput;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
@@ -21,7 +22,7 @@ import java.net.Socket;
  * Created by oscarr on 3/7/17.
  */
 @StatelessComponent
-@BlackboardSubscription( messages = {SaraCons.MSG_ASR})
+@BlackboardSubscription( messages = {SaraCons.MSG_ASR, SaraCons.MSG_NVB})
 public class RapportEstimator extends PluggableComponent implements MessageListener {
 
     private RapportClient rapportClient;
@@ -48,7 +49,7 @@ public class RapportEstimator extends PluggableComponent implements MessageListe
     public static VHMsg vhmsgSubscriber;
 
     // for sending
-    private VhmsgSender rapportEstSender;
+    private VHMsg rapportEstSender;
     private final static int agentId = 0;
     public static ServerSocket listener;
     public static Socket socket;
@@ -79,6 +80,11 @@ public class RapportEstimator extends PluggableComponent implements MessageListe
         Log4J.info(this, "SocialReasonerComponent: " + hashCode());
 
         extractAndProcess();
+    }
+
+    public void updateNVB() {
+        NonVerbalOutput nvbOutput = (NonVerbalOutput) blackboard().get(SaraCons.MSG_NVB);
+        vhmsgSubscriber.sendMessage("vrMultisense 0 " + nvbOutput.isSmiling() + " 0.939988519996405 " + nvbOutput.isGazeAtPartner() + " false neutral 1.0 true");
     }
 
     private void extractAndProcess() {
@@ -114,7 +120,14 @@ public class RapportEstimator extends PluggableComponent implements MessageListe
         //TODO: add code here
         //...
         Log4J.info(this, "RapportComponent. These objects have been updated at the blackboard: " + event.toString());
-        extractAndProcess();
+        if (event.getId()==SaraCons.MSG_NVB) {
+            //System.out.println(" ###################### Message from OpenFace");
+            updateNVB();
+        }
+        if (event.getId()==SaraCons.MSG_ASR) {
+            extractAndProcess();
+        }
+
 
     }
 
