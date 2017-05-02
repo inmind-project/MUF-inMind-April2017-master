@@ -1,0 +1,66 @@
+{
+  "nonVerbal": {
+    "gazeAtPartner": false,
+    "smiling": false
+  },
+  "socialIntent": {
+    "rapportLevel": "low-rapport",
+    "userConvStrategy": "ASN",
+    "rapportScore": 2.5
+  },
+  "status": "",
+  "systemIntent": "system-intent",
+  "userIntent": {
+    "entitities": [
+      "robotics",
+      "IA",
+      "cooking"
+    ],
+    "userIntent": "user-interests"
+  },
+  "verbal": {
+    "utterance": "hello"
+  },
+  "action": "explicit_confirm",
+  "entities": [
+    {
+      "entity": "genres",
+      "polarity": 0.5,
+      "value": "drama"
+    }
+  ],
+  "recommendation": {
+    "rexplanations": [
+      {
+        "recommendation": "Toy Story (1995)",
+        "explanations": [
+          "stomhanks"
+        ]
+      }
+    ]
+  },
+  "userFrame": {
+    "frame": {
+      "actors": {
+        "like": ["tom_cruise", "tom_hanks"],
+        "dislike": ["harrison_ford", "carrie_fisher"]
+      },
+      "genres": {
+        "like": ["sci-fi", "drama"],
+        "dislike": ["documentary"]
+      },
+      "directors": {
+        "like": ["steven_spielberg", "christopher_nolan"],
+        "dislike": ["quentin_tarantino"]
+      },
+      "movies": {
+        "like": ["toy_story", "intersteller"],
+        "dislike": ["et"],
+        "history": ["???"]
+      }
+    },
+    "ask_stack": ["start", "genres", "directors", "actors", "recommend"],
+    "universals": ["help", "start_over"]
+  }
+
+}

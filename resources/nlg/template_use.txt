@@ -1,0 +1,9 @@
+greeting
+goodbye
+ask_genres
+ask_directors
+ask_actors
+ask_repeat
+explicit_confirm
+recommend
+help
