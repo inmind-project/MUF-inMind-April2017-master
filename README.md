@@ -1,12 +1,17 @@
 # MUF-inMind-April2017
 This repository contains:
 1.	SARA Commons, a library defining:
+
 o	List of constants used amongst all projects 
+
 o	The different objects used to communicate between components:
 
 2.	The Multi-User Framework version used during the inMind retreat on 28th of April.
+
 o	A list of Orchestrators managing the flow of information amongst the different components integrated in the architecture
+
 o	A list of components:
+
 	Fake NLU
 •	Input: Msg_ASR
 •	Output: Msg_NLU
