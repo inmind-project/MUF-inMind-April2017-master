@@ -80,10 +80,33 @@ public class SocialReasonerComponent extends PluggableComponent {
         srOutput.setUserFrame(dmOutput.getUserFrame());
         srOutput.setRapport(rapport);
 
+//        if (dmOutput.getAction()!=null && socialController!=null) {
+//            //socialController.addSystemIntent("set " + dmOutput.getUserFrame().getAsk_stack().get(0) + " " + dmOutput.getAction() + " {}");
+//            socialController.addSystemIntent("set " + dmOutput.getAction() + " " + dmOutput.getAction() + " {}");
+//            systemStrategy = socialController.getConvStrategyFormatted();
+//            srOutput.setStrategy(systemStrategy);
+//
+//            VhmsgSender sender = new VhmsgSender("vrSocialReasonerScore");
+//
+//            SocialReasonerOutput output = new SocialReasonerOutput();
+//            output.setActivations(socialController.getSocialReasoner().getNetwork().getOnlyActivations());
+//            output.setNames(socialController.getSocialReasoner().getNetwork().getModuleNames());
+//            output.setThreshold(socialController.getSocialReasoner().getNetwork().getTheta());
+//
+//            String json = Utils.toJson(output);
+//
+//            sender.sendMessage("0 " + json);
+//
+//
+//            //System.out.println("---------------- System Strategy : " + systemStrategy);
+//            Log4J.info(this, "Input: " + dmOutput.getAction() + ", Output: " + srOutput.getStrategy() + "\n");
+//        } else {
+//            System.out.println("null");
+//        }
+
         if (dmOutput.getAction()!=null && socialController!=null) {
-            socialController.addSystemIntent("set greetings " + dmOutput.getAction() + " {}");
-            systemStrategy = socialController.getConvStrategyFormatted();
-            srOutput.setStrategy(systemStrategy);
+            socialController.addSystemIntent("set " + dmOutput.getAction() + " " + dmOutput.getAction() + " {}");
+
 
             VhmsgSender sender = new VhmsgSender("vrSocialReasonerScore");
 
@@ -96,6 +119,9 @@ public class SocialReasonerComponent extends PluggableComponent {
 
             sender.sendMessage("0 " + json);
 
+            systemStrategy = socialController.getConvStrategyFormatted();
+            srOutput.setStrategy(systemStrategy);
+
 
             //System.out.println("---------------- System Strategy : " + systemStrategy);
             Log4J.info(this, "Input: " + dmOutput.getAction() + ", Output: " + srOutput.getStrategy() + "\n");
@@ -106,7 +132,7 @@ public class SocialReasonerComponent extends PluggableComponent {
         return srOutput;
     }
 
-    /**
+    /*
      * If the blackboard model is modified externally, does SR have to do anything? this is useful when running multiple
      * processes in parallel rather than sequentially.
      */
@@ -117,11 +143,11 @@ public class SocialReasonerComponent extends PluggableComponent {
         //Log4J.info(this, "SocialReasonerComponent. These objects have been updated at the blackboard: " + event.toString());
 
         if (event.getId()==SaraCons.MSG_NVB) {
-            System.out.println(" ###################### Message from OpenFace");
+            //System.out.println(" ###################### Message from OpenFace");
             updateNVB();
         }
         if (event.getId()==SaraCons.MSG_RPT) {
-            updateRapport();
+            //updateRapport();
         }
         if (event.getId()==SaraCons.MSG_DM) {
             sendToNLG = selectStrategy();

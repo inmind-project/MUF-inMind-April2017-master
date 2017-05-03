@@ -61,7 +61,7 @@ public class MainController{
     // preconditions
     public static String rapportDelta;
     public static String rapportLevel; // = Constants.HIGH_RAPPORT;
-    public static double rapportScore = 2; // = 6;
+    public static double rapportScore = 4; // = 6;
     public static String userConvStrategy; // = Constants.VIOLATION_SOCIAL_NORM;
     public static String smile;
     public static String eyeGaze;
@@ -115,6 +115,9 @@ public class MainController{
                     setNonVerbalWindow(false);
                     addContinousStates(trIntent);
                     socialReasoner.execute(trIntent);
+                    if (getConvStrategyFormatted().equals("NONE_SYSTEM_CS")){
+                        System.out.println("+++++++++++++++++++ " + getConvStrategyFormatted());
+                    }
                     printOutput();
                     resetStates();
                 }
@@ -146,8 +149,13 @@ public class MainController{
     }
 
     public String getConvStrategyFormatted() {
-        return conversationalStrategies[0].equals( Constants.ACK_SYSTEM_CS )? Constants.ACK_SYSTEM_CS + " -> "
-                + conversationalStrategies[1] : conversationalStrategies[0];
+        //return conversationalStrategies[0].equals( Constants.ACK_SYSTEM_CS )? Constants.ACK_SYSTEM_CS + " -> "
+        //        + conversationalStrategies[1] : conversationalStrategies[0];
+        if (conversationalStrategies[0].equals("NONE_SYSTEM_CS")){
+            return conversationalStrategies[1];
+        } else {
+            return conversationalStrategies[0];
+        }
     }
 
     private String removeSufix(String s) {

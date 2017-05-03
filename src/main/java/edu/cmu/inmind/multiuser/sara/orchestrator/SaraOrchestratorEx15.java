@@ -29,8 +29,12 @@ public class SaraOrchestratorEx15 extends ProcessOrchestratorImpl {
         super.process(message);
 
         SessionMessage inputMessage = Utils.fromJson(message, SessionMessage.class);
-        blackboard.post( this, inputMessage.getMessageId(), Utils.fromJson(inputMessage.getPayload(),
-                ASROutput.class));
+        if( inputMessage.getPayload() != null && !inputMessage.getPayload().isEmpty()) {
+            blackboard.post(this, inputMessage.getMessageId(), Utils.fromJson(inputMessage.getPayload(),
+                    ASROutput.class));
+        }else{
+            blackboard.post(this, inputMessage.getMessageId(), inputMessage.getMessageId());
+        }
     }
 
     @Override
