@@ -14,7 +14,7 @@ public class ProcessInput extends FileInput {
 	
 	public ProcessInput(String fileOrURL) throws IOException {
 		//String binaryName = System.getProperty("openface.featureExtraction.binaryName", "/home/timo/uni/software/OpenFace/OpenFace/build/bin/FeatureExtraction");
-		String binaryName = System.getProperty("openface.featureExtraction.binaryName", "C:\\Users\\fpecune\\Desktop\\SARA\\OpenFace-master\\OpenFace-master\\Release\\FeatureExtraction");
+		String binaryName = System.getProperty("openface.featureExtraction.binaryName", "C:\\Users\\fpecune\\git\\openface\\Release\\FeatureExtraction");
 		File tmpFile = File.createTempFile("OpenFace", ".out");
 		new FileOutputStream(tmpFile).close(); // make sure the tmpFile exists (and is empty)
 		//tmpFile.deleteOnExit(); // clean up once we're done

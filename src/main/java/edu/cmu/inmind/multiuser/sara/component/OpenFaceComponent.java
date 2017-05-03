@@ -38,7 +38,7 @@ public class OpenFaceComponent extends PluggableComponent {
 	@Override
 	public void onEvent(BlackboardEvent event) {
 		if (event.getId().equals("MSG_START_SESSION")) {
-			System.out.println(" ###################### Message from OpenFace");
+			//System.out.println(" ###################### Message from OpenFace");
 			runOpenFace();
 		}
 
@@ -69,6 +69,7 @@ public class OpenFaceComponent extends PluggableComponent {
 				NonVerbalOutput nvb = new NonVerbalOutput();
 				nvb.setSmiling(e.getSmile());
 				nvb.setGazeAtPartner(e.getGaze());
+                //System.out.println(" ###################### is Smiling?" + e.getSmile());
 				OpenFaceComponent.this.blackboard().post(OpenFaceComponent.this, SaraCons.MSG_NVB, nvb);
 			}
 		}

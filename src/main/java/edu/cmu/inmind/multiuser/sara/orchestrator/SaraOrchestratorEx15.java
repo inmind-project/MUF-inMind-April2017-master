@@ -32,8 +32,12 @@ public class SaraOrchestratorEx15 extends ProcessOrchestratorImpl {
         if( inputMessage.getMessageId().equals("MSG_START_SESSION") ){
             blackboard.post( this, inputMessage.getMessageId(), inputMessage.getPayload() );
         }else{
-            blackboard.post( this, inputMessage.getMessageId(), Utils.fromJson(inputMessage.getPayload(),
-                    ASROutput.class));
+            ASROutput asrOutput = Utils.fromJson(inputMessage.getPayload(), ASROutput.class);
+            blackboard.post( this, inputMessage.getMessageId(), asrOutput);
+            if( inputMessage.getMessageId().equals(SaraCons.MSG_ASR) ){
+                Log4J.info( this, "ASR - > utterance: " + asrOutput.getUtterance() + "  confidence: " 
+                        + asrOutput.getConfidence());
+            }
         }
     }
 
