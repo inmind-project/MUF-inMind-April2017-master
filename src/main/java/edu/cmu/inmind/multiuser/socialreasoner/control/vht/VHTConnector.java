@@ -3,6 +3,7 @@ package edu.cmu.inmind.multiuser.socialreasoner.control.vht;
 import edu.cmu.inmind.multiuser.socialreasoner.control.MainController;
 import edu.cmu.inmind.multiuser.socialreasoner.control.util.Utils;
 import edu.cmu.inmind.multiuser.socialreasoner.model.SocialReasonerOutput;
+import edu.cmu.inmind.multiuser.socialreasoner.model.intent.SystemIntent;
 import edu.cmu.inmind.multiuser.socialreasoner.model.nlu.NLUOutput;
 import edu.cmu.inmind.multiuser.socialreasoner.view.emulators.InputController;
 import edu.usc.ict.vhmsg.MessageEvent;
@@ -220,7 +221,9 @@ public class VHTConnector implements MessageListener{
 
     private void extractTaskReasonerIntent(String message) {
         if( !message.contains("topintents") ) {
-            mainController.addSystemIntent(message);
+            SystemIntent systemIntent = new SystemIntent();
+            systemIntent.setIntent(message);
+            mainController.addSystemIntent(systemIntent);
         }
     }
 

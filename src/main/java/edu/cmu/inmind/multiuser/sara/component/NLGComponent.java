@@ -51,7 +51,7 @@ public class NLGComponent extends PluggableComponent implements BeatCallback{
         /**
          * generation
          */
-         String sentence = gen.genenete(srOutput);
+        String sentence = gen.genenete(srOutput);
         beat.sendMessage(srOutput, sentence);
 
         //BSON bson = groove.generateBson(sentence);
@@ -68,6 +68,9 @@ public class NLGComponent extends PluggableComponent implements BeatCallback{
         //...
         //Log4J.info(this, "NLGComponent. These objects have been updated at the blackboard: " + event.toString());
         extractAndProcess();
+
+        //TODO: this was added by Oscar for testing purposes. You can remove it
+        receiveMessage( getFakeJsonString() );
     }
 
     @Override
@@ -79,7 +82,36 @@ public class NLGComponent extends PluggableComponent implements BeatCallback{
     public SROutput generateFakeSROutput(){
         SROutput srOutput = new SROutput();
 
-        String json_sr = "{\n" +
+        String json_sr = getFakeJsonString();
+
+
+        Gson gson = new GsonBuilder().create();
+        srOutput = gson.fromJson(json_sr, SROutput.class);
+
+        String action = "";
+
+        /*
+        Random ran = new Random();
+        int rInt = ran.nextInt(9);
+        if(rInt == 0) action = "greeting";
+        else if(rInt == 1) action = "goodbye";
+        else if(rInt == 2) action = "ask_genres";
+        else if(rInt == 3) action = "ask_directors";
+        else if(rInt == 4) action = "ask_actors";
+        else if(rInt == 5) action = "ask_repeat";
+        else if(rInt == 6) action = "explicit_confirm";
+        else if(rInt == 7) action = "recommend";
+        else if(rInt == 8) action = "help";
+        srOutput.setAction(action);
+        srOutput.setStrategy("SD");
+        srOutput.setRapport(4);
+        */
+
+        return srOutput;
+    }
+
+    private String getFakeJsonString() {
+        return "{\n" +
                 "  \"action\": \"recommend\",\n" +
                 "  \"strategy\": \"SD\",\n" +
                 "  \"rapport\": 4,\n" +
@@ -156,31 +188,6 @@ public class NLGComponent extends PluggableComponent implements BeatCallback{
                 "    ]\n" +
                 "  }\n" +
                 "}";
-
-
-        Gson gson = new GsonBuilder().create();
-        srOutput = gson.fromJson(json_sr, SROutput.class);
-
-        String action = "";
-
-        /*
-        Random ran = new Random();
-        int rInt = ran.nextInt(9);
-        if(rInt == 0) action = "greeting";
-        else if(rInt == 1) action = "goodbye";
-        else if(rInt == 2) action = "ask_genres";
-        else if(rInt == 3) action = "ask_directors";
-        else if(rInt == 4) action = "ask_actors";
-        else if(rInt == 5) action = "ask_repeat";
-        else if(rInt == 6) action = "explicit_confirm";
-        else if(rInt == 7) action = "recommend";
-        else if(rInt == 8) action = "help";
-        srOutput.setAction(action);
-        srOutput.setStrategy("SD");
-        srOutput.setRapport(4);
-        */
-
-        return srOutput;
     }
 
     @Override

@@ -14,6 +14,9 @@ import edu.cmu.inmind.multiuser.rapportestimator.vhmsg.main.VhmsgSender;
 import edu.cmu.inmind.multiuser.socialreasoner.control.MainController;
 import edu.cmu.inmind.multiuser.socialreasoner.control.util.Utils;
 import edu.cmu.inmind.multiuser.socialreasoner.model.SocialReasonerOutput;
+import edu.cmu.inmind.multiuser.socialreasoner.model.intent.SystemIntent;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by oscarr on 3/7/17.
@@ -71,6 +74,7 @@ public class SocialReasonerComponent extends PluggableComponent {
     }
 
     private SROutput selectStrategy(){
+        long time = System.nanoTime();
         SROutput srOutput = new SROutput();
 
         DMOutput dmOutput = (DMOutput) blackboard().get(SaraCons.MSG_DM);
@@ -81,7 +85,11 @@ public class SocialReasonerComponent extends PluggableComponent {
         srOutput.setRapport(rapport);
 
         if (dmOutput.getAction()!=null && socialController!=null) {
-            socialController.addSystemIntent("set greetings " + dmOutput.getAction() + " {}");
+            SystemIntent systemIntent =  new SystemIntent( );
+            systemIntent.setIntent(dmOutput.getAction());
+            systemIntent.setEntities(dmOutput.getEntities());
+            systemIntent.setRecommendationResults( Utils.toJson(dmOutput.getRecommendation()));
+            socialController.addSystemIntent( systemIntent );
             systemStrategy = socialController.getConvStrategyFormatted();
             srOutput.setStrategy(systemStrategy);
 
@@ -96,7 +104,8 @@ public class SocialReasonerComponent extends PluggableComponent {
 
             sender.sendMessage("0 " + json);
 
-
+            Log4J.info(this, "Time SocialReasoner: " + (TimeUnit.MILLISECONDS
+                    .convert(System.nanoTime() - time, TimeUnit.NANOSECONDS)));
             //System.out.println("---------------- System Strategy : " + systemStrategy);
             Log4J.info(this, "Input: " + dmOutput.getAction() + ", Output: " + srOutput.getStrategy() + "\n");
         } else {
@@ -116,14 +125,14 @@ public class SocialReasonerComponent extends PluggableComponent {
         //...
         //Log4J.info(this, "SocialReasonerComponent. These objects have been updated at the blackboard: " + event.toString());
 
-        if (event.getId()==SaraCons.MSG_NVB) {
+        if (event.getId().equals(SaraCons.MSG_NVB)) {
             System.out.println(" ###################### Message from OpenFace");
             updateNVB();
         }
-        if (event.getId()==SaraCons.MSG_RPT) {
+        if (event.getId().equals(SaraCons.MSG_RPT)) {
             updateRapport();
         }
-        if (event.getId()==SaraCons.MSG_DM) {
+        if (event.getId().equals(SaraCons.MSG_DM)) {
             sendToNLG = selectStrategy();
             blackboard().post(this, SaraCons.MSG_SR, sendToNLG);
         }

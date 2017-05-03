@@ -29,7 +29,7 @@ public class Ex15_WholePipeline extends MainClass {
                         .addPlugin(TaskReasonerComponent.class, SaraCons.ID_DM)
                         .addPlugin(SocialReasonerComponent.class, SaraCons.ID_SR)
                         .addPlugin(NLGComponent.class, SaraCons.ID_NLG)
-                        .addPlugin(OpenFaceComponent.class, SaraCons.ID_OF)
+                        //.addPlugin(OpenFaceComponent.class, SaraCons.ID_OF)
                         //.addPlugin(UserModelComponent.class, SaraCons.ID_UM)
                         .build()
         };
