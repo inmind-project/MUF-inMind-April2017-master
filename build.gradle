@@ -57,6 +57,8 @@ dependencies {
     compile name: 'vhmsg-java'
     compile name: 'jfreechart-1.0.19-experimental'
     compile name: 'jfreechart-1.0.19-swt'
+
+    compile fileTree(dir: 'lib', include: ['*.jar'])
 }
 
 task sourceJar(type: Jar) {
@@ -68,3 +70,6 @@ task sourceJar(type: Jar) {
 
 apply plugin: 'maven'
 
+compileJava {
+    options.encoding = "UTF-8"
+}
