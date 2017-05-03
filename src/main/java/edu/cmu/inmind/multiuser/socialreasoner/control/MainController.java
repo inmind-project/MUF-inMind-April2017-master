@@ -415,16 +415,11 @@ public class MainController{
         availableSharedExp = "NOT_AVAILABLE";
     }
 
-    public void addSystemIntent(String message) {
+    public void addSystemIntent(SystemIntent systemIntent) {
         try {
-            String[] split = message.split(" ");
-            boolean isSet = extractTypeOfTRmessage(split[0]);
-            if(verbose) System.out.println("message: " + split[0]);
-            if( isSet) {
-                intentsQueue.add(new SystemIntent(split[2], split[1]));
-                jsonResults = split[3];
-                process();
-            }
+            intentsQueue.add( systemIntent );
+            jsonResults = systemIntent.getRecommendationResults();
+            process();
         }catch (Exception e){
             e.printStackTrace();
         }
