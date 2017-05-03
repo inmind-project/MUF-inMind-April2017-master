@@ -21,12 +21,14 @@ import java.util.Random;
 @BlackboardSubscription(messages = {SaraCons.MSG_NLU, SaraCons.MSG_DIALOGUE_RESPONSE})
 public class TaskReasonerComponent extends PluggableComponent {
 
-    SaraInput saraInput;
-    SaraOutput saraOutput;
+    private SaraInput saraInput;
+    private SaraOutput saraOutput;
+    private int cpt;
 
     @Override
     public void startUp() {
         super.startUp();
+        cpt = 0;
         // TODO: add code to initialize this component
     }
 
@@ -39,18 +41,38 @@ public class TaskReasonerComponent extends PluggableComponent {
     private DMOutput sendToSR() {
         DMOutput dmOutput = new DMOutput();
 
-        Random random = new Random();
-        double value = 1 + (5 - 1) * random.nextDouble();
+//        Random random = new Random();
+//        double value = 1 + (5 - 1) * random.nextDouble();
+//
+//        if (value < 2) {
+//            dmOutput.setAction("goodbye");
+//        } else if (value < 3) {
+//            dmOutput.setAction("greeting");
+//        } else if (value < 4) {
+//            dmOutput.setAction("ask_genres");
+//        } else if (value < 5) {
+//            dmOutput.setAction("explicit_confirm");
+//        }
 
-        if (value < 2) {
-            dmOutput.setAction("goodbye");
-        } else if (value < 3) {
+        if (cpt == 0) {
             dmOutput.setAction("greeting");
-        } else if (value < 4) {
+            cpt++;
+        } else if (cpt == 1) {
             dmOutput.setAction("ask_genres");
-        } else if (value < 5) {
-            dmOutput.setAction("explicit_confirm");
+            cpt++;
+        } else if (cpt == 2) {
+            dmOutput.setAction("ask_directors");
+            cpt++;
+        } else if (cpt == 3) {
+            dmOutput.setAction("ask_actors");
+            cpt++;
+        } else if (cpt == 4) {
+            dmOutput.setAction("recommend");
+            cpt++;
+        } else if (cpt == 5) {
+            dmOutput.setAction("goodbye");
         }
+
 
         return dmOutput;
     }
