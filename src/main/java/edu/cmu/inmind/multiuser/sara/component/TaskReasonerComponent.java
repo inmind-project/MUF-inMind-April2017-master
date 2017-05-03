@@ -2,15 +2,15 @@ package edu.cmu.inmind.multiuser.sara.component;
 
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.common.Utils;
-import edu.cmu.inmind.multiuser.common.model.DMOutput;
-import edu.cmu.inmind.multiuser.common.model.SaraInput;
-import edu.cmu.inmind.multiuser.common.model.SaraOutput;
+import edu.cmu.inmind.multiuser.common.model.*;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardSubscription;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
 import edu.cmu.inmind.multiuser.controller.plugin.StatefulComponent;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -28,7 +28,7 @@ public class TaskReasonerComponent extends PluggableComponent {
     @Override
     public void startUp() {
         super.startUp();
-        cpt = 0;
+        cpt = 1;
         // TODO: add code to initialize this component
     }
 
@@ -67,14 +67,33 @@ public class TaskReasonerComponent extends PluggableComponent {
             dmOutput.setAction("ask_actors");
             cpt++;
         } else if (cpt == 4) {
+            setFakeMovie(dmOutput, "Jack Reacher");
             dmOutput.setAction("recommend");
             cpt++;
         } else if (cpt == 5) {
+            setFakeMovie(dmOutput, "Mission Impossible");
+            dmOutput.setAction("recommend");
+            cpt++;
+        } else if (cpt == 6) {
+            setFakeMovie(dmOutput, "Edge of Tomorrow");
+            dmOutput.setAction("recommend");
+            cpt++;
+        } else if (cpt == 7) {
             dmOutput.setAction("goodbye");
         }
 
 
         return dmOutput;
+    }
+
+    private void setFakeMovie(DMOutput output, String movieTitle){
+        Recommendation reco = new Recommendation();
+        Rexplanation movie = new Rexplanation();
+        List<Rexplanation> list = new ArrayList<Rexplanation>();
+        list.add(movie);
+        movie.setRecommendation(movieTitle);
+        reco.setRexplanations(list);
+        output.setRecommendation(reco);
     }
 
     /**
