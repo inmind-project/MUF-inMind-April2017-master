@@ -79,8 +79,8 @@ public class SocialReasoner {
         try {
             network.setState(blackboard.getModel());
             if(MainController.verbose) System.out.println("*** States: " + Arrays.toString( blackboard.getModel().toArray() ) );
-            boolean isDecsionMade = false, usingHighestActivation = false;
-            while( !isDecsionMade ) {
+            boolean isDecisionMade = false, usingHighestActivation = false;
+            while( !isDecisionMade ) {
                 if(MainController.verbose) {
                     System.out.println("cycle: " + cycles);
                 }
@@ -105,7 +105,7 @@ public class SocialReasoner {
                         sendToClassifier(MainController.conversationalStrategies);
                         flagSentSROutput = true;
                     }
-                    isDecsionMade = true;
+                    isDecisionMade = true;
                     if (MainController.useSRPlot) {
                         //visualizer.printFSMOutput(output);
                         //visualizer.printStates(network.getStateString(), current.phase, current.name);

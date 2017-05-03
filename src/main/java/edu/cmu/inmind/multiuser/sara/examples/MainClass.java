@@ -23,6 +23,7 @@ public class MainClass {
 
     protected void execute() {
         // starting the Multiuser framework
+//        Config config =
         MultiuserFramework.start(createModules(), createConfig());
 
         // just in case you force the system to close or an unexpected error happen.
