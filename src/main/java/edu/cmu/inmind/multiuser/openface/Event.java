@@ -1,4 +1,4 @@
-package edu.cmu.inmind.multiuser.openface;
+package edu.cmu.inmind.openfacequalifier;
 
 /**
  * this should be the output of the classification; 
@@ -11,13 +11,17 @@ public class Event {
 	
 	private boolean smile = false;
 	private boolean gaze_at = false;
-	
+	private float smileStrength = 0f;
 	public boolean getSmile(){
 		return smile;
 	}
 	
-	public void setSmile(boolean sm){
+	public Event setSmile(boolean sm, float smileStrength){
 		smile = sm;
+//		assert smileStrength >= 0f : smileStrength;
+//		assert smileStrength <= 1.0f : smileStrength;
+		this.smileStrength = smileStrength;
+		return this;
 	}
 	
 	public boolean getGaze(){
@@ -31,6 +35,10 @@ public class Event {
 	@Override
 	public String toString() {
 		return "Event smile: " + getSmile() + ", gaze: " + getGaze(); 
+	}
+
+	public float getSmileStrength() {
+		return smileStrength;
 	}
 	
 }

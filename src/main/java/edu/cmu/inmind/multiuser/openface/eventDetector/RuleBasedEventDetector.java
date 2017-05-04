@@ -1,16 +1,15 @@
-package edu.cmu.inmind.multiuser.openface.eventDetector;
+package edu.cmu.inmind.openfacequalifier.eventDetector;
 
 import java.util.Map;
 
-import edu.cmu.inmind.multiuser.openface.Event;
-import edu.cmu.inmind.multiuser.openface.FeatureType;
-import edu.cmu.inmind.multiuser.openface.input.OpenFaceInput;
+import edu.cmu.inmind.openfacequalifier.Event;
+import edu.cmu.inmind.openfacequalifier.FeatureType;
+import edu.cmu.inmind.openfacequalifier.input.OpenFaceInput;
 
 public class RuleBasedEventDetector extends EventDetector {
 
-	Event e = new Event();
 	boolean isSmiling;
-	boolean wasSmiling;
+	boolean wasSmiling = false;
 	
 	public RuleBasedEventDetector(OpenFaceInput ofi) {
 		super(ofi);
@@ -20,21 +19,10 @@ public class RuleBasedEventDetector extends EventDetector {
 	Event consumeFrame(Map<FeatureType,Float> f) {
 		assert f != null;
 		assert f.containsKey(FeatureType.AU12_r);
-		wasSmiling = e.getSmile();
-		
-		if (f.get(FeatureType.AU12_r)>0.5){
-			isSmiling = true;
-		} else {
-			isSmiling = false;
-		}
-		e.setSmile(isSmiling);
-		
-		if ((isSmiling && !wasSmiling) || (!isSmiling && wasSmiling)){
-			return e;		
-		} else {
-			return null;
-		}
-	
+
+		boolean isSmiling = f.get(FeatureType.AU12_r) > 1.3; 
+		wasSmiling = isSmiling;
+		return (new Event()).setSmile(isSmiling, f.get(FeatureType.AU12_r));
 	}
 
 }
