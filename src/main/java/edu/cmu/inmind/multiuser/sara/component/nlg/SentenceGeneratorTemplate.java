@@ -1,5 +1,6 @@
 package edu.cmu.inmind.multiuser.sara.component.nlg;
 
+import edu.cmu.inmind.multiuser.common.Utils;
 import edu.cmu.inmind.multiuser.common.model.Recommendation;
 import edu.cmu.inmind.multiuser.common.model.Rexplanation;
 import edu.cmu.inmind.multiuser.common.model.SROutput;
@@ -16,8 +17,8 @@ import java.util.Random;
 public class SentenceGeneratorTemplate implements SentenceGenerator {
     private List<Sentence> sentenceList;
     private List<String> templateUseIntents;
-    private final String sentenceDBPath = "resources/nlg/sentence_db.tsv";
-    private final String templateUsePath = "resources/nlg/template_use.txt";
+    private final String sentenceDBPath = Utils.getProperty("sentenceDBPath");
+    private final String templateUsePath = Utils.getProperty("templateUsePath");
 
     public SentenceGeneratorTemplate(){
         sentenceList = loadSentenceList();
