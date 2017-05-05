@@ -1,6 +1,7 @@
 package edu.cmu.inmind.multiuser.sara.component;
 
 import edu.cmu.inmind.multiuser.common.SaraCons;
+import edu.cmu.inmind.multiuser.common.model.ASROutput;
 import edu.cmu.inmind.multiuser.common.model.NonVerbalOutput;
 import edu.cmu.inmind.multiuser.common.model.RapportOutput;
 import edu.cmu.inmind.multiuser.common.model.SaraInput;
@@ -56,7 +57,7 @@ public class RapportEstimator extends PluggableComponent implements MessageListe
 
         //Create a new thread for the social reasoner
         //rapportClient = new RapportClient();
-        VHMsg vhmsgSubscriber = new VHMsg();
+        vhmsgSubscriber = new VHMsg();
         vhmsgSubscriber.openConnection();
         vhmsgSubscriber.enableImmediateMethod();
         vhmsgSubscriber.addMessageListener(this);
@@ -81,15 +82,20 @@ public class RapportEstimator extends PluggableComponent implements MessageListe
     }
 
     private void extractAndProcess() {
-        Object input = blackboard().get(SaraCons.MSG_ASR);
+        //Object input = blackboard().get(SaraCons.MSG_ASR);
+        Object input = blackboard().get("MSG_ASR");
+
         SaraInput saraInput;
         if (input instanceof String) {
             saraInput = new SaraInput();
             saraInput.setASRinput((String) input);
         } else if (input instanceof SaraInput) {
             saraInput = (SaraInput) input;
+        } else if (input instanceof ASROutput) {
+            saraInput = new SaraInput();
+            saraInput.setASRinput(((ASROutput) input).getUtterance());
         } else {
-            throw new IllegalArgumentException("I only eat String and SaraInput");
+            throw new IllegalArgumentException("I only eat String and SaraInput and ASROutput");
         }
 
         VhmsgSender sender = new VhmsgSender("vrASR");
@@ -116,10 +122,12 @@ public class RapportEstimator extends PluggableComponent implements MessageListe
         if (event.getId()==SaraCons.MSG_NVB) {
             //System.out.println(" ###################### Message from OpenFace");
             updateNVB();
-        }
-        if (event.getId()==SaraCons.MSG_ASR) {
+        } else if (event.getId().equals(SaraCons.MSG_ASR)){
             extractAndProcess();
         }
+        //if (event.getId()==SaraCons.MSG_ASR) {
+        //    extractAndProcess();
+        //}
 
 
     }
