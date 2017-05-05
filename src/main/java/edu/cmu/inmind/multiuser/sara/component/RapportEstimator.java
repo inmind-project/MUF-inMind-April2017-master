@@ -48,13 +48,6 @@ public class RapportEstimator extends PluggableComponent implements MessageListe
     // for subscription
     public static VHMsg vhmsgSubscriber;
 
-    // for sending
-    private VHMsg rapportEstSender;
-    private final static int agentId = 0;
-    public static ServerSocket listener;
-    public static Socket socket;
-
-    public final static int port = 2003;
     public static double global_rapport_score;
 
     @Override
