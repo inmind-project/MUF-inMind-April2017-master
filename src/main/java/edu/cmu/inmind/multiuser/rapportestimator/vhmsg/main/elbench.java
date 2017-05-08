@@ -1,6 +1,7 @@
 package edu.cmu.inmind.multiuser.rapportestimator.vhmsg.main;
 
 
+import edu.cmu.inmind.multiuser.common.Utils;
 import edu.usc.ict.vhmsg.MessageEvent;
 import edu.usc.ict.vhmsg.MessageListener;
 import edu.usc.ict.vhmsg.VHMsg;
@@ -15,7 +16,7 @@ public class elbench implements MessageListener
 	public int numMessagesReceived = 0;
 	public int m_testSpecialCases = 0;
 	
-	public static String VHMSG_SERVER = "localhost";
+	public static String VHMSG_SERVER = Utils.getProperty("VHMSG_SERVER_URL");
 
 	private boolean kbhit() 
 	{

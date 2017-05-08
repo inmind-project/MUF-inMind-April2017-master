@@ -51,7 +51,6 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
                 sentenceTemplateList.add(s);
             }
         }
-
         //select NONE
         if(sentenceTemplateList.size()==0){
             for(Sentence s : sentenceList){
@@ -60,7 +59,10 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
                 }
             }
         }
+<<<<<<< HEAD
+=======
 
+>>>>>>> 5abbe3e421f634fe75163126a768d7110533a4d7
         //select something
         if(sentenceTemplateList.size()==0){
             for(Sentence s : sentenceList){
@@ -86,26 +88,6 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
                 out = sentence.replaceAll("#entity", entity);
             }
         }
-        /*
-        }else if(sentence.contains("#genre")){
-            if(srOutput.getUserFrame().getFrame().getGenres().getLike()!=null){
-                int size = srOutput.getUserFrame().getFrame().getGenres().getLike().size();
-                String genre = srOutput.getUserFrame().getFrame().getGenres().getLike().get(size-1);
-                out = sentence.replaceAll("#genre", genre);
-            }
-        }else if(sentence.contains("#actor")){
-            if(srOutput.getUserFrame().getFrame().getGenres().getLike()!=null){
-                int size = srOutput.getUserFrame().getFrame().getActors().getLike().size();
-                String actor = srOutput.getUserFrame().getFrame().getActors().getLike().get(size-1);
-                out = sentence.replaceAll("#actor", actor);
-            }
-        }else if(sentence.contains("#director")){
-            if(srOutput.getUserFrame().getFrame().getGenres().getLike()!=null){
-                int size = srOutput.getUserFrame().getFrame().getDirectors().getLike().size();
-                String director = srOutput.getUserFrame().getFrame().getDirectors().getLike().get(size-1);
-                out = sentence.replaceAll("#director", director);
-            }
-        }*/
         return out;
     }
 
