@@ -23,7 +23,7 @@ public class MainClass {
 
     protected void execute() {
         // starting the Multiuser framework
-//        Config config =
+        Config config = createConfig();
         MultiuserFramework.start(createModules(), createConfig());
 
         // just in case you force the system to close or an unexpected error happen.
@@ -55,10 +55,11 @@ public class MainClass {
                 // you can add values directly like this:
                 .setSessionManagerPort(5555)
                 .setDefaultNumOfPoolInstances(10)
-                        // or you can refer to values in your config.properties file:
+                // or you can refer to values in your config.properties file:
                 .setPathLogs(Utils.getProperty("pathLogs"))
                 .setSessionTimeout(5, TimeUnit.MINUTES)
                 .setServerAddress("127.0.0.1") //use IP instead of 'localhost'
+                .setShouldShowException(true)
                 .build();
     }
 

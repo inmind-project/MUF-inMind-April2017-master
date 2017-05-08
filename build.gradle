@@ -2,6 +2,10 @@ group 'edu.cmu.inmind'
 version '1.0'
 
 apply plugin: 'java'
+apply plugin: 'maven'
+// used for zip big files
+apply plugin: 'com.github.johnrengelman.shadow'
+
 
 sourceCompatibility = 1.8
 
@@ -19,6 +23,17 @@ repositories {
     }
 }
 
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        // used for zip big files
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
+    }
+}
+
+
 configurations {
     deployerJars
 }
@@ -34,6 +49,7 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
     compile 'edu.cmu.inmind.framework:multiuser:2.0'        // this is the Multiuser Framework
     compile 'edu.cmu.inmind.framework:saracommons:1.0'      // this is the Sara Commons Catalog
+
 
     compile group: 'aopalliance', name: 'aopalliance', version: '1.0'
     compile group: 'uk.com.robust-it', name: 'cloning', version: '1.9.3'
@@ -66,22 +82,34 @@ task sourceJar(type: Jar) {
     classifier "sources"
 }
 
-// you have to run: gradle clean build --refresh-dependencies
-
-apply plugin: 'maven'
-
 compileJava {
     options.encoding = "UTF-8"
 }
 
 //create a single Jar with all dependencies
-task fatJar(type: Jar) {
+jar {
     manifest {
-        attributes 'Implementation-Title': 'Gradle Jar File Example',
+        attributes 'Implementation-Title': 'SARA Multiuser',
                 'Implementation-Version': version,
                 'Main-Class': 'edu.cmu.inmind.multiuser.sara.examples.Ex15_WholePipeline'
     }
     baseName = project.name + '-with-dependencies'
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
+    from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
+    zip64 true
+}
+
+// used for zip big files
+shadowJar {
+    zip64 true
+    manifest {
+        attributes 'Implementation-Title': 'SARA Multiuser',
+                'Implementation-Version': version,
+                'Main-Class': 'edu.cmu.inmind.multiuser.sara.examples.Ex15_WholePipeline'
+    }
+    from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
+    mergeServiceFiles()
+    exclude "META-INF/*.SF"
+    exclude 'META-INF/*.DSA'
+    exclude 'META-INF/*.RSA'
+    exclude "LICENSE*"
 }

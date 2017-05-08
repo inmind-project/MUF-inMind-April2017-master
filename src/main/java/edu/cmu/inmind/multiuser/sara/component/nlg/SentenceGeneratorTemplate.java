@@ -59,10 +59,7 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
                 }
             }
         }
-<<<<<<< HEAD
-=======
 
->>>>>>> 5abbe3e421f634fe75163126a768d7110533a4d7
         //select something
         if(sentenceTemplateList.size()==0){
             for(Sentence s : sentenceList){
