@@ -1,6 +1,5 @@
 package edu.cmu.inmind.multiuser.sara.component.nlg;
 
-import edu.cmu.inmind.multiuser.common.Utils;
 import edu.cmu.inmind.multiuser.common.model.Recommendation;
 import edu.cmu.inmind.multiuser.common.model.Rexplanation;
 import edu.cmu.inmind.multiuser.common.model.SROutput;
@@ -17,8 +16,8 @@ import java.util.Random;
 public class SentenceGeneratorTemplate implements SentenceGenerator {
     private List<Sentence> sentenceList;
     private List<String> templateUseIntents;
-    private final String sentenceDBPath = Utils.getProperty("sentenceDBPath");
-    private final String templateUsePath = Utils.getProperty("templateUsePath");
+    private final String sentenceDBPath = "resources/nlg/sentence_db.tsv";
+    private final String templateUsePath = "resources/nlg/template_use.txt";
 
     public SentenceGeneratorTemplate(){
         sentenceList = loadSentenceList();
@@ -52,16 +51,14 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
                 sentenceTemplateList.add(s);
             }
         }
-
         //select NONE
-//        if(sentenceTemplateList.size()==0){
-//            for(Sentence s : sentenceList){
-//                if(intent.getAction().equals(s.getIntent()) && s.getStrategy().equals("NONE")){
-//                    sentenceTemplateList.add(s);
-//                }
-//            }
-//        }
-
+        if(sentenceTemplateList.size()==0){
+            for(Sentence s : sentenceList){
+                if(intent.getAction().equals(s.getIntent()) && s.getStrategy().equals("NONE")){
+                    sentenceTemplateList.add(s);
+                }
+            }
+        }
         //select something
         if(sentenceTemplateList.size()==0){
             for(Sentence s : sentenceList){
@@ -87,26 +84,6 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
                 out = sentence.replaceAll("#entity", entity);
             }
         }
-        /*
-        }else if(sentence.contains("#genre")){
-            if(srOutput.getUserFrame().getFrame().getGenres().getLike()!=null){
-                int size = srOutput.getUserFrame().getFrame().getGenres().getLike().size();
-                String genre = srOutput.getUserFrame().getFrame().getGenres().getLike().get(size-1);
-                out = sentence.replaceAll("#genre", genre);
-            }
-        }else if(sentence.contains("#actor")){
-            if(srOutput.getUserFrame().getFrame().getGenres().getLike()!=null){
-                int size = srOutput.getUserFrame().getFrame().getActors().getLike().size();
-                String actor = srOutput.getUserFrame().getFrame().getActors().getLike().get(size-1);
-                out = sentence.replaceAll("#actor", actor);
-            }
-        }else if(sentence.contains("#director")){
-            if(srOutput.getUserFrame().getFrame().getGenres().getLike()!=null){
-                int size = srOutput.getUserFrame().getFrame().getDirectors().getLike().size();
-                String director = srOutput.getUserFrame().getFrame().getDirectors().getLike().get(size-1);
-                out = sentence.replaceAll("#director", director);
-            }
-        }*/
         return out;
     }
 
