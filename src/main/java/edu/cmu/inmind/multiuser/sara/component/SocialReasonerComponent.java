@@ -154,6 +154,7 @@ public class SocialReasonerComponent extends PluggableComponent {
         }
         if (event.getId()==SaraCons.MSG_RPT) {
             //updateRapport();
+        }
         if (event.getId().equals(SaraCons.MSG_NVB)) {
             System.out.println(" ###################### Message from OpenFace");
             updateNVB();
