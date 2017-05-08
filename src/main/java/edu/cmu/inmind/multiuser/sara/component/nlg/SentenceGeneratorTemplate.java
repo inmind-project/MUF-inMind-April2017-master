@@ -47,7 +47,7 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
     public List<Sentence> selectTemplate(SROutput intent){
         List<Sentence> sentenceTemplateList = new ArrayList<Sentence>();
         for(Sentence s : sentenceList){
-            if(intent.getAction().equals(s.getIntent()) && intent.getStrategy().equals(s.getStrategy())){
+            if(intent.getAction().equals(s.getIntent()) && intent.getStrategy().contains(s.getStrategy())){
                 sentenceTemplateList.add(s);
             }
         }
@@ -59,6 +59,10 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
                 }
             }
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5abbe3e421f634fe75163126a768d7110533a4d7
         //select something
         if(sentenceTemplateList.size()==0){
             for(Sentence s : sentenceList){

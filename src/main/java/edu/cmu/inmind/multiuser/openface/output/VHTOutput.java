@@ -12,9 +12,7 @@ import edu.usc.ict.vhmsg.VHMsg;
 public class VHTOutput implements EventOutput {
 
 	private VHMsg sender;
-	private Blackboard blackboard;
-	OpenFaceComponent openFaceComponent;
-	
+
 	public VHTOutput(){
 		sender = new VHMsg();
 		sender.openConnection(Utils.getProperty("VHMSG_SERVER_URL"));

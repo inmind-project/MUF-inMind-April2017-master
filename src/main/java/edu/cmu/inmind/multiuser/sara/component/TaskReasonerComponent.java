@@ -2,15 +2,15 @@ package edu.cmu.inmind.multiuser.sara.component;
 
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.common.Utils;
-import edu.cmu.inmind.multiuser.common.model.DMOutput;
-import edu.cmu.inmind.multiuser.common.model.SaraInput;
-import edu.cmu.inmind.multiuser.common.model.SaraOutput;
+import edu.cmu.inmind.multiuser.common.model.*;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardSubscription;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
 import edu.cmu.inmind.multiuser.controller.plugin.StatefulComponent;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -21,12 +21,14 @@ import java.util.Random;
 @BlackboardSubscription(messages = {SaraCons.MSG_NLU, SaraCons.MSG_DIALOGUE_RESPONSE})
 public class TaskReasonerComponent extends PluggableComponent {
 
-    SaraInput saraInput;
-    SaraOutput saraOutput;
+    private SaraInput saraInput;
+    private SaraOutput saraOutput;
+    private int cpt;
 
     @Override
     public void startUp() {
         super.startUp();
+        cpt = 1;
         // TODO: add code to initialize this component
     }
 
@@ -39,20 +41,59 @@ public class TaskReasonerComponent extends PluggableComponent {
     private DMOutput sendToSR() {
         DMOutput dmOutput = new DMOutput();
 
-        Random random = new Random();
-        double value = 1 + (5 - 1) * random.nextDouble();
+//        Random random = new Random();
+//        double value = 1 + (5 - 1) * random.nextDouble();
+//
+//        if (value < 2) {
+//            dmOutput.setAction("goodbye");
+//        } else if (value < 3) {
+//            dmOutput.setAction("greeting");
+//        } else if (value < 4) {
+//            dmOutput.setAction("ask_genres");
+//        } else if (value < 5) {
+//            dmOutput.setAction("explicit_confirm");
+//        }
 
-        if (value < 2) {
-            dmOutput.setAction("goodbye");
-        } else if (value < 3) {
+        if (cpt == 0) {
             dmOutput.setAction("greeting");
-        } else if (value < 4) {
+            cpt++;
+        } else if (cpt == 1) {
             dmOutput.setAction("ask_genres");
-        } else if (value < 5) {
-            dmOutput.setAction("explicit_confirm");
+            cpt++;
+        } else if (cpt == 2) {
+            dmOutput.setAction("ask_directors");
+            cpt++;
+        } else if (cpt == 3) {
+            dmOutput.setAction("ask_actors");
+            cpt++;
+        } else if (cpt == 4) {
+            setFakeMovie(dmOutput, "Jack Reacher");
+            dmOutput.setAction("recommend");
+            cpt++;
+        } else if (cpt == 5) {
+            setFakeMovie(dmOutput, "Mission Impossible");
+            dmOutput.setAction("recommend");
+            cpt++;
+        } else if (cpt == 6) {
+            setFakeMovie(dmOutput, "Edge of Tomorrow");
+            dmOutput.setAction("recommend");
+            cpt++;
+        } else if (cpt == 7) {
+            dmOutput.setAction("goodbye");
         }
 
+
         return dmOutput;
+    }
+
+    private void setFakeMovie(DMOutput output, String movieTitle){
+        Recommendation reco = new Recommendation();
+        Rexplanation movie = new Rexplanation();
+        List<Rexplanation> list = new ArrayList<Rexplanation>();
+        list.add(movie);
+        movie.setRecommendation(movieTitle);
+        reco.setRexplanations(list);
+        output.setRecommendation(reco);
     }
 
     /**

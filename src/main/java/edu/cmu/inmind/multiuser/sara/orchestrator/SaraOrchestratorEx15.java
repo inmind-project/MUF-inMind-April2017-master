@@ -36,7 +36,7 @@ public class SaraOrchestratorEx15 extends ProcessOrchestratorImpl {
             ASROutput asrOutput = Utils.fromJson(inputMessage.getPayload(), ASROutput.class);
             blackboard.post( this, inputMessage.getMessageId(), asrOutput);
             if( inputMessage.getMessageId().equals(SaraCons.MSG_ASR) ){
-                Log4J.info( this, "ASR - > utterance: " + asrOutput.getUtterance() + "  confidence: "
+              Log4J.info( this, "ASR - > utterance: " + asrOutput.getUtterance() + "  confidence: "
                         + asrOutput.getConfidence());
             }
         }
