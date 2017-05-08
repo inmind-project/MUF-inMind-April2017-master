@@ -47,20 +47,22 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
     public List<Sentence> selectTemplate(SROutput intent){
         List<Sentence> sentenceTemplateList = new ArrayList<Sentence>();
         for(Sentence s : sentenceList){
-            if(intent.getAction().equals(s.getIntent()) && intent.getStrategy().equals(s.getStrategy())){
+            if(intent.getAction().equals(s.getIntent()) && intent.getStrategy().contains(s.getStrategy())){
                 sentenceTemplateList.add(s);
             }
         }
-
         //select NONE
-//        if(sentenceTemplateList.size()==0){
-//            for(Sentence s : sentenceList){
-//                if(intent.getAction().equals(s.getIntent()) && s.getStrategy().equals("NONE")){
-//                    sentenceTemplateList.add(s);
-//                }
-//            }
-//        }
+        if(sentenceTemplateList.size()==0){
+            for(Sentence s : sentenceList){
+                if(intent.getAction().equals(s.getIntent()) && s.getStrategy().equals("NONE")){
+                    sentenceTemplateList.add(s);
+                }
+            }
+        }
+<<<<<<< HEAD
+=======
 
+>>>>>>> 5abbe3e421f634fe75163126a768d7110533a4d7
         //select something
         if(sentenceTemplateList.size()==0){
             for(Sentence s : sentenceList){
@@ -86,26 +88,6 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
                 out = sentence.replaceAll("#entity", entity);
             }
         }
-        /*
-        }else if(sentence.contains("#genre")){
-            if(srOutput.getUserFrame().getFrame().getGenres().getLike()!=null){
-                int size = srOutput.getUserFrame().getFrame().getGenres().getLike().size();
-                String genre = srOutput.getUserFrame().getFrame().getGenres().getLike().get(size-1);
-                out = sentence.replaceAll("#genre", genre);
-            }
-        }else if(sentence.contains("#actor")){
-            if(srOutput.getUserFrame().getFrame().getGenres().getLike()!=null){
-                int size = srOutput.getUserFrame().getFrame().getActors().getLike().size();
-                String actor = srOutput.getUserFrame().getFrame().getActors().getLike().get(size-1);
-                out = sentence.replaceAll("#actor", actor);
-            }
-        }else if(sentence.contains("#director")){
-            if(srOutput.getUserFrame().getFrame().getGenres().getLike()!=null){
-                int size = srOutput.getUserFrame().getFrame().getDirectors().getLike().size();
-                String director = srOutput.getUserFrame().getFrame().getDirectors().getLike().get(size-1);
-                out = sentence.replaceAll("#director", director);
-            }
-        }*/
         return out;
     }
 

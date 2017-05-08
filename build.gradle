@@ -73,3 +73,15 @@ apply plugin: 'maven'
 compileJava {
     options.encoding = "UTF-8"
 }
+
+//create a single Jar with all dependencies
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'Gradle Jar File Example',
+                'Implementation-Version': version,
+                'Main-Class': 'edu.cmu.inmind.multiuser.sara.examples.Ex15_WholePipeline'
+    }
+    baseName = project.name + '-with-dependencies'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}

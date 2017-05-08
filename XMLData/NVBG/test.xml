@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<rule_inut>
+    <nvb_rules>
+        <rule keyword="first_NP" priority="5" >
+            <pattern>pattern1</pattern>
+            </rule>
+        </nvb_rules>
+    </rule_inut>

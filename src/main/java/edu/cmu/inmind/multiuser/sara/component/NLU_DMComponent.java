@@ -27,7 +27,7 @@ import java.util.ArrayList;
 public class NLU_DMComponent extends PluggableComponent {
     private ClientCommController commController;
     //private final String pythonDialogueAddress = "tcp://128.237.220.225:5590";
-    private final String pythonDialogueAddress = "tcp://52.91.203.75:5590";
+    private final String pythonDialogueAddress = Utils.getProperty("pythonDialogueAddress");
     private String serviceName;
 
     @Override

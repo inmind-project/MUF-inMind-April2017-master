@@ -3,6 +3,7 @@ package edu.cmu.inmind.multiuser.sara.component;
 import java.io.IOException;
 
 import edu.cmu.inmind.multiuser.common.SaraCons;
+import edu.cmu.inmind.multiuser.common.Utils;
 import edu.cmu.inmind.multiuser.common.model.NonVerbalOutput;
 import edu.cmu.inmind.multiuser.controller.blackboard.Blackboard;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
@@ -31,14 +32,14 @@ public class OpenFaceComponent extends PluggableComponent {
 		System.out.println("Hello from OpenFace");
 		String sessionID = getSessionId();
 		//sessionID = "54201342a4cfb96d"; // FIXME: Timo's phone hardwired for now
-		String url = "rtsp://34.203.204.136:8554/live/myStream" + sessionID;
+		String url = Utils.getProperty("streamingURL") + sessionID;
 		startupAndReturn(url);
 	}
 
 	@Override
 	public void onEvent(BlackboardEvent event) {
 		if (event.getId().equals("MSG_START_SESSION")) {
-			System.out.println(" ###################### Message from OpenFace");
+			//System.out.println(" ###################### Message from OpenFace");
 			runOpenFace();
 		}
 
@@ -51,7 +52,7 @@ public class OpenFaceComponent extends PluggableComponent {
 				try {
 					OpenFaceInput ofi = new ProcessInput(fileOrURL);
 					EventDetector ed = new RuleBasedEventDetector(ofi);
-					ed.addListener(new VHTOutput());
+//					ed.addListener(new VHTOutput());
 					ed.addListener(new MUFOutput());
 					ed.run();
 				} catch (IOException e) {
@@ -69,6 +70,7 @@ public class OpenFaceComponent extends PluggableComponent {
 				NonVerbalOutput nvb = new NonVerbalOutput();
 				nvb.setSmiling(e.getSmile());
 				nvb.setGazeAtPartner(e.getGaze());
+                //System.out.println(" ###################### is Smiling?" + e.getSmile());
 				OpenFaceComponent.this.blackboard().post(OpenFaceComponent.this, SaraCons.MSG_NVB, nvb);
 			}
 		}

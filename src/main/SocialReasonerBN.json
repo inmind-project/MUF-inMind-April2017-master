@@ -18,7 +18,7 @@
           "GAZE_ELSEWHERE_NONVERBAL"
         ],
         [
-          "introduce",
+          "recommend",
           "start_*",
           "do_*",
           "outcome_*",
@@ -84,8 +84,9 @@
           "NUM_TURNS_LOWER_THAN_THRESHOLD"
         ],
         [
-          "feedback_*",
-          "start_*",
+          "ask_directors",
+          "recommend",
+          "goodbye",
           "end_*",
           "outcome_*"
         ]
@@ -163,7 +164,7 @@
           "NOT_SD_HISTORY_SYSTEM"
         ],
         [
-          "do_*_elicit*",
+          "recommend",
           "pre_closing",
           "ask_*"
         ]
@@ -213,7 +214,7 @@
         ],
         [
           "greeting",
-          "start_*"
+          "recommend"
         ]
       ],
       "addList": [
@@ -239,6 +240,7 @@
           "RAPPORT_INCREASED"
         ],
         [
+          "SD_HISTORY_SYSTEM",
           "VSN_USER_CS"
         ],
         [
@@ -254,9 +256,9 @@
           "NOT_ASN_HISTORY_USER"
         ],
         [
-          "feedback_*",
-          "elicit_feedback_*",
-          "start_*",
+          "ask_actors",
+          "recommend",
+          "goodbye",
           "do_*_elicit*"
         ]
       ],
@@ -266,6 +268,7 @@
         "SMILE_NONVERBAL"
       ],
       "deleteList": [
+        "SD_HISTORY_SYSTEM",
         "NOT_VSN_HISTORY_SYSTEM",
         "greeting",
         "feedback_*",
@@ -298,10 +301,9 @@
           "GAZE_PARTNER_NONVERBAL"
         ],
         [
-          "outcome_*_recommendation_*",
-          "pre_closing",
+          "recommend",
+          "ask_genres",
           "greeting",
-          "farewell",
           "feedback_*",
           "start_*"
         ]

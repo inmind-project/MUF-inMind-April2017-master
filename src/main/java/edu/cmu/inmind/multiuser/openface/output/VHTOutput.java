@@ -1,6 +1,7 @@
 package edu.cmu.inmind.multiuser.openface.output;
 
 import edu.cmu.inmind.multiuser.common.SaraCons;
+import edu.cmu.inmind.multiuser.common.Utils;
 import edu.cmu.inmind.multiuser.common.model.NonVerbalOutput;
 import edu.cmu.inmind.multiuser.controller.blackboard.Blackboard;
 import edu.cmu.inmind.multiuser.openface.Event;
@@ -11,12 +12,10 @@ import edu.usc.ict.vhmsg.VHMsg;
 public class VHTOutput implements EventOutput {
 
 	private VHMsg sender;
-	private Blackboard blackboard;
-	OpenFaceComponent openFaceComponent;
-	
+
 	public VHTOutput(){
 		sender = new VHMsg();
-		sender.openConnection("localhost");
+		sender.openConnection(Utils.getProperty("VHMSG_SERVER_URL"));
 	}
 	
 	@Override
