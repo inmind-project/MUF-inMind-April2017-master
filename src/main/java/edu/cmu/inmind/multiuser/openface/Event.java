@@ -1,4 +1,4 @@
-package edu.cmu.inmind.openfacequalifier;
+package edu.cmu.inmind.multiuser.openface;
 
 /**
  * this should be the output of the classification; 

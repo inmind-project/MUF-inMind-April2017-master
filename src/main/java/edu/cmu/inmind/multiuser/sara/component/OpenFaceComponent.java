@@ -31,7 +31,6 @@ public class OpenFaceComponent extends PluggableComponent {
 	public void runOpenFace(){
 		System.out.println("Hello from OpenFace");
 		String sessionID = getSessionId();
-		//sessionID = "54201342a4cfb96d"; // FIXME: Timo's phone hardwired for now
 		String url = Utils.getProperty("streamingURL") + sessionID;
 		startupAndReturn(url);
 	}
@@ -52,7 +51,7 @@ public class OpenFaceComponent extends PluggableComponent {
 				try {
 					OpenFaceInput ofi = new ProcessInput(fileOrURL);
 					EventDetector ed = new RuleBasedEventDetector(ofi);
-//					ed.addListener(new VHTOutput());
+					ed.addListener(new VHTOutput());
 					ed.addListener(new MUFOutput());
 					ed.run();
 				} catch (IOException e) {
