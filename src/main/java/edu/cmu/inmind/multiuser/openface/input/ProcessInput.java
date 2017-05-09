@@ -23,7 +23,7 @@ public class ProcessInput extends FileInput {
 		Log4J.info(this, "logging OpenFace features to " + featFile.toString());
 		//tmpFile.deleteOnExit(); // clean up once we're done --> do not clean up, we want the log!
 		new FileOutputStream(featFile).close(); // make sure the tmpFile exists (and is empty)
-		ProcessBuilder pb = new ProcessBuilder(binaryName, "-f", fileOrURL, "-of", featFile.toString()); // "-q",
+		ProcessBuilder pb = new ProcessBuilder(binaryName, "-f", fileOrURL, "-of", featFile.toString(), "-q");
 		pb.inheritIO();
 		openFace = pb.start();
 		pb = new ProcessBuilder("ffmpeg", "-i", fileOrURL, "-vcodec", "copy", mp4File.toString());
