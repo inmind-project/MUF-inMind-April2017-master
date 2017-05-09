@@ -134,7 +134,7 @@
 </GESTURE>
 
 <GESTURE TYPE="ICONIC" VALUE="WORLD_NAME">
-  <RIGHTARM HANDSHAPE="both_hands_cond_r"XMLData/database_inmind2.xml"etime"/>
+  <RIGHTARM HANDSHAPE="both_hands_cond_r"/>
 </GESTURE>
 
 <GESTURE TYPE="ICONIC" VALUE="SQUARE">
