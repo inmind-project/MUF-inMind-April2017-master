@@ -17,7 +17,7 @@ import java.util.Random;
  * Created by oscarr on 3/7/17.
  */
 @StatefulComponent
-//@BlackboardSubscription(messages = {SaraCons.MSG_NLU})
+//@BlackboardSubscription(messages = {SaraCons.MSG_NLU, "MSG_START_SESSION"})
 @BlackboardSubscription(messages = {SaraCons.MSG_NLU, SaraCons.MSG_DIALOGUE_RESPONSE})
 public class TaskReasonerComponent extends PluggableComponent {
 
@@ -40,19 +40,6 @@ public class TaskReasonerComponent extends PluggableComponent {
 
     private DMOutput sendToSR() {
         DMOutput dmOutput = new DMOutput();
-
-//        Random random = new Random();
-//        double value = 1 + (5 - 1) * random.nextDouble();
-//
-//        if (value < 2) {
-//            dmOutput.setAction("goodbye");
-//        } else if (value < 3) {
-//            dmOutput.setAction("greeting");
-//        } else if (value < 4) {
-//            dmOutput.setAction("ask_genres");
-//        } else if (value < 5) {
-//            dmOutput.setAction("explicit_confirm");
-//        }
 
         if (cpt == 0) {
             dmOutput.setAction("greeting");
@@ -106,7 +93,10 @@ public class TaskReasonerComponent extends PluggableComponent {
         //...
         //Log4J.info(this, "TaskReasonerComponent. These objects have been updated at the blackboard: " + event.toString());
         //Log4J.info(this, "Input: " + saraInput.getASRinput() + " Output: " + saraOutput.getSystemIntent() );
-        blackboard().post(this, SaraCons.MSG_DM, sendToSR());
+        if (event.getId().equals("MSG_START_SESSION")) {
+		System.out.println("Fake DM is initiating dialogue");
+	}
+	blackboard().post(this, SaraCons.MSG_DM, sendToSR());
     }
 
     @Override
