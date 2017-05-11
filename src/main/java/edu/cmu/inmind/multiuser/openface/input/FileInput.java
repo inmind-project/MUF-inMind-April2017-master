@@ -100,7 +100,9 @@ public class FileInput extends TailerListenerAdapter implements OpenFaceInput {
 		tailer.stop(); // stop tailing the file
 		tailer = null;
 		t.cancel(); // release Timer thread
-		waitingThread.interrupt();
+		if (waitingThread != null) {
+			waitingThread.interrupt();
+		}
 	}
 
 	/* * timer to avoid running forever when tailing a closed file * */

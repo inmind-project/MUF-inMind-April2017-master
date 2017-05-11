@@ -17,16 +17,18 @@ public class ProcessInput extends FileInput {
 	public ProcessInput(String fileOrURL) throws IOException {
 		String binaryName = Utils.getProperty("openface.featureExtraction.binaryName");
 		String logDir = Utils.getProperty("openface.featureExtraction.logDir");
-		File featFile = File.createTempFile("OpenFace", ".out", new File(logDir));
+		File featFile = File.createTempFile("OpenFace", ".openfacefeatures", new File(logDir));
 		Log4J.info(this, "logging OpenFace features to " + featFile.toString());
-		File mp4File = File.createTempFile("OpenFace", ".mp4", new File(logDir));
 		Log4J.info(this, "logging OpenFace features to " + featFile.toString());
 		//tmpFile.deleteOnExit(); // clean up once we're done --> do not clean up, we want the log!
 		new FileOutputStream(featFile).close(); // make sure the tmpFile exists (and is empty)
 		ProcessBuilder pb = new ProcessBuilder(binaryName, "-f", fileOrURL, "-of", featFile.toString(), "-q");
 		pb.inheritIO();
 		openFace = pb.start();
-		pb = new ProcessBuilder("ffmpeg", "-i", fileOrURL, "-vcodec", "copy", mp4File.toString());
+		String mp4Filename = featFile.toString().replace(".openfacefeatures", ".mp4");
+		pb = new ProcessBuilder("ffmpeg", "-i", fileOrURL, "-vcodec", "copy", mp4Filename);
+		//pb.inheritIO();
+		ffmpeg = pb.start();
 		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -34,7 +36,6 @@ public class ProcessInput extends FileInput {
 				PrintStream ps = new PrintStream(ffmpeg.getOutputStream());
 				ps.println("q");
 				ps.close();
-
 			}
 		}));
 		openFile(featFile.toString());
