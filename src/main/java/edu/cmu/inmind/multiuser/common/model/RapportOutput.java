@@ -24,7 +24,7 @@ public class RapportOutput {
     }
 
     public String toString(){
-        return "Component: " + this.getClass().toString() + " rapport: " + rapportScore;
+        return "Component: " + this.getClass().toString() + " User Strategy: " + userStrategy + " rapport: " + rapportScore;
     }
 
 

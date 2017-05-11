@@ -98,9 +98,9 @@ public class RapportEstimator extends PluggableComponent implements MessageListe
             throw new IllegalArgumentException("I only eat String and SaraInput and ASROutput");
         }
 
-        VhmsgSender sender = new VhmsgSender("vrASR");
+        //VhmsgSender sender = new VhmsgSender("vrASR");
         //sender.sendMessage(0 + " " + saraInput.getASRinput());
-        sender.sendMessage(0 + " " + saraInput.getASRinput());
+        vhmsgSubscriber.sendMessage("vrASR 0 " + saraInput.getASRinput());
 
 
         // do some fancy processing
