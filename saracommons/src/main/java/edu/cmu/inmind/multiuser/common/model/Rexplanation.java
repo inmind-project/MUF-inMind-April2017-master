@@ -24,4 +24,12 @@ public class Rexplanation {
     public void setExplanations(List<String> explanations) {
         this.explanations = explanations;
     }
+
+    @Override
+    public String toString() {
+        return "Rexplanation{" +
+                "recommendation='" + recommendation + '\'' +
+                ", explanations=" + explanations +
+                '}';
+    }
 }

@@ -15,4 +15,11 @@ public class Recommendation {
     public void setRexplanations(List<Rexplanation> rexplanations) {
         this.rexplanations = rexplanations;
     }
+
+    @Override
+    public String toString() {
+        return "Recommendation{" +
+                "rexplanations=" + rexplanations +
+                '}';
+    }
 }

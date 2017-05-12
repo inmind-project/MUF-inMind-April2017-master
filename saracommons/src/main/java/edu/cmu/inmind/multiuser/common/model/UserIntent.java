@@ -15,7 +15,7 @@ public class UserIntent {
     }
 
     public String getUserIntent() {
-        return userIntent;
+        return this.userIntent;
     }
 
     public void setUserIntent(String userIntent) {
@@ -23,10 +23,17 @@ public class UserIntent {
     }
 
     public List<String> getEntitities() {
-        return entitities;
+        return this.entitities;
     }
 
     public void setEntitities(List<String> entitities) {
         this.entitities = entitities;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Component: " + this.getClass().toString() + " userIntent: "+ userIntent +
+                " entities: " + entitities.toString();
     }
 }

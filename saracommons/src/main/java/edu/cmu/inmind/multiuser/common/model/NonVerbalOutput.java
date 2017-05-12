@@ -7,8 +7,16 @@ public class NonVerbalOutput {
     private boolean smiling;
     private boolean gazeAtPartner;
 
+    public NonVerbalOutput() {
+    }
+
+    @Override
+    public String toString() {
+        return "Component: " + this.getClass().toString() + " smiling: "+ smiling + " gazeAtPartner: " + gazeAtPartner;
+    }
+
     public boolean isSmiling() {
-        return smiling;
+        return this.smiling;
     }
 
     public void setSmiling(boolean smiling) {
@@ -16,14 +24,10 @@ public class NonVerbalOutput {
     }
 
     public boolean isGazeAtPartner() {
-        return gazeAtPartner;
+        return this.gazeAtPartner;
     }
 
     public void setGazeAtPartner(boolean gazeAtPartner) {
         this.gazeAtPartner = gazeAtPartner;
-    }
-
-    public String toString(){
-        return "Component: " + this.getClass().toString() + " Smiling: " + smiling;
     }
 }

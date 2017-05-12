@@ -15,7 +15,7 @@ public class SocialIntent {
     }
 
     public double getRapportScore() {
-        return rapportScore;
+        return this.rapportScore;
     }
 
     public void setRapportScore(double rapportScore) {
@@ -23,7 +23,7 @@ public class SocialIntent {
     }
 
     public String getRapportLevel() {
-        return rapportLevel;
+        return this.rapportLevel;
     }
 
     public void setRapportLevel(String rapportLevel) {
@@ -31,10 +31,16 @@ public class SocialIntent {
     }
 
     public String getUserConvStrategy() {
-        return userConvStrategy;
+        return this.userConvStrategy;
     }
 
     public void setUserConvStrategy(String userConvStrategy) {
         this.userConvStrategy = userConvStrategy;
+    }
+
+    @Override
+    public String toString() {
+        return "Component: " + this.getClass().toString() + " rapportScore: "+ rapportScore
+                + " rapportLevel: " + rapportLevel + " userConvStrategy: "+ userConvStrategy;
     }
 }

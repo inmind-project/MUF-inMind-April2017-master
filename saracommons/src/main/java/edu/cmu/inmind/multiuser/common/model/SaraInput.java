@@ -9,8 +9,11 @@ public class SaraInput {
     private boolean isGazeAtPartner;
     private boolean isHeadNod;
 
+    public SaraInput() {
+    }
+
     public String getASRinput() {
-        return ASRinput;
+        return this.ASRinput;
     }
 
     public void setASRinput(String ASRinput) {
@@ -18,7 +21,7 @@ public class SaraInput {
     }
 
     public boolean isSmiling() {
-        return isSmiling;
+        return this.isSmiling;
     }
 
     public void setIsSmiling(boolean isSmiling) {
@@ -26,7 +29,7 @@ public class SaraInput {
     }
 
     public boolean isGazeAtPartner() {
-        return isGazeAtPartner;
+        return this.isGazeAtPartner;
     }
 
     public void setIsGazeAtPartner(boolean isGazeAtPartner) {
@@ -34,15 +37,13 @@ public class SaraInput {
     }
 
     public boolean isHeadNod() {
-        return isHeadNod;
+        return this.isHeadNod;
     }
 
     public void setIsHeadNod(boolean isHeadNod) {
         this.isHeadNod = isHeadNod;
     }
-
     public String toString(){
         return "Component: " + this.getClass().toString() + " User sentence: " + ASRinput;
     }
-
 }

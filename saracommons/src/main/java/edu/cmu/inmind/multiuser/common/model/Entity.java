@@ -60,4 +60,15 @@ public class Entity {
     }
 
 
+    @Override
+    public String toString() {
+        return "Entity{" +
+                "entity='" + entity + '\'' +
+                ", polarity=" + polarity +
+                ", value='" + value + '\'' +
+                ", id='" + id + '\'' +
+                ", start=" + start +
+                ", end=" + end +
+                '}';
+    }
 }

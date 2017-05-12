@@ -17,7 +17,7 @@ public class VerbalOutput {
     }
 
     public String getUtterance() {
-        return utterance;
+        return this.utterance;
     }
 
     public void setUtterance(String utterance) {
@@ -25,14 +25,16 @@ public class VerbalOutput {
     }
 
     public String getConvStrategy() {
-        return convStrategy;
+        return this.convStrategy;
     }
 
     public void setConvStrategy(String convStrategy) {
         this.convStrategy = convStrategy;
     }
 
-    public String toString(){
-        return "Utterance: " + utterance + " convStrategy: " + convStrategy;
+    @Override
+    public String toString() {
+        return "Component: " + this.getClass().toString() + " utterance: " + utterance
+                + " convStrategy: " + convStrategy;
     }
 }

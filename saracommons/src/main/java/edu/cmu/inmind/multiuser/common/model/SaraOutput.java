@@ -1,17 +1,17 @@
 package edu.cmu.inmind.multiuser.common.model;
 
-
-import java.util.ArrayList;
-
 /**
  * Created by oscarr on 3/3/17.
  */
+
+import java.util.ArrayList;
+
 public class SaraOutput {
     private VerbalOutput verbal;
     private NonVerbalOutput nonVerbal;
     private SocialIntent socialIntent;
     private String status = "";
-    private UserIntent userIntent;
+    private UserIntent userIntent ;
     private String systemIntent;
 
     public SaraOutput() {
@@ -21,8 +21,15 @@ public class SaraOutput {
         userIntent = new UserIntent("", new ArrayList<String>());
     }
 
+    @Override
+    public String toString() {
+        return "Component: " + this.getClass().toString() + " VerbalOutput: " + verbal.toString()
+                + " NonVerbalOutput: " + nonVerbal.toString() + " SocialIntent: "+ socialIntent.toString()
+                + " UserIntent: " + userIntent.toString() + " status: " + status + " systemIntent: " + systemIntent;
+    }
+
     public VerbalOutput getVerbal() {
-        return verbal;
+        return this.verbal;
     }
 
     public void setVerbal(VerbalOutput verbal) {
@@ -30,7 +37,7 @@ public class SaraOutput {
     }
 
     public NonVerbalOutput getNonVerbal() {
-        return nonVerbal;
+        return this.nonVerbal;
     }
 
     public void setNonVerbal(NonVerbalOutput nonVerbal) {
@@ -38,7 +45,7 @@ public class SaraOutput {
     }
 
     public SocialIntent getSocialIntent() {
-        return socialIntent;
+        return this.socialIntent;
     }
 
     public void setSocialIntent(SocialIntent socialIntent) {
@@ -46,7 +53,7 @@ public class SaraOutput {
     }
 
     public String getStatus() {
-        return status;
+        return this.status;
     }
 
     public void setStatus(String status) {
@@ -54,7 +61,7 @@ public class SaraOutput {
     }
 
     public UserIntent getUserIntent() {
-        return userIntent;
+        return this.userIntent;
     }
 
     public void setUserIntent(UserIntent userIntent) {
@@ -62,15 +69,10 @@ public class SaraOutput {
     }
 
     public String getSystemIntent() {
-        return systemIntent;
+        return this.systemIntent;
     }
 
     public void setSystemIntent(String systemIntent) {
         this.systemIntent = systemIntent;
     }
-
-    public String toString(){
-        return "Component: " + this.getClass().toString() + " " + verbal.toString();
-    }
-
 }
