@@ -5,7 +5,6 @@ import java.io.IOException;
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.common.Utils;
 import edu.cmu.inmind.multiuser.common.model.NonVerbalOutput;
-import edu.cmu.inmind.multiuser.controller.blackboard.Blackboard;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardSubscription;
 import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
@@ -15,7 +14,6 @@ import edu.cmu.inmind.multiuser.openface.eventDetector.EventDetector;
 import edu.cmu.inmind.multiuser.openface.eventDetector.RuleBasedEventDetector;
 import edu.cmu.inmind.multiuser.openface.input.OpenFaceInput;
 import edu.cmu.inmind.multiuser.openface.input.ProcessInput;
-import edu.cmu.inmind.multiuser.openface.output.ConsoleOutput;
 import edu.cmu.inmind.multiuser.openface.output.EventOutput;
 import edu.cmu.inmind.multiuser.openface.output.VHTOutput;
 

@@ -16,9 +16,6 @@ import edu.usc.ict.vhmsg.MessageEvent;
 import edu.usc.ict.vhmsg.MessageListener;
 import edu.usc.ict.vhmsg.VHMsg;
 
-import java.net.ServerSocket;
-import java.net.Socket;
-
 /**
  * Created by oscarr on 3/7/17.
  */

@@ -1,7 +1,5 @@
 package edu.cmu.inmind.multiuser.sara.component;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.common.model.SROutput;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;

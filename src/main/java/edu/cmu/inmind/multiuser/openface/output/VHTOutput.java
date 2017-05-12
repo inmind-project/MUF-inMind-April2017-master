@@ -1,11 +1,7 @@
 package edu.cmu.inmind.multiuser.openface.output;
 
-import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.common.Utils;
-import edu.cmu.inmind.multiuser.common.model.NonVerbalOutput;
-import edu.cmu.inmind.multiuser.controller.blackboard.Blackboard;
 import edu.cmu.inmind.multiuser.openface.Event;
-import edu.cmu.inmind.multiuser.sara.component.OpenFaceComponent;
 import edu.usc.ict.vhmsg.VHMsg;
 
 

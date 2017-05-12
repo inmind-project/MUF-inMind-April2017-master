@@ -1,7 +1,6 @@
 package edu.cmu.inmind.multiuser.sara.component;
 
 import edu.cmu.inmind.multiuser.common.SaraCons;
-import edu.cmu.inmind.multiuser.common.Utils;
 import edu.cmu.inmind.multiuser.common.model.*;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardSubscription;
@@ -11,7 +10,6 @@ import edu.cmu.inmind.multiuser.controller.plugin.StatefulComponent;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by oscarr on 3/7/17.
