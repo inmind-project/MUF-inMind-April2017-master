@@ -35,7 +35,7 @@ public class NLU_DMComponent extends PluggableComponent {
 //        postCreate();
 //        postCreateblackboard().post(this, SaraCons.MSG_ASR, "Hello");
         //blackboard().post(this, SaraCons.MSG_ASR, "Hello");
-	Log4J.info(this, "NLU_DMComponent: startup has finished.");
+        Log4J.info(this, "NLU_DMComponent: startup has finished.");
     }
 
     @Override
@@ -49,14 +49,12 @@ public class NLU_DMComponent extends PluggableComponent {
     }
 
     public void postCreate(){
-        Log4J.info(this, "postCreate is called.");
-        Log4J.info(this, "sessionID is " + getSessionId());
-        String[] msgSubscriptions = {"MSG_ASR"};
+        Log4J.info(this, "postCreate is called, sessionID is " + getSessionId());
+        String[] msgSubscriptions = { SaraCons.MSG_ASR };
         ZMsgWrapper msgWrapper = new ZMsgWrapper();
         commController = new ClientCommController(pythonDialogueAddress, getSessionId(),
                 Utils.getProperty("dialogueAddress"), Constants.REQUEST_CONNECT, msgWrapper, msgSubscriptions);
     }
-
 
     private SaraOutput extractAndProcess() {
         SaraInput saraInput = (SaraInput) blackboard().get(SaraCons.MSG_ASR);
@@ -71,15 +69,15 @@ public class NLU_DMComponent extends PluggableComponent {
         Log4J.debug(this, "received " + blackboardEvent.toString());
         // let's forward the ASR message to DialoguePython:
         if (blackboardEvent.getId().equals("MSG_START_SESSION")){
-		ASROutput initialGreeting = new ASROutput("Hello", 1.0);
-		commController.send( getSessionId(), initialGreeting );
-                commController.send( getSessionId(), initialGreeting );
-		Log4J.debug(this, "Sending Initial Greeting");
-	} else {
-		Log4J.debug(this, "sending on " + blackboardEvent.toString() );
-		commController.send( getSessionId(), blackboardEvent.getElement() );
-//		Log4J.debug(this, "now something was sent");
-	}
+	    ASROutput initialGreeting = new ASROutput("Hello", 1.0);
+	    commController.send( getSessionId(), initialGreeting );
+            commController.send( getSessionId(), initialGreeting );
+	    Log4J.debug(this, "Sending Initial Greeting");
+        } else {
+            Log4J.debug(this, "sending on " + blackboardEvent.toString() );
+            commController.send( getSessionId(), blackboardEvent.getElement() );
+//	    Log4J.debug(this, "now something was sent");
+        }
         // here we receive the response from DialoguePython:
         commController.receive(new ResponseListener() {
             @Override
@@ -96,6 +94,8 @@ public class NLU_DMComponent extends PluggableComponent {
         SessionMessage sessionMessage = new SessionMessage();
         sessionMessage.setRequestType( Constants.REQUEST_DISCONNECT );
         commController.send( getSessionId(), sessionMessage );
+        commController.close();
+        super.shutDown();
     }
 
 }
