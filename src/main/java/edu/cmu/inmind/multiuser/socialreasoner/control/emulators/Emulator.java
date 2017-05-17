@@ -13,6 +13,10 @@ public class Emulator extends Thread {
     private ArrayList<EmulationStep> steps = new ArrayList();
     private boolean stop = false;
 
+    public Emulator() {
+        super("emulator thread");
+    }
+
     @Override
     public void run() {
 //        // incremental engagement

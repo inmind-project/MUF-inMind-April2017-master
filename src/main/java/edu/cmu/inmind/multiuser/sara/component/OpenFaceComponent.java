@@ -26,36 +26,30 @@ public class OpenFaceComponent extends PluggableComponent {
 
 	} // we do the heavy lifting from an event, rather than in execute()
 
-	public void runOpenFace(){
-		System.out.println("Hello from OpenFace");
-		String sessionID = getSessionId();
-		String url = Utils.getProperty("streamingURL") + sessionID;
-		startupAndReturn(url);
-	}
-
 	@Override
 	public void onEvent(BlackboardEvent event) {
 		if (event.getId().equals("MSG_START_SESSION")) {
 			runOpenFace();
 		}
+	}
 
+	public void runOpenFace(){
+		String url = Utils.getProperty("streamingURL") + getSessionId();
+		startupAndReturn(url);
 	}
 
 	private void startupAndReturn(final String fileOrURL) {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					OpenFaceInput ofi = new ProcessInput(fileOrURL);
-					EventDetector ed = new RuleBasedEventDetector(ofi);
+		new Thread(() -> {
+			try {
+				OpenFaceInput ofi = new ProcessInput(fileOrURL);
+				EventDetector ed = new RuleBasedEventDetector(ofi);
 //					ed.addListener(new VHTOutput());
-					ed.addListener(new MUFOutput());
-					ed.run();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				ed.addListener(new MUFOutput());
+				ed.run();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-		}, "OpenFace Thread").start();
+		}, "OpenFace Thread for session " + getSessionId()).start();
 	}
 
 	/** send stuff towards MUF from our blackboard */

@@ -27,7 +27,7 @@ public class MainClass {
         MultiuserFramework.start(createModules(), createConfig());
 
         // just in case you force the system to close or an unexpected error happen.
-        Runtime.getRuntime().addShutdownHook(new Thread() {
+        Runtime.getRuntime().addShutdownHook(new Thread("shutdownHook from MainClass") {
             public void run() {
                 MultiuserFramework.stop();
             }
