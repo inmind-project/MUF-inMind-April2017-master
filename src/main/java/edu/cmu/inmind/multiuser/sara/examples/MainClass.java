@@ -57,7 +57,7 @@ public class MainClass {
                 .setDefaultNumOfPoolInstances(10)
                 // or you can refer to values in your config.properties file:
                 .setPathLogs(Utils.getProperty("pathLogs"))
-                .setSessionTimeout(5, TimeUnit.MINUTES)
+                .setSessionTimeout(10, TimeUnit.DAYS)
                 .setServerAddress("127.0.0.1") //use IP instead of 'localhost'
                 .setShouldShowException(true)
                 .build();
