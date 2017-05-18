@@ -27,6 +27,7 @@ public class SaraOrchestratorEx15 extends ProcessOrchestratorImpl {
 
     @Override
     public void process(String message) {
+        Log4J.debug(this, "orchestrator received message " + message);
         super.process(message);
 
         SessionMessage inputMessage = Utils.fromJson(message, SessionMessage.class);
@@ -48,6 +49,7 @@ public class SaraOrchestratorEx15 extends ProcessOrchestratorImpl {
      */
     public void onEvent(BlackboardEvent event){
         response = (BSON) blackboard.get(SaraCons.MSG_NLG);
+        Log4J.debug(this, "sending out to client: " + response.toString());
         sendResponse( new SessionMessage(SaraCons.MSG_NLG, Utils.toJson(response) ) );
     }
 
