@@ -14,6 +14,7 @@ public class SaraCons {
     public static final String ID_RPT = "ID_RPT";
     public static final String ID_NVB = "ID_NVB";
     public static final String ID_OF = "ID_OF";
+    public static final String ID_CSC = "ID_CSC";
     public static final String ID_GUAVA_SERVICE = "ID_GUAVA_SERVICE";
     public static final String ID_LOG_COMPONENT = "ID_LOG_COMPONENT";
     public static final String ID_REMOTE_COMPONENT = "ID_REMOTE_COMPONENT";
@@ -28,6 +29,7 @@ public class SaraCons {
     public static final String MSG_LOCAL = "MSG_LOCAL";
     public static final String MSG_ASR = "MSG_ASR";
     public static final String MSG_UM = "MSG_UM";
+    public static final String MSG_CSC = "MSG_CSC";
     public static final String MSG_RPT = "MSG_RPT";
     public static final String MSG_NVB = "MSG_NVB";
     public static final String MSG_StartOpenFace = "MSG_StartOpenFace";
