@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Gradle: :vhmsg-java:">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/vhmsg-java.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
