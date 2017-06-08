@@ -20,6 +20,7 @@ public class SaraCons {
     public static final String ID_REMOTE_COMPONENT = "ID_REMOTE_COMPONENT";
     public static final String ID_ASYNC = "ID_ASYNC";
     public static final String ID_POOL = "ID_POOL";
+    public static final String ID_R5 = "ID_R5";
 
     //messages
     public static final String MSG_NLU = "MSG_NLU";
@@ -37,6 +38,7 @@ public class SaraCons {
     public static final String MSG_SYNC_SERVICE = "MSG_SYNC_SERVICE";
     public static final String MSG_LOG_COMPONENT = "MSG_LOG_COMPONENT";
     public static final String MSG_DIALOGUE_RESPONSE = "MSG_DIALOGUE_RESPONSE";
+    public static final String MSG_START_STREAMING = "MSG_START_STREAMING";
 
     //services
     public static final String NLU_SERVICE = "NLU_SERVICE";
@@ -44,6 +46,14 @@ public class SaraCons {
     public static final String DM_SERVICE = "DM_SERVICE";
     public static final String SR_SERVICE = "SR_SERVICE";
     public static final String RPT_SERVICE = "RPT_SERVICE";
+
+    //R5 Stream
+    public static final String R5STREAM_CONNECTED = "R5STREAM_CONNECTED";
+    public static final String R5STREAM_DISCONNECTED = "R5STREAM_DISCONNECTED";
+    public static final String R5STREAM_CLOSE = "R5STREAM_CLOSE";
+    public static final String R5STREAM_TIMEOUT = "R5STREAM_TIMEOUT";
+    public static final String R5STREAM_ERROR = "R5STREAM_ERROR";
+    public static final String R5STREAM_STARTED = "R5STREAM_STARTED";
 
     public static final String SHUTDOWN = "shutdown";
 }

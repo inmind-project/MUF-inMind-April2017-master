@@ -1,4 +1,4 @@
-<Configuration status="WARN">
+<Configuration status="ALL">
     <Appenders>
         <!--<File name="file-log" fileName="/tmp/logging.out" append="false">-->
             <!--<PatternLayout>-->
@@ -15,7 +15,7 @@
         <!--</Logger>-->
         <Root level="trace">
             <!-- Only events at DIAG level or more specific are sent to the console. -->
-            <AppenderRef ref="Console" level="trace" />
+            <AppenderRef ref="Console" level="all" />
             <!--<AppenderRef ref="MyFile" level="trace" />-->
         </Root>
     </Loggers>
