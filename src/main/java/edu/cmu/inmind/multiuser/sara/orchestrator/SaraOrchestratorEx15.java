@@ -10,7 +10,7 @@ import edu.cmu.inmind.multiuser.controller.communication.SessionMessage;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.controller.orchestrator.ProcessOrchestratorImpl;
 import edu.cmu.inmind.multiuser.controller.session.Session;
-import edu.cmu.inmind.multiuser.sara.component.groove.bson.BSON;
+import edu.cmu.inmind.multiuser.sara.component.beat.bson.BSON;
 
 /**
  * Created by oscarr on 3/3/17.
@@ -48,6 +48,7 @@ public class SaraOrchestratorEx15 extends ProcessOrchestratorImpl {
      */
     public void onEvent(BlackboardEvent event){
         response = (BSON) blackboard.get(SaraCons.MSG_NLG);
+        Log4J.debug(this, "sending out to client: " + response.toString());
         sendResponse( new SessionMessage(SaraCons.MSG_NLG, Utils.toJson(response) ) );
     }
 

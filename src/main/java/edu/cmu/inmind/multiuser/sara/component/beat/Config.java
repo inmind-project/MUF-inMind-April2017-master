@@ -1,6 +1,4 @@
-package beat;
-
-import beat.beat.gui.ColorTheme;
+package edu.cmu.inmind.multiuser.sara.component.beat;
 
 public class Config {
     /**
@@ -24,10 +22,6 @@ public class Config {
      * Connecting to VHMsg or not
      */
     public static boolean isConnectVHMsg = false;
-    /**
-     * Color theme
-     */
-    public static ColorTheme colorTheme = ColorTheme.BRIGHT;
     /**
      * file name of NLG generation guidance
      */

@@ -10,13 +10,10 @@ import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardSubscription;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
 import edu.cmu.inmind.multiuser.controller.plugin.StatefulComponent;
-import edu.cmu.inmind.multiuser.rapportestimator.vhmsg.main.VhmsgSender;
 import edu.cmu.inmind.multiuser.socialreasoner.control.MainController;
 import edu.cmu.inmind.multiuser.socialreasoner.control.util.Utils;
 import edu.cmu.inmind.multiuser.socialreasoner.model.SocialReasonerOutput;
 import edu.cmu.inmind.multiuser.socialreasoner.model.intent.SystemIntent;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by oscarr on 3/7/17.
@@ -84,30 +81,6 @@ public class SocialReasonerComponent extends PluggableComponent {
         srOutput.setUserFrame(dmOutput.getUserFrame());
         srOutput.setRapport(rapport);
 
-//        if (dmOutput.getAction()!=null && socialController!=null) {
-//            //socialController.addSystemIntent("set " + dmOutput.getUserFrame().getAsk_stack().get(0) + " " + dmOutput.getAction() + " {}");
-//            socialController.addSystemIntent("set " + dmOutput.getAction() + " " + dmOutput.getAction() + " {}");
-//            systemStrategy = socialController.getConvStrategyFormatted();
-//            srOutput.setStrategy(systemStrategy);
-//
-//            VhmsgSender sender = new VhmsgSender("vrSocialReasonerScore");
-//
-//            SocialReasonerOutput output = new SocialReasonerOutput();
-//            output.setActivations(socialController.getSocialReasoner().getNetwork().getOnlyActivations());
-//            output.setNames(socialController.getSocialReasoner().getNetwork().getModuleNames());
-//            output.setThreshold(socialController.getSocialReasoner().getNetwork().getTheta());
-//
-//            String json = Utils.toJson(output);
-//
-//            sender.sendMessage("0 " + json);
-//
-//
-//            //System.out.println("---------------- System Strategy : " + systemStrategy);
-//            Log4J.info(this, "Input: " + dmOutput.getAction() + ", Output: " + srOutput.getStrategy() + "\n");
-//        } else {
-//            System.out.println("null");
-//        }
-
         if (dmOutput.getAction()!=null && socialController!=null) {
             SystemIntent systemIntent =  new SystemIntent( );
             systemIntent.setIntent(dmOutput.getAction());
@@ -117,7 +90,7 @@ public class SocialReasonerComponent extends PluggableComponent {
             systemStrategy = socialController.getConvStrategyFormatted();
             srOutput.setStrategy(systemStrategy);
 
-            VhmsgSender sender = new VhmsgSender("vrSocialReasonerScore");
+//            VhmsgSender sender = new VhmsgSender("vrSocialReasonerScore");
 
             SocialReasonerOutput output = new SocialReasonerOutput();
             output.setActivations(socialController.getSocialReasoner().getNetwork().getOnlyActivations());
@@ -126,7 +99,7 @@ public class SocialReasonerComponent extends PluggableComponent {
 
             String json = Utils.toJson(output);
 
-            sender.sendMessage("0 " + json);
+//            sender.sendMessage("0 " + json);
             systemStrategy = socialController.getConvStrategyFormatted();
             srOutput.setStrategy(systemStrategy);
             //System.out.println("---------------- System Strategy : " + systemStrategy);
@@ -148,15 +121,14 @@ public class SocialReasonerComponent extends PluggableComponent {
         //...
         //Log4J.info(this, "SocialReasonerComponent. These objects have been updated at the blackboard: " + event.toString());
 
-        if (event.getId()==SaraCons.MSG_NVB) {
+        if (event.getId()== SaraCons.MSG_NVB) {
             //System.out.println(" ###################### Message from OpenFace");
             updateNVB();
         }
-        if (event.getId()==SaraCons.MSG_RPT) {
+        if (event.getId()== SaraCons.MSG_RPT) {
             //updateRapport();
         }
         if (event.getId().equals(SaraCons.MSG_NVB)) {
-            System.out.println(" ###################### Message from OpenFace");
             updateNVB();
         }
         if (event.getId().equals(SaraCons.MSG_RPT)) {

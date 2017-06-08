@@ -5,9 +5,9 @@ package edu.cmu.inmind.multiuser.sara.component.beat;
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * This is proprietary and confidential.
  * Written by members of the ArticuLab, directed by Justine Cassell, 2015.
- * 
+ *
  * @author Yoichi Matsuyama <yoichim@cs.cmu.edu>
- * 
+ *
  */
 
 import beat.beat.compiler.BSONCompiler;
@@ -51,12 +51,12 @@ public class BEAT {
 
 	public void initBEAT() throws Exception {
 		// Load DBs:
-		NVBTypes nvbTypes = new NVBTypes(new File(beat.Config.XMLDIR + "NVBTypes.xml"));
-		ModuleTags moduleTags = new ModuleTags(new File(beat.Config.XMLDIR + "ModuleTags.xml"));
-		KnowledgeBase KB = new KnowledgeBase(beat.Config.XMLDIR + beat.Config.KNOWLEGEBASE_FILE);
+		NVBTypes nvbTypes = new NVBTypes(new File(Config.XMLDIR + "NVBTypes.xml"));
+		ModuleTags moduleTags = new ModuleTags(new File(Config.XMLDIR + "ModuleTags.xml"));
+		KnowledgeBase KB = new KnowledgeBase(Config.XMLDIR + Config.KNOWLEGEBASE_FILE);
 		//
-		//inputThread = new InputTheread(this);
-		//inputThread.start();
+		inputThread = new InputTheread(this);
+		inputThread.start();
 		/**
 		 * Build compiler...
 		 */
@@ -68,7 +68,7 @@ public class BEAT {
 		 */
 		FlattenTreeModule treeFlattener = new FlattenTreeModule(nvbTypes, bsonCompiler);// Compiler
 		//
-		if(beat.Config.logging) {
+		if(Config.logging) {
 			BeatModuleTracer tracerForScheduler = new TextTracer(printout);
 			treeFlattener.setOutputTracer(tracerForScheduler);
 		}
@@ -82,7 +82,7 @@ public class BEAT {
 		 */
 		NVBFilterModule filter = new NVBFilterModule(nvbTypes, scheduler);
 
-		if(beat.Config.logging) {
+		if(Config.logging) {
 			filter.setOutputTracer(new PPrintTracer("OUTPUT FROM NVB FILTER MODULE"));
 			BeatModuleTracer tracerForFilter = new TextTracer(printout);
 			scheduler.setInputTracer(tracerForFilter);
@@ -94,7 +94,7 @@ public class BEAT {
 		 * Build generator...
 		 */
 		NVBGeneratorModule generator = new NVBGeneratorModule(nvbTypes, KB, filter);
-		if(beat.Config.logging){
+		if(Config.logging){
 			BeatModuleTracer tracerForGenerator = new TextTracer(printout);
 			generator.setOutputTracer(tracerForGenerator);
 		}
@@ -104,16 +104,16 @@ public class BEAT {
 		generator.register(new IconicGestureGenerator());
 		generator.register(new DeicticGestureGenerator());
 		generator.register(new MonologuePostureShiftGenerator());
-		generator.register(new NVBXSLGenerator(new File(beat.Config.XMLDIR + "BeatGenerator.xsl")));
-		generator.register(new NVBXSLGenerator(new File(beat.Config.XMLDIR + "EyebrowsGenerator.xsl")));
-		generator.register(new NVBXSLGenerator(new File(beat.Config.XMLDIR + "IntonationGenerator.xsl")));
-		generator.register(new NVBXSLGenerator(new File(beat.Config.XMLDIR + "MetaGenerator.xsl")));
-		generator.register(new NVBXSLGenerator(new File(beat.Config.XMLDIR + "PunctuationGenerator.xsl")));
-		generator.register(new NVBXSLGenerator(new File(beat.Config.XMLDIR + "HeadnodGenerator.xsl")));
+		generator.register(new NVBXSLGenerator(new File(Config.XMLDIR + "BeatGenerator.xsl")));
+		generator.register(new NVBXSLGenerator(new File(Config.XMLDIR + "EyebrowsGenerator.xsl")));
+		generator.register(new NVBXSLGenerator(new File(Config.XMLDIR + "IntonationGenerator.xsl")));
+		generator.register(new NVBXSLGenerator(new File(Config.XMLDIR + "MetaGenerator.xsl")));
+		generator.register(new NVBXSLGenerator(new File(Config.XMLDIR + "PunctuationGenerator.xsl")));
+		generator.register(new NVBXSLGenerator(new File(Config.XMLDIR + "HeadnodGenerator.xsl")));
 		// Build tagger...
-		POSTagger postagger = new StanfordTagger(beat.Config.POSTAGGER_HOST, beat.Config.POSTAGGER_PORT);
+		POSTagger postagger = new StanfordTagger(Config.POSTAGGER_HOST, Config.POSTAGGER_PORT);
 		tagger = new LanguageModule(KB, postagger, generator);
-		if(beat.Config.logging) tagger.setOutputTracer(new TextTracer(printout));
+		if(Config.logging) tagger.setOutputTracer(new TextTracer(printout));
 		//
 		System.out.println("Pipeline built!");
 		System.out.println("\n--- Ready to process input ---");
@@ -133,7 +133,7 @@ public class BEAT {
 		try {
 			String inputXML = "<UTTERANCE SCENE=\"" + scene + "\" SPEAKER=\"" + speaker + "\" HEARER=\"" + hearer
 					+ "\">" + input + "</UTTERANCE>";
-			if(beat.Config.logging) System.out.println("startProcess: " + inputXML);
+			if(Config.logging) System.out.println("startProcess: " + inputXML);
 			tagger.process(XMLWrapper.parseXML(inputXML));
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block

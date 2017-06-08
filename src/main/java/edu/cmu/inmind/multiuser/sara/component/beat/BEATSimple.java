@@ -1,6 +1,5 @@
 package edu.cmu.inmind.multiuser.sara.component.beat;
 
-import beat.Config;
 import edu.cmu.inmind.multiuser.common.model.SROutput;
 import edu.usc.ict.vhmsg.MessageEvent;
 import edu.usc.ict.vhmsg.MessageListener;
