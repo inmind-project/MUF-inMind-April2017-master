@@ -71,8 +71,7 @@ dependencies {
     compile name: 'vhmsg-java'
     compile name: 'jfreechart-1.0.19-experimental'
     compile name: 'jfreechart-1.0.19-swt'
-//    compile name: 'beat-new'
-    compile name: 'SARA-BEAT-CommandLine'
+    compile name: 'beat-commandline'
 }
 
 task sourceJar(type: Jar) {

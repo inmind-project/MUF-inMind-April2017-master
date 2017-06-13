@@ -1,5 +1,6 @@
 package edu.cmu.inmind.multiuser.sara.component;
 
+import beat.beat.bson.BSON;
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.common.model.SROutput;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
@@ -11,8 +12,6 @@ import edu.cmu.inmind.multiuser.controller.plugin.StatelessComponent;
 import edu.cmu.inmind.multiuser.sara.component.beat.BEAT;
 import edu.cmu.inmind.multiuser.sara.component.beat.BeatCallback;
 import edu.cmu.inmind.multiuser.sara.component.nlg.SentenceGeneratorTemplate;
-import beat.bson.BSON;
-
 /**
  * Created by oscarr on 3/7/17.
  */
