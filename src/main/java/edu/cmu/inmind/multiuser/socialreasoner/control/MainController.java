@@ -118,7 +118,7 @@ public class MainController{
                     if (getConvStrategyFormatted().equals("NONE_SYSTEM_CS")){
                         System.out.println("+++++++++++++++++++ " + getConvStrategyFormatted());
                     }
-                    printOutput();
+                    //printOutput();
                     resetStates();
                 }
             } catch (Exception ex) {

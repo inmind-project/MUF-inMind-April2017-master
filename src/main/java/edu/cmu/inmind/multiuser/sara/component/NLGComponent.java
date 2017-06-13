@@ -66,7 +66,9 @@ public class NLGComponent extends PluggableComponent implements BeatCallback {
     @Override
     public void onEvent(BlackboardEvent event) {
         //TODO: add code here
-        extractAndProcess();
+        if(event.getId().equals(SaraCons.MSG_SR)) {
+            extractAndProcess();
+        }
     }
 
     @Override
