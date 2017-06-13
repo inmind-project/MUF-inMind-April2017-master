@@ -34,6 +34,7 @@ public class SaraCons {
     public static final String MSG_RPT = "MSG_RPT";
     public static final String MSG_NVB = "MSG_NVB";
     public static final String MSG_StartOpenFace = "MSG_StartOpenFace";
+    public static final String MSG_START_DM = "MSG_START_DM";
     public static final String MSG_GUAVA_SERVICE = "MSG_GUAVA_SERVICE";
     public static final String MSG_SYNC_SERVICE = "MSG_SYNC_SERVICE";
     public static final String MSG_LOG_COMPONENT = "MSG_LOG_COMPONENT";

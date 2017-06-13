@@ -71,7 +71,7 @@ public class NLU_DMComponent extends PluggableComponent {
         Log4J.debug(this, "received " + blackboardEvent.toString());
         // let's forward the ASR message to DialoguePython:
         if (blackboardEvent.getId().equals("MSG_START_SESSION")){
-            ASROutput initialGreeting = new ASROutput("MSG_START_DM", 1.0);
+            ASROutput initialGreeting = new ASROutput(SaraCons.MSG_START_DM, 1.0);
             Log4J.debug(this, "about to send initial greeting ...");
     	    commController.send( getSessionId(), initialGreeting );
             //commController.send( getSessionId(), initialGreeting );
