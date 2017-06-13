@@ -23,14 +23,14 @@ public class UserModelComponent extends PluggableComponent {
     // this is out user model (though you may want to create something more sophisticated)
     private HashMap<String, List<String>> userModel;
     private final static String USER_INTEREST = "user-interests";
-    private final static String PATH = "C:\\Users\\fpecune\\Desktop\\Logs";
+    //private final static String PATH = "C:\\Users\\fpecune\\Desktop\\Logs";
     private final static String FILE_NAME = "MyUserModel.json";
 
     @Override
     public void startUp(){
         super.startUp();
-        // TODO: add code to initialize this component
-        userModel = Utils.readObjectFromJsonFile( PATH + FILE_NAME, HashMap.class);
+        // TODO: uncomment
+        //userModel = Utils.readObjectFromJsonFile( PATH + FILE_NAME, HashMap.class);
         if( userModel == null ) userModel = new HashMap<>();
     }
 
@@ -63,6 +63,6 @@ public class UserModelComponent extends PluggableComponent {
         super.shutDown();
         // TODO: add code to release resources
         // you can store the User Model on disk (DB, File, Json, etc).
-         Utils.writeObjectToJsonFile( userModel, PATH, FILE_NAME);
+        //Utils.writeObjectToJsonFile( userModel, PATH, FILE_NAME);
     }
 }
