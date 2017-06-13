@@ -1,7 +1,8 @@
 
-/.idea/libraries
+.idea/libraries
 .DS_Store
 /build
+/saracommons/build
 /captures
 /.gradle
 /output
