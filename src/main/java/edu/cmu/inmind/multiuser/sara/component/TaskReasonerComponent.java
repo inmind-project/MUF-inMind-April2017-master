@@ -67,7 +67,7 @@ public class TaskReasonerComponent extends PluggableComponent {
             dmOutput.setAction("goodbye");
         }
 
-
+        Log4J.info(this, "TaskReasoner: MSG_DM " + dmOutput.toString());
         return dmOutput;
     }
 
@@ -93,7 +93,7 @@ public class TaskReasonerComponent extends PluggableComponent {
         //Log4J.info(this, "Input: " + saraInput.getASRinput() + " Output: " + saraOutput.getSystemIntent() );
         if (event.getId().equals("MSG_START_SESSION")) {
 		System.out.println("Fake DM is initiating dialogue");
-	}
+	    }
 	blackboard().post(this, SaraCons.MSG_DM, sendToSR());
     }
 

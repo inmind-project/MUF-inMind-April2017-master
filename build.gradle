@@ -47,7 +47,7 @@ configurations.all {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
-    compile 'edu.cmu.inmind.framework:multiuser:2.4.2'        // this is the Multiuser Framework
+    compile 'edu.cmu.inmind.framework:multiuser:2.5-no-locks'        // this is the Multiuser Framework
     compile project(":saracommons")
     compile group: 'aopalliance', name: 'aopalliance', version: '1.0'
     compile group: 'uk.com.robust-it', name: 'cloning', version: '1.9.3'

@@ -53,7 +53,8 @@ public class NLU_DMComponent extends PluggableComponent {
         String[] msgSubscriptions = { SaraCons.MSG_ASR };
         ZMsgWrapper msgWrapper = new ZMsgWrapper();
         commController = new ClientCommController(pythonDialogueAddress, getSessionId(),
-                Utils.getProperty("dialogueAddress"), Constants.REQUEST_CONNECT, msgWrapper, msgSubscriptions);
+                Utils.getProperty("dialogAddress"),
+                Constants.REQUEST_CONNECT, msgWrapper, msgSubscriptions);
     }
 
     private SaraOutput extractAndProcess() {
@@ -65,6 +66,7 @@ public class NLU_DMComponent extends PluggableComponent {
         return saraOutput;
     }
 
+    @Override
     public void onEvent(BlackboardEvent blackboardEvent) {
         Log4J.debug(this, "received " + blackboardEvent.toString());
         // let's forward the ASR message to DialoguePython:

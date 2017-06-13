@@ -43,6 +43,7 @@ public class OpenFaceComponent extends PluggableComponent {
 
 	@Override
 	public void onEvent(BlackboardEvent event) {
+		Log4J.debug(this, "received " + event.toString());
 		if( event.getId().equals(SaraCons.R5STREAM_STARTED))
 		{
 			runOpenFace();
