@@ -22,11 +22,11 @@ public class MainLauncher extends MainClass {
                         //comment out the line below if you want to use remote DialogueSystem
                         .addPlugin(NLUComponent.class, SaraCons.ID_NLU)
                         //.addPlugin(NLU_DMComponent.class, SaraCons.ID_NLU)
-                        .addPlugin(RapportEstimator.class, SaraCons.ID_RPT)
+                        //.addPlugin(RapportEstimator.class, SaraCons.ID_RPT)
                         .addPlugin(TaskReasonerComponent.class, SaraCons.ID_DM)
                         .addPlugin(SocialReasonerComponent.class, SaraCons.ID_SR)
                         .addPlugin(NLGComponent.class, SaraCons.ID_NLG)
-                        .addPlugin(OpenFaceComponent.class, SaraCons.ID_OF)
+                        //.addPlugin(OpenFaceComponent.class, SaraCons.ID_OF)
                         //.addPlugin(UserModelComponent.class, SaraCons.ID_UM)
                         .build()
         };

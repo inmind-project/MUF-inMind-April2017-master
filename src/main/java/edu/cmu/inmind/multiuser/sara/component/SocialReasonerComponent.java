@@ -10,7 +10,6 @@ import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardSubscription;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
 import edu.cmu.inmind.multiuser.controller.plugin.StatefulComponent;
-import edu.cmu.inmind.multiuser.rapportestimator.vhmsg.main.VhmsgSender;
 import edu.cmu.inmind.multiuser.socialreasoner.control.MainController;
 import edu.cmu.inmind.multiuser.socialreasoner.control.util.Utils;
 import edu.cmu.inmind.multiuser.socialreasoner.model.SocialReasonerOutput;
@@ -122,11 +121,11 @@ public class SocialReasonerComponent extends PluggableComponent {
         //...
         //Log4J.info(this, "SocialReasonerComponent. These objects have been updated at the blackboard: " + event.toString());
 
-        if (event.getId()==SaraCons.MSG_NVB) {
+        if (event.getId()== SaraCons.MSG_NVB) {
             //System.out.println(" ###################### Message from OpenFace");
             updateNVB();
         }
-        if (event.getId()==SaraCons.MSG_RPT) {
+        if (event.getId()== SaraCons.MSG_RPT) {
             //updateRapport();
         }
         if (event.getId().equals(SaraCons.MSG_NVB)) {
