@@ -10,7 +10,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="sara_main" />
-    <orderEntry type="library" name="Gradle: edu.cmu.inmind.framework:multiuser:2.5-no-locks" level="project" />
+    <orderEntry type="library" name="Gradle: edu.cmu.inmind.framework:multiuser:2.5.3" level="project" />
     <orderEntry type="module" module-name="saracommons_main" />
     <orderEntry type="library" name="Gradle: aopalliance:aopalliance:1.0" level="project" />
     <orderEntry type="library" name="Gradle: uk.com.robust-it:cloning:1.9.3" level="project" />
