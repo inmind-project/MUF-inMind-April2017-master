@@ -2,6 +2,7 @@ package edu.cmu.inmind.multiuser.sara.component;
 
 import beat.beat.bson.BSON;
 import edu.cmu.inmind.multiuser.common.SaraCons;
+import edu.cmu.inmind.multiuser.common.Utils;
 import edu.cmu.inmind.multiuser.common.model.SROutput;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardSubscription;
@@ -85,6 +86,6 @@ public class NLGComponent extends PluggableComponent implements BeatCallback {
          */
         Log4J.info(this, "Input: " + srOutput.getAction() + " " + srOutput.getStrategy() + " Output: " +bson.getSpeech());
         blackboard().post( this, SaraCons.MSG_NLG, bson );
-        Log4J.info(this, "BSON to Android: " + bson);
+        Log4J.info(this, "BSON to Android: " + Utils.toJson(bson));
     }
 }

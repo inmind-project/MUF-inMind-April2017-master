@@ -24,7 +24,7 @@ import java.util.ArrayList;
  * Created by oscarr on 3/7/17.
  */
 @StatefulComponent
-@BlackboardSubscription( messages = {SaraCons.MSG_ASR, "MSG_START_SESSION"} )
+@BlackboardSubscription( messages = {SaraCons.MSG_ASR, SaraCons.MSG_START_DM} )
 public class NLU_DMComponent extends PluggableComponent {
     private ClientCommController commController;
     private final String pythonDialogueAddress = Utils.getProperty("pythonDialogueAddress");
@@ -70,11 +70,11 @@ public class NLU_DMComponent extends PluggableComponent {
     public void onEvent(BlackboardEvent blackboardEvent) {
         Log4J.debug(this, "received " + blackboardEvent.toString());
         // let's forward the ASR message to DialoguePython:
-        if (blackboardEvent.getId().equals("MSG_START_SESSION")){
-            ASROutput initialGreeting = new ASROutput(SaraCons.MSG_START_DM, 1.0);
+        if (blackboardEvent.getId().equals(SaraCons.MSG_START_DM)){
+            ASROutput startDMMessage = new ASROutput(SaraCons.MSG_START_DM, 1.0);
             Log4J.debug(this, "about to send initial greeting ...");
-    	    commController.send( getSessionId(), initialGreeting );
-            //commController.send( getSessionId(), initialGreeting );
+    	    commController.send( getSessionId(), startDMMessage );
+            commController.send( getSessionId(), startDMMessage );
             Log4J.debug(this, "Sent Initial Greeting");
         } else {
             Log4J.debug(this, "sending on " + blackboardEvent.toString() );

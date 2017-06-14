@@ -34,6 +34,7 @@ public class SaraOrchestratorEx15 extends ProcessOrchestratorImpl {
 
         SessionMessage inputMessage = Utils.fromJson(message, SessionMessage.class);
         if( inputMessage.getMessageId().equals("MSG_START_SESSION") ){
+            Log4J.info( this, "MSG_START_SESSION");
             blackboard.post( this, inputMessage.getMessageId(), inputMessage.getPayload() );
         }
         else if( inputMessage.getMessageId().equals(SaraCons.R5STREAM_STARTED) ||
@@ -42,6 +43,10 @@ public class SaraOrchestratorEx15 extends ProcessOrchestratorImpl {
                 inputMessage.getMessageId().equals(SaraCons.R5STREAM_TIMEOUT) ||
                 inputMessage.getMessageId().equals(SaraCons.R5STREAM_ERROR))
         {
+            blackboard.post( this, inputMessage.getMessageId(), inputMessage.getPayload() );
+        }
+        else if( inputMessage.getMessageId().equals(SaraCons.MSG_START_DM) ){
+            Log4J.info( this, SaraCons.MSG_START_DM);
             blackboard.post( this, inputMessage.getMessageId(), inputMessage.getPayload() );
         }
         else{
@@ -61,8 +66,9 @@ public class SaraOrchestratorEx15 extends ProcessOrchestratorImpl {
     public void onEvent(BlackboardEvent event){
         if(event.getId().equals(SaraCons.MSG_NLG)) {
             response = (BSON) blackboard.get(SaraCons.MSG_NLG);
-            Log4J.debug(this, "sending out to client: " + response.toString());
+            Log4J.debug(this, "sending out to client: " + Utils.toJson(response));
             sendResponse(new SessionMessage(SaraCons.MSG_NLG, Utils.toJson(response)));
+            //sendResponse(new SessionMessage("test", "test"));
         }
         else if(event.getId().equals(SaraCons.MSG_START_STREAMING))
         {

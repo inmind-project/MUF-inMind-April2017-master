@@ -138,13 +138,13 @@ public class MainController{
     }
 
     private void printOutput() {
-        String output = removeSufix(trIntent.getIntent() + "\t" + rapportScore  + "\t" + userConvStrategy  + "\t" + smile  + "\t"
+        /*String output = removeSufix(trIntent.getIntent() + "\t" + rapportScore  + "\t" + userConvStrategy  + "\t" + smile  + "\t"
                 + eyeGaze + "\t" + availableSharedExp + "\t" + getConvStrategyFormatted()  + "\t" + Arrays.toString(conversationalStrategies)
                 + "\t Liste intentions " + socialReasoner.getOutput() + "\t" + socialReasoner.getStates() + "\t" + socialReasoner.getMatches()) + "\n";
         if( verbose ) {
             System.out.print(output);
         }
-        outputResults += output;
+        outputResults += output;*/
 
     }
 
