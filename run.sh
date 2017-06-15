@@ -1,2 +1,3 @@
-#!/bin/sh
-bash ./gradlew build && java -jar build/libs/sara-with-dependencies-1.0.jar
+#!/bin/bash
+date=`date --iso-8601=seconds`
+bash ./gradlew build && java -jar build/libs/sara-with-dependencies-2.0.jar  > >(tee stdout.$date) 2> >(tee stderr.$date >&2)
