@@ -1,6 +1,8 @@
 package edu.cmu.inmind.multiuser.sara.component;
 
+import beat.beat.bson.BSON;
 import edu.cmu.inmind.multiuser.common.SaraCons;
+import edu.cmu.inmind.multiuser.common.Utils;
 import edu.cmu.inmind.multiuser.common.model.SROutput;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardSubscription;
@@ -11,8 +13,6 @@ import edu.cmu.inmind.multiuser.controller.plugin.StatelessComponent;
 import edu.cmu.inmind.multiuser.sara.component.beat.BEAT;
 import edu.cmu.inmind.multiuser.sara.component.beat.BeatCallback;
 import edu.cmu.inmind.multiuser.sara.component.nlg.SentenceGeneratorTemplate;
-import beat.bson.BSON;
-
 /**
  * Created by oscarr on 3/7/17.
  */
@@ -67,7 +67,9 @@ public class NLGComponent extends PluggableComponent implements BeatCallback {
     @Override
     public void onEvent(BlackboardEvent event) {
         //TODO: add code here
-        extractAndProcess();
+        if(event.getId().equals(SaraCons.MSG_SR)) {
+            extractAndProcess();
+        }
     }
 
     @Override
@@ -84,6 +86,6 @@ public class NLGComponent extends PluggableComponent implements BeatCallback {
          */
         Log4J.info(this, "Input: " + srOutput.getAction() + " " + srOutput.getStrategy() + " Output: " +bson.getSpeech());
         blackboard().post( this, SaraCons.MSG_NLG, bson );
-        Log4J.info(this, "BSON to Android: " + bson);
+        Log4J.info(this, "BSON to Android: " + Utils.toJson(bson));
     }
 }

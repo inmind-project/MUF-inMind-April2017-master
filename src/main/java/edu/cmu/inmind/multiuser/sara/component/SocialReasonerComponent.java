@@ -8,9 +8,9 @@ import edu.cmu.inmind.multiuser.common.model.SROutput;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardSubscription;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
+import edu.cmu.inmind.multiuser.controller.log.Loggable;
 import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
 import edu.cmu.inmind.multiuser.controller.plugin.StatefulComponent;
-import edu.cmu.inmind.multiuser.rapportestimator.vhmsg.main.VhmsgSender;
 import edu.cmu.inmind.multiuser.socialreasoner.control.MainController;
 import edu.cmu.inmind.multiuser.socialreasoner.control.util.Utils;
 import edu.cmu.inmind.multiuser.socialreasoner.model.SocialReasonerOutput;
@@ -31,6 +31,7 @@ public class SocialReasonerComponent extends PluggableComponent {
     private boolean isSmiling;
     private boolean isGazing;
 
+    @Loggable
     @Override
     public void startUp(){
         super.startUp();
@@ -40,6 +41,7 @@ public class SocialReasonerComponent extends PluggableComponent {
         // TODO: add code to initialize this component
     }
 
+    @Loggable
     @Override
     public void execute() {
         Log4J.info(this, "SocialReasonerComponent: " + hashCode());
@@ -76,6 +78,7 @@ public class SocialReasonerComponent extends PluggableComponent {
         SROutput srOutput = new SROutput();
 
         DMOutput dmOutput = (DMOutput) blackboard().get(SaraCons.MSG_DM);
+        Log4J.info(this,"dmOutput : "+dmOutput.toString() );
         srOutput.setAction(dmOutput.getAction());
         srOutput.setEntities(dmOutput.getEntities());
         srOutput.setRecommendation(dmOutput.getRecommendation());
@@ -116,17 +119,18 @@ public class SocialReasonerComponent extends PluggableComponent {
      * If the blackboard model is modified externally, does SR have to do anything? this is useful when running multiple
      * processes in parallel rather than sequentially.
      */
+    @Loggable
     @Override
     public void onEvent(BlackboardEvent event) {
         //TODO: add code here
         //...
         //Log4J.info(this, "SocialReasonerComponent. These objects have been updated at the blackboard: " + event.toString());
 
-        if (event.getId()==SaraCons.MSG_NVB) {
+        if (event.getId()== SaraCons.MSG_NVB) {
             //System.out.println(" ###################### Message from OpenFace");
             updateNVB();
         }
-        if (event.getId()==SaraCons.MSG_RPT) {
+        if (event.getId()== SaraCons.MSG_RPT) {
             //updateRapport();
         }
         if (event.getId().equals(SaraCons.MSG_NVB)) {
@@ -142,6 +146,7 @@ public class SocialReasonerComponent extends PluggableComponent {
 
     }
 
+    @Loggable
     @Override
     public void shutDown() {
         super.shutDown();

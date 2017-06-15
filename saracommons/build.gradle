@@ -1,5 +1,5 @@
 group 'edu.cmu.inmind'
-version '2.0.1'
+version '2.0.4'
 
 apply plugin: 'java'
 
@@ -66,3 +66,4 @@ uploadArchives {
         }
     }
 }
+
