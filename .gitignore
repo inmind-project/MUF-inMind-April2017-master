@@ -1,5 +1,5 @@
-stderr.*
-stdout.*
+/logs/stderr.*
+/logs/stdout.*
 /.idea/libraries
 .DS_Store
 /build
