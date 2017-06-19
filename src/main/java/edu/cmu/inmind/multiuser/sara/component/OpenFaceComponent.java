@@ -44,21 +44,22 @@ public class OpenFaceComponent extends PluggableComponent {
 	@Override
 	public void onEvent(BlackboardEvent event) {
 		Log4J.debug(this, "received " + event.toString());
-		if( event.getId().equals(SaraCons.R5STREAM_STARTED))
-		{
+		if( event.getId().equals(SaraCons.R5STREAM_STARTED)) {
 			runOpenFace();
-		}
-		else if(event.getId().equals(SaraCons.R5STREAM_DISCONNECTED) ||
+		} else if(event.getId().equals(SaraCons.R5STREAM_DISCONNECTED) ||
 				event.getId().equals(SaraCons.R5STREAM_CLOSE) ||
 				event.getId().equals(SaraCons.R5STREAM_TIMEOUT) ||
 				event.getId().equals(SaraCons.R5STREAM_ERROR))
 		{
 			stopOpenFace();
+		} else {
+			throw new RuntimeException("I've received an event that I don't like: " + event.toString());
 		}
 	}
 
 	public void runOpenFace(){
 		String url = Utils.getProperty("streamingURL") + getSessionId();
+		Log4J.debug(this, "streaming from " + url);
 		startupAndReturn(url);
 	}
 
