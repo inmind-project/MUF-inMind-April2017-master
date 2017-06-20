@@ -1,24 +1,28 @@
 package edu.cmu.inmind.multiuser.common.model;
 
-import java.util.EnumMap;
 import java.util.List;
 
 /**
  * Created by fpecune on 4/15/2017.
  */
 public class CSCOutput {
-    private EnumMap<ConversationalStrategy, Double> userConversationalStrategies;
+    private List<Strategy> userStrategies;
 
     public String toString(){
-        return "User strategies: " + userConversationalStrategies;
+        String message = "";
+        for(Strategy s : userStrategies){
+            message += userStrategies.get(0).getName() + " " + userStrategies.get(0).getScore();
+            message += " ";
+        }
+        return "Component: " + this.getClass().toString() + message;
     }
 
-    public void setStrategyScores(EnumMap<ConversationalStrategy, Double> strategies){
-        this.userConversationalStrategies = strategies;
+    public void setUserStrategies(List<Strategy> strategies){
+        this.userStrategies = strategies;
     }
 
-    public EnumMap<ConversationalStrategy, Double> getUserStrategies(){
-        return this.userConversationalStrategies;
+    public List<Strategy> getUserStrategies(){
+        return this.userStrategies;
     }
 
 }
