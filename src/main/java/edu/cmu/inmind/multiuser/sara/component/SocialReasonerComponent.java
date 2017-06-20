@@ -1,12 +1,11 @@
 package edu.cmu.inmind.multiuser.sara.component;
 
+import com.google.gson.Gson;
 import edu.cmu.inmind.multiuser.common.SaraCons;
-import edu.cmu.inmind.multiuser.common.model.DMOutput;
-import edu.cmu.inmind.multiuser.common.model.NonVerbalOutput;
-import edu.cmu.inmind.multiuser.common.model.RapportOutput;
-import edu.cmu.inmind.multiuser.common.model.SROutput;
+import edu.cmu.inmind.multiuser.common.model.*;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardSubscription;
+import edu.cmu.inmind.multiuser.controller.communication.SessionMessage;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.controller.log.Loggable;
 import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
@@ -50,7 +49,9 @@ public class SocialReasonerComponent extends PluggableComponent {
 
 
     private void updateRapport(){
-        RapportOutput rapportOutput = (RapportOutput) blackboard().get(SaraCons.MSG_RPT);
+        RapportOutput rapportOutput = edu.cmu.inmind.multiuser.common.Utils.fromJson(
+                (String) blackboard().get(SaraCons.MSG_RPT), RapportOutput.class );
+
         rapport = (int)rapportOutput.getRapportScore();
         userCS = rapportOutput.getUserStrategy();
         socialController.setRapportScore(rapport);

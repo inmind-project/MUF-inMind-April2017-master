@@ -1,26 +1,28 @@
 package edu.cmu.inmind.multiuser.common.model;
 
-//import edu.cmu.lti.rapport.pipline.csc.ConversationalStrategyDistribution;
-
-import java.util.EnumMap;
 import java.util.List;
 
 /**
  * Created by fpecune on 4/15/2017.
  */
 public class CSCOutput {
-    /*private ConversationalStrategyDistribution userConversationalStrategies;
+    private List<Strategy> userStrategies;
 
     public String toString(){
-        return "User strategies: " + userConversationalStrategies;
+        String message = "";
+        for(Strategy s : userStrategies){
+            message += userStrategies.get(0).getName() + " " + userStrategies.get(0).getScore();
+            message += " ";
+        }
+        return "Component: " + this.getClass().toString() + message;
     }
 
-    public void setStrategyScores(ConversationalStrategyDistribution strategies){
-        this.userConversationalStrategies = strategies;
+    public void setUserStrategies(List<Strategy> strategies){
+        this.userStrategies = strategies;
     }
 
-    public ConversationalStrategyDistribution getUserStrategies(){
-        return this.userConversationalStrategies;
+    public List<Strategy> getUserStrategies(){
+        return this.userStrategies;
     }
-*/
+
 }
