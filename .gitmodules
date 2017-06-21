@@ -1,0 +1,4 @@
+[submodule "saracsc"]
+	path = saracsc
+	url = git@github.com:mmasley/SARA-WEF-Jan2017-UnderstandingModule.git
+	branch = InMind
