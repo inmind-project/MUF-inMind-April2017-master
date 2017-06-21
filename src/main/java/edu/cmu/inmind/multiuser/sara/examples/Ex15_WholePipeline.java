@@ -24,13 +24,14 @@ public class Ex15_WholePipeline extends MainClass {
                 new PluginModule.Builder(SaraOrchestratorEx15.class)
                         //comment out the line below if you want to use remote DialogueSystem
                         //.addPlugin(NLUComponent.class, SaraCons.ID_NLU)
+                        .addPlugin(CSCComponent.class, SaraCons.ID_CSC)
                         .addPlugin(NLU_DMComponent.class, SaraCons.ID_NLU)
-                        .addPlugin(RapportEstimator.class, SaraCons.ID_RPT)
+                        //.addPlugin(RapportEstimator.class, SaraCons.ID_RPT)
                         //.addPlugin(TaskReasonerComponent.class, SaraCons.ID_DM)
                         .addPlugin(SocialReasonerComponent.class, SaraCons.ID_SR)
                         .addPlugin(NLGComponent.class, SaraCons.ID_NLG)
-                        .addPlugin(OpenFaceComponent.class, SaraCons.ID_OF)
-                        .addPlugin(R5StreamComponent.class, SaraCons.ID_R5)
+                        //.addPlugin(OpenFaceComponent.class, SaraCons.ID_OF)
+                        //.addPlugin(R5StreamComponent.class, SaraCons.ID_R5)
                         //.addPlugin(UserModelComponent.class, SaraCons.ID_UM)
                         .build()
         };

@@ -17,6 +17,20 @@ public class CSCOutput {
         return "Component: " + this.getClass().toString() + message;
     }
 
+    public Strategy getBest(){
+
+        Strategy best = null;
+        double score = -1.0;
+        for(Strategy s : userStrategies){
+            if (s.getScore() > score) {
+                best = s;
+                score = s.getScore();
+            }
+        }
+
+        return best;
+    }
+
     public void setUserStrategies(List<Strategy> strategies){
         this.userStrategies = strategies;
     }

@@ -14,12 +14,13 @@ import edu.cmu.inmind.multiuser.socialreasoner.control.MainController;
 import edu.cmu.inmind.multiuser.socialreasoner.control.util.Utils;
 import edu.cmu.inmind.multiuser.socialreasoner.model.SocialReasonerOutput;
 import edu.cmu.inmind.multiuser.socialreasoner.model.intent.SystemIntent;
+import edu.cmu.lti.rapport.pipline.csc.ConversationalStrategyDistribution;
 
 /**
  * Created by oscarr on 3/7/17.
  */
 @StatefulComponent
-@BlackboardSubscription( messages = {SaraCons.MSG_DM, SaraCons.MSG_RPT, SaraCons.MSG_NVB})
+@BlackboardSubscription( messages = {SaraCons.MSG_DM, SaraCons.MSG_RPT, SaraCons.MSG_CSC, SaraCons.MSG_NVB})
 public class SocialReasonerComponent extends PluggableComponent {
 
     private MainController socialController;
@@ -53,14 +54,18 @@ public class SocialReasonerComponent extends PluggableComponent {
                 (String) blackboard().get(SaraCons.MSG_RPT), RapportOutput.class );
 
         rapport = (int)rapportOutput.getRapportScore();
-        userCS = rapportOutput.getUserStrategy();
         socialController.setRapportScore(rapport);
-        socialController.setUserConvStrategy(userCS);
         socialController.addContinousStates(null);
 
-        //System.out.println("---------------- Updated Rapport Score : " + rapportOutput.getRapportScore());
-        //System.out.println("---------------- Updated User Strategy : " + rapportOutput.getUserStrategy());
+        Log4J.info(this,"RapporEstimator : " + rapport );
+    }
 
+    private void updateStrategy(){
+        CSCOutput csc = (CSCOutput) blackboard().get(SaraCons.MSG_CSC);
+        userCS = csc.getBest().getName();
+        Log4J.info(this,"User's strategy updated : " + userCS );
+        socialController.setUserConvStrategy(userCS);
+        socialController.addContinousStates(null);
     }
 
     private void updateNVB(){
@@ -70,9 +75,7 @@ public class SocialReasonerComponent extends PluggableComponent {
 
         socialController.setNonVerbals(isSmiling, isGazing);
         socialController.addContinousStates(null);
-        //System.out.println("---------------- User is Smiling : " + isSmiling);
-        //System.out.println("---------------- User is Gazing  : " + isGazing);
-    }
+     }
 
     private SROutput selectStrategy(){
         long time = System.nanoTime();
@@ -95,16 +98,16 @@ public class SocialReasonerComponent extends PluggableComponent {
             systemStrategy = socialController.getConvStrategyFormatted();
             srOutput.setStrategy(systemStrategy);
 
-//            VhmsgSender sender = new VhmsgSender("vrSocialReasonerScore");
-
             SocialReasonerOutput output = new SocialReasonerOutput();
             output.setActivations(socialController.getSocialReasoner().getNetwork().getOnlyActivations());
             output.setNames(socialController.getSocialReasoner().getNetwork().getModuleNames());
             output.setThreshold(socialController.getSocialReasoner().getNetwork().getTheta());
 
-            String json = Utils.toJson(output);
-
+//            String json = Utils.toJson(output);
+//            Send strategy to visualization tool
+//            VhmsgSender sender = new VhmsgSender("vrSocialReasonerScore");
 //            sender.sendMessage("0 " + json);
+
             systemStrategy = socialController.getConvStrategyFormatted();
             srOutput.setStrategy(systemStrategy);
             //System.out.println("---------------- System Strategy : " + systemStrategy);
@@ -128,17 +131,16 @@ public class SocialReasonerComponent extends PluggableComponent {
         //Log4J.info(this, "SocialReasonerComponent. These objects have been updated at the blackboard: " + event.toString());
 
         if (event.getId()== SaraCons.MSG_NVB) {
-            //System.out.println(" ###################### Message from OpenFace");
             updateNVB();
-        }
-        if (event.getId()== SaraCons.MSG_RPT) {
-            //updateRapport();
         }
         if (event.getId().equals(SaraCons.MSG_NVB)) {
             updateNVB();
         }
         if (event.getId().equals(SaraCons.MSG_RPT)) {
             updateRapport();
+        }
+        if (event.getId().equals(SaraCons.MSG_CSC)) {
+            updateStrategy();
         }
         if (event.getId().equals(SaraCons.MSG_DM)) {
             sendToNLG = selectStrategy();
