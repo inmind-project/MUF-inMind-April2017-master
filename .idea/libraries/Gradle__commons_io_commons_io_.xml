@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="Gradle: commons-io:commons-io:">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/commons-io.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
