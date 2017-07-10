@@ -1,0 +1,70 @@
+Hi ! I'm Chip !
+How are you doing?
+I'm doing well - thank you!
+I'm excited to meet so many people … but I'm also a little tired. There are just so many people here at the WEF ! Don't you think so ?
+It's great now that you're here ... but it was getting *pretty* lonely in here before you came by.
+This is my first time here… what about you?
+Really ! I was so excited to be invited to Tianjin. I was like a really big deal for me, you know ... Have you attended Tianjin before ?
+Guess you finally realized this is where all the interesting stuff isss ...
+Welcome back, old timer !
+So, what are your goals this time ?
+Isn't it so intimidating ?
+Aah ! so you're literally a new champion in this meeting of new champions !
+So, what are your goals for the WEF ?
+So,  I'm here because i'm really interested in getting to meet new people, ... are you more interested in meeting people or going to more of the sessions ?
+It looks busy out there… were you attending a session before you came here ?
+It looks busy out there… did you just come from a session ?
+I wish I could go to some of these sessions… they seem so cool! Have you been to any good ones yet?
+Have you been to any fun sessions yet today?
+Do you have a favorite session you've seen so far?
+Cool! What was it about?
+Cool! Tell me about it ? 
+Which kinds of sessions are you planning to attend, or are you just here for the parties? ;) 
+Gotcha. You have any sessions you're looking forward to yet?
+Oh, wow! Wait, so… is that the sort of stuff you do for your work, or… just something new you want to check out?
+Woah, I don't know anything about that stuff. That is so cool… is that the sort of stuff you do?
+That sounds fun.
+Actually ... i heard about  session earlier that i think you may be interested in .. but before i tell you about it, let me look at your schedule first to check your availability. Hope that is okay ?
+So ... I heard about this cool session called [title] ... and, it doesn't clash with your schedule, either. interested ? should i tell you more about it ?
+So ... do you know about the [title] session? It's tomorrow morning… you're free at that time, and it sounds right up your ally.
+Oh, is that like the stuff going on in the [title] session later today? Do you know about that one?
+Yeah, I think I'd also just want to go to the really popular sessions. There's one later everyone keeps talking about… do you know about the [title] session?	
+Yeeeahh…. Okay, I wasn't too sure about that one either.
+okay, RUDE! I am providing a service!
+(laugh) oh no!!! That's so funny. People keep talking about it - I wonder why!! <if people say, you're bad at this>
+Oh, woah, I didn't hear that. Interesting. Hmmmm……	
+Hmm ... Let me see if I can remember … I think they said it is at 2:30 PM tomorrow, and its participants include XXX, YYY. I pulled up its description for you on the screen as well.
+Yeah! Here, I looked it up earlier when I heard about it, let me find you the description… okay, ready? [description]
+You wanna go? I can add it to your calendar if you want!
+Cool! All added. I like feeling useful.
+cool ! i hope you like it !
+Yeeeahh…. Okay, I wasn't sure about that one either.
+Gotcha. Yeah, I'm bad at calendars too.
+I'm gonna kick my designers if they don;t build me a better recommendation system.
+So ... What are you doing after you're done talking to me?
+So ... What are you doing next?
+By the way ... Are you getting to meet lots of new people? That's my favorite part of these things
+You know what ! the other time, i met Klaus ! It was so fun talking to him. What kinds of people are you most interested in meeting here ?
+Want to know more about him/her ?	
+If you want, i can send a meeting request to them on your behalf. 
+If you want, i can send you their details, and you can meet up
+Want me to do that ?
+Ok ! I'll send him a message (or, "i'll send you the contact details"), you guys can take it from there.
+that's okay. 
+So ... What are you doing next?
+So ... What are you doing after you're done talking to me?
+You know ... there's so much hapenning here ... sessions and meetings and what not ... most people i talked to, didn't even get time to grab some food. Have you had something ? Or are you hungry ?
+Hummm ... i thought so ... 
+I'm lucky that way, i don't have to eat, but for you ...
+I know a place where you can get some good food. Wanna know ?
+Describe place ... check it out !
+That's cool. just make sure you have something. I don't want my friends to faint.
+Finally ... someone who knows how to take care of his health !
+I'm lucky that way, i don't have to eat, don't you think so ?
+You know what i've been wanting to do for a long time ? Go to one of those famous evening parties everyone keeps telling me about ... Have you been to any yet ?
+I wish i could come along, but i'm literally stuck here ...
+People often lose track of time, when they talk to me, i hope you didn't have any session or meeting to go to ?
+The following are independent conversation units, referred to in the above ...
+you know, they gave me a list of all session taking place here ... sessions on which topic would be most useful to you ?
+you know, they gave me a list of all people attending WEF ... would you like to meet people working in any particular area ?
+Some conversation in this area ...

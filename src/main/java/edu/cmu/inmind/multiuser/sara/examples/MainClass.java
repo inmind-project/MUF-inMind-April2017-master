@@ -59,7 +59,7 @@ public class MainClass {
                 .setPathLogs(Utils.getProperty("pathLogs"))
                 .setSessionTimeout(10, TimeUnit.DAYS)
                 .setServerAddress("127.0.0.1") //use IP instead of 'localhost'
-                .setShouldShowException(true)
+                //.setShouldShowException(true)
                 .build();
     }
 

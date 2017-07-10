@@ -2,7 +2,7 @@ package edu.cmu.inmind.multiuser.sara.examples;
 
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.controller.plugin.PluginModule;
-import edu.cmu.inmind.multiuser.sara.component.NLU_DMComponent;
+//import edu.cmu.inmind.multiuser.sara.component.NLU_DMComponent;
 import edu.cmu.inmind.multiuser.sara.component.UserModelComponent;
 import edu.cmu.inmind.multiuser.sara.orchestrator.SaraOrchestratorEx13;
 
@@ -27,7 +27,7 @@ public class Ex13_UserModel extends MainClass {
     protected PluginModule[] createModules() {
         return new PluginModule[]{
                 new PluginModule.Builder(SaraOrchestratorEx13.class)
-                        .addPlugin(NLU_DMComponent.class, SaraCons.ID_NLU)
+                        //.addPlugin(NLU_DMComponent.class, SaraCons.ID_NLU)
                         .addPlugin(UserModelComponent.class, SaraCons.ID_UM)
                         .build()
         };

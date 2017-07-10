@@ -10,6 +10,8 @@
 # idea files
 .idea/
 .idea/**
+# class files
+.class
 
 # Local configuration file (sdk path, etc)
 local.properties
