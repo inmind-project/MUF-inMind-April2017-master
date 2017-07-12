@@ -4,7 +4,7 @@ public class Config {
     /**
      * Path to behavior rules XML
      */
-    public static final String XMLDIR="XMLData/";
+    public static final String XMLDIR="sarabeat/XMLData/";
     /**
      * Filename of knowledgebase
      */

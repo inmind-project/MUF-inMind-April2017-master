@@ -1029,7 +1029,7 @@ public class LanguageModule extends BeatModule {
 		XMLWrapper newxml = null;
 		try {
 			if(Config.logging)System.out.println("INPUT OF POS: "+xml);
-			XMLWrapper.Transform xsl = new XMLWrapper.Transform(new File("XMLData/nlpConverter.xsl"));
+			XMLWrapper.Transform xsl = new XMLWrapper.Transform(new File(Config.XMLDIR + "nlpConverter.xsl"));
 			XMLWrapper oldxml = new XMLWrapper(xml.toXml());
 			newxml = new XMLWrapper(XMLWrapper.applyTransform(xsl,oldxml.getDocument()));
 			if(Config.logging)System.out.println("OUTPUT OF POS new xml: "+newxml);
