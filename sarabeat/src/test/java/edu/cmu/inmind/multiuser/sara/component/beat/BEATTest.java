@@ -1,6 +1,7 @@
 package edu.cmu.inmind.multiuser.sara.component.beat;
 
 import beat.BEAT;
+import beat.Config;
 import org.junit.Test;
 
 /**
@@ -10,6 +11,7 @@ public class BEATTest {
 
     @Test(timeout = 10000)
     public void beatTest() throws Exception {
+        Config.XMLDIR = "XMLData/";
         BEAT beat = new BEAT();
         String input = "This is a test sentence.";
         beat.getBsonCompiler().setPlainText(input);

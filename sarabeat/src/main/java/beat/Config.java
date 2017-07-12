@@ -4,7 +4,7 @@ public class Config {
     /**
      * Path to behavior rules XML
      */
-    public static final String XMLDIR="sarabeat/XMLData/";
+    public static String XMLDIR="sarabeat/XMLData/";
     /**
      * Filename of knowledgebase
      */
@@ -19,11 +19,11 @@ public class Config {
     public static final String POSTAGGER_HOST = "localhost";
     public static final int    POSTAGGER_PORT = 9000; //9090
     /**
-     *
-     */
-    public static final String BML_FILE = "BML/sentence-bml.tsv";
-    /**
      * Log
      */
     public static boolean logging = false;
+    /**
+     * Local or server-client Stanford NLP
+     */
+    public static boolean useStanfordCoreNLPServer = false;
 }

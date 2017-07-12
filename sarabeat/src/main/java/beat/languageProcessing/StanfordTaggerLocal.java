@@ -1,36 +1,32 @@
 package beat.languageProcessing;
-import java.io.StreamTokenizer;
-import java.util.List;
-import java.util.Properties;
-import java.util.Vector;
 
 import beat.Config;
 import beat.utilities.XMLWrapper;
-import org.w3c.dom.Element;
-
-import edu.stanford.nlp.ling.CoreAnnotations.LemmaAnnotation;
-import edu.stanford.nlp.ling.CoreAnnotations.NamedEntityTagAnnotation;
-import edu.stanford.nlp.ling.CoreAnnotations.PartOfSpeechAnnotation;
-import edu.stanford.nlp.ling.CoreAnnotations.SentencesAnnotation;
-import edu.stanford.nlp.ling.CoreAnnotations.TextAnnotation;
-import edu.stanford.nlp.ling.CoreAnnotations.TokensAnnotation;
+import edu.stanford.nlp.ling.CoreAnnotations.*;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.pipeline.Annotation;
+import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.pipeline.StanfordCoreNLPClient;
 import edu.stanford.nlp.semgraph.SemanticGraph;
 import edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations.CollapsedCCProcessedDependenciesAnnotation;
 import edu.stanford.nlp.trees.Tree;
 import edu.stanford.nlp.trees.TreeCoreAnnotations.TreeAnnotation;
 import edu.stanford.nlp.util.CoreMap;
+import org.w3c.dom.Element;
 
-public class StanfordTagger implements POSTagger {
-	public StanfordCoreNLPClient pipeline;
-	
-	public StanfordTagger(String server, int port) {
+import java.io.StreamTokenizer;
+import java.util.List;
+import java.util.Properties;
+import java.util.Vector;
+
+public class StanfordTaggerLocal implements POSTagger {
+	public StanfordCoreNLP pipeline;
+
+	public StanfordTaggerLocal() {
 		// creates a StanfordCoreNLP object with POS tagging, lemmatization, NER, parsing, and coreference resolution
 		Properties props = new Properties();
 		props.setProperty("annotators", "tokenize, ssplit, pos, lemma, parse");
-		pipeline = new StanfordCoreNLPClient(props, Config.POSTAGGER_HOST, Config.POSTAGGER_PORT, 1);
+		pipeline = new StanfordCoreNLP(props);
 	}
 	
 	public static void main(String[] args) {

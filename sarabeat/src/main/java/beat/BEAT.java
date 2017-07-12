@@ -19,6 +19,7 @@ import beat.kb.KnowledgeBase;
 import beat.languageProcessing.LanguageModule;
 import beat.languageProcessing.POSTagger;
 import beat.languageProcessing.StanfordTagger;
+import beat.languageProcessing.StanfordTaggerLocal;
 import beat.nvbgenerators.*;
 import beat.scheduler.SchedulerModule;
 import beat.speechTiming.FixedTimingSource;
@@ -114,7 +115,13 @@ public class BEAT {
 		generator.register(new NVBXSLGenerator(new File(Config.XMLDIR + "PunctuationGenerator.xsl")));
 		generator.register(new NVBXSLGenerator(new File(Config.XMLDIR + "HeadnodGenerator.xsl")));
 		// Build tagger...
-		POSTagger postagger = new StanfordTagger(Config.POSTAGGER_HOST, Config.POSTAGGER_PORT);
+		POSTagger postagger = null;
+		if(Config.useStanfordCoreNLPServer){
+			postagger = new StanfordTagger(Config.POSTAGGER_HOST, Config.POSTAGGER_PORT);
+		} else {
+			postagger = new StanfordTaggerLocal();
+		}
+
 		tagger = new LanguageModule(KB, postagger, generator);
 		if(Config.logging) tagger.setOutputTracer(new TextTracer(printout));
 		//
