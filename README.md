@@ -1,4 +1,17 @@
 # MUF-inMind-April2017
+
+## Cloning with Subomudles
+This repository contains submodules which you need to checkout in addition to the main respository itself.
+
+Either clone by saying ```git clone --recursive git@github.com:fpecune/MUF-inMind-April2017-master.git```, 
+or after cloning say the following to populate the submodules:
+```bash
+git submodule init
+git submodule update
+```
+
+## Contents:
+
 This repository contains:
 1.	SARA Commons, a library defining:
 
