@@ -2,3 +2,6 @@
 	path = saracsc
 	url = git@github.com:mmasley/SARA-WEF-Jan2017-UnderstandingModule.git
 	branch = InMind
+[submodule "sarabeat"]
+	path = sarabeat
+	url = https://github.com/mmasley/InMind-April2017-BEAT/
