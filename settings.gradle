@@ -1,4 +1,4 @@
 rootProject.name = 'sara'
 include 'saracommons'
-//include 'saracsc'
+include 'saracsc'
 include 'sarabeat'
