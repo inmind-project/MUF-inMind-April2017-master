@@ -21,7 +21,11 @@ public class SaraOrchestratorEx12 extends ProcessOrchestratorImpl {
         // messageLogger = new SaraDBLogger();
         // messageLogger.setPath( "your-db-connection-string-goes-here");
 
-        super.initialize( session );
+        try {
+            super.initialize( session );
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
     }
 
     @Override
@@ -52,7 +56,11 @@ public class SaraOrchestratorEx12 extends ProcessOrchestratorImpl {
         // by default, the log is stored on disk when you finish the session (e.g., you type shutdown) but you can force
         // it like this:
         try {
-            logger.store();
+            try {
+                logger.store();
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+            }
         }catch (Exception e){
             ExceptionHandler.handle(e);
         }
@@ -87,7 +95,11 @@ public class SaraOrchestratorEx12 extends ProcessOrchestratorImpl {
 
     @Override
     public void close() throws Exception{
-        super.close();
+        try {
+            super.close();
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
         //TODO: add some logic when session is closed (e.g., release resources)
     }
 }

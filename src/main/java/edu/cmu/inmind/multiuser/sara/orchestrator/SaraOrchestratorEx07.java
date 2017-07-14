@@ -22,7 +22,11 @@ public class SaraOrchestratorEx07 extends ProcessOrchestratorImpl {
 
     @Override
     public void initialize(Session session) throws Exception{
-        super.initialize( session );
+        try {
+            super.initialize( session );
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
     }
 
     @Override
@@ -66,7 +70,11 @@ public class SaraOrchestratorEx07 extends ProcessOrchestratorImpl {
 
     @Override
     public void close() throws Exception{
-        super.close();
+        try {
+            super.close();
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
         //TODO: add some logic when session is closed (e.g., release resources)
     }
 }
