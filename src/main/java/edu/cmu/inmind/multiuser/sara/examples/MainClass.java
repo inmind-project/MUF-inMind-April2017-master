@@ -66,14 +66,11 @@ public class MainClass {
                 // or you can refer to values in your config.properties file:
                 .setPathLogs(Utils.getProperty("pathLogs"))
                 .setSessionTimeout(10, TimeUnit.DAYS)
-<<<<<<< HEAD
                 .setServerAddress("tcp://127.0.0.1:") //use IP instead of 'localhost'
                 .setExceptionTraceLevel(Constants.SHOW_NO_EXCEPTIONS)  //change SHOW_ALL_EXCEPTIONS/
                                                                         // MUF Exceptions/NON_MUF Exceptions
-=======
                 .setServerAddress("127.0.0.1") //use IP instead of 'localhost'
                 //.setShouldShowException(true)
->>>>>>> 44a101b4b0a45db7921ed30f2a72b8f27740ae91
                 .build();
     }
 
