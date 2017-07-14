@@ -32,8 +32,8 @@ public class NLU_DMComponent extends PluggableComponent {
     @Override
     public void startUp(){
         super.startUp();
-//        postCreate();
-//        postCreateblackboard().post(this, SaraCons.MSG_ASR, "Hello");
+        postCreate();
+        //postCreateblackboard().post(this, SaraCons.MSG_ASR, "Hello");
         //blackboard().post(this, SaraCons.MSG_ASR, "Hello");
         Log4J.info(this, "NLU_DMComponent: startup has finished.");
     }

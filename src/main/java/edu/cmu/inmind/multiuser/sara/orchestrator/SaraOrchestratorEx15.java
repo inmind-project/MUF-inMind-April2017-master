@@ -1,6 +1,6 @@
 package edu.cmu.inmind.multiuser.sara.orchestrator;
 
-import beat.beat.bson.BSON;
+import beat.bson.BSON;
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.common.Utils;
 import edu.cmu.inmind.multiuser.common.model.ASROutput;
