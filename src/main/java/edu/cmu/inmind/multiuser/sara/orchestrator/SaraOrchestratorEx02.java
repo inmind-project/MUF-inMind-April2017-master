@@ -25,7 +25,11 @@ public class SaraOrchestratorEx02 extends ProcessOrchestratorImpl {
         logger = new SaraDBLogger();
         logger.setPath( "your-db-connection-string-goes-here");
 
-        super.initialize( session );
+        try {
+            super.initialize( session );
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
     }
 
     /**
@@ -85,7 +89,11 @@ public class SaraOrchestratorEx02 extends ProcessOrchestratorImpl {
 
     @Override
     public void close() throws Exception{
-        super.close();
+        try {
+            super.close();
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
         //TODO: add some logic when session is closed (e.g., release resources)
     }
 }

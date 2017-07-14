@@ -4,6 +4,7 @@ import beat.bson.BSON;
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.common.Utils;
 import edu.cmu.inmind.multiuser.common.model.ASROutput;
+import edu.cmu.inmind.multiuser.common.model.DMOutput;
 import edu.cmu.inmind.multiuser.common.model.R5StreamListener;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardSubscription;
@@ -15,7 +16,7 @@ import edu.cmu.inmind.multiuser.controller.session.Session;
 /**
  * Created by oscarr on 3/3/17.
  */
-@BlackboardSubscription( messages = {SaraCons.MSG_NLG, SaraCons.MSG_START_STREAMING, SaraCons.R5STREAM_DISCONNECTED,
+@BlackboardSubscription( messages = {SaraCons.MSG_NLG, SaraCons.MSG_DM, SaraCons.MSG_START_STREAMING, SaraCons.R5STREAM_DISCONNECTED,
 SaraCons.R5STREAM_CLOSE, SaraCons.R5STREAM_TIMEOUT, SaraCons.R5STREAM_ERROR, SaraCons.R5STREAM_STARTED})
 public class SaraOrchestratorEx15 extends ProcessOrchestratorImpl {
     private BSON response = new BSON();
@@ -23,7 +24,11 @@ public class SaraOrchestratorEx15 extends ProcessOrchestratorImpl {
 
     @Override
     public void initialize(Session session) throws Exception{
-        super.initialize( session );
+        try {
+            super.initialize( session );
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
 
     }
 
@@ -76,6 +81,12 @@ public class SaraOrchestratorEx15 extends ProcessOrchestratorImpl {
             Log4J.info(this, "Message from MUF to Start Streaming " + r5StreamListener.toString());
             sendResponse((new SessionMessage(SaraCons.MSG_START_STREAMING, Utils.toJson(r5StreamListener))));
         }
+        else if(event.getId().equals(SaraCons.MSG_DM))
+        {
+            Log4J.info(this, "Message for MUF to MockClient " + event.getElement());
+            //sendResponse(new SessionMessage(SaraCons.MSG_DM, Utils.toJson(event.getElement().toString())));
+
+        }
 
     }
 
@@ -100,7 +111,11 @@ public class SaraOrchestratorEx15 extends ProcessOrchestratorImpl {
 
     @Override
     public void close() throws Exception{
-        super.close();
+        try {
+            super.close();
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
         //TODO: add some logic when session is closed (e.g., release resources)
     }
 }

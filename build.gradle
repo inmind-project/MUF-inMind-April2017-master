@@ -47,7 +47,7 @@ configurations.all {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
-    compile 'edu.cmu.inmind.framework:multiuser:2.5.3'        // this is the Multiuser Framework
+    compile 'edu.cmu.inmind.framework:multiuser:2.7'        // this is the Multiuser Framework 2.5.3 current working version
     compile project(":saracommons")
     compile project(":saracsc")
     compile project(":sarabeat")

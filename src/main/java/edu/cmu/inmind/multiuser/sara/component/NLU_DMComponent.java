@@ -52,9 +52,17 @@ public class NLU_DMComponent extends PluggableComponent {
         Log4J.info(this, "postCreate is called, sessionID is " + getSessionId());
         String[] msgSubscriptions = { SaraCons.MSG_ASR };
         ZMsgWrapper msgWrapper = new ZMsgWrapper();
-        commController = new ClientCommController(pythonDialogueAddress, getSessionId(),
+        /*commController = new ClientCommController(pythonDialogueAddress, getSessionId(),
                 Utils.getProperty("dialogAddress"),
-                Constants.REQUEST_CONNECT, msgWrapper, msgSubscriptions);
+                Constants.REQUEST_CONNECT, msgWrapper, msgSubscriptions);*/
+        commController =  new ClientCommController.Builder()
+                .setServerAddress( pythonDialogueAddress)
+                .setServiceName(getSessionId())
+                .setClientAddress( Utils.getProperty("dialogAddress") )
+                .setRequestType( Constants.REQUEST_CONNECT )
+                .setTCPon( true )
+                .setMuf( true? null : null ) //when TCP is off, we need to explicitly tell the client who the MUF is
+                .build();
     }
 
     private SaraOutput extractAndProcess() {
