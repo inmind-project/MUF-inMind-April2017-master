@@ -93,21 +93,9 @@ jar {
     }
     baseName = project.name + '-with-dependencies'
     from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
-    zip64 true
-}
-
-// used for zip big files
-shadowJar {
-    zip64 true
-    manifest {
-        attributes 'Implementation-Title': 'SARA Multiuser',
-                'Implementation-Version': version,
-                'Main-Class': 'edu.cmu.inmind.multiuser.sara.examples.Ex15_WholePipeline'
-    }
-    from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
-    mergeServiceFiles()
     exclude "META-INF/*.SF"
     exclude 'META-INF/*.DSA'
     exclude 'META-INF/*.RSA'
-    exclude "LICENSE*"
+    zip64 true
 }
+

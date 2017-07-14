@@ -4,6 +4,7 @@ import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.controller.plugin.PluginModule;
 import edu.cmu.inmind.multiuser.sara.component.*;
 import edu.cmu.inmind.multiuser.sara.orchestrator.SaraOrchestratorEx15;
+import edu.cmu.lti.rapport.pipline.csc.ConversationalStrategyUtil;
 
 /**
  * Created by oscarr on 4/10/17.
@@ -15,6 +16,7 @@ import edu.cmu.inmind.multiuser.sara.orchestrator.SaraOrchestratorEx15;
 public class Ex15_WholePipeline extends MainClass {
 
     public static void main(String args[]) {
+        ConversationalStrategyUtil.preloadRecipes();
         new Ex15_WholePipeline().execute();
     }
 
@@ -23,14 +25,14 @@ public class Ex15_WholePipeline extends MainClass {
         return new PluginModule[]{
                 new PluginModule.Builder(SaraOrchestratorEx15.class)
                         //comment out the line below if you want to use remote DialogueSystem
-                        //.addPlugin(NLUComponent.class, SaraCons.ID_NLU)
-                        //.addPlugin(CSCComponent.class, SaraCons.ID_CSC)
+                        .addPlugin(NLUComponent.class, SaraCons.ID_NLU)
+                        .addPlugin(CSCComponent.class, SaraCons.ID_CSC)
                         //.addPlugin(NLU_DMComponent.class, SaraCons.ID_NLU)
                         //.addPlugin(RapportEstimator.class, SaraCons.ID_RPT)
-                        //.addPlugin(TaskReasonerComponent.class, SaraCons.ID_DM)
+                        .addPlugin(TaskReasonerComponent.class, SaraCons.ID_DM)
                         .addPlugin(SocialReasonerComponent.class, SaraCons.ID_SR)
                         .addPlugin(NLGComponent.class, SaraCons.ID_NLG)
-                        //.addPlugin(OpenFaceComponent.class, SaraCons.ID_OF)
+                        .addPlugin(OpenFaceComponent.class, SaraCons.ID_OF)
                         //.addPlugin(R5StreamComponent.class, SaraCons.ID_R5)
                         //.addPlugin(UserModelComponent.class, SaraCons.ID_UM)
                         .build()
