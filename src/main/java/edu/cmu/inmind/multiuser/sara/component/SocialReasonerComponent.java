@@ -35,10 +35,8 @@ public class SocialReasonerComponent extends PluggableComponent {
     @Override
     public void startUp(){
         super.startUp();
-
         //Create a new thread for the social reasoner
         socialController = new MainController();
-        // TODO: add code to initialize this component
     }
 
     @Loggable
@@ -103,13 +101,6 @@ public class SocialReasonerComponent extends PluggableComponent {
             output.setNames(socialController.getSocialReasoner().getNetwork().getModuleNames());
             output.setThreshold(socialController.getSocialReasoner().getNetwork().getTheta());
 
-//            String json = Utils.toJson(output);
-//            Send strategy to visualization tool
-//            VhmsgSender sender = new VhmsgSender("vrSocialReasonerScore");
-//            sender.sendMessage("0 " + json);
-
-            systemStrategy = socialController.getConvStrategyFormatted();
-            srOutput.setStrategy(systemStrategy);
             //System.out.println("---------------- System Strategy : " + systemStrategy);
             Log4J.info(this, "Input: " + dmOutput.getAction() + ", Output: " + srOutput.getStrategy() + "\n");
         } else {
@@ -130,9 +121,6 @@ public class SocialReasonerComponent extends PluggableComponent {
         //...
         //Log4J.info(this, "SocialReasonerComponent. These objects have been updated at the blackboard: " + event.toString());
 
-        if (event.getId()== SaraCons.MSG_NVB) {
-            updateNVB();
-        }
         if (event.getId().equals(SaraCons.MSG_NVB)) {
             updateNVB();
         }
@@ -153,6 +141,5 @@ public class SocialReasonerComponent extends PluggableComponent {
     @Override
     public void shutDown() {
         super.shutDown();
-        // TODO: add code to release resources
     }
 }

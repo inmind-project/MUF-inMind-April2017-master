@@ -74,7 +74,6 @@ public class MainController{
     private boolean isFirstTime = true;
     private boolean isProcessingIntent;
     private SystemIntent previousIntent;
-    private String jsonResults;
     public static SystemIntent trIntent;
     private static String availableSharedExp;
     private static Double percSmileWindow;
@@ -137,17 +136,6 @@ public class MainController{
         eyeGaze = null;
     }
 
-    private void printOutput() {
-        /*String output = removeSufix(trIntent.getIntent() + "\t" + rapportScore  + "\t" + userConvStrategy  + "\t" + smile  + "\t"
-                + eyeGaze + "\t" + availableSharedExp + "\t" + getConvStrategyFormatted()  + "\t" + Arrays.toString(conversationalStrategies)
-                + "\t Liste intentions " + socialReasoner.getOutput() + "\t" + socialReasoner.getStates() + "\t" + socialReasoner.getMatches()) + "\n";
-        if( verbose ) {
-            System.out.print(output);
-        }
-        outputResults += output;*/
-
-    }
-
     public String getConvStrategyFormatted() {
         //return conversationalStrategies[0].equals( Constants.ACK_SYSTEM_CS )? Constants.ACK_SYSTEM_CS + " -> "
         //        + conversationalStrategies[1] : conversationalStrategies[0];
@@ -156,10 +144,6 @@ public class MainController{
         } else {
             return conversationalStrategies[0];
         }
-    }
-
-    private String removeSufix(String s) {
-        return s.replace( "_NONVERBAL", "").replace("_SYSTEM_CS", "").replace("_USER_CS", "");
     }
 
     private void createSocialReasoner() {
@@ -418,7 +402,6 @@ public class MainController{
     public void addSystemIntent(SystemIntent systemIntent) {
         try {
             intentsQueue.add( systemIntent );
-            jsonResults = systemIntent.getRecommendationResults();
             process();
         }catch (Exception e){
             e.printStackTrace();
