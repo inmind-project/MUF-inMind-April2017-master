@@ -103,6 +103,7 @@ public class OpenFaceComponent extends PluggableComponent {
 	@Override
 	public void shutDown() {
 		stopOpenFace();
+		super.shutDown();
 	}
 
 

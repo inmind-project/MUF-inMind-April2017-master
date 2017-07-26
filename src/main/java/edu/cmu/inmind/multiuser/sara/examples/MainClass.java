@@ -47,9 +47,9 @@ public class MainClass {
             System.err.println("Type \"shutdown\" to stop:");
             Scanner scanner = new Scanner(System.in);
             command = scanner.nextLine();
-            if (command.equals(SaraCons.SHUTDOWN)) {
-                MultiuserFrameworkContainer.stopFramework(saraMultiuserFramework);
-            }
+        }
+        if (command.equals(SaraCons.SHUTDOWN)) {
+            MultiuserFrameworkContainer.stopFramework(saraMultiuserFramework);
         }
     }
 
@@ -67,7 +67,7 @@ public class MainClass {
                 .setPathLogs(Utils.getProperty("pathLogs"))
                 .setSessionTimeout(10, TimeUnit.DAYS)
                 .setServerAddress("tcp://127.0.0.1:") //use IP instead of 'localhost'
-                .setExceptionTraceLevel(Constants.SHOW_NO_EXCEPTIONS)  //change SHOW_ALL_EXCEPTIONS/
+                .setExceptionTraceLevel(Constants.SHOW_MUF_EXCEPTIONS)  //change SHOW_ALL_EXCEPTIONS/
                                                                         // MUF Exceptions/NON_MUF Exceptions
                 .build();
     }

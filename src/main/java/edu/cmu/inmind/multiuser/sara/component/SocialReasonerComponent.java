@@ -119,7 +119,7 @@ public class SocialReasonerComponent extends PluggableComponent {
     public void onEvent(BlackboardEvent event) {
         //TODO: add code here
         //...
-        //Log4J.info(this, "SocialReasonerComponent. These objects have been updated at the blackboard: " + event.toString());
+        Log4J.info(this, "SocialReasonerComponent. These objects have been updated at the blackboard: " + event.toString());
 
         if (event.getId().equals(SaraCons.MSG_NVB)) {
             updateNVB();

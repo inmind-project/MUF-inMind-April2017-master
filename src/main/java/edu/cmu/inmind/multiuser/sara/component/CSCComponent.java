@@ -107,7 +107,7 @@ import java.util.List;
 
         @Override
         public void shutDown(){
-
+            super.shutDown();
         }
 
     }

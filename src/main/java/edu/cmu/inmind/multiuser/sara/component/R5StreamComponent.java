@@ -37,4 +37,10 @@ private R5StreamListener r5StreamListener = null;
             blackboard().post(R5StreamComponent.this, SaraCons.MSG_START_STREAMING, r5StreamListener);
         }
     }
+
+    @Override
+    public void shutDown() {
+        super.shutDown();
+        // TODO: add code to release resources
+    }
 }

@@ -16,7 +16,7 @@ import java.util.List;
  */
 @StatefulComponent
 //@BlackboardSubscription(messages = {SaraCons.MSG_NLU, "MSG_START_SESSION"})
-@BlackboardSubscription(messages = {SaraCons.MSG_NLU, SaraCons.MSG_DIALOGUE_RESPONSE})
+@BlackboardSubscription(messages = {SaraCons.MSG_NLU, SaraCons.MSG_DIALOGUE_RESPONSE, SaraCons.MSG_START_DM})
 public class TaskReasonerComponent extends PluggableComponent {
 
     private SaraInput saraInput;
@@ -89,12 +89,12 @@ public class TaskReasonerComponent extends PluggableComponent {
     public void onEvent(BlackboardEvent event) {
         //TODO: add code here
         //...
-        //Log4J.info(this, "TaskReasonerComponent. These objects have been updated at the blackboard: " + event.toString());
+        Log4J.info(this, "TaskReasonerComponent. These objects have been updated at the blackboard: " + event.toString());
         //Log4J.info(this, "Input: " + saraInput.getASRinput() + " Output: " + saraOutput.getSystemIntent() );
         if (event.getId().equals("MSG_START_SESSION")) {
 		System.out.println("Fake DM is initiating dialogue");
 	    }
-	blackboard().post(this, SaraCons.MSG_DM, sendToSR());
+	    blackboard().post(this, SaraCons.MSG_DM, sendToSR());
     }
 
     @Override
