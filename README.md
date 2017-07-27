@@ -7,6 +7,7 @@ and one of the submodules uses large-file-support.
  * before cloning, please make sure you have installed git large-file-support: https://git-lfs.github.com/
 
  * clone by saying ```git clone --recursive git@github.com:fpecune/MUF-inMind-April2017-master.git```
+   (or via https, whichever you prefer)
 
  * or after cloning say the following to populate the submodules:
 ```bash
