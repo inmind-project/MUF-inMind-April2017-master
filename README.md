@@ -1,10 +1,14 @@
 # MUF-inMind-April2017
 
-## Cloning with Subomudles
-This repository contains submodules which you need to checkout in addition to the main respository itself.
+## Cloning with Submodules
+This repository contains submodules which you need to checkout in addition to the main respository itself, 
+and one of the submodules uses large-file-support. 
 
-Either clone by saying ```git clone --recursive git@github.com:fpecune/MUF-inMind-April2017-master.git```, 
-or after cloning say the following to populate the submodules:
+ * before cloning, please make sure you have installed git large-file-support: https://git-lfs.github.com/
+
+ * clone by saying ```git clone --recursive git@github.com:fpecune/MUF-inMind-April2017-master.git```
+
+ * or after cloning say the following to populate the submodules:
 ```bash
 git submodule init
 git submodule update
