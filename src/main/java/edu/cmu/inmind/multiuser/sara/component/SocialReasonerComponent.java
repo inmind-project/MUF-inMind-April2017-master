@@ -20,6 +20,7 @@ import edu.cmu.inmind.multiuser.socialreasoner.model.intent.SystemIntent;
 /**
  * Created by oscarr on 3/7/17.
  */
+
 @StateType( state = Constants.STATEFULL)
 @BlackboardSubscription( messages = {SaraCons.MSG_DM, SaraCons.MSG_RPT, SaraCons.MSG_CSC, SaraCons.MSG_NVB})
 public class SocialReasonerComponent extends PluggableComponent {
@@ -120,7 +121,8 @@ public class SocialReasonerComponent extends PluggableComponent {
     public void onEvent(BlackboardEvent event) {
         //TODO: add code here
         //...
-        Log4J.info(this, "SocialReasonerComponent. These objects have been updated at the blackboard: " + event.toString());
+        Log4J.info(this, "SocialReasonerComponent. These objects have been updated at the blackboard: "
+                + event.toString());
 
         if (event.getId().equals(SaraCons.MSG_NVB)) {
             updateNVB();
@@ -138,9 +140,9 @@ public class SocialReasonerComponent extends PluggableComponent {
 
     }
 
-    @Loggable
     @Override
     public void shutDown() {
         super.shutDown();
+        // TODO: add code to release resources
     }
 }

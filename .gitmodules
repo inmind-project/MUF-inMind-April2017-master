@@ -4,5 +4,5 @@
 	branch = InMind
 [submodule "sarabeat"]
 	path = sarabeat
-	url = https://github.com/mmasley/InMind-April2017-BEAT/
+	url = https://github.com/mmasley/InMind-April2017-BEAT
 	branch = deployment-may2017
