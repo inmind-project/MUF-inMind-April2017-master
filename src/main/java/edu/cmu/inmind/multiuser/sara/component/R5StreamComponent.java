@@ -1,5 +1,6 @@
 package edu.cmu.inmind.multiuser.sara.component;
 
+import edu.cmu.inmind.multiuser.common.Constants;
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.common.Utils;
 import edu.cmu.inmind.multiuser.common.model.R5StreamListener;
@@ -7,12 +8,12 @@ import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardSubscription;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
-import edu.cmu.inmind.multiuser.controller.plugin.StatefulComponent;
+import edu.cmu.inmind.multiuser.controller.plugin.StateType;
 
 /**
  * Created by sakoju on 6/7/17.
  */
-@StatefulComponent
+@StateType( state = Constants.STATEFULL)
 @BlackboardSubscription(messages = "MSG_START_SESSION")
 public class R5StreamComponent extends PluggableComponent {
 private R5StreamListener r5StreamListener = null;

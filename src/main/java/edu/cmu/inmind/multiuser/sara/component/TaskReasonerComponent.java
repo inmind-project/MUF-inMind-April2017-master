@@ -1,12 +1,13 @@
 package edu.cmu.inmind.multiuser.sara.component;
 
+import edu.cmu.inmind.multiuser.common.Constants;
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.common.model.*;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardSubscription;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
-import edu.cmu.inmind.multiuser.controller.plugin.StatefulComponent;
+import edu.cmu.inmind.multiuser.controller.plugin.StateType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +15,9 @@ import java.util.List;
 /**
  * Created by oscarr on 3/7/17.
  */
-@StatefulComponent
+
 //@BlackboardSubscription(messages = {SaraCons.MSG_NLU, "MSG_START_SESSION"})
+@StateType( state = Constants.STATEFULL)
 @BlackboardSubscription(messages = {SaraCons.MSG_NLU, SaraCons.MSG_DIALOGUE_RESPONSE, SaraCons.MSG_START_DM})
 public class TaskReasonerComponent extends PluggableComponent {
 

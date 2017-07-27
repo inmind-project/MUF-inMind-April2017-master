@@ -46,7 +46,7 @@ public class MainClass {
         while (!command.equals("shutdown")) {
             System.err.println("Type \"shutdown\" to stop:");
             Scanner scanner = new Scanner(System.in);
-            command = scanner.nextLine();
+            command = scanner.hasNextLine() ? scanner.nextLine():"";
         }
         if (command.equals(SaraCons.SHUTDOWN)) {
             MultiuserFrameworkContainer.stopFramework(saraMultiuserFramework);

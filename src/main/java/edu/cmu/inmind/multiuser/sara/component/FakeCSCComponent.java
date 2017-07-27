@@ -9,8 +9,7 @@ import edu.cmu.inmind.multiuser.controller.communication.ClientCommController;
 import edu.cmu.inmind.multiuser.controller.communication.SessionMessage;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
-import edu.cmu.inmind.multiuser.controller.plugin.StatefulComponent;
-import edu.cmu.inmind.multiuser.controller.plugin.StatelessComponent;
+import edu.cmu.inmind.multiuser.controller.plugin.StateType;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -24,7 +23,7 @@ import java.util.Random;
 /**
  * Created by oscarr on 3/7/17.
  */
-@StatelessComponent
+@StateType( state = Constants.STATELESS)
 @BlackboardSubscription( messages = {SaraCons.MSG_ASR} )
 public class FakeCSCComponent extends PluggableComponent {
 

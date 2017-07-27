@@ -16,14 +16,14 @@ import edu.cmu.inmind.multiuser.controller.communication.SessionMessage;
 import edu.cmu.inmind.multiuser.controller.communication.ZMsgWrapper;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
-import edu.cmu.inmind.multiuser.controller.plugin.StatefulComponent;
+import edu.cmu.inmind.multiuser.controller.plugin.StateType;
 
 import java.util.ArrayList;
 
 /**
  * Created by oscarr on 3/7/17.
  */
-@StatefulComponent
+@StateType( state = Constants.STATEFULL)
 @BlackboardSubscription( messages = {SaraCons.MSG_ASR, SaraCons.MSG_START_DM} )
 public class NLU_DMComponent extends PluggableComponent {
     private ClientCommController commController;

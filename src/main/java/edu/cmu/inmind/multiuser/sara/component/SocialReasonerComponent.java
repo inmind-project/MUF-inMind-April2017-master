@@ -1,6 +1,7 @@
 package edu.cmu.inmind.multiuser.sara.component;
 
 import com.google.gson.Gson;
+import edu.cmu.inmind.multiuser.common.Constants;
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.common.model.*;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
@@ -9,7 +10,7 @@ import edu.cmu.inmind.multiuser.controller.communication.SessionMessage;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.controller.log.Loggable;
 import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
-import edu.cmu.inmind.multiuser.controller.plugin.StatefulComponent;
+import edu.cmu.inmind.multiuser.controller.plugin.StateType;
 import edu.cmu.inmind.multiuser.socialreasoner.control.MainController;
 import edu.cmu.inmind.multiuser.socialreasoner.control.util.Utils;
 import edu.cmu.inmind.multiuser.socialreasoner.model.SocialReasonerOutput;
@@ -19,7 +20,7 @@ import edu.cmu.inmind.multiuser.socialreasoner.model.intent.SystemIntent;
 /**
  * Created by oscarr on 3/7/17.
  */
-@StatefulComponent
+@StateType( state = Constants.STATEFULL)
 @BlackboardSubscription( messages = {SaraCons.MSG_DM, SaraCons.MSG_RPT, SaraCons.MSG_CSC, SaraCons.MSG_NVB})
 public class SocialReasonerComponent extends PluggableComponent {
 

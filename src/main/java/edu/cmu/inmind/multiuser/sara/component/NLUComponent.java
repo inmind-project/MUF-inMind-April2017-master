@@ -1,5 +1,6 @@
 package edu.cmu.inmind.multiuser.sara.component;
 
+import edu.cmu.inmind.multiuser.common.Constants;
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.common.model.SaraOutput;
 import edu.cmu.inmind.multiuser.common.model.UserIntent;
@@ -7,14 +8,14 @@ import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardSubscription;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
-import edu.cmu.inmind.multiuser.controller.plugin.StatelessComponent;
+import edu.cmu.inmind.multiuser.controller.plugin.StateType;
 
 import java.util.ArrayList;
 
 /**
  * Created by oscarr on 3/7/17.
  */
-@StatelessComponent
+@StateType( state = Constants.STATELESS)
 @BlackboardSubscription( messages = {SaraCons.MSG_ASR})
 public class NLUComponent extends PluggableComponent {
 
