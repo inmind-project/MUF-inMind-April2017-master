@@ -14,6 +14,7 @@
 .idea/**
 # class files
 .class
+/out/
 
 # Local configuration file (sdk path, etc)
 local.properties
