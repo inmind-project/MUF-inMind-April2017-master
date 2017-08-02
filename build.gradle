@@ -70,7 +70,6 @@ dependencies {
     compile group: 'org.json', name: 'json', version: '20160810'
     compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.16'
     compile name: 'simplenlg-v4.4.3'
-    compile name: 'vhmsg-java'
     compile name: 'jfreechart-1.0.19-experimental'
     compile name: 'jfreechart-1.0.19-swt'
 }

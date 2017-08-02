@@ -18,12 +18,9 @@ import java.util.List;
  * Created by oscarr on 3/16/17.
  */
 @StateType( state = Constants.STATEFULL)
-@BlackboardSubscription( messages = {SaraCons.MSG_NLU})
+@BlackboardSubscription( messages = {SaraCons.MSG_DM})
 public class UserModelComponent extends PluggableComponent {
 
-    // this is out user model (though you may want to create something more sophisticated)
-    private HashMap<String, List<String>> userModel;
-    private final static String USER_INTEREST = "user-interests";
     //private final static String PATH = "C:\\Users\\fpecune\\Desktop\\Logs";
     private final static String FILE_NAME = "MyUserModel.json";
 
@@ -32,7 +29,6 @@ public class UserModelComponent extends PluggableComponent {
         super.startUp();
         // TODO: uncomment
         //userModel = Utils.readObjectFromJsonFile( PATH + FILE_NAME, HashMap.class);
-        if( userModel == null ) userModel = new HashMap<>();
     }
 
     @Override
@@ -42,21 +38,8 @@ public class UserModelComponent extends PluggableComponent {
 
     @Override
     public void onEvent(BlackboardEvent event) {
-        // Since this component is listening to NLUComponent messages, you can cast event.getElement to any kind of
-        // known representation for user intents. For instance:
-        UserIntent userIntent = ((SaraOutput)event.getElement()).getUserIntent();
-
-        //now you can save user preferences on your user model
-        if( userIntent.getUserIntent().equals( USER_INTEREST ) ){
-            List<String> currentPreferences = userModel.get( USER_INTEREST );
-            if( currentPreferences == null ) currentPreferences = new ArrayList<>();
-            for( String preference : userIntent.getEntitities() ){
-                if( !currentPreferences.contains(preference) ) {
-                    currentPreferences.add( preference );
-                }
-            }
-            userModel.put( USER_INTEREST, currentPreferences );
-        }
+        System.out.println("toto-------------------");
+        System.out.println();
     }
 
     @Override

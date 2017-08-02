@@ -2,7 +2,6 @@ package edu.cmu.inmind.multiuser.socialreasoner.view.ui;
 
 import edu.cmu.inmind.multiuser.socialreasoner.control.MainController;
 import edu.cmu.inmind.multiuser.socialreasoner.control.controllers.BehaviorNetworkController;
-import edu.cmu.inmind.multiuser.socialreasoner.control.vht.VHTConnector;
 import edu.cmu.inmind.multiuser.socialreasoner.view.emulators.InputController;
 
 import java.util.ArrayList;
@@ -13,7 +12,6 @@ import java.util.ArrayList;
 public class Visualizer {
     private CombinedBNXYPlot plot;
     private static Visualizer instance;
-    private VHTConnector vhtConnector;
     private ArrayList<Double>[] behaviorValues;
 
     public static Visualizer getInstance(){
@@ -26,11 +24,6 @@ public class Visualizer {
     public void initializePlot( MainController MainController, BehaviorNetworkController bnt1, BehaviorNetworkController bnt2 ){
         plot = CombinedBNXYPlot.startPlot( bnt1.getName(), MainController.useFSM? null : bnt2.getName(), bnt1.getTitle(),
                 MainController.useFSM? null : bnt2.getTitle(), bnt1.getSeries(), MainController.useFSM? null : bnt2.getSeries(), MainController.useSRPlot );
-        if(MainController.useVHTConnnector && vhtConnector == null ) {
-            vhtConnector = VHTConnector.getInstance();
-            vhtConnector.setInputController(plot.getInputController());
-            vhtConnector.setMainController(MainController);
-        }
         behaviorValues = new ArrayList[bnt1.getSize()];
         for( int i = 0; i < behaviorValues.length; i++ ){
             behaviorValues[i] = new ArrayList<>();

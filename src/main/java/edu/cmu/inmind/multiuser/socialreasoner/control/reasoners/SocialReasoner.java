@@ -5,7 +5,6 @@ import edu.cmu.inmind.multiuser.socialreasoner.control.bn.BehaviorNetworkPlus;
 import edu.cmu.inmind.multiuser.socialreasoner.control.bn.BehaviorPlus;
 import edu.cmu.inmind.multiuser.socialreasoner.control.controllers.BehaviorNetworkController;
 import edu.cmu.inmind.multiuser.socialreasoner.control.util.Utils;
-import edu.cmu.inmind.multiuser.socialreasoner.control.vht.VHTConnector;
 import edu.cmu.inmind.multiuser.socialreasoner.model.SocialReasonerOutput;
 import edu.cmu.inmind.multiuser.socialreasoner.model.blackboard.Blackboard;
 import edu.cmu.inmind.multiuser.socialreasoner.model.history.SocialHistory;
@@ -28,7 +27,6 @@ public class SocialReasoner {
     private final int maxNumCycles = 8;
     //private Model model;
     //private State current;
-    private VHTConnector vhtConnector;
     private SocialHistory socialHistory;
     private Visualizer visualizer;
     //private TaskReasoner taskReasoner;
@@ -41,7 +39,6 @@ public class SocialReasoner {
         this.network = bnt.getNetwork();
         this.name = name;
         this.blackboard = Blackboard.getInstance();
-        this.vhtConnector = VHTConnector.getInstance();
         this.socialHistory = SocialHistory.getInstance();
         this.visualizer = Visualizer.getInstance();
         initialize();
@@ -98,13 +95,6 @@ public class SocialReasoner {
                     }
                     MainController.currentTurn++;
 
-                    // send results to NLG and print them out on the screen
-                    if (vhtConnector != null) {
-                        sendBNActivations();
-                        sendToNLG( intent, MainController.conversationalStrategies );
-                        sendToClassifier(MainController.conversationalStrategies);
-                        flagSentSROutput = true;
-                    }
                     isDecisionMade = true;
                     if (MainController.useSRPlot) {
                         //visualizer.printFSMOutput(output);
@@ -122,9 +112,6 @@ public class SocialReasoner {
                     visualizer.plot(network.getActivations(), network.getModules().size(), name, network.getTheta(),
                             network.getNameBehaviorActivated());
                 }
-                if (vhtConnector != null && !flagSentSROutput && stepCount % 20 == 0) {
-                    sendBNActivations();
-                }
                 stepCount++;
                 flagSentSROutput = false;
                 System.gc();
@@ -140,14 +127,6 @@ public class SocialReasoner {
         }
     }
 
-    private void sendBNActivations() {
-        SocialReasonerOutput output = new SocialReasonerOutput();
-        output.setActivations(network.getOnlyActivations());
-        output.setNames(network.getModuleNames());
-        output.setThreshold(network.getTheta());
-        vhtConnector.sendActivations(output);
-    }
-
     private void sendToNLG(SystemIntent intent, String[] convStrategies){
         if( convStrategies != null ){
             for( int i = 0; i< convStrategies.length; i++ ){
@@ -160,13 +139,6 @@ public class SocialReasoner {
         srOutputMessage.setRapport(MainController.rapportScore);
 
         //json = json.replace("}],\"rapport\"", ",\"conversational_strategies\":" + jsonConvStrat + "}],\"rapport\"");
-        vhtConnector.sendToNLG(Utils.toJson(srOutputMessage) );
-    }
-
-
-
-    private void sendToClassifier(String[] convStrategies){
-        vhtConnector.sendToClassifier( convStrategies[0] );
     }
 
     public void initialize() {
