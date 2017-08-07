@@ -1,0 +1,15 @@
+{
+  "services": [
+    {
+      "serviceName": "NLU_SERVICE",
+      //"serviceName": "RPT_SERVICE",
+      //"clientAddress": "tcp://52.87.172.224:5580",
+      "clientAddress": "tcp://127.0.0.1:5580",
+      "msgSubscriptions": [
+        "MSG_ASR",
+        "MSG_CSC",
+        "MSG_TR"
+      ]
+    }
+  ]
+}

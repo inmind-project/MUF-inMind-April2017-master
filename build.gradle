@@ -6,7 +6,6 @@ apply plugin: 'maven'
 // used for zip big files
 apply plugin: 'com.github.johnrengelman.shadow'
 
-
 sourceCompatibility = 1.8
 
 repositories {
@@ -33,7 +32,6 @@ buildscript {
     }
 }
 
-
 configurations {
     deployerJars
 }
@@ -47,9 +45,10 @@ configurations.all {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
-    compile 'edu.cmu.inmind.framework:multiuser:2.7.1'        // this is the Multiuser Framework 2.5.3 current working version
+    compile 'edu.cmu.inmind.framework:multiuser:2.8'        // this is the Multiuser Framework 2.5.3 current working
+    // version
     compile project(":saracommons")
-    compile project(":saracsc")
+    //compile project(":saracsc")
     compile project(":sarabeat")
     compile group: 'aopalliance', name: 'aopalliance', version: '1.0'
     compile group: 'uk.com.robust-it', name: 'cloning', version: '1.9.3'
@@ -97,4 +96,3 @@ jar {
     exclude 'META-INF/*.RSA'
     zip64 true
 }
-
