@@ -47,13 +47,13 @@ public class UserModelComponentTest {
     @Test
     public void updatesModelOnSREvent() {
         final SROutput srOutput = new SROutput();
-        final ImmutableList<String> states = ImmutableList.<String>builder().add("state_1", "state_2").build();
+        final ImmutableList<String> states = ImmutableList.of("state_1", "state_2");
         srOutput.setStates(states);
         final BlackboardEvent event = new BlackboardEvent("status", SaraCons.MSG_SR, srOutput);
 
         component.startUp();
         component.onEvent(event);
 
-        assertEquals(states, model.getSocialReasonerStates());
+        assertEquals(states, model.getBehaviorNetworkStates());
     }
 }

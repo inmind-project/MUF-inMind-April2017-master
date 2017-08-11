@@ -3,15 +3,16 @@ package edu.cmu.inmind.multiuser.common.model;
 import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * This class represents data about the user that should be persisted between sessions
  */
 public class UserModel {
-    @NotNull private final String id;
+    private final List<String> behaviorNetworkStates = new ArrayList<>();
 
-    @Nullable private List<String> socialReasonerStates;
+    @NotNull private final String id;
 
     public UserModel(@NotNull String id) {
         this.id = id;
@@ -23,11 +24,12 @@ public class UserModel {
     }
 
     @Nullable
-    public List<String> getSocialReasonerStates() {
-        return socialReasonerStates;
+    public List<String> getBehaviorNetworkStates() {
+        return behaviorNetworkStates;
     }
 
-    public void setSocialReasonerStates(@Nullable final List<String> socialReasonerStates) {
-        this.socialReasonerStates = socialReasonerStates;
+    public void updateBehaviorNetworkStates(@Nullable final List<String> behaviorNetworkStates) {
+        this.behaviorNetworkStates.clear();
+        this.behaviorNetworkStates.addAll(behaviorNetworkStates);
     }
 }

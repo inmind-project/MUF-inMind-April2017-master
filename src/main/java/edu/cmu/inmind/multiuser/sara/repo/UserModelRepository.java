@@ -17,6 +17,7 @@ public class UserModelRepository {
 
     public UserModelRepository(@NotNull String logPath, @NotNull String sessionId) {
         this.path = String.format(PATH_PATTERN, logPath);
+        // The session id remains stable across sessions with a given client so we use this to look up the user model
         this.fileName = String.format(FILE_NAME_PATTERN, sessionId);
         this.sessionId = sessionId;
     }

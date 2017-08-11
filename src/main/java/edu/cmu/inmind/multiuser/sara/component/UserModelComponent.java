@@ -51,7 +51,7 @@ public class UserModelComponent extends PluggableComponent {
         switch(event.getId()) {
             case SaraCons.MSG_SR: {
                 final SROutput srOutput = (SROutput) event.getElement();
-                userModel.setSocialReasonerStates(srOutput.getStates());
+                userModel.updateBehaviorNetworkStates(srOutput.getStates());
                 break;
             }
             default: {
