@@ -1,12 +1,10 @@
 package edu.cmu.inmind.multiuser.sara.component;
 
-import com.google.gson.Gson;
 import edu.cmu.inmind.multiuser.common.Constants;
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.common.model.*;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardSubscription;
-import edu.cmu.inmind.multiuser.controller.communication.SessionMessage;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.controller.log.Loggable;
 import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
@@ -97,6 +95,7 @@ public class SocialReasonerComponent extends PluggableComponent {
             socialController.addSystemIntent( systemIntent );
             systemStrategy = socialController.getConvStrategyFormatted();
             srOutput.setStrategy(systemStrategy);
+            srOutput.setStates(socialController.getSocialReasoner().getNetwork().getState());
 
             SocialReasonerOutput output = new SocialReasonerOutput();
             output.setActivations(socialController.getSocialReasoner().getNetwork().getOnlyActivations());

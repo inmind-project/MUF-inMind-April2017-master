@@ -20,6 +20,7 @@ repositories {
         }
         url "http://www.cs.cmu.edu/afs/cs/project/inmind-cmu-yahoo/www/maven2"
     }
+    jcenter()
 }
 
 buildscript {
@@ -45,6 +46,7 @@ configurations.all {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile "org.mockito:mockito-core:1.+"
     compile 'edu.cmu.inmind.framework:multiuser:2.8'        // this is the Multiuser Framework 2.5.3 current working
     // version
     compile project(":saracommons")
@@ -68,6 +70,7 @@ dependencies {
     compile group: 'org.apache.poi', name: 'poi', version: '3.16'
     compile group: 'org.json', name: 'json', version: '20160810'
     compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.16'
+    compile group: 'org.jetbrains.annotations', name: 'annotations', version: '15.0'
     compile name: 'simplenlg-v4.4.3'
     compile name: 'jfreechart-1.0.19-experimental'
     compile name: 'jfreechart-1.0.19-swt'
