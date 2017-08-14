@@ -42,7 +42,7 @@ public class UserModelComponent extends PluggableComponent {
         userModel = repository.readModel()
                 .orElseGet(() -> new UserModel(getSessionId()));
 
-        // TODO: Update other components when user model loaded
+        blackboard().post(this, SaraCons.MSG_USER_MODEL_LOADED, userModel);
     }
 
     @Override

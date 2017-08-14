@@ -23,7 +23,7 @@ public class UserModel {
         return id;
     }
 
-    @Nullable
+    @NotNull
     public List<String> getBehaviorNetworkStates() {
         return behaviorNetworkStates;
     }

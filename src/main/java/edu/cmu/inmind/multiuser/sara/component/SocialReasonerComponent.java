@@ -20,7 +20,8 @@ import edu.cmu.inmind.multiuser.socialreasoner.model.intent.SystemIntent;
  */
 
 @StateType( state = Constants.STATEFULL)
-@BlackboardSubscription( messages = {SaraCons.MSG_DM, SaraCons.MSG_RPT, SaraCons.MSG_CSC, SaraCons.MSG_NVB})
+@BlackboardSubscription( messages = {SaraCons.MSG_DM, SaraCons.MSG_RPT, SaraCons.MSG_CSC, SaraCons.MSG_NVB,
+        SaraCons.MSG_USER_MODEL_LOADED})
 public class SocialReasonerComponent extends PluggableComponent {
 
     private MainController socialController;
@@ -74,6 +75,12 @@ public class SocialReasonerComponent extends PluggableComponent {
         socialController.setNonVerbals(isSmiling, isGazing);
         socialController.addContinousStates(null);
      }
+
+    private void updateUserModel(final UserModel model) {
+        if (!model.getBehaviorNetworkStates().isEmpty()) {
+            socialController.getSocialReasoner().getNetwork().updateState(model.getBehaviorNetworkStates());
+        }
+    }
 
     private SROutput selectStrategy(){
         long time = System.nanoTime();
@@ -131,6 +138,9 @@ public class SocialReasonerComponent extends PluggableComponent {
         }
         if (event.getId().equals(SaraCons.MSG_CSC)) {
             updateStrategy();
+        }
+        if (event.getId().equals(SaraCons.MSG_USER_MODEL_LOADED)) {
+            updateUserModel(((UserModel) event.getElement()));
         }
         if (event.getId().equals(SaraCons.MSG_DM)) {
             sendToNLG = selectStrategy();
