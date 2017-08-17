@@ -1,0 +1,8 @@
+2017-08-17 21:00:43,364 INFO    SessionManager                 - Starting Multiuser framework...
+2017-08-17 21:00:43,373 INFO    SessionManager                 - Registering service: RPT_SERVICE
+2017-08-17 21:00:43,374 DEBUG   String                         - registerService
+2017-08-17 21:00:45,320 DEBUG   Broker                         - sending to worker worker 00F1537499 for service service session-manager with address 00F1537499 and expiration 1503003655317
+2017-08-17 21:00:47,824 DEBUG   Broker                         - sending to worker worker 00F1537499 for service service session-manager with address 00F1537499 and expiration 1503003657822
+2017-08-17 21:00:50,327 DEBUG   Broker                         - sending to worker worker 00F1537499 for service service session-manager with address 00F1537499 and expiration 1503003660325
+2017-08-17 21:00:52,831 DEBUG   Broker                         - sending to worker worker 00F1537499 for service service session-manager with address 00F1537499 and expiration 1503003662828
+2017-08-17 21:00:55,334 DEBUG   Broker                         - sending to worker worker 00F1537499 for service service session-manager with address 00F1537499 and expiration 1503003665331

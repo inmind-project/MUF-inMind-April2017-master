@@ -1,0 +1,10 @@
+Type "shutdown" to stop:
+[Session-cdf20e73589e8763-Thread] INFO edu.stanford.nlp.pipeline.StanfordCoreNLP - Adding annotator tokenize
+[Session-cdf20e73589e8763-Thread] INFO edu.stanford.nlp.pipeline.TokenizerAnnotator - TokenizerAnnotator: No tokenizer type provided. Defaulting to PTBTokenizer.
+[Session-cdf20e73589e8763-Thread] INFO edu.stanford.nlp.pipeline.StanfordCoreNLP - Adding annotator ssplit
+[Session-cdf20e73589e8763-Thread] INFO edu.stanford.nlp.pipeline.StanfordCoreNLP - Adding annotator pos
+Reading POS tagger model from edu/stanford/nlp/models/pos-tagger/english-left3words/english-left3words-distsim.tagger ... done [0.7 sec].
+[Session-cdf20e73589e8763-Thread] INFO edu.stanford.nlp.pipeline.StanfordCoreNLP - Adding annotator lemma
+[Session-cdf20e73589e8763-Thread] INFO edu.stanford.nlp.pipeline.StanfordCoreNLP - Adding annotator parse
+[Session-cdf20e73589e8763-Thread] INFO edu.stanford.nlp.parser.common.ParserGrammar - Loading parser from serialized file edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz ... 
+done [2.0 sec].
