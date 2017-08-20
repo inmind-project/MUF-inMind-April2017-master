@@ -1,0 +1,11 @@
+# this line is a comment because it starts with a hash sign
+# comment lines are ignored. empty lines are also ignored.
+
+# the above line was empty (hence ignored).
+recommendation	recommend	NONE	#title has #reason.
+recommendation	recommend	SD	Wow, here is one I'd love to go to. It's called #title.
+recommendation	recommend	PR	Here's a movie that might be worth your time. What do you think of #title?
+recommendation	recommend	VSN	I think even you would find this film interesting. The name is #title?
+recommendation	recommend	ASN	Perhaps you might be interested in this movie. It's called #title.
+recommendation	recommend	ASN	I think this movie fits your tastes. How about #title?
+recommendation	recommend	HE	I think this one might possibly be a good fit. How about #title?
