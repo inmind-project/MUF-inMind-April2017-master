@@ -12,6 +12,7 @@ public class SROutput {
     List<Entity> entities;
     Recommendation recommendation;
     UserFrame userFrame;
+    List<String> states;
 
     public String getAction() {
         return action;
@@ -59,6 +60,14 @@ public class SROutput {
 
     public void setUserFrame(UserFrame userFrame) {
         this.userFrame = userFrame;
+    }
+
+    public List<String> getStates() {
+        return states;
+    }
+
+    public void setStates(final List<String> states) {
+        this.states = states;
     }
 
     public String toString(){
