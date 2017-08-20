@@ -2,10 +2,22 @@
 # comment lines are ignored. empty lines are also ignored.
 
 # the above line was empty (hence ignored).
+
+# for the moment, the following slot types are implemented:
+# - #title (the movie to be recommended)
+# - #reason (the first entity in the explanations list -- can be genre or director or actor so be careful with the wording)
+# - #actor/director/genre: the first liked value of each of these in the corresponding list of liked entities
+# - #dislikedActor/dislikedDirector/dislikedGenre: the first disliked value of each of these in the corresponding list of disliked entities
+
+# for the entity lists, should I implement randomization? Should we try to add the decay function for old entities somewhere and weigh by that?
+# Please let me know if you want more, I'm very open to discussing further slots (and their grounding).
+
+
+recommendation	recommend	ASN	How about #title. Do you want another #genre movie, or what other genre do you want?
+recommendation	recommend	VSN	How about #title. I remember you do not like #dislikedGenre. What other genre would you want me to recommend?
 recommendation	recommend	NONE	#title has #reason.
+recommendation	recommend	NONE	I would love to recommend you something, but I've run out of options.
 recommendation	recommend	SD	Wow, here is one I'd love to go to. It's called #title.
 recommendation	recommend	PR	Here's a movie that might be worth your time. What do you think of #title?
-recommendation	recommend	VSN	I think even you would find this film interesting. The name is #title?
-recommendation	recommend	ASN	Perhaps you might be interested in this movie. It's called #title.
 recommendation	recommend	ASN	I think this movie fits your tastes. How about #title?
 recommendation	recommend	HE	I think this one might possibly be a good fit. How about #title?

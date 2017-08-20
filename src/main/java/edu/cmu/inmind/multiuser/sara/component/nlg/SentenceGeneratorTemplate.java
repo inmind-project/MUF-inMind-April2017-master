@@ -40,41 +40,45 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
     /** generate the final NLG output string for this task intent and social strategy */
     @Override
     public String generate(SROutput srOutput){
-        List<Template> candidateTemplates = selectCandidates(srOutput.getAction(), srOutput.getStrategy());
-        List<WeightedCandidate> filledCandidates = filterFillable(candidateTemplates, srOutput);
-        String sentence = selectByWeight(filledCandidates);
+        List<WeightedCandidate> candidates = selectCandidates(srOutput);
+        String sentence = selectByWeight(candidates);
         return sentence;
     }
 
     /* select candidates from the DB based on the task intent and conversational strategy */
-    public List<Template> selectCandidates(String intent, String strategy){
+    public List<WeightedCandidate> selectCandidates(SROutput srOutput) {
+        String intent = srOutput.getAction();
+        String strategy = srOutput.getStrategy();
         Map<String, List<Template>> intentMap = templateMap.get(intent);
         if (intentMap == null)
             throw new IllegalArgumentException("you're querying an unknown intent: " + intent);
         // get the sentence candidates that match the intent and strategy
-        List<Template> candidates = intentMap.get(strategy);
+        List<WeightedCandidate> candidates = filterFillable(intentMap.get(strategy), srOutput);
         // if no strategy is known, try "NONE" as strategy
         if (candidates == null || candidates.isEmpty())
-            candidates = intentMap.get("NONE");
+            candidates = filterFillable(intentMap.get("NONE"), srOutput);
         // if none does not exist either, use all available social strategies
         if (candidates == null || candidates.isEmpty())
-            candidates = intentMap.get(ANY_STRATEGY);
+            candidates = filterFillable(intentMap.get(ANY_STRATEGY), srOutput);
         assert candidates != null && !candidates.isEmpty() : "could not find any intent for " + intent + "+" + strategy;
         return candidates;
     }
 
     public static List<WeightedCandidate> filterFillable(List<Template> candidates, SROutput srOutput) {
         List<WeightedCandidate> filteredCandidates = new ArrayList<>();
-        for (Template template : candidates) {
-            String match = template.match(srOutput);
-            if (match != null) {
-                filteredCandidates.add(new WeightedCandidate(match, 1.0));
+        if (candidates != null) {
+            for (Template template : candidates) {
+                String match = template.match(srOutput);
+                if (match != null) {
+                    filteredCandidates.add(new WeightedCandidate(match, 1.0));
+                }
             }
         }
         return filteredCandidates;
     }
 
     public static String selectByWeight(List<WeightedCandidate> candidates) {
+        assert candidates.size() > 0 : "filtering ended without any options.";
         // FIXME: to be implemented
         return candidates.get(0).sentence;
     }
@@ -116,27 +120,51 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
             this.template = template;
         }
 
-        public String match(SROutput srOutput) {
+        String match(SROutput srOutput) {
             String instantiation = template;
             Matcher m = slotMarker.matcher(instantiation);
             while (m.matches()) {
                 String slotName = m.group(1);
-                switch (slotName) {
-                    case "#title":
-                        String title = srOutput.getRecommendation() != null ? srOutput.getRecommendation().getRexplanations().get(0).getRecommendation() : null;
-                        if (title == null)
-                            return null;
-                        instantiation = instantiation.replaceAll("#title", title);
-                        break;
-                    case "#reason":
-                        String reason = srOutput.getRecommendation() != null ? srOutput.getRecommendation().getRexplanations().get(0).getExplanations().get(0) : null;
-                        if (reason == null)
-                            return null;
-                        instantiation = instantiation.replaceAll("#reason", reason);
-                        break;
-                    default:
-                        throw new RuntimeException("SentenceGeneratorTemplate.Template#match() found a marker that I do not understand: " + slotName);
+                String value;
+                try {
+                    switch (slotName) {
+                        case "#title":
+                            value = srOutput.getRecommendation().getRexplanations().get(0).getRecommendation();
+                            break;
+                        case "#reason":
+                            value = srOutput.getRecommendation().getRexplanations().get(0).getExplanations().get(0);
+                            break;
+                        case "#actor":
+                            value = srOutput.getUserFrame().getFrame().getActors().getLike().get(0).getValue();
+                            break;
+                        case "#dislikedActor":
+                            value = srOutput.getUserFrame().getFrame().getActors().getDislike().get(0).getValue();
+                            break;
+                        case "#genre":
+                            value = srOutput.getUserFrame().getFrame().getGenres().getLike().get(0).getValue();
+                            break;
+                        case "#dislikedGenre":
+                            value = srOutput.getUserFrame().getFrame().getGenres().getDislike().get(0).getValue();
+                            break;
+                        case "#director":
+                            value = srOutput.getUserFrame().getFrame().getDirectors().getLike().get(0).getValue();
+                            break;
+                        case "#dislikedDirector":
+                            value = srOutput.getUserFrame().getFrame().getDirectors().getDislike().get(0).getValue();
+                            break;
+                        default:
+                            throw new RuntimeException("SentenceGeneratorTemplate.Template#match() found a marker that I do not understand: " + slotName);
+                    }
+                } catch (NullPointerException | IndexOutOfBoundsException npe) {
+                    // null pointer exceptions occur when we're unable to access the field
+                    // it's much simpler to catch them than to handle them individually for all cases
+                    value = null;
                 }
+                if (value == null) {
+                    instantiation = null;
+                    break;
+                }
+                instantiation = instantiation.replaceAll(slotName, value);
                 m = slotMarker.matcher(instantiation);
             }
             return instantiation;

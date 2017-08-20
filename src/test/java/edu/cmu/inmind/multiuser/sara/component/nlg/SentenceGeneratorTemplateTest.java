@@ -37,12 +37,12 @@ public class SentenceGeneratorTemplateTest {
         srOutput.setRapport(7);
         srOutput.setStrategy("NONE");
         String nlgout = gen.generate(srOutput);
-        System.out.println(nlgout);
+        System.out.println("NONE\t" + nlgout);
         assert(nlgout.contains(recommendedMovie));
         for (ConversationalStrategy cs : ConversationalStrategy.values()) {
             srOutput.setStrategy(cs.name());
             nlgout = gen.generate(srOutput);
-            System.out.println(nlgout);
+            System.out.println(cs.name() + "\t" + nlgout);
             assert(nlgout.contains(recommendedMovie));
         }
     }

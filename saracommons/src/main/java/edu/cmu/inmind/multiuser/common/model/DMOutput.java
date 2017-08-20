@@ -9,7 +9,7 @@ public class DMOutput {
     String action;
     List<Entity> entities;
     Recommendation recommendation;
-    UserFrame userFrame;
+    UserFrame frame;
 
     public String getAction() {
         return action;
@@ -36,11 +36,11 @@ public class DMOutput {
     }
 
     public UserFrame getUserFrame() {
-        return userFrame;
+        return frame;
     }
 
-    public void setUserFrame(UserFrame userFrame) {
-        this.userFrame = userFrame;
+    public void setFrame(UserFrame frame) {
+        this.frame = frame;
     }
 
     public String toString(){
