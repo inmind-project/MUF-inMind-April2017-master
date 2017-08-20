@@ -6,5 +6,5 @@ import edu.cmu.inmind.multiuser.common.model.SROutput;
  * Created by yoichimatsuyama on 4/12/17.
  */
 public interface SentenceGenerator {
-    public String genenete(SROutput intent);
+    public String generate(SROutput intent);
 }

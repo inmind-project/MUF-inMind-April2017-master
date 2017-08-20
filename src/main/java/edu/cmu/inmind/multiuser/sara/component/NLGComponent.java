@@ -14,6 +14,9 @@ import edu.cmu.inmind.multiuser.controller.log.Loggable;
 import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
 import edu.cmu.inmind.multiuser.controller.plugin.StateType;
 import edu.cmu.inmind.multiuser.sara.component.nlg.SentenceGeneratorTemplate;
+
+import java.io.FileNotFoundException;
+
 /**
  * Created by oscarr on 3/7/17.
  */
@@ -36,8 +39,12 @@ public class NLGComponent extends PluggableComponent implements BeatCallback {
     @Override
     public void startUp(){
         super.startUp();
-        // TODO: add code to initialize this component
-        gen = new SentenceGeneratorTemplate();
+        try {
+            gen = new SentenceGeneratorTemplate();
+        } catch (FileNotFoundException fnfe) {
+            fnfe.printStackTrace();
+            throw new RuntimeException("could not start SentenceGenerator. Exiting.");
+        }
     }
 
     @Override
@@ -52,7 +59,7 @@ public class NLGComponent extends PluggableComponent implements BeatCallback {
          * generation
          */
         Log4J.info(this, "NLG srOutput: " + srOutput);
-        String sentence = gen.genenete(srOutput);
+        String sentence = gen.generate(srOutput);
         /**
          * send sentence to BEAT
          */

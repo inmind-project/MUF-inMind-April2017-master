@@ -39,8 +39,8 @@ public class DMOutput {
         return frame;
     }
 
-    public void setUserFrame(UserFrame userFrame) {
-        this.frame = userFrame;
+    public void setFrame(UserFrame frame) {
+        this.frame = frame;
     }
 
     public String toString(){
