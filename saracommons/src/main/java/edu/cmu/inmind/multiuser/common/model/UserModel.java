@@ -11,6 +11,7 @@ import java.util.List;
  */
 public class UserModel {
     private final List<String> behaviorNetworkStates = new ArrayList<>();
+    @Nullable private UserFrame userFrame;
 
     @NotNull private final String id;
 
@@ -31,5 +32,14 @@ public class UserModel {
     public void updateBehaviorNetworkStates(@Nullable final List<String> behaviorNetworkStates) {
         this.behaviorNetworkStates.clear();
         this.behaviorNetworkStates.addAll(behaviorNetworkStates);
+    }
+
+    @Nullable
+    public UserFrame getUserFrame() {
+        return userFrame;
+    }
+
+    public void setUserFrame(@Nullable final UserFrame userFrame) {
+        this.userFrame = userFrame;
     }
 }

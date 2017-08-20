@@ -52,6 +52,7 @@ public class UserModelComponent extends PluggableComponent {
             case SaraCons.MSG_SR: {
                 final SROutput srOutput = (SROutput) event.getElement();
                 userModel.updateBehaviorNetworkStates(srOutput.getStates());
+                userModel.setUserFrame(srOutput.getUserFrame());
                 break;
             }
             default: {

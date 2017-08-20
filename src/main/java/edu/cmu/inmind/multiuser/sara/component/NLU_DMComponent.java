@@ -3,11 +3,7 @@ package edu.cmu.inmind.multiuser.sara.component;
 import edu.cmu.inmind.multiuser.common.Constants;
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.common.Utils;
-import edu.cmu.inmind.multiuser.common.model.DMOutput;
-import edu.cmu.inmind.multiuser.common.model.SaraInput;
-import edu.cmu.inmind.multiuser.common.model.SaraOutput;
-import edu.cmu.inmind.multiuser.common.model.UserIntent;
-import edu.cmu.inmind.multiuser.common.model.ASROutput;
+import edu.cmu.inmind.multiuser.common.model.*;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardSubscription;
 import edu.cmu.inmind.multiuser.controller.communication.ClientCommController;
@@ -24,8 +20,9 @@ import java.util.ArrayList;
  * Created by oscarr on 3/7/17.
  */
 @StateType( state = Constants.STATEFULL)
-@BlackboardSubscription( messages = {SaraCons.MSG_ASR, SaraCons.MSG_START_DM} )
+@BlackboardSubscription( messages = {SaraCons.MSG_ASR, SaraCons.MSG_START_DM, SaraCons.MSG_USER_MODEL_LOADED} )
 public class NLU_DMComponent extends PluggableComponent {
+    private static final String SESSION_MANAGER_SERVICE = "session-manager";
     private ClientCommController commController;
     private final String pythonDialogueAddress = Utils.getProperty("pythonDialogueAddress");
 
@@ -62,6 +59,7 @@ public class NLU_DMComponent extends PluggableComponent {
                 .setRequestType( Constants.REQUEST_CONNECT )
                 .setTCPon( true )
                 .setMuf( true? null : null ) //when TCP is off, we need to explicitly tell the client who the MUF is
+                .setSessionManagerService(SESSION_MANAGER_SERVICE)
                 .build();
     }
 
@@ -84,6 +82,11 @@ public class NLU_DMComponent extends PluggableComponent {
     	    commController.send( getSessionId(), startDMMessage );
             commController.send( getSessionId(), startDMMessage );
             Log4J.debug(this, "Sent Initial Greeting");
+        } else if (blackboardEvent.getId().equals(SaraCons.MSG_USER_MODEL_LOADED)) {
+            final UserModel userModel = (UserModel) blackboardEvent.getElement();
+            if (userModel.getUserFrame() != null) {
+                commController.send(getSessionId(), userModel.getUserFrame());
+            }
         } else {
             Log4J.debug(this, "sending on " + blackboardEvent.toString() );
             commController.send( getSessionId(), blackboardEvent.getElement() );
@@ -104,9 +107,9 @@ public class NLU_DMComponent extends PluggableComponent {
     public void shutDown(){
         SessionMessage sessionMessage = new SessionMessage();
         sessionMessage.setRequestType( Constants.REQUEST_DISCONNECT );
-        commController.send( getSessionId(), sessionMessage );
+        sessionMessage.setSessionId(getSessionId());
+        commController.send( SESSION_MANAGER_SERVICE, sessionMessage );
         commController.close();
         super.shutDown();
     }
-
 }
