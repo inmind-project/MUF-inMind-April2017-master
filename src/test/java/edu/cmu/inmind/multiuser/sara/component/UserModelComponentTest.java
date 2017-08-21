@@ -7,7 +7,6 @@ import edu.cmu.inmind.multiuser.common.model.UserModel;
 import edu.cmu.inmind.multiuser.controller.blackboard.Blackboard;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
 import edu.cmu.inmind.multiuser.sara.repo.UserModelRepository;
-import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -70,7 +69,7 @@ public class UserModelComponentTest {
         assertEquals(states, model.getBehaviorNetworkStates());
     }
 
-    private static void startSession(@NotNull UserModelComponent component) {
+    private static void startSession(UserModelComponent component) {
         component.startUp();
         component.onEvent(new BlackboardEvent("status", "MSG_START_SESSION", null));
     }
