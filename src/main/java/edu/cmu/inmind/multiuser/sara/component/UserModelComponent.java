@@ -13,7 +13,6 @@ import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
 import edu.cmu.inmind.multiuser.controller.plugin.StateType;
 import edu.cmu.inmind.multiuser.controller.session.Session;
 import edu.cmu.inmind.multiuser.sara.repo.UserModelRepository;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.function.Consumer;
@@ -29,16 +28,13 @@ import java.util.function.Consumer;
  * Furthermore, this component will support replacing the current model with a preset user profile
  */
 @StateType(state = Constants.STATEFULL)
-@BlackboardSubscription(messages = {SaraCons.MSG_DM, SaraCons.MSG_SR, SaraCons.MSG_START_SESSION})
+@BlackboardSubscription(messages = {SaraCons.MSG_DM, SaraCons.MSG_SR, SaraCons.MSG_START_SESSION,
+        SaraCons.MSG_CSC, SaraCons.MSG_NVB, SaraCons.MSG_SR})
 public class UserModelComponent extends PluggableComponent {
 
-    @SuppressWarnings("NullableProblems") // Initialized in #startUp()
-    @NotNull private Map<String, Consumer<BlackboardEvent>> delegationMap;
-    @SuppressWarnings("NullableProblems") // Initialized in #startUp()
-    @NotNull private UserModelRepository repository;
-
-    @SuppressWarnings("NullableProblems") // Initialized when session started
-    @NotNull private UserModel userModel;
+    private Map<String, Consumer<BlackboardEvent>> delegationMap;
+    private UserModelRepository repository;
+    private UserModel userModel;
 
     @Override
     protected void startUp() {
@@ -52,7 +48,7 @@ public class UserModelComponent extends PluggableComponent {
     }
 
     @Override
-    public void onEvent(@NotNull BlackboardEvent event) {
+    public void onEvent(BlackboardEvent event) {
         if (delegationMap.containsKey(event.getId())) {
             delegationMap.get(event.getId()).accept(event);
         } else {
@@ -60,7 +56,7 @@ public class UserModelComponent extends PluggableComponent {
         }
     }
 
-    private void onStartSession(@NotNull BlackboardEvent event) {
+    private void onStartSession(BlackboardEvent event) {
         // TODO: Check event to see if we should clear the user history
         userModel = repository.readModel()
                 .orElseGet(() -> new UserModel(getSessionId()));
@@ -68,7 +64,7 @@ public class UserModelComponent extends PluggableComponent {
         blackboard().post(this, SaraCons.MSG_USER_MODEL_LOADED, userModel);
     }
 
-    private void handleMsgSR(@NotNull BlackboardEvent event) {
+    private void handleMsgSR(BlackboardEvent event) {
         final SROutput srOutput = (SROutput) event.getElement();
         userModel.updateBehaviorNetworkStates(srOutput.getStates());
         userModel.setUserFrame(srOutput.getUserFrame());
@@ -82,7 +78,6 @@ public class UserModelComponent extends PluggableComponent {
     }
 
     @VisibleForTesting
-    @NotNull
     UserModelRepository createRepo() {
         try {
             final Session session = getSession();
