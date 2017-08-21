@@ -7,6 +7,7 @@ import edu.cmu.inmind.multiuser.common.model.UserModel;
 import edu.cmu.inmind.multiuser.controller.blackboard.Blackboard;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
 import edu.cmu.inmind.multiuser.sara.repo.UserModelRepository;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -43,7 +44,7 @@ public class UserModelComponentTest {
 
     @Test
     public void readsModelOnStartUp() {
-        component.startUp();
+        startSession(component);
         verify(repo).readModel();
 
         verify(blackboard).post(component, SaraCons.MSG_USER_MODEL_LOADED, model);
@@ -51,7 +52,7 @@ public class UserModelComponentTest {
 
     @Test
     public void writesModelOnShutDown() {
-        component.startUp();
+        startSession(component);
         component.shutDown();
         verify(repo).writeModel(model);
     }
@@ -63,9 +64,14 @@ public class UserModelComponentTest {
         srOutput.setStates(states);
         final BlackboardEvent event = new BlackboardEvent("status", SaraCons.MSG_SR, srOutput);
 
-        component.startUp();
+        startSession(component);
         component.onEvent(event);
 
         assertEquals(states, model.getBehaviorNetworkStates());
+    }
+
+    private static void startSession(@NotNull UserModelComponent component) {
+        component.startUp();
+        component.onEvent(new BlackboardEvent("status", "MSG_START_SESSION", null));
     }
 }
