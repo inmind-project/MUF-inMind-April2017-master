@@ -28,8 +28,7 @@ import java.util.function.Consumer;
  * Furthermore, this component will support replacing the current model with a preset user profile
  */
 @StateType(state = Constants.STATEFULL)
-@BlackboardSubscription(messages = {SaraCons.MSG_DM, SaraCons.MSG_SR, SaraCons.MSG_START_SESSION,
-        SaraCons.MSG_CSC, SaraCons.MSG_NVB, SaraCons.MSG_SR})
+@BlackboardSubscription(messages = {SaraCons.MSG_SR, SaraCons.MSG_START_SESSION})
 public class UserModelComponent extends PluggableComponent {
 
     private Map<String, Consumer<BlackboardEvent>> delegationMap;
@@ -68,12 +67,7 @@ public class UserModelComponent extends PluggableComponent {
         final SROutput srOutput = (SROutput) event.getElement();
         userModel.updateBehaviorNetworkStates(srOutput.getStates());
         userModel.setUserFrame(srOutput.getUserFrame());
-    }
-
-    @Override
-    public void shutDown() {
-        super.shutDown();
-        Log4J.info(this, "Writing userModel to disk");
+        // TODO: Figure out why only doing the write in shutDown does not work
         repository.writeModel(userModel);
     }
 
