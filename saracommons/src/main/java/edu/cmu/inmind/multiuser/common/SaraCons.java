@@ -23,6 +23,7 @@ public class SaraCons {
     public static final String ID_R5 = "ID_R5";
 
     //messages
+    public static final String MSG_START_SESSION = "MSG_START_SESSION";
     public static final String MSG_NLU = "MSG_NLU";
     public static final String MSG_DM = "MSG_DM";
     public static final String MSG_SR = "MSG_SR";

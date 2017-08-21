@@ -4,7 +4,6 @@ import beat.bson.BSON;
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.common.Utils;
 import edu.cmu.inmind.multiuser.common.model.ASROutput;
-import edu.cmu.inmind.multiuser.common.model.DMOutput;
 import edu.cmu.inmind.multiuser.common.model.R5StreamListener;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardSubscription;
@@ -38,7 +37,7 @@ public class SaraOrchestratorEx15 extends ProcessOrchestratorImpl {
         super.process(message);
 
         SessionMessage inputMessage = Utils.fromJson(message, SessionMessage.class);
-        if( inputMessage.getMessageId().equals("MSG_START_SESSION") ){
+        if( inputMessage.getMessageId().equals(SaraCons.MSG_START_SESSION) ){
             Log4J.info( this, "MSG_START_SESSION");
             blackboard.post( this, inputMessage.getMessageId(), inputMessage.getPayload() );
         }

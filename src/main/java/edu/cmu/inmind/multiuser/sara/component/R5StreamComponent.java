@@ -14,7 +14,7 @@ import edu.cmu.inmind.multiuser.controller.plugin.StateType;
  * Created by sakoju on 6/7/17.
  */
 @StateType( state = Constants.STATEFULL)
-@BlackboardSubscription(messages = "MSG_START_SESSION")
+@BlackboardSubscription(messages = SaraCons.MSG_START_SESSION)
 public class R5StreamComponent extends PluggableComponent {
 private R5StreamListener r5StreamListener = null;
 
@@ -33,7 +33,7 @@ private R5StreamListener r5StreamListener = null;
     @Override
     public void onEvent(BlackboardEvent blackboardEvent)
     {
-        if(blackboardEvent.getId().equals("MSG_START_SESSION"))
+        if(blackboardEvent.getId().equals(SaraCons.MSG_START_SESSION))
         {
             blackboard().post(R5StreamComponent.this, SaraCons.MSG_START_STREAMING, r5StreamListener);
         }
