@@ -84,8 +84,12 @@ public class NLU_DMComponent extends PluggableComponent {
             Log4J.debug(this, "Sent Initial Greeting");
         } else if (blackboardEvent.getId().equals(SaraCons.MSG_USER_MODEL_LOADED)) {
             final UserModel userModel = (UserModel) blackboardEvent.getElement();
+            Log4J.info(this, "Received user model");
             if (userModel.getUserFrame() != null) {
+                Log4J.info(this, "Sending user frame to python: " + Utils.toJson(userModel.getUserFrame()));
                 commController.send(getSessionId(), userModel.getUserFrame());
+            } else {
+                Log4J.info(this, "User frame was empty");
             }
         } else {
             Log4J.debug(this, "sending on " + blackboardEvent.toString() );
