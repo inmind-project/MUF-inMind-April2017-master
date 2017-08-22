@@ -44,6 +44,10 @@ public class UserModelComponent extends PluggableComponent {
                 SaraCons.MSG_START_SESSION, this::onStartSession
         );
         repository = createRepo();
+        userModel = repository.readModel()
+                .orElseGet(() -> new UserModel(getSessionId()));
+
+        blackboard().post(this, SaraCons.MSG_USER_MODEL_LOADED, userModel);
     }
 
     @Override
@@ -57,18 +61,20 @@ public class UserModelComponent extends PluggableComponent {
 
     private void onStartSession(BlackboardEvent event) {
         // TODO: Check event to see if we should clear the user history
-        userModel = repository.readModel()
-                .orElseGet(() -> new UserModel(getSessionId()));
-
-        blackboard().post(this, SaraCons.MSG_USER_MODEL_LOADED, userModel);
     }
 
     private void handleMsgSR(BlackboardEvent event) {
         final SROutput srOutput = (SROutput) event.getElement();
         userModel.updateBehaviorNetworkStates(srOutput.getStates());
         userModel.setUserFrame(srOutput.getUserFrame());
-        // TODO: Figure out why only doing the write in shutDown does not work
+        // TODO: Only write in shutDown once the app is updated to properly send REQUEST_DISCONNECT
         repository.writeModel(userModel);
+    }
+
+    @Override
+    public void shutDown() {
+        repository.writeModel(userModel);
+        super.shutDown();
     }
 
     @VisibleForTesting
