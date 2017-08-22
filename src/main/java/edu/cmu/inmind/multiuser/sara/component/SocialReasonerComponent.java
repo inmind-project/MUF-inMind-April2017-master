@@ -77,8 +77,12 @@ public class SocialReasonerComponent extends PluggableComponent {
      }
 
     private void updateUserModel(final UserModel model) {
+        Log4J.info(this, "Received user model");
         if (!model.getBehaviorNetworkStates().isEmpty()) {
+            Log4J.info(this, "Updating states: " + Utils.toJson(model.getBehaviorNetworkStates()));
             socialController.getSocialReasoner().getNetwork().updateState(model.getBehaviorNetworkStates());
+        } else {
+            Log4J.info(this, "States were empty");
         }
     }
 
