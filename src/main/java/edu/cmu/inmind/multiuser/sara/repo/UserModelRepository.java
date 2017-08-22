@@ -27,7 +27,6 @@ public class UserModelRepository {
                     .filter(model -> model.getId().equals(sessionId));
         } catch (Exception exception) {
             Log4J.error(this, "Unable to load user userModel for " + sessionId);
-            exception.printStackTrace();
         }
         return Optional.empty();
     }
