@@ -641,7 +641,7 @@ public class BehaviorNetworkPlus{ //} implements BehaviorNetworkInterface{
 	 */
 	public synchronized void triggerPostconditions(int behIndex){
 		if( behIndex >= 0 && behIndex < modules.size() ) {
-			Behavior beh = modules.get(behIndex);
+			BehaviorPlus beh = modules.get(behIndex);
 			Vector<String> addList = new Vector<>(beh.getAddList());
 			Vector<String> deleteList = new Vector<>(beh.getDeleteList());
 
