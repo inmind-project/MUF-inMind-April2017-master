@@ -13,6 +13,7 @@ import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
 import edu.cmu.inmind.multiuser.controller.plugin.StateType;
 import edu.cmu.inmind.multiuser.controller.session.Session;
 import edu.cmu.inmind.multiuser.sara.repo.UserModelRepository;
+import edu.cmu.inmind.multiuser.socialreasoner.control.util.Utils;
 
 import java.util.Map;
 import java.util.function.Consumer;
@@ -38,6 +39,7 @@ public class UserModelComponent extends PluggableComponent {
     @Override
     protected void startUp() {
         super.startUp();
+        Log4J.info(this, "Initializing user model component");
         // TODO: Add additional data from various events (SR, DM, etc.)
         delegationMap = ImmutableMap.of(
                 SaraCons.MSG_SR, this::handleMsgSR,
@@ -46,6 +48,8 @@ public class UserModelComponent extends PluggableComponent {
         repository = createRepo();
         userModel = repository.readModel()
                 .orElseGet(() -> new UserModel(getSessionId()));
+
+        Log4J.info(this, "Loaded user model: " + Utils.toJson(userModel));
 
         blackboard().post(this, SaraCons.MSG_USER_MODEL_LOADED, userModel);
     }
@@ -68,6 +72,7 @@ public class UserModelComponent extends PluggableComponent {
         userModel.updateBehaviorNetworkStates(srOutput.getStates());
         userModel.setUserFrame(srOutput.getUserFrame());
         // TODO: Only write in shutDown once the app is updated to properly send REQUEST_DISCONNECT
+        Log4J.info(this, "Writing user model: " + Utils.toJson(userModel));
         repository.writeModel(userModel);
     }
 
