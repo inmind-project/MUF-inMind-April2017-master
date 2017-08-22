@@ -640,47 +640,51 @@ public class BehaviorNetworkPlus{ //} implements BehaviorNetworkInterface{
 	 * @param behIndex
 	 */
 	public synchronized void triggerPostconditions(int behIndex){
-		BehaviorPlus beh = modules.get(behIndex);
-		Vector<String> addList = new Vector<>(beh.getAddList());
-		Vector<String> deleteList = new Vector<>(beh.getDeleteList());
+		if( behIndex >= 0 && behIndex < modules.size() ) {
+			Behavior beh = modules.get(behIndex);
+			Vector<String> addList = new Vector<>(beh.getAddList());
+			Vector<String> deleteList = new Vector<>(beh.getDeleteList());
 
-        synchronized ( states ) {
-            try {
-                previousStates = new Vector<>(states);
-                //we do not need to add preconditions to state since it is done by DMMain
-//                for (String anAddList : addList) {
-//                    if (!anAddList.contains("_history")) {
-//                        states.remove(anAddList);
-//                        states.add(anAddList);
-//                    }
-//                }
-                if (removePrecond) {
-                    for (List<String> preconds : beh.getPreconditions()) {
-                        for (String precond : preconds) {
-                            states.remove(precond);
-                        }
-                    }
-                } else {
-                    List<String> toRemove = new ArrayList<>();
-                    for (String premise : deleteList) {
-                        for( String st : states ){
-                            if( premise.contains("*") && Pattern.compile(premise.replace("*", "[a-zA-Z0-9]*"))
-                                    .matcher(st).matches()) {
-                                toRemove.add( st );
-                            }
-                        }
-                        for( String st : toRemove ){
-                            states.remove( st );
-                        }
-                    }
-                }
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-		for (String goal : beh.getAddGoals()) {
-			goals.remove( goal );
-			goals.add( goal );
+			synchronized (states) {
+				try {
+					previousStates = new Vector<>(states);
+					//we do not need to add preconditions to state since it is done by DMMain
+					//                for (String anAddList : addList) {
+					//                    if (!anAddList.contains("_history")) {
+					//                        states.remove(anAddList);
+					//                        states.add(anAddList);
+					//                    }
+					//                }
+					if (removePrecond) {
+						if( beh.getPreconditions() != null ) {
+							for (List<String> preconds : beh.getPreconditions()) {
+								for (String precond : preconds) {
+									states.remove(precond);
+								}
+							}
+						}
+					} else {
+						List<String> toRemove = new ArrayList<>();
+						for (String premise : deleteList) {
+							for (String st : states) {
+								if (premise.contains("*") && Pattern.compile(premise.replace("*", "[a-zA-Z0-9]*"))
+										.matcher(st).matches()) {
+									toRemove.add(st);
+								}
+							}
+							for (String st : toRemove) {
+								states.remove(st);
+							}
+						}
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			for (String goal : beh.getAddGoals()) {
+				goals.remove(goal);
+				goals.add(goal);
+			}
 		}
 	}
 
