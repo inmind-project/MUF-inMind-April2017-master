@@ -5,8 +5,10 @@ import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.common.Utils;
 import edu.cmu.inmind.multiuser.controller.MultiuserFramework;
 import edu.cmu.inmind.multiuser.controller.MultiuserFrameworkContainer;
+import edu.cmu.inmind.multiuser.controller.log.MessageLog;
 import edu.cmu.inmind.multiuser.controller.plugin.PluginModule;
 import edu.cmu.inmind.multiuser.controller.resources.Config;
+import edu.cmu.inmind.multiuser.sara.log.ExceptionLogger;
 
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -68,8 +70,15 @@ public class MainClass {
                 .setSessionTimeout(10, TimeUnit.DAYS)
                 .setServerAddress("tcp://127.0.0.1:") //use IP instead of 'localhost'
                 .setExceptionTraceLevel(Constants.SHOW_MUF_EXCEPTIONS)  //change SHOW_ALL_EXCEPTIONS/
-                                                                        // MUF Exceptions/NON_MUF Exceptions
+                .setExceptionLogger( getExceptionLogger() )// MUF Exceptions/NON_MUF Exceptions
                 .build();
+    }
+
+    protected MessageLog getExceptionLogger(){
+        MessageLog log =  new ExceptionLogger();
+        log.setId( "any-arbitrary-id" );
+        log.setPath( Utils.getProperty("pathExceptionLog") );
+        return log;
     }
 
 }
