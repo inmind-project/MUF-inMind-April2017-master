@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  */
 public class SentenceGeneratorTemplate implements SentenceGenerator {
 
-    // the outer map maps from task intent to map of social intent to a list of canidate sentence templates to be filled in
+    // the outer map maps from task intent to map of social intent to a list of candidate sentence templates to be filled in
     private final Map<String,Map<String, List<Template>>> templateMap = new HashMap<>();
 
     private static final String ANY_STRATEGY = "ANY";
@@ -48,18 +48,21 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
     /* select candidates from the DB based on the task intent and conversational strategy */
     public List<WeightedCandidate> selectCandidates(SROutput srOutput) {
         String intent = srOutput.getAction();
-        String strategy = srOutput.getStrategy();
+        // srOutput strategy is formatted as [STRATEGY]_CS_SYSTEM; we only want [STRATEGY]
+        String strategy = srOutput.getStrategy().split("_")[0];
         Map<String, List<Template>> intentMap = templateMap.get(intent);
         if (intentMap == null)
             throw new IllegalArgumentException("you're querying an unknown intent: " + intent);
         // get the sentence candidates that match the intent and strategy
         List<WeightedCandidate> candidates = filterFillable(intentMap.get(strategy), srOutput);
         // if no strategy is known, try "NONE" as strategy
-        if (candidates == null || candidates.isEmpty())
+        if (candidates == null || candidates.isEmpty()) {
             candidates = filterFillable(intentMap.get("NONE"), srOutput);
+        }
         // if none does not exist either, use all available social strategies
-        if (candidates == null || candidates.isEmpty())
+        if (candidates == null || candidates.isEmpty()) {
             candidates = filterFillable(intentMap.get(ANY_STRATEGY), srOutput);
+        }
         assert candidates != null && !candidates.isEmpty() : "could not find any intent for " + intent + "+" + strategy;
         return candidates;
     }
@@ -68,9 +71,14 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
         List<WeightedCandidate> filteredCandidates = new ArrayList<>();
         if (candidates != null) {
             for (Template template : candidates) {
-                String match = template.match(srOutput);
+                WeightedCandidate match = template.match(srOutput);
                 if (match != null) {
-                    filteredCandidates.add(new WeightedCandidate(match, 1.0));
+                    // add to head if has greater weight (else add to tail)
+                    if (filteredCandidates.size() > 0 && match.weight >= filteredCandidates.get(0).weight) {
+                        filteredCandidates.add(0,match);
+                    } else {
+                        filteredCandidates.add(match);
+                    }
                 }
             }
         }
@@ -80,6 +88,7 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
     public static String selectByWeight(List<WeightedCandidate> candidates) {
         assert candidates.size() > 0 : "filtering ended without any options.";
         // FIXME: to be implemented
+        // temporarily implemented in filterFillable (when adding candidates to list)
         return candidates.get(0).sentence;
     }
 
@@ -116,16 +125,21 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
         private final static Pattern slotMarker = Pattern.compile(".*?(#[^ \\.,\\?!]*).*");
 
         final String template;
-        Template(String template) {
+        final double weight;
+        /* Template(String template) {
             this.template = template;
+        } */
+        Template(String template, double weight) {
+            this.template = template;
+            this.weight = weight;
         }
 
-        String match(SROutput srOutput) {
+        WeightedCandidate match(SROutput srOutput) {
             String instantiation = template;
             Matcher m = slotMarker.matcher(instantiation);
             while (m.matches()) {
                 String slotName = m.group(1);
-                String value;
+                String value = null;
                 try {
                     switch (slotName) {
                         case "#title":
@@ -152,6 +166,30 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
                         case "#dislikedDirector":
                             value = srOutput.getUserFrame().getFrame().getDirectors().getDislike().get(0).getValue();
                             break;
+                        case "#latestGenre":
+                            int latestGenre = srOutput.getUserFrame().getFrame().getGenres().getLike().size() - 1;
+                            String latestGenreValue = srOutput.getUserFrame().getFrame().getGenres().getLike().get(latestGenre).getValue();
+                            String latestGenreUtterance = srOutput.getUserFrame().getLatestUtterance();
+                            if (latestGenreUtterance == null || latestGenreUtterance.contains(latestGenreValue)) {
+                                value = latestGenreValue;
+                            }
+                            break;
+                         case "#latestActor":
+                            int latestActor = srOutput.getUserFrame().getFrame().getActors().getLike().size() - 1;
+                            String latestActorValue = srOutput.getUserFrame().getFrame().getActors().getLike().get(latestActor).getValue();
+                            String latestActorUtterance = srOutput.getUserFrame().getLatestUtterance();
+                            if (latestActorUtterance == null || latestActorUtterance.contains(latestActorValue)) {
+                                value = latestActorValue;
+                            }
+                            break;
+                        case "#latestDirector":
+                            int latestDirector = srOutput.getUserFrame().getFrame().getDirectors().getLike().size() - 1;
+                            String latestDirectorValue = srOutput.getUserFrame().getFrame().getDirectors().getLike().get(latestDirector).getValue();
+                            String latestDirectorUtterance = srOutput.getUserFrame().getLatestUtterance();
+                            if (latestDirectorUtterance == null || latestDirectorUtterance.contains(latestDirectorValue)) {
+                                value = latestDirectorValue;
+                            }
+                            break;
                         default:
                             throw new RuntimeException("SentenceGeneratorTemplate.Template#match() found a marker that I do not understand: " + slotName);
                     }
@@ -167,7 +205,8 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
                 instantiation = instantiation.replaceAll(slotName, value);
                 m = slotMarker.matcher(instantiation);
             }
-            return instantiation;
+            // return instantiation;
+            return (instantiation == null) ? null : new WeightedCandidate(instantiation, weight);
         }
     }
 
@@ -178,11 +217,12 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
         String intent;
         String strategy;
         String sentence;
+        double weight;
 
         /**
          * turn a line formatted in the following way into a sentence object:
          * - empty lines are OK, lines starting with a # character are OK (both are disregarded)
-         * - tab-separated fields: phase \t intent \t conversational strategy \t sentence (possibly with attribute markers)
+         * - tab-separated fields: phase \t intent \t conversational strategy \t weight (as a double) \t sentence (possibly with attribute markers)
          * @return the Sentence object or NULL if comment
          * @throws IllegalArgumentException for lines that are neither comments nor properly formatted sentenceDB entries
          */
@@ -191,7 +231,7 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
             if(!line.startsWith("#") && !line.trim().isEmpty()){
                 String[] tokens = line.split("\t");
                 if(tokens.length > 3){
-                    sentence = new Sentence(tokens[1], tokens[2], tokens[3]);
+                    sentence = new Sentence(tokens[1], tokens[2], Double.parseDouble(tokens[3]), tokens[4]);
                 } else {
                     throw new IllegalArgumentException("line was not a comment and did not have the right format: " + line);
                 }
@@ -199,18 +239,18 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
             return sentence;
         }
 
-        Sentence(String intent, String strategy, String sentence) {
+        Sentence(String intent, String strategy, double weight, String sentence) {
             this.intent = intent;
             this.strategy = strategy;
+            this.weight = weight;
             this.sentence = sentence.trim();
         }
 
         String getIntent() { return intent; }
         String getStrategy() { return strategy; }
-        String getSentence() {
-            return sentence;
-        }
-        Template getTemplate() {return new Template(sentence);}
+        String getSentence() { return sentence; }
+        double getWeight() { return weight; }
+        Template getTemplate() {return new Template(sentence, weight);}
     }
 
     /**

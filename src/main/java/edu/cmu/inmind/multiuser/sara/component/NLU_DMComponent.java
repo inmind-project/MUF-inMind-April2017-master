@@ -80,7 +80,7 @@ public class NLU_DMComponent extends PluggableComponent {
             ASROutput startDMMessage = new ASROutput(SaraCons.MSG_START_DM, 1.0);
             Log4J.debug(this, "about to send initial greeting ...");
     	    commController.send( getSessionId(), startDMMessage );
-            commController.send( getSessionId(), startDMMessage );
+           // commController.send( getSessionId(), startDMMessage );
             Log4J.debug(this, "Sent Initial Greeting");
         } else if (blackboardEvent.getId().equals(SaraCons.MSG_USER_MODEL_LOADED)) {
             final UserModel userModel = (UserModel) blackboardEvent.getElement();
@@ -91,6 +91,11 @@ public class NLU_DMComponent extends PluggableComponent {
             } else {
                 Log4J.info(this, "User frame was empty");
             }
+            // temporary hack
+            // add latest utterance to user frame?
+            String latestUtterance = blackboardEvent.toString().split("Utterance: ")[1].split(" confidence:")[0];
+System.out.println("NLU_DM storing " + latestUtterance);
+            userModel.getUserFrame().setLatestUtterance(latestUtterance);
         } else {
             Log4J.debug(this, "sending on " + blackboardEvent.toString() );
             commController.send( getSessionId(), blackboardEvent.getElement() );

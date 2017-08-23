@@ -10,6 +10,7 @@ public class UserFrame {
     private Frame frame;
     private List<String> ask_stack;
     private List<String> universals;
+    private String latestUtterance;
 
     public Frame getFrame() {
         return frame;
@@ -33,6 +34,14 @@ public class UserFrame {
 
     public void setUniversals(List<String> universals) {
         this.universals = universals;
+    }
+
+    public String getLatestUtterance() {
+        return latestUtterance;
+    }
+
+    public void setLatestUtterance(String string) {
+        this.latestUtterance = string;
     }
 
 
