@@ -10,6 +10,7 @@ public class DMOutput {
     List<Entity> entities;
     Recommendation recommendation;
     UserFrame frame;
+    String utterance;
 
     public String getAction() {
         return action;
@@ -41,6 +42,14 @@ public class DMOutput {
 
     public void setFrame(UserFrame frame) {
         this.frame = frame;
+    }
+
+    public void setUtterance(String utterance) {
+        this.utterance = utterance;
+    }
+
+    public String getUtterance() {
+        return utterance;
     }
 
     public String toString(){

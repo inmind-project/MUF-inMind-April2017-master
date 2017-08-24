@@ -20,21 +20,24 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
 
     // the outer map maps from task intent to map of social intent to a list of candidate sentence templates to be filled in
     private final Map<String,Map<String, List<Template>>> templateMap = new HashMap<>();
-
+    // maps from entity to list of SARA's preferences for that entity
+    private final Map<String,ArrayList<String>> preferencesMap = new HashMap<>();
     private static final String ANY_STRATEGY = "ANY";
 
     /** sentence DB to be loaded by default */
     public SentenceGeneratorTemplate() throws FileNotFoundException {
-        this("resources/nlg/sentence_db.tsv");
+        this("resources/nlg/sentence_db.tsv", "resources/nlg/sara_preferences_db.tsv");
     }
 
-    public SentenceGeneratorTemplate(String sentenceDBName) throws FileNotFoundException {
-        this(new FileInputStream(sentenceDBName));
+    public SentenceGeneratorTemplate(String sentenceDBName, String saraDBName) throws FileNotFoundException {
+        this(new FileInputStream(sentenceDBName), new FileInputStream(saraDBName));
     }
 
-    public SentenceGeneratorTemplate(InputStream sentenceDB) {
+    public SentenceGeneratorTemplate(InputStream sentenceDB, InputStream saraDB) {
         assert sentenceDB != null;
         loadSentenceList(sentenceDB);
+System.out.println("load SARA's preferences");
+        loadSARAPreferences(saraDB);
     }
 
     /** generate the final NLG output string for this task intent and social strategy */
@@ -54,24 +57,24 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
         if (intentMap == null)
             throw new IllegalArgumentException("you're querying an unknown intent: " + intent);
         // get the sentence candidates that match the intent and strategy
-        List<WeightedCandidate> candidates = filterFillable(intentMap.get(strategy), srOutput);
+        List<WeightedCandidate> candidates = filterFillable(intentMap.get(strategy), srOutput, preferencesMap);
         // if no strategy is known, try "NONE" as strategy
         if (candidates == null || candidates.isEmpty()) {
-            candidates = filterFillable(intentMap.get("NONE"), srOutput);
+            candidates = filterFillable(intentMap.get("NONE"), srOutput, preferencesMap);
         }
         // if none does not exist either, use all available social strategies
         if (candidates == null || candidates.isEmpty()) {
-            candidates = filterFillable(intentMap.get(ANY_STRATEGY), srOutput);
+            candidates = filterFillable(intentMap.get(ANY_STRATEGY), srOutput, preferencesMap);
         }
         assert candidates != null && !candidates.isEmpty() : "could not find any intent for " + intent + "+" + strategy;
         return candidates;
     }
 
-    public static List<WeightedCandidate> filterFillable(List<Template> candidates, SROutput srOutput) {
+    public static List<WeightedCandidate> filterFillable(List<Template> candidates, SROutput srOutput, Map<String,ArrayList<String>> preferencesMap) {
         List<WeightedCandidate> filteredCandidates = new ArrayList<>();
         if (candidates != null) {
             for (Template template : candidates) {
-                WeightedCandidate match = template.match(srOutput);
+                WeightedCandidate match = template.match(srOutput, preferencesMap);
                 if (match != null) {
                     // add to head if has greater weight (else add to tail)
                     if (filteredCandidates.size() > 0 && match.weight >= filteredCandidates.get(0).weight) {
@@ -134,12 +137,12 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
             this.weight = weight;
         }
 
-        WeightedCandidate match(SROutput srOutput) {
+        WeightedCandidate match(SROutput srOutput, Map<String,ArrayList<String>> preferencesMap) {
             String instantiation = template;
             Matcher m = slotMarker.matcher(instantiation);
             while (m.matches()) {
                 String slotName = m.group(1);
-                String value = null;
+                String value = null, latestEntityValue = null, latestEntityType = null, latestUtterance = null;
                 try {
                     switch (slotName) {
                         case "#title":
@@ -166,28 +169,39 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
                         case "#dislikedDirector":
                             value = srOutput.getUserFrame().getFrame().getDirectors().getDislike().get(0).getValue();
                             break;
-                        case "#latestGenre":
-                            int latestGenre = srOutput.getUserFrame().getFrame().getGenres().getLike().size() - 1;
-                            String latestGenreValue = srOutput.getUserFrame().getFrame().getGenres().getLike().get(latestGenre).getValue();
-                            String latestGenreUtterance = srOutput.getUserFrame().getLatestUtterance();
-                            if (latestGenreUtterance == null || latestGenreUtterance.contains(latestGenreValue)) {
-                                value = latestGenreValue;
+                        case "#latest":
+                            latestUtterance = srOutput.getUserFrame().getLatestUtterance();
+                            latestEntityValue = getLatestEntityValue(srOutput); // latest entity
+                            // if entity is from user's last utterance
+                            if (latestUtterance.contains(latestEntityValue)) {
+                                value = latestEntityValue;
                             }
                             break;
-                         case "#latestActor":
-                            int latestActor = srOutput.getUserFrame().getFrame().getActors().getLike().size() - 1;
-                            String latestActorValue = srOutput.getUserFrame().getFrame().getActors().getLike().get(latestActor).getValue();
-                            String latestActorUtterance = srOutput.getUserFrame().getLatestUtterance();
-                            if (latestActorUtterance == null || latestActorUtterance.contains(latestActorValue)) {
-                                value = latestActorValue;
+                        case "#agree":
+                            latestUtterance = srOutput.getUserFrame().getLatestUtterance();
+                            latestEntityValue = getLatestEntityValue(srOutput); // latest entity value
+                            latestEntityType = getLatestEntityType(srOutput);
+                            // if SARA shares the same preference
+                            if (preferencesMap.get(latestEntityType).contains(latestEntityValue)) {
+                                value = latestEntityValue;
                             }
                             break;
-                        case "#latestDirector":
-                            int latestDirector = srOutput.getUserFrame().getFrame().getDirectors().getLike().size() - 1;
-                            String latestDirectorValue = srOutput.getUserFrame().getFrame().getDirectors().getLike().get(latestDirector).getValue();
-                            String latestDirectorUtterance = srOutput.getUserFrame().getLatestUtterance();
-                            if (latestDirectorUtterance == null || latestDirectorUtterance.contains(latestDirectorValue)) {
-                                value = latestDirectorValue;
+                        case "#disagree":
+                            latestUtterance = srOutput.getUserFrame().getLatestUtterance();
+                            latestEntityValue = getLatestEntityValue(srOutput); // latest entity value
+                            latestEntityType = getLatestEntityType(srOutput);
+                            // if SARA shares the same preference
+                            if (!preferencesMap.get(latestEntityType).contains(latestEntityValue)) {
+                                value = latestEntityValue;
+                            }
+                            break;
+                        case "#different":
+                            latestUtterance = srOutput.getUserFrame().getLatestUtterance();
+                            latestEntityValue = getLatestEntityValue(srOutput); // latest entity value
+                            latestEntityType = getLatestEntityType(srOutput);
+                            // if SARA shares the same preference
+                            if (!preferencesMap.get(latestEntityType).contains(latestEntityValue)) {
+                                value = preferencesMap.get(latestEntityValue).get(0);
                             }
                             break;
                         default:
@@ -211,6 +225,53 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
     }
 
     /**
+     * Uses latest intent to get latest entity value.
+     */
+    private static String getLatestEntityValue(SROutput srOutput) {
+        int latestEntityIndex = 0;
+        try {
+            switch(srOutput.getAction()) {
+                case "ask_directors": // refer to genre
+                    latestEntityIndex = srOutput.getUserFrame().getFrame().getGenres().getLike().size() - 1;
+                    return srOutput.getUserFrame().getFrame().getGenres().getLike().get(latestEntityIndex).getValue();
+                case "ask_actors": // refer to director
+                    latestEntityIndex = srOutput.getUserFrame().getFrame().getDirectors().getLike().size() - 1;
+                    return srOutput.getUserFrame().getFrame().getDirectors().getLike().get(latestEntityIndex).getValue();
+                case "recommend": // refer to actor
+                    latestEntityIndex = srOutput.getUserFrame().getFrame().getActors().getLike().size() - 1;
+                    return srOutput.getUserFrame().getFrame().getActors().getLike().get(latestEntityIndex).getValue();
+                default:
+                    return null;
+            }
+        } catch (NullPointerException npe) {
+            throw new NullPointerException();
+        }
+    }
+
+    /**
+     * Uses latest intent to get latest entity type.
+     */
+    private static String getLatestEntityType(SROutput srOutput) {
+        int latestEntityIndex = 0;
+        try {
+            switch(srOutput.getAction()) {
+                case "ask_directors": // refer to genre
+                    return "genre";
+                case "ask_actors": // refer to director
+                    return "director";
+                case "recommend": // refer to actor
+                    return "actor";
+                default:
+                    return null;
+            }
+        } catch (NullPointerException npe) {
+            throw new NullPointerException();
+        }
+    }
+
+
+
+    /**
      * Created by yoichimatsuyama on 4/12/17.
      */
     private static class Sentence {
@@ -231,6 +292,7 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
             if(!line.startsWith("#") && !line.trim().isEmpty()){
                 String[] tokens = line.split("\t");
                 if(tokens.length > 3){
+                    // assumes that weight (token[3]) is a double
                     sentence = new Sentence(tokens[1], tokens[2], Double.parseDouble(tokens[3]), tokens[4]);
                 } else {
                     throw new IllegalArgumentException("line was not a comment and did not have the right format: " + line);
@@ -282,4 +344,27 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
         }
     }
 
+    /**
+     * load SARA's preferences
+     */
+    private void loadSARAPreferences(InputStream saraDB) {
+        preferencesMap.clear();
+        try {
+            BufferedReader in = new BufferedReader(new InputStreamReader(saraDB));
+            String line = null;
+            while((line = in.readLine()) != null && !line.startsWith("#") && !line.trim().isEmpty()) {
+                String[] tokens = line.split("\t");
+                if (tokens.length == 2) {
+                    String entity = tokens[0], preference = tokens[1];
+                    // create map objects if entity doesn't already exist
+                    preferencesMap.putIfAbsent(entity, new ArrayList<>());
+                    preferencesMap.get(entity).add(preference);
+                }
+            }
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } // end try
+    }
 }

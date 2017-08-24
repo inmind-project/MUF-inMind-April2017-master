@@ -74,6 +74,7 @@ public class NLU_DMComponent extends PluggableComponent {
 
     @Override
     public void onEvent(BlackboardEvent blackboardEvent) {
+        String utterance = blackboardEvent.toString().split("Utterance: ")[1].split(" confidence:")[0];
         Log4J.debug(this, "received " + blackboardEvent.toString());
         // let's forward the ASR message to DialoguePython:
         if (blackboardEvent.getId().equals(SaraCons.MSG_START_DM)){
@@ -91,11 +92,6 @@ public class NLU_DMComponent extends PluggableComponent {
             } else {
                 Log4J.info(this, "User frame was empty");
             }
-            // temporary hack
-            // add latest utterance to user frame?
-            String latestUtterance = blackboardEvent.toString().split("Utterance: ")[1].split(" confidence:")[0];
-System.out.println("NLU_DM storing " + latestUtterance);
-            userModel.getUserFrame().setLatestUtterance(latestUtterance);
         } else {
             Log4J.debug(this, "sending on " + blackboardEvent.toString() );
             commController.send( getSessionId(), blackboardEvent.getElement() );
@@ -106,8 +102,11 @@ System.out.println("NLU_DM storing " + latestUtterance);
             @Override
             public void process(String message) {
 		Log4J.debug(NLU_DMComponent.this, "I've received: " + message);
-                blackboard().post( NLU_DMComponent.this, SaraCons.MSG_DM,
-                        Utils.fromJson( message, DMOutput.class ));
+                // store user's utterance (for NLG)
+                DMOutput dmOutput = Utils.fromJson(message, DMOutput.class);
+                dmOutput.setUtterance(utterance);
+                // for incremental system, set rec here
+                blackboard().post(NLU_DMComponent.this, SaraCons.MSG_DM, dmOutput);
             }
         });
     }

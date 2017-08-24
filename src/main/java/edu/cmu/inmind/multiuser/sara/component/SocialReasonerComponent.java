@@ -96,6 +96,8 @@ public class SocialReasonerComponent extends PluggableComponent {
         srOutput.setEntities(dmOutput.getEntities());
         srOutput.setRecommendation(dmOutput.getRecommendation());
         srOutput.setUserFrame(dmOutput.getUserFrame());
+        // temporary: fix this while fixing incremental system
+        srOutput.getUserFrame().setLatestUtterance(dmOutput.getUtterance());
         srOutput.setRapport(rapport);
 
         if (dmOutput.getAction()!=null && socialController!=null) {
