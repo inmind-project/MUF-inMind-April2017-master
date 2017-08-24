@@ -88,7 +88,8 @@ public class TaskReasonerComponent extends PluggableComponent {
      * processes in parallel rather than sequentially.
      */
     @Override
-    public void onEvent(BlackboardEvent event) {
+    public void onEvent(BlackboardEvent event) throws Throwable
+    {
         //TODO: add code here
         //...
         Log4J.info(this, "TaskReasonerComponent. These objects have been updated at the blackboard: " + event.toString());

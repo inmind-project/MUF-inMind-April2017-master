@@ -1,3 +1,4 @@
 Manifest-Version: 1.0
-Main-Class: edu.cmu.inmind.multiuser.sara.examples.Ex15_WholePipeline
+Main-Class: edu.cmu.inmind.multiuser.sara.examples.Ex16_MasterCallsSla
+ ves
 

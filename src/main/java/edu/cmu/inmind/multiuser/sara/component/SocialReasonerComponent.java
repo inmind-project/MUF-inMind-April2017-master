@@ -130,7 +130,7 @@ public class SocialReasonerComponent extends PluggableComponent {
      */
     @Loggable
     @Override
-    public void onEvent(BlackboardEvent event) {
+    public void onEvent(BlackboardEvent event) throws Throwable {
         //TODO: add code here
         //...
         Log4J.info(this, "SocialReasonerComponent. These objects have been updated at the blackboard: "

@@ -24,7 +24,8 @@ public class PoolExComponent extends PluggableComponent {
     }
 
     @Override
-    public void onEvent(BlackboardEvent event) {
+    public void onEvent(BlackboardEvent event) throws Throwable
+    {
         //TODO: add code here
         //...
         Log4J.info(this, "PoolExComponent. These objects have been updated at the blackboard: " + event.toString());

@@ -45,7 +45,8 @@ public class FakeCSCComponent extends PluggableComponent {
 
     }
 
-    public void onEvent(BlackboardEvent blackboardEvent) {
+    public void onEvent(BlackboardEvent blackboardEvent) throws Throwable
+    {
         CSCOutput cscOutput = new CSCOutput();
         Random r = new Random();
 

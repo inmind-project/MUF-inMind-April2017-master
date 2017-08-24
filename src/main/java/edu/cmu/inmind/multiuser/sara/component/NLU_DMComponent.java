@@ -73,7 +73,8 @@ public class NLU_DMComponent extends PluggableComponent {
     }
 
     @Override
-    public void onEvent(BlackboardEvent blackboardEvent) {
+    public void onEvent(BlackboardEvent blackboardEvent) throws Throwable
+    {
         String utterance = blackboardEvent.toString().split("Utterance: ")[1].split(" confidence:")[0];
         Log4J.debug(this, "received " + blackboardEvent.toString());
         // let's forward the ASR message to DialoguePython:

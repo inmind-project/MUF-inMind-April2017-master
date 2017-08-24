@@ -58,16 +58,19 @@ public class UserModelComponent extends PluggableComponent {
     public void onEvent(BlackboardEvent event) {
         if (delegationMap.containsKey(event.getId())) {
             delegationMap.get(event.getId()).accept(event);
+            Log4J.info(this,event.toString());
         } else {
             Log4J.error(this, "Received unrecognized event: " + event.getId());
         }
     }
 
-    private void onStartSession(BlackboardEvent event) {
+    private void onStartSession(BlackboardEvent event)
+    {
         // TODO: Check event to see if we should clear the user history
     }
 
-    private void handleMsgSR(BlackboardEvent event) {
+    private void handleMsgSR(BlackboardEvent event)
+    {
         final SROutput srOutput = (SROutput) event.getElement();
         userModel.updateBehaviorNetworkStates(srOutput.getStates());
         userModel.setUserFrame(srOutput.getUserFrame());
@@ -77,7 +80,8 @@ public class UserModelComponent extends PluggableComponent {
     }
 
     @Override
-    public void shutDown() {
+    public void shutDown(){
+        Log4J.info(this, "shutting down UserModelComponent");
         repository.writeModel(userModel);
         super.shutDown();
     }

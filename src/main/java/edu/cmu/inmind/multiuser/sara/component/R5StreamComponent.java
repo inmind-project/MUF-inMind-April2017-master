@@ -31,7 +31,7 @@ private R5StreamListener r5StreamListener = null;
     }
 
     @Override
-    public void onEvent(BlackboardEvent blackboardEvent)
+    public void onEvent(BlackboardEvent blackboardEvent) throws Throwable
     {
         if(blackboardEvent.getId().equals(SaraCons.MSG_START_SESSION))
         {

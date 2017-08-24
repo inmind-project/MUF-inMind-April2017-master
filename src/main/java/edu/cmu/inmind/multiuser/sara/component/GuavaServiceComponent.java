@@ -53,7 +53,8 @@ public class GuavaServiceComponent extends PluggableComponent {
     }
 
     @Override
-    public void onEvent(BlackboardEvent event) {
+    public void onEvent(BlackboardEvent event) throws Throwable
+    {
         //TODO: add code here
         //...
         Log4J.info(this, kindOfService + ". These objects have been updated at the blackboard: "

@@ -10,6 +10,7 @@ import edu.cmu.inmind.multiuser.controller.plugin.PluginModule;
 import edu.cmu.inmind.multiuser.controller.resources.Config;
 import edu.cmu.inmind.multiuser.sara.log.ExceptionLogger;
 
+import java.io.File;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
@@ -76,8 +77,8 @@ public class MainClass {
 
     protected MessageLog getExceptionLogger(){
         MessageLog log =  new ExceptionLogger();
-        log.setId( "any-arbitrary-id" );
-        log.setPath( Utils.getProperty("pathExceptionLog") );
+        log.setId( String.valueOf(System.currentTimeMillis() ) );
+        log.setPath( Utils.getProperty("pathExceptionLog").replace('/', File.separatorChar));
         return log;
     }
 

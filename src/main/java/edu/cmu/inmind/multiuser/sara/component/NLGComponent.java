@@ -73,7 +73,8 @@ public class NLGComponent extends PluggableComponent implements BeatCallback {
      * processes in parallel rather than sequentially.
      */
     @Override
-    public void onEvent(BlackboardEvent event) {
+    public void onEvent(BlackboardEvent event) throws Throwable
+    {
         //TODO: add code here
         if(event.getId().equals(SaraCons.MSG_SR)) {
             extractAndProcess();
