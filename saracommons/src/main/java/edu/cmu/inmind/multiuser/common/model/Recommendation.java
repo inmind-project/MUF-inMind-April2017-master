@@ -16,6 +16,17 @@ public class Recommendation {
         this.rexplanations = rexplanations;
     }
 
+    /**
+     *  @return true if contains recommendation, else false
+     */
+    public boolean hasContent() {
+        return rexplanations == null;
+    }
+
+    public String getTitle() {
+        return rexplanations.get(0).getRecommendation();
+    }
+
     @Override
     public String toString() {
         return "Recommendation{" +

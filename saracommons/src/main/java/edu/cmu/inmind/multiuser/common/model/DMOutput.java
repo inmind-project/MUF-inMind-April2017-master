@@ -11,6 +11,7 @@ public class DMOutput {
     Recommendation recommendation;
     UserFrame frame;
     String utterance;
+    String sessionID;
 
     public String getAction() {
         return action;
@@ -18,6 +19,14 @@ public class DMOutput {
 
     public void setAction(String action) {
         this.action = action;
+    }
+
+    public void setSessionID(String sessionID) {
+        this.sessionID = sessionID;
+    }
+
+    public String getSessionID() {
+        return sessionID;
     }
 
     public List<Entity> getEntities() {

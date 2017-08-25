@@ -1,5 +1,5 @@
 package edu.cmu.inmind.multiuser.sara.component.nlg;
-
+import edu.cmu.inmind.multiuser.sara.component.NLU_DMComponent;
 import edu.cmu.inmind.multiuser.common.model.SROutput;
 
 import java.io.*;
@@ -36,7 +36,6 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
     public SentenceGeneratorTemplate(InputStream sentenceDB, InputStream saraDB) {
         assert sentenceDB != null;
         loadSentenceList(sentenceDB);
-System.out.println("load SARA's preferences");
         loadSARAPreferences(saraDB);
     }
 
@@ -149,7 +148,11 @@ System.out.println("load SARA's preferences");
                 try {
                     switch (slotName) {
                         case "#title":
-                            value = srOutput.getRecommendation().getRexplanations().get(0).getRecommendation();
+                            // value = srOutput.getRecommendation().getRexplanations().get(0).getRecommendation();
+                            // fill underspecified variable
+                            NLU_DMComponent.getRecommendation(srOutput.getRecommendation(), srOutput.getSessionID());
+System.out.println("VIVIAN: found recommendation " + srOutput.getRecommendation());
+                            value = srOutput.getRecommendationTitle();
                             break;
                         case "#reason":
                             value = srOutput.getRecommendation().getRexplanations().get(0).getExplanations().get(0);

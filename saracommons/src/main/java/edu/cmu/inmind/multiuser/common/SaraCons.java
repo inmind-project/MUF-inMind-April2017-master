@@ -26,6 +26,7 @@ public class SaraCons {
     public static final String MSG_START_SESSION = "MSG_START_SESSION";
     public static final String MSG_NLU = "MSG_NLU";
     public static final String MSG_DM = "MSG_DM";
+    public static final String MSG_QUERY = "MSG_QUERY";
     public static final String MSG_SR = "MSG_SR";
     public static final String MSG_NLG = "MSG_NLG";
     public static final String MSG_LOCAL = "MSG_LOCAL";

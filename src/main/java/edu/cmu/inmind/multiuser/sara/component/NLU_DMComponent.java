@@ -20,7 +20,7 @@ import java.util.ArrayList;
  * Created by oscarr on 3/7/17.
  */
 @StateType( state = Constants.STATEFULL)
-@BlackboardSubscription( messages = {SaraCons.MSG_ASR, SaraCons.MSG_START_DM, SaraCons.MSG_UM} )
+@BlackboardSubscription( messages = {SaraCons.MSG_ASR, SaraCons.MSG_START_DM, SaraCons.MSG_USER_MODEL_LOADED} )
 public class NLU_DMComponent extends PluggableComponent {
     private static final String SESSION_MANAGER_SERVICE = "session-manager";
     private ClientCommController commController;
@@ -73,8 +73,10 @@ public class NLU_DMComponent extends PluggableComponent {
     }
 
     @Override
-    public void onEvent(BlackboardEvent blackboardEvent) throws Exception
-    {
+    public void onEvent(BlackboardEvent blackboardEvent) throws Exception {
+        // store user's latest utterance
+        String utterance = blackboardEvent.toString().split("Utterance: ")[1].split(" confidence:")[0];
+        // print full event
         Log4J.debug(this, "received " + blackboardEvent.toString());
         // let's forward the ASR message to DialoguePython:
         if (blackboardEvent.getId().equals(SaraCons.MSG_START_DM)){
@@ -83,7 +85,7 @@ public class NLU_DMComponent extends PluggableComponent {
     	    commController.send( getSessionId(), startDMMessage );
            // commController.send( getSessionId(), startDMMessage );
             Log4J.debug(this, "Sent Initial Greeting");
-        } else if (blackboardEvent.getId().equals(SaraCons.MSG_UM)) {
+        } else if (blackboardEvent.getId().equals(SaraCons.MSG_USER_MODEL_LOADED)) {
             final UserModel userModel = (UserModel) blackboardEvent.getElement();
             Log4J.info(this, "Received user model");
             if (userModel.getUserFrame() != null) {
@@ -101,11 +103,47 @@ public class NLU_DMComponent extends PluggableComponent {
         commController.receive(new ResponseListener() {
             @Override
             public void process(String message) {
-		        Log4J.debug(NLU_DMComponent.this, "I've received: " + message);
+		Log4J.debug(NLU_DMComponent.this, "I've received: " + message);
+                // store user's utterance (for NLG)
                 DMOutput dmOutput = Utils.fromJson(message, DMOutput.class);
+                dmOutput.setUtterance(utterance);
+                // for incremental system
+                // if contains underspecified recommendation, create empty Recommendation
+                if (dmOutput.getRecommendation() != null) {
+                    dmOutput.setRecommendation(new Recommendation());
+                    dmOutput.setSessionID(getSessionId());
+                }
+                // post to Blackboard
                 blackboard().post(NLU_DMComponent.this, SaraCons.MSG_DM, dmOutput);
             }
         });
+    }
+
+    /** Fills in underspecified Recommmendation variable.
+     *  @return complete movie recommendation
+     */
+    public static Recommendation getRecommendation(Recommendation recommendation, String sessionID) {
+        // query for value
+        commController.send(sessionID, new ASROutput(SaraCons.MSG_QUERY, 1.0));
+        commController.receive(new ResponseListener() {
+            @Override
+            public void process(String message) {
+                // set recommendation to newly found value
+                recommendation.setRexplanations(Utils.fromJson(message, DMOutput.class).getRecommendation().getRexplanations());
+            }
+        });
+        // wait for DialoguePython to send the value
+        while (!recommendation.hasContent()) {
+            try {
+System.out.println("VIVIAN: waiting for specified rec");
+                Thread.sleep(50);
+            } catch (Exception e) {
+                System.out.println(e);
+                System.err.println(e);
+            }
+        }
+        // Recommendation object now contains value
+        return recommendation;
     }
 
     @Override

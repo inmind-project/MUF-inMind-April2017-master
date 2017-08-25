@@ -79,14 +79,9 @@ public class SocialReasonerComponent extends PluggableComponent {
 
     private SROutput selectStrategy(){
         long time = System.nanoTime();
-        SROutput srOutput = new SROutput();
-
         DMOutput dmOutput = (DMOutput) blackboard().get(SaraCons.MSG_DM);
         Log4J.info(this,"dmOutput : "+dmOutput.toString() );
-        srOutput.setAction(dmOutput.getAction());
-        srOutput.setEntities(dmOutput.getEntities());
-        srOutput.setRecommendation(dmOutput.getRecommendation());
-        srOutput.setUserFrame(dmOutput.getUserFrame());
+        SROutput srOutput = new SROutput(dmOutput);
         // temporary: fix this while fixing incremental system
         srOutput.getUserFrame().setLatestUtterance(dmOutput.getUtterance());
         srOutput.setRapport(rapport);

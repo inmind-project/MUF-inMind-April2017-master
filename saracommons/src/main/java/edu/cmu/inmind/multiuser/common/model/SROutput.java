@@ -6,20 +6,29 @@ import java.util.List;
  * Created by yoichimatsuyama on 4/11/17.
  */
 public class SROutput {
-    String action;
+    DMOutput dmOutput;
     String strategy;
     double rapport;
-    List<Entity> entities;
-    Recommendation recommendation;
-    UserFrame userFrame;
     List<String> states;
 
+    public SROutput(DMOutput dmOutput) { 
+        this.dmOutput = dmOutput;
+    }
+
     public String getAction() {
-        return action;
+        return dmOutput.action;
     }
 
     public void setAction(String action) {
-        this.action = action;
+        dmOutput.action = action;
+    }
+
+    public void setSessionID(String sessionID) {
+        dmOutput.sessionID = sessionID;
+    }
+
+    public String getSessionID() {
+        return dmOutput.sessionID;
     }
 
     public String getStrategy() {
@@ -39,27 +48,31 @@ public class SROutput {
     }
 
     public List<Entity> getEntities() {
-        return entities;
+        return dmOutput.entities;
     }
 
     public void setEntities(List<Entity> entities) {
-        this.entities = entities;
+        dmOutput.entities = entities;
     }
 
     public Recommendation getRecommendation() {
-        return recommendation;
+        return dmOutput.recommendation;
+    }
+
+    public String getRecommendationTitle() {
+        return dmOutput.recommendation.getTitle();
     }
 
     public void setRecommendation(Recommendation recommendation) {
-        this.recommendation = recommendation;
+        dmOutput.recommendation = recommendation;
     }
 
     public UserFrame getUserFrame() {
-        return userFrame;
+        return dmOutput.frame;
     }
 
     public void setUserFrame(UserFrame userFrame) {
-        this.userFrame = userFrame;
+        dmOutput.frame = userFrame;
     }
 
     public List<String> getStates() {
@@ -71,6 +84,6 @@ public class SROutput {
     }
 
     public String toString(){
-        return "Component: " + this.getClass().toString() + " System Action: " + action + " Strategy:" + strategy;
+        return "Component: " + this.getClass().toString() + " System Action: " + dmOutput.action + " Strategy:" + strategy;
     }
 }
