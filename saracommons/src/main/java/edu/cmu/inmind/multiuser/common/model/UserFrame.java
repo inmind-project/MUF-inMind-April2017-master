@@ -1,5 +1,6 @@
 package edu.cmu.inmind.multiuser.common.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -48,11 +49,11 @@ public class UserFrame {
     /**
      * Frame
      */
-    public class Frame {
-        private Actors actors;
-        private Genres genres;
-        private Directors directors;
-        private Movies movies;
+    public static class Frame {
+        private Actors actors = new Actors();
+        private Genres genres = new Genres();
+        private Directors directors = new Directors();
+        private Movies movies = new Movies();
 
         public Actors getActors() {
             return actors;
@@ -91,9 +92,9 @@ public class UserFrame {
     /**
      * Movies
      */
-    public class Actors {
-        private List<Entity> like;
-        private List<Entity> dislike;
+    public static class Actors {
+        private List<Entity> like = new ArrayList<>();
+        private List<Entity> dislike = new ArrayList<>();
 
         public List<Entity> getLike() {
             return like;
@@ -115,9 +116,9 @@ public class UserFrame {
     /**
      * Genres
      */
-    public class Genres {
-        private List<Entity> like;
-        private List<Entity> dislike;
+    public static class Genres {
+        private List<Entity> like = new ArrayList<>();
+        private List<Entity> dislike = new ArrayList<>();
 
         public List<Entity> getLike() {
             return like;
@@ -139,9 +140,9 @@ public class UserFrame {
     /**
      * Directors
      */
-    public class Directors {
-        private List<Entity> like;
-        private List<Entity> dislike;
+    public static class Directors {
+        private List<Entity> like = new ArrayList<>();
+        private List<Entity> dislike = new ArrayList<>();
 
         public List<Entity> getLike() {
             return like;
@@ -161,10 +162,10 @@ public class UserFrame {
 
     }
 
-    public class Movies {
-        private List<String> like;
-        private List<String> dislike;
-        private List<String> history;
+    public static class Movies {
+        private List<String> like = new ArrayList<>();
+        private List<String> dislike = new ArrayList<>();
+        private List<String> history = new ArrayList<>();
 
         public List<String> getLike() {
             return like;

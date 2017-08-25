@@ -75,7 +75,6 @@ public class NLU_DMComponent extends PluggableComponent {
     @Override
     public void onEvent(BlackboardEvent blackboardEvent) throws Exception
     {
-        String utterance = blackboardEvent.toString().split("Utterance: ")[1].split(" confidence:")[0];
         Log4J.debug(this, "received " + blackboardEvent.toString());
         // let's forward the ASR message to DialoguePython:
         if (blackboardEvent.getId().equals(SaraCons.MSG_START_DM)){
@@ -103,10 +102,7 @@ public class NLU_DMComponent extends PluggableComponent {
             @Override
             public void process(String message) {
 		Log4J.debug(NLU_DMComponent.this, "I've received: " + message);
-                // store user's utterance (for NLG)
                 DMOutput dmOutput = Utils.fromJson(message, DMOutput.class);
-                dmOutput.setUtterance(utterance);
-                // for incremental system, set rec here
                 blackboard().post(NLU_DMComponent.this, SaraCons.MSG_DM, dmOutput);
             }
         });
