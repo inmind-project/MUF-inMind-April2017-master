@@ -50,7 +50,7 @@ public class AsyncComponent extends PluggableComponent {
     }
 
     @Override
-    public void onEvent(BlackboardEvent event) throws Throwable{
+    public void onEvent(BlackboardEvent event) throws Exception{
         //TODO: add code here
         //...
         Log4J.info(this, "AsyncComponent. These objects have been updated at the blackboard: " + event.toString() );

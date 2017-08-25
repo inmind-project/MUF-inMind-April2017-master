@@ -51,7 +51,7 @@
 //
 //        }
 //
-//        public void onEvent(BlackboardEvent blackboardEvent) {
+//        public void onEvent(BlackboardEvent blackboardEvent) throws Exception{
 //
 //            Log4J.info(this, "CSCComponent: starting classifying.");
 //

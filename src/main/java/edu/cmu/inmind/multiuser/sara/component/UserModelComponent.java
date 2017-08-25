@@ -41,10 +41,15 @@ public class UserModelComponent extends PluggableComponent {
         super.startUp();
         Log4J.info(this, "Initializing user model component");
         // TODO: Add additional data from various events (SR, DM, etc.)
-        delegationMap = ImmutableMap.of(
-                SaraCons.MSG_SR, this::handleMsgSR,
-                SaraCons.MSG_START_SESSION, this::onStartSession
-        );
+        try {
+            delegationMap = ImmutableMap.of(
+                    SaraCons.MSG_SR, this::handleMsgSR,
+                    SaraCons.MSG_START_SESSION, this::onStartSession
+            );
+        }catch(Throwable throwable)
+        {
+            throwable.printStackTrace();
+        }
         repository = createRepo();
         userModel = repository.readModel()
                 .orElseGet(() -> new UserModel(getSessionId()));
@@ -55,10 +60,11 @@ public class UserModelComponent extends PluggableComponent {
     }
 
     @Override
-    public void onEvent(BlackboardEvent event) {
+    public void onEvent(BlackboardEvent event) throws Exception {
         if (delegationMap.containsKey(event.getId())) {
-            delegationMap.get(event.getId()).accept(event);
-            Log4J.info(this,event.toString());
+                delegationMap.get(event.getId()).accept(event);
+                Log4J.info(this, event.toString());
+
         } else {
             Log4J.error(this, "Received unrecognized event: " + event.getId());
         }

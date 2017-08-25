@@ -40,7 +40,7 @@ public class OpenFaceComponent extends PluggableComponent {
 	} // we do the heavy lifting from an event, rather than in execute()
 
 	@Override
-	public void onEvent(BlackboardEvent event) throws Throwable
+	public void onEvent(BlackboardEvent event) throws Exception
 	{
 		Log4J.debug(this, "received " + event.toString());
 		if( event.getId().equals(SaraCons.R5STREAM_STARTED)) {

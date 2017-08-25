@@ -24,7 +24,7 @@ public class PoolExComponent extends PluggableComponent {
     }
 
     @Override
-    public void onEvent(BlackboardEvent event) throws Throwable
+    public void onEvent(BlackboardEvent event) throws Exception
     {
         //TODO: add code here
         //...

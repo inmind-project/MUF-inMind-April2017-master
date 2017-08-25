@@ -88,7 +88,7 @@ public class TaskReasonerComponent extends PluggableComponent {
      * processes in parallel rather than sequentially.
      */
     @Override
-    public void onEvent(BlackboardEvent event) throws Throwable
+    public void onEvent(BlackboardEvent event) throws Exception
     {
         //TODO: add code here
         //...

@@ -24,7 +24,7 @@ public class HowToLogComponent extends PluggableComponent {
     }
 
     @Override
-    public void onEvent(BlackboardEvent event) throws Throwable
+    public void onEvent(BlackboardEvent event) throws Exception
     {
     }
 }
