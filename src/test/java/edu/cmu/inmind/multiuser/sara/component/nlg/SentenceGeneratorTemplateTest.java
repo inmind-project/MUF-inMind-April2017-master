@@ -21,7 +21,7 @@ public class SentenceGeneratorTemplateTest {
     }
 
     @Test public void testTestDB() throws FileNotFoundException {
-        SentenceGenerator gen = new SentenceGeneratorTemplate(this.getClass().getResourceAsStream("TestDB.tsv"));
+        SentenceGenerator gen = new SentenceGeneratorTemplate(this.getClass().getResourceAsStream("TestDB.tsv"), this.getClass().getResourceAsStream("resources/nlg/sara_preferences_db.tsv"));
         doTest(gen);
     }
 
@@ -49,10 +49,10 @@ public class SentenceGeneratorTemplateTest {
 
     @Test(expected = FileNotFoundException.class)
     public void testException1() throws FileNotFoundException {
-        new SentenceGeneratorTemplate("lets/hope/this/file/does/not/exist");
+        new SentenceGeneratorTemplate("lets/hope/this/file/does/not/exist", "some_other_file");
     }
     @Test(expected = AssertionError.class)
     public void testException2() throws FileNotFoundException {
-        new SentenceGeneratorTemplate((InputStream) null);
+        new SentenceGeneratorTemplate((InputStream) null, null);
     }
 }
