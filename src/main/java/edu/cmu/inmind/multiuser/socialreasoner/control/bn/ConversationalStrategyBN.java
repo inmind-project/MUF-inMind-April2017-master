@@ -1,13 +1,9 @@
-package edu.cmu.inmind.multiuser.socialreasoner.control.controllers;
+package edu.cmu.inmind.multiuser.socialreasoner.control.bn;
 
-import edu.cmu.inmind.multiuser.socialreasoner.control.bn.BehaviorNetworkPlus;
-import edu.cmu.inmind.multiuser.socialreasoner.control.bn.BehaviorPlus;
 import edu.cmu.inmind.multiuser.socialreasoner.control.util.Utils;
 import edu.cmu.inmind.multiuser.socialreasoner.model.Constants;
 import edu.cmu.inmind.multiuser.socialreasoner.model.blackboard.BlackboardListener;
 
-import java.util.Arrays;
-import java.util.Vector;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -17,102 +13,102 @@ public class ConversationalStrategyBN extends BehaviorNetworkController implemen
     private boolean load = true;
 
     public ConversationalStrategyBN(){
-        network = new BehaviorNetworkPlus();
+        network = new BehaviorNetwork();
         createBN();
     }
 
     @Override
-    public BehaviorNetworkPlus createBN() {
+    public BehaviorNetwork createBN() {
         name = "Conversational Strategy BN";
 
         if( load ){
-            network = Utils.fromJson("src/main/SocialReasonerBN.json", BehaviorNetworkPlus.class);
+            network = Utils.fromJson("SocialReasonerBN.json", BehaviorNetwork.class);
             modules = network.getModules();
             NUM_BEHAVIORS = modules.size();
             NUM_VARIABLES = NUM_BEHAVIORS + 1; // +2 includes the threshold line and behavior activated
             states = network.getState();
             goals = network.getGoals();
         }else {
-            BehaviorPlus behavior;
-
-            // Self Disclosure
-            behavior = new BehaviorPlus("SD");
-            behavior.setDescription("Self Disclosure");
-            behavior.addPreconditions(new String[][]{new String[]{Constants.PLEASURE_COMING_TOGETHER, Constants.USER_TELLS_ABOUT_WORK,
-                    Constants.FEEDBACK_LIKE_WORK, Constants.FEEDBACK_DISLIKE_WORK,}});
-            behavior.addPreconditions(new String[][]{new String[]{Constants.ASN_HISTORY_SYSTEM, Constants.PR_HISTORY_SYSTEM, Constants.VSN_HISTORY_SYSTEM}});
-            behavior.addAddList(Arrays.asList(Constants.SD_SYSTEM_CS));
-            modules.add(behavior);
-
-            // Violation Social Norm
-            behavior = new BehaviorPlus("VSN");
-            behavior.setDescription(Constants.VIOLATION_SOCIAL_NORM);
-            behavior.addPreconditions(new String[][]{new String[]{Constants.USER_RESPONDS_FASHION_INDUSTRY}});
-            behavior.addAddList(Arrays.asList(Constants.VSN_SYSTEM_CS));
-            modules.add(behavior);
-
-            // Question to Elicit Self Disclosure
-            behavior = new BehaviorPlus("QESD");
-            behavior.setDescription("Question to Elicit Self Disclosure");
-            behavior.addPreconditions(new String[][]{new String[]{Constants.WHO_ONE_IS, Constants.USER_RESPONDS_FIRST_TIME_ATTENDING,
-                    Constants.START_GOAL_ELICITATION, Constants.START_PERSON_PRE_RECOMMEND_NOTICE, Constants.RECOMMEND_PERSON,
-                    Constants.USER_REPONDS_SOMEBODY_TO_MEET, Constants.YOUR_WELCOME, Constants.USER_RESPONDS_SESSION_GESTURE}});
-            behavior.addPreconditions(new String[][]{new String[]{Constants.SD_HISTORY_SYSTEM, Constants.QESD_HISTORY_SYSTEM, Constants.PR_HISTORY_SYSTEM}});
-            behavior.addAddList(Arrays.asList(Constants.QESD_SYSTEM_CS));
-            modules.add(behavior);
-
-            // Referring to Shared Experiences
-            behavior = new BehaviorPlus("RSE");
-            behavior.setDescription(Constants.SHARED_EXPERIENCES);
-            behavior.addPreconditions(new String[][]{new String[]{Constants.AVAILABLE_SHARED_EXPERIENCES}});
-            behavior.addAddList(Arrays.asList(Constants.RSE_SYSTEM_CS));
-            modules.add(behavior);
-
-            // Praise
-            behavior = new BehaviorPlus("PR");
-            behavior.setDescription(Constants.PRAISE);
-            behavior.addPreconditions(new String[][]{new String[]{Constants.USER_RESPONDS_ELICIT_GOALS_PEOPLE,
-                    Constants.USER_RESPONDS_QUESTION_WORK, Constants.START_RECOMMEND_INDUSTRY}});
-            behavior.addPreconditions(new String[][]{new String[]{Constants.SD_HISTORY_SYSTEM, Constants.QESD_HISTORY_SYSTEM}});
-            behavior.addAddList(Arrays.asList(Constants.PR_SYSTEM_CS));
-            modules.add(behavior);
-
-            // Adhere Social Norm
-            behavior = new BehaviorPlus("ASN");
-            behavior.setDescription(Constants.ADHERE_SOCIAL_NORM);
-            behavior.addPreconditions(new String[][]{new String[]{Constants.GREETING_WORD,
-                    Constants.USER_RESPONDS_PRE_FAREWELL}});
-            behavior.addAddList(Arrays.asList(Constants.ASN_SYSTEM_CS));
-            modules.add(behavior);
-
-
-            // Back-Channel
-            behavior = new BehaviorPlus("ACK");
-            behavior.setDescription(Constants.BACK_CHANNEL);
-            behavior.addPreconditions(new String[][]{new String[]{}});
-            //        behavior.addPreconditions(new String[][]{ new String[]{Constants.NOT_ACK_HISTORY_SYSTEM}});
-            behavior.addAddList(Arrays.asList(Constants.ACK_SYSTEM_CS));
-            modules.add(behavior);
-
-            NUM_BEHAVIORS = modules.size();
-            NUM_VARIABLES = NUM_BEHAVIORS + 1; // +2 includes the threshold line and behavior activated
-
-            states = new CopyOnWriteArrayList<>(Arrays.asList(new String[]{Constants.GREETING_WORD}));
-            goals.add(Constants.RAPPORT_INCREASED);
-
-            network.setGoals(goals);
-            network.setPi(20);
-            network.setTheta(15);
-            network.setInitialTheta(15);
-            network.setPhi(20);
-            network.setGamma(70);
-            network.setDelta(50);
-
-            network.setModules(modules, NUM_VARIABLES);
-            network.setState(states);
-            network.setGoalsR(new Vector<>());
-
-            Utils.toJson(network, "SocialReasonerBN");
+//            Behavior behavior;
+//
+//            // Self Disclosure
+//            behavior = new Behavior("SD");
+//            behavior.setDescription("Self Disclosure");
+//            behavior.addPreconditions(new String[][]{new String[]{Constants.PLEASURE_COMING_TOGETHER, Constants.USER_TELLS_ABOUT_WORK,
+//                    Constants.FEEDBACK_LIKE_WORK, Constants.FEEDBACK_DISLIKE_WORK,}});
+//            behavior.addPreconditions(new String[][]{new String[]{Constants.ASN_HISTORY_SYSTEM, Constants.PR_HISTORY_SYSTEM, Constants.VSN_HISTORY_SYSTEM}});
+//            behavior.addAddList(Arrays.asList(Constants.SD_SYSTEM_CS));
+//            modules.add(behavior);
+//
+//            // Violation Social Norm
+//            behavior = new Behavior("VSN");
+//            behavior.setDescription(Constants.VIOLATION_SOCIAL_NORM);
+//            behavior.addPreconditions(new String[][]{new String[]{Constants.USER_RESPONDS_FASHION_INDUSTRY}});
+//            behavior.addAddList(Arrays.asList(Constants.VSN_SYSTEM_CS));
+//            modules.add(behavior);
+//
+//            // Question to Elicit Self Disclosure
+//            behavior = new Behavior("QESD");
+//            behavior.setDescription("Question to Elicit Self Disclosure");
+//            behavior.addPreconditions(new String[][]{new String[]{Constants.WHO_ONE_IS, Constants.USER_RESPONDS_FIRST_TIME_ATTENDING,
+//                    Constants.START_GOAL_ELICITATION, Constants.START_PERSON_PRE_RECOMMEND_NOTICE, Constants.RECOMMEND_PERSON,
+//                    Constants.USER_REPONDS_SOMEBODY_TO_MEET, Constants.YOUR_WELCOME, Constants.USER_RESPONDS_SESSION_GESTURE}});
+//            behavior.addPreconditions(new String[][]{new String[]{Constants.SD_HISTORY_SYSTEM, Constants.QESD_HISTORY_SYSTEM, Constants.PR_HISTORY_SYSTEM}});
+//            behavior.addAddList(Arrays.asList(Constants.QESD_SYSTEM_CS));
+//            modules.add(behavior);
+//
+//            // Referring to Shared Experiences
+//            behavior = new Behavior("RSE");
+//            behavior.setDescription(Constants.SHARED_EXPERIENCES);
+//            behavior.addPreconditions(new String[][]{new String[]{Constants.AVAILABLE_SHARED_EXPERIENCES}});
+//            behavior.addAddList(Arrays.asList(Constants.RSE_SYSTEM_CS));
+//            modules.add(behavior);
+//
+//            // Praise
+//            behavior = new Behavior("PR");
+//            behavior.setDescription(Constants.PRAISE);
+//            behavior.addPreconditions(new String[][]{new String[]{Constants.USER_RESPONDS_ELICIT_GOALS_PEOPLE,
+//                    Constants.USER_RESPONDS_QUESTION_WORK, Constants.START_RECOMMEND_INDUSTRY}});
+//            behavior.addPreconditions(new String[][]{new String[]{Constants.SD_HISTORY_SYSTEM, Constants.QESD_HISTORY_SYSTEM}});
+//            behavior.addAddList(Arrays.asList(Constants.PR_SYSTEM_CS));
+//            modules.add(behavior);
+//
+//            // Adhere Social Norm
+//            behavior = new Behavior("ASN");
+//            behavior.setDescription(Constants.ADHERE_SOCIAL_NORM);
+//            behavior.addPreconditions(new String[][]{new String[]{Constants.GREETING_WORD,
+//                    Constants.USER_RESPONDS_PRE_FAREWELL}});
+//            behavior.addAddList(Arrays.asList(Constants.ASN_SYSTEM_CS));
+//            modules.add(behavior);
+//
+//
+//            // Back-Channel
+//            behavior = new Behavior("ACK");
+//            behavior.setDescription(Constants.BACK_CHANNEL);
+//            behavior.addPreconditions(new String[][]{new String[]{}});
+//            //        behavior.addPreconditions(new String[][]{ new String[]{Constants.NOT_ACK_HISTORY_SYSTEM}});
+//            behavior.addAddList(Arrays.asList(Constants.ACK_SYSTEM_CS));
+//            modules.add(behavior);
+//
+//            NUM_BEHAVIORS = modules.size();
+//            NUM_VARIABLES = NUM_BEHAVIORS + 1; // +2 includes the threshold line and behavior activated
+//
+//            states = new CopyOnWriteArrayList<>(Arrays.asList(new String[]{Constants.GREETING_WORD}));
+//            goals.add(Constants.RAPPORT_INCREASED);
+//
+//            network.setGoals(goals);
+//            network.setPi(20);
+//            network.setTheta(15);
+//            network.setInitialTheta(15);
+//            network.setPhi(20);
+//            network.setGamma(70);
+//            network.setDelta(50);
+//
+//            network.setModules(modules, NUM_VARIABLES);
+//            network.setState(states);
+//            network.setGoalsR(new Vector<>());
+//
+//            Utils.toJson(network, "SocialReasonerBN");
         }
 
         title = "Conversational Strategy BN";

@@ -5,33 +5,90 @@
       "id": "SD_SYSTEM_CS",
       "preconditions": [
         [
-          "HIGH_RAPPORT",
-          "MEDIUM_RAPPORT",
-          "RAPPORT_DECREASED"
+          {
+            "label": "HIGH_RAPPORT",
+            "weight": 1.0
+          },
+          {
+            "label": "MEDIUM_RAPPORT",
+            "weight": 1.0
+          },
+          {
+            "label": "RAPPORT_DECREASED",
+            "weight": 1.0
+          }
         ],
         [
-          "SD_USER_CS",
-          "QESD_USER_CS"
+          {
+            "label": "SD_USER_CS",
+            "weight": 1.0
+          },
+          {
+            "label": "QESD_USER_CS",
+            "weight": 1.0
+          }
         ],
         [
-          "NOT_SMILE_NONVERBAL",
-          "GAZE_ELSEWHERE_NONVERBAL"
+          {
+            "label": "NOT_SMILE_NONVERBAL",
+            "weight": 1.0
+          },
+          {
+            "label": "GAZE_ELSEWHERE_NONVERBAL",
+            "weight": 1.0
+          }
         ],
         [
-          "recommend",
-          "start_*",
-          "do_*",
-          "outcome_*",
-          "elicit_feedback_*",
-          "end_*"
+          {
+            "label": "recommend",
+            "weight": 1.0
+          },
+          {
+            "label": "start_*",
+            "weight": 1.0
+          },
+          {
+            "label": "do_*",
+            "weight": 1.0
+          },
+          {
+            "label": "outcome_*",
+            "weight": 1.0
+          },
+          {
+            "label": "elicit_feedback_*",
+            "weight": 1.0
+          },
+          {
+            "label": "end_*",
+            "weight": 1.0
+          }
         ],
         [
-          "SEVERAL_ASN_HISTORY_SYSTEM",
-          "PR_HISTORY_SYSTEM",
-          "NOT_ACK_HISTORY_SYSTEM",
-          "VSN_HISTORY_SYSTEM",
-          "NUM_TURNS_LOWER_THAN_THRESHOLD",
-          "NOT_SD_HISTORY_SYSTEM"
+          {
+            "label": "SEVERAL_ASN_HISTORY_SYSTEM",
+            "weight": 1.0
+          },
+          {
+            "label": "PR_HISTORY_SYSTEM",
+            "weight": 1.0
+          },
+          {
+            "label": "NOT_ACK_HISTORY_SYSTEM",
+            "weight": 1.0
+          },
+          {
+            "label": "VSN_HISTORY_SYSTEM",
+            "weight": 1.0
+          },
+          {
+            "label": "NUM_TURNS_LOWER_THAN_THRESHOLD",
+            "weight": 1.0
+          },
+          {
+            "label": "NOT_SD_HISTORY_SYSTEM",
+            "weight": 1.0
+          }
         ]
       ],
       "addList": [
@@ -53,42 +110,101 @@
       "description": "Self Disclosure",
       "addGoals": []
     },
-
     {
       "name": "PR",
       "id": "PR_SYSTEM_CS",
       "preconditions": [
         [
-          "LOW_RAPPORT",
-          "HIGH_RAPPORT"
+          {
+            "label": "LOW_RAPPORT",
+            "weight": 1.0
+          },
+          {
+            "label": "HIGH_RAPPORT",
+            "weight": 1.0
+          }
         ],
         [
-          "GAZE_ELSEWHERE_NONVERBAL"
+          {
+            "label": "GAZE_ELSEWHERE_NONVERBAL",
+            "weight": 1.0
+          }
         ],
         [
-          "RAPPORT_INCREASED"
+          {
+            "label": "RAPPORT_INCREASED",
+            "weight": 1.0
+          }
         ],
         [
-          "NOT_PR_USER_CS",
-          "RSE_USER_CS",
-          "VSN_USER_CS"
+          {
+            "label": "NOT_PR_USER_CS",
+            "weight": 1.0
+          },
+          {
+            "label": "RSE_USER_CS",
+            "weight": 1.0
+          },
+          {
+            "label": "VSN_USER_CS",
+            "weight": 1.0
+          }
         ],
         [
-          "NOT_PR_HISTORY_USER",
-          "NOT_PR_HISTORY_SYSTEM",
-          "NOT_VSN_HISTORY_SYSTEM",
-          "SD_HISTORY_SYSTEM",
-          "NOT_QESD_HISTORY_SYSTEM",
-          "NOT_ACK_HISTORY_SYSTEM",
-          "QESD_HISTORY_USER",
-          "NUM_TURNS_LOWER_THAN_THRESHOLD"
+          {
+            "label": "NOT_PR_HISTORY_USER",
+            "weight": 1.0
+          },
+          {
+            "label": "NOT_PR_HISTORY_SYSTEM",
+            "weight": 1.0
+          },
+          {
+            "label": "NOT_VSN_HISTORY_SYSTEM",
+            "weight": 1.0
+          },
+          {
+            "label": "SD_HISTORY_SYSTEM",
+            "weight": 1.0
+          },
+          {
+            "label": "NOT_QESD_HISTORY_SYSTEM",
+            "weight": 1.0
+          },
+          {
+            "label": "NOT_ACK_HISTORY_SYSTEM",
+            "weight": 1.0
+          },
+          {
+            "label": "QESD_HISTORY_USER",
+            "weight": 1.0
+          },
+          {
+            "label": "NUM_TURNS_LOWER_THAN_THRESHOLD",
+            "weight": 1.0
+          }
         ],
         [
-          "ask_directors",
-          "recommend",
-          "goodbye",
-          "end_*",
-          "outcome_*"
+          {
+            "label": "ask_directors",
+            "weight": 1.0
+          },
+          {
+            "label": "recommend",
+            "weight": 1.0
+          },
+          {
+            "label": "goodbye",
+            "weight": 1.0
+          },
+          {
+            "label": "end_*",
+            "weight": 1.0
+          },
+          {
+            "label": "outcome_*",
+            "weight": 1.0
+          }
         ]
       ],
       "addList": [
@@ -103,39 +219,91 @@
       "description": "Praise",
       "addGoals": []
     },
-
-
     {
       "name": "ACK",
       "id": "ACK_SYSTEM_CS",
       "preconditions": [
         [
-          "HIGH_RAPPPORT",
-          "RAPPORT_INCREASED"
+          {
+            "label": "HIGH_RAPPPORT",
+            "weight": 1.0
+          },
+          {
+            "label": "RAPPORT_INCREASED",
+            "weight": 1.0
+          }
         ],
         [
-          "SD_USER_CS",
-          "VSN_USER_CS"
+          {
+            "label": "SD_USER_CS",
+            "weight": 1.0
+          },
+          {
+            "label": "VSN_USER_CS",
+            "weight": 1.0
+          }
         ],
         [
-          "NOT_SMILE_NONVERBAL",
-          "GAZE_ELSEWHERE_NONVERBAL"
+          {
+            "label": "NOT_SMILE_NONVERBAL",
+            "weight": 1.0
+          },
+          {
+            "label": "GAZE_ELSEWHERE_NONVERBAL",
+            "weight": 1.0
+          }
         ],
         [
-          "NOT_ACK_HISTORY_USER",
-          "NOT_ACK_HISTORY_SYSTEM",
-          "NOT_ASN_HISTORY_SYSTEM",
-          "NOT_QESD_HISTORY_SYSTEM",
-          "NOT_ASN_HISTORY_USER",
-          "NOT_VSN_HISTORY_USER",
-          "NOT_ACK_HISTORY_USER"
+          {
+            "label": "NOT_ACK_HISTORY_USER",
+            "weight": 1.0
+          },
+          {
+            "label": "NOT_ACK_HISTORY_SYSTEM",
+            "weight": 1.0
+          },
+          {
+            "label": "NOT_ASN_HISTORY_SYSTEM",
+            "weight": 1.0
+          },
+          {
+            "label": "NOT_QESD_HISTORY_SYSTEM",
+            "weight": 1.0
+          },
+          {
+            "label": "NOT_ASN_HISTORY_USER",
+            "weight": 1.0
+          },
+          {
+            "label": "NOT_VSN_HISTORY_USER",
+            "weight": 1.0
+          },
+          {
+            "label": "NOT_ACK_HISTORY_USER",
+            "weight": 1.0
+          }
         ],
         [
-          "feedback_*",
-          "bye",
-          "farewell",
-          "greeting",
-          "elicit_feedback"
+          {
+            "label": "feedback_*",
+            "weight": 1.0
+          },
+          {
+            "label": "bye",
+            "weight": 1.0
+          },
+          {
+            "label": "farewell",
+            "weight": 1.0
+          },
+          {
+            "label": "greeting",
+            "weight": 1.0
+          },
+          {
+            "label": "elicit_feedback",
+            "weight": 1.0
+          }
         ]
       ],
       "addList": [
@@ -149,24 +317,43 @@
       "description": "Acknowledgement",
       "addGoals": []
     },
-
-
     {
       "name": "QESD",
       "id": "QESD_SYSTEM_CS",
       "preconditions": [
         [
-          "LOW_RAPPORT"
+          {
+            "label": "LOW_RAPPORT",
+            "weight": 1.0
+          }
         ],
         [
-          "NOT_QESD_HISTORY_USER",
-          "NOT_QESD_HISTORY_SYSTEM",
-          "NOT_SD_HISTORY_SYSTEM"
+          {
+            "label": "NOT_QESD_HISTORY_USER",
+            "weight": 1.0
+          },
+          {
+            "label": "NOT_QESD_HISTORY_SYSTEM",
+            "weight": 1.0
+          },
+          {
+            "label": "NOT_SD_HISTORY_SYSTEM",
+            "weight": 1.0
+          }
         ],
         [
-          "recommend",
-          "pre_closing",
-          "ask_*"
+          {
+            "label": "recommend",
+            "weight": 1.0
+          },
+          {
+            "label": "pre_closing",
+            "weight": 1.0
+          },
+          {
+            "label": "ask_*",
+            "weight": 1.0
+          }
         ]
       ],
       "addList": [
@@ -184,37 +371,77 @@
       "description": "Question to Elicit Self Disclosure",
       "addGoals": []
     },
-
-
     {
       "name": "RSE",
       "id": "RSE_SYSTEM_CS",
       "preconditions": [
         [
-          "MEDIUM_RAPPORT",
-          "HIGH_RAPPORT",
-          "RAPPORT_INCREASED",
-          "RAPPORT_MAINTAINED"
+          {
+            "label": "MEDIUM_RAPPORT",
+            "weight": 1.0
+          },
+          {
+            "label": "HIGH_RAPPORT",
+            "weight": 1.0
+          },
+          {
+            "label": "RAPPORT_INCREASED",
+            "weight": 1.0
+          },
+          {
+            "label": "RAPPORT_MAINTAINED",
+            "weight": 1.0
+          }
         ],
         [
-          "RSE_USER_CS",
-          "SD_USER_CS",
-          "VSN_USER_CS"
+          {
+            "label": "RSE_USER_CS",
+            "weight": 1.0
+          },
+          {
+            "label": "SD_USER_CS",
+            "weight": 1.0
+          },
+          {
+            "label": "VSN_USER_CS",
+            "weight": 1.0
+          }
         ],
         [
-          "GAZE_ELSEWHERE_NONVERBAL"
+          {
+            "label": "GAZE_ELSEWHERE_NONVERBAL",
+            "weight": 1.0
+          }
         ],
         [
-          "VSN_HISTORY_SYSTEM",
-          "VSN_HISTORY_USER",
-          "NOT_RSE_HISTORY_SYSTEM"
+          {
+            "label": "VSN_HISTORY_SYSTEM",
+            "weight": 1.0
+          },
+          {
+            "label": "VSN_HISTORY_USER",
+            "weight": 1.0
+          },
+          {
+            "label": "NOT_RSE_HISTORY_SYSTEM",
+            "weight": 1.0
+          }
         ],
         [
-          "AVAILABLE_SHARED_EXPERIENCES"
+          {
+            "label": "AVAILABLE_SHARED_EXPERIENCES",
+            "weight": 1.0
+          }
         ],
         [
-          "greeting",
-          "recommend"
+          {
+            "label": "greeting",
+            "weight": 1.0
+          },
+          {
+            "label": "recommend",
+            "weight": 1.0
+          }
         ]
       ],
       "addList": [
@@ -229,37 +456,83 @@
       "description": "Referring to Shared Experiences",
       "addGoals": []
     },
-
-
     {
       "name": "VSN",
       "id": "VSN_SYSTEM_CS",
       "preconditions": [
         [
-          "HIGH_RAPPORT",
-          "RAPPORT_INCREASED"
+          {
+            "label": "HIGH_RAPPORT",
+            "weight": 1.0
+          },
+          {
+            "label": "RAPPORT_INCREASED",
+            "weight": 1.0
+          }
         ],
         [
-          "SD_HISTORY_SYSTEM",
-          "VSN_USER_CS"
+          {
+            "label": "SD_HISTORY_SYSTEM",
+            "weight": 1.0
+          },
+          {
+            "label": "VSN_USER_CS",
+            "weight": 1.0
+          }
         ],
         [
-          "SMILE_NONVERBAL",
-          "GAZE_PARTNER_NONVERBAL"
+          {
+            "label": "SMILE_NONVERBAL",
+            "weight": 1.0
+          },
+          {
+            "label": "GAZE_PARTNER_NONVERBAL",
+            "weight": 1.0
+          }
         ],
         [
-          "NUM_TURNS_HIGHER_THAN_THRESHOLD",
-          "NOT_OVERLAP",
-          "ONCE_VSN_HISTORY_USER",
-          "NOT_VSN_HISTORY_SYSTEM",
-          "NOT_ASN_HISTORY_SYSTEM",
-          "NOT_ASN_HISTORY_USER"
+          {
+            "label": "NUM_TURNS_HIGHER_THAN_THRESHOLD",
+            "weight": 1.0
+          },
+          {
+            "label": "NOT_OVERLAP",
+            "weight": 1.0
+          },
+          {
+            "label": "ONCE_VSN_HISTORY_USER",
+            "weight": 1.0
+          },
+          {
+            "label": "NOT_VSN_HISTORY_SYSTEM",
+            "weight": 1.0
+          },
+          {
+            "label": "NOT_ASN_HISTORY_SYSTEM",
+            "weight": 1.0
+          },
+          {
+            "label": "NOT_ASN_HISTORY_USER",
+            "weight": 1.0
+          }
         ],
         [
-          "ask_actors",
-          "recommend",
-          "goodbye",
-          "do_*_elicit*"
+          {
+            "label": "ask_actors",
+            "weight": 1.0
+          },
+          {
+            "label": "recommend",
+            "weight": 1.0
+          },
+          {
+            "label": "goodbye",
+            "weight": 1.0
+          },
+          {
+            "label": "do_*_elicit*",
+            "weight": 1.0
+          }
         ]
       ],
       "addList": [
@@ -278,34 +551,77 @@
       "description": "Violation Social Norm",
       "addGoals": []
     },
-
-
     {
       "name": "ASN",
       "id": "ASN_SYSTEM_CS",
       "preconditions": [
         [
-          "LOW_RAPPORT",
-          "MEDIUM_RAPPORT",
-          "RAPPORT_MAINTAINED",
-          "RAPPORT_DECREASED"
+          {
+            "label": "LOW_RAPPORT",
+            "weight": 1.0
+          },
+          {
+            "label": "MEDIUM_RAPPORT",
+            "weight": 1.0
+          },
+          {
+            "label": "RAPPORT_MAINTAINED",
+            "weight": 1.0
+          },
+          {
+            "label": "RAPPORT_DECREASED",
+            "weight": 1.0
+          }
         ],
         [
-          "NOT_ASN_HISTORY_SYSTEM",
-          "NOT_VSN_HISTORY_SYSTEM",
-          "NOT_ASN_HISTORY_USER",
-          "NOT_VSN_HISTORY_USER"
+          {
+            "label": "NOT_ASN_HISTORY_SYSTEM",
+            "weight": 1.0
+          },
+          {
+            "label": "NOT_VSN_HISTORY_SYSTEM",
+            "weight": 1.0
+          },
+          {
+            "label": "NOT_ASN_HISTORY_USER",
+            "weight": 1.0
+          },
+          {
+            "label": "NOT_VSN_HISTORY_USER",
+            "weight": 1.0
+          }
         ],
         [
-          "NOT_SMILE_NONVERBAL",
-          "GAZE_PARTNER_NONVERBAL"
+          {
+            "label": "NOT_SMILE_NONVERBAL",
+            "weight": 1.0
+          },
+          {
+            "label": "GAZE_PARTNER_NONVERBAL",
+            "weight": 1.0
+          }
         ],
         [
-          "recommend",
-          "ask_genres",
-          "greeting",
-          "feedback_*",
-          "start_*"
+          {
+            "label": "recommend",
+            "weight": 1.0
+          },
+          {
+            "label": "ask_genres",
+            "weight": 1.0
+          },
+          {
+            "label": "greeting",
+            "weight": 1.0
+          },
+          {
+            "label": "feedback_*",
+            "weight": 1.0
+          },
+          {
+            "label": "start_*",
+            "weight": 1.0
+          }
         ]
       ],
       "addList": [
@@ -326,8 +642,6 @@
       "description": "Adhere Social Norm",
       "addGoals": []
     },
-
-
     {
       "name": "NONE",
       "id": "NONE_SYSTEM_CS",
@@ -350,8 +664,8 @@
   "pi": 15,
   "theta": 15,
   "initialTheta": 15,
-  "phi": 70,
-  "gamma": 20,
-  "delta": 50,
+  "phi": 71.0,
+  "gamma": 21.0,
+  "delta": 51.0,
   "removePrecond": false
 }

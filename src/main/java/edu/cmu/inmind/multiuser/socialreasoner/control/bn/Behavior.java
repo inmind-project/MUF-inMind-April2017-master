@@ -1,5 +1,7 @@
 package edu.cmu.inmind.multiuser.socialreasoner.control.bn;
 
+import edu.cmu.inmind.multiuser.socialreasoner.control.util.Utils;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -17,10 +19,10 @@ import java.util.regex.Pattern;
  * @author oromero
  *
  */
-public class BehaviorPlus implements Comparable<BehaviorPlus>{
+public class Behavior implements Comparable<Behavior>{ // implements BehaviorInterface{
 	private String name;
     private String id;
-	private List<List<String>> preconditions = new Vector <>();
+	private List<List<Premise>> preconditions = new Vector <>();
 	private List<String> addList = new Vector <>();
 	private String description;
 	private List<String> addGoals = new Vector<>();
@@ -31,33 +33,36 @@ public class BehaviorPlus implements Comparable<BehaviorPlus>{
 	private transient boolean executable = false, activated = false;
 	private transient boolean verbose = false;
     private transient int numMatches;
+	private transient String stateMatches;
+	private transient int numPreconditions = -1;
+    private transient double utility;
 
-    public BehaviorPlus(String name){
+    public Behavior(String name){
 		this.name = name;
 	}
 
-	public BehaviorPlus(String name, String[][] preconds, String[] addlist, String[] deletelist){
+	public Behavior(String name, Premise[][] preconds, String[] addlist, String[] deletelist){
 		this.name = name;
 		addPreconditions(preconds);
 		addList.addAll(Arrays.asList(addlist));
 		deleteList.addAll(Arrays.asList(deletelist));
 	}
 
-    public BehaviorPlus(String name, String description, String[][] preconds, String[] addlist, String[] deletelist){
+    public Behavior(String name, String description, Premise[][] preconds, String[] addlist, String[] deletelist){
         this(name, preconds, addlist, deletelist);
         this.description = description;
     }
 
-    public BehaviorPlus(String name, String description, String[][] preconds, String[] addlist, String[] deletelist, String[] addGoals){
+    public Behavior(String name, String description, Premise[][] preconds, String[] addlist, String[] deletelist, String[] addGoals){
         this(name, description, preconds, addlist, deletelist);
         this.description = description;
         this.addGoals.addAll(Arrays.asList(addGoals));
 
     }
 
-    public void addPreconditions(String[][] preconds){
+    public void addPreconditions(Premise[][] preconds){
         for(int i = 0; preconds != null && i < preconds.length; i++) {
-            List<String> precondList = new Vector<>();
+            List<Premise> precondList = new Vector<>();
             for(int j = 0; j < preconds[i].length; j++){
                 precondList.add( preconds[i][j] );
             }
@@ -100,10 +105,11 @@ public class BehaviorPlus implements Comparable<BehaviorPlus>{
 	public void setActivation(double activation) {
 		this.activation = activation;
 	}
-	public Collection<List<String>> getPreconditions() {
-		if(preconditions != null && preconditions.size() > 0)
-			return preconditions;
-		return new Vector<>();
+	public Collection<List<Premise>> getPreconditions() {
+		if(preconditions == null){
+		    preconditions = new Vector<>();
+        }
+        return preconditions;
 	}
 	public int getIdx(){
 		return this.idx;
@@ -121,69 +127,64 @@ public class BehaviorPlus implements Comparable<BehaviorPlus>{
 		activated = a;
 	}
 
+
 	/**
 	 * Determines if is into the add-list
 	 * @param proposition
 	 * @return
+     *
+     * Note: modified with weights.
 	 */
 	public boolean isSuccesor(String proposition){
-        if( addList.contains(proposition) ) {
-            return true;
-        }else{
-            for( String premise : addList ){
-				if( ((premise.startsWith("do_") || premise.startsWith("start_") || premise.startsWith("feedback_")
-						|| premise.startsWith("end_") || premise.startsWith("feedback_") || premise.startsWith("ask_")
-						|| premise.startsWith("outcome_"))) &&
-						(proposition.startsWith("do_") || proposition.startsWith("start_") || proposition.startsWith("feedback_")
-								|| proposition.startsWith("end_") || proposition.startsWith("feedback_") || proposition.startsWith("ask_")
-								|| proposition.startsWith("outcome_"))){
-					System.out.println("");
-				}
-				if( premise.contains("*") && Pattern.compile(premise.replace("*", "[a-zA-Z0-9_]*"))
-                        .matcher(proposition).matches()) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return isKindOfLink( addList, proposition );
 	}
 
 	/**
 	 * Determines if is into the delete-list
 	 * @param proposition
 	 * @return
+     *
+     * Note: modified with weights.
 	 */
 	public boolean isInhibition(String proposition){
-		if( deleteList.contains(proposition) ) {
+		return isKindOfLink( deleteList, proposition );
+	}
+
+
+
+	private boolean isKindOfLink(List<String> list, String proposition){
+        if( list.contains(proposition) ) {
             return true;
         }else{
-            for( String premise : deleteList ){
-				if( premise.contains("*") && Pattern.compile(premise.replace("*", "[a-zA-Z0-9_]*"))
+            for( String premise : list ){
+                if( premise.contains("*") && Pattern.compile(premise.replace("*", "[a-zA-Z0-9_]*"))
                         .matcher(proposition).matches()) {
-                        return true;
+                    return true;
                 }
             }
         }
-		return false;
-	}
+        return false;
+    }
 
 	public void setAddList(String proposition){
 		addList.add(proposition);
 	}
 
 	/**
-	 * Determines if is into the preconditions set
+	 * Determines whether proposition is into the preconditions set
 	 * @param proposition
+     * Note: modified with weights.
 	 * @return
 	 */
-	public boolean isPrecondition(String proposition){
-       for(List<String> precondList : preconditions ){
-            for( String precond : precondList ){
-				if( precond.contains("*")){
-                    if ( Pattern.compile( precond.replace("*", "[a-zA-Z0-9_]*") ).matcher( proposition ).matches() ){
+	public boolean hasPrecondition(String proposition){
+       for(List<Premise> precondList : preconditions ){
+            for( Premise precond : precondList ){
+				if( precond.getLabel().contains("*")){
+                    if ( Pattern.compile( precond.getLabel().replace("*", "[a-zA-Z0-9_]*") )
+							.matcher( proposition ).matches() ){
                         return true;
                     }
-                }else if( precond.equals(proposition) ){
+                }else if( precond.getLabel().equals(proposition) ){
                     return true;
                 }
 
@@ -197,15 +198,16 @@ public class BehaviorPlus implements Comparable<BehaviorPlus>{
 	 * @param states
 	 * @param matchedStates
 	 * @param phi
+     * Note: modified with weights.
 	 * @return
 	 */
 	public double calculateInputFromState(List<String> states, int[] matchedStates, double phi){
 		double activation = 0;
-		for(List<String> condList : preconditions ){
-            for(String cond : condList ) {
-                int index = states.indexOf( cond );
+		for(List<Premise> condList : preconditions ){
+            for(Premise cond : condList ) {
+                int index = states.indexOf( cond.getLabel() );
                 if (index != -1) {
-                    double temp = phi * (1.0d / (double) matchedStates[index]) * (1.0d / (double) preconditions.size());
+                    double temp = phi * (1.0d / (double) matchedStates[index]) * (1.0d / (double) preconditions.size()) * cond.getWeight();
                     activation += temp;
                     if(verbose) {
 						System.out.println("state gives " + this.name + " an extra activation of " + temp + " for " + cond);
@@ -221,6 +223,7 @@ public class BehaviorPlus implements Comparable<BehaviorPlus>{
 	 * @param goals
 	 * @param achievedPropositions
 	 * @param gamma
+     * Note: modified with weights.
 	 * @return
 	 */
 	public double calculateInputFromGoals(List<String> goals, int[] achievedPropositions, double gamma){
@@ -244,6 +247,7 @@ public class BehaviorPlus implements Comparable<BehaviorPlus>{
 	 * @param goalsR
 	 * @param undoPropositions
 	 * @param delta
+     * Note: modified with weights.
 	 * @return
 	 */
 	public double calculateTakeAwayByProtectedGoals(List<String> goalsR, int[] undoPropositions, double delta){
@@ -265,13 +269,13 @@ public class BehaviorPlus implements Comparable<BehaviorPlus>{
 	 * A function executable(i t), which returns 1 (true) if competence module i is executable
 	 * at time t (i.e., if all of the preconditions of competence module i are members
 	 * of S (t)), and 0 (false) otherwise.
+     * Note: modified with weights.
 	 */
 	public boolean isExecutable (List <String> states){
-		Vector<List<String>> preconds = new Vector<> (this.getPreconditions());
-		external : for(List<String> precondRow : preconds ){
-			for(String precond : precondRow ){
-				if(states.contains(precond)){
-//					continue external;
+		Collection<List<Premise>> preconds = new Vector<> (this.getPreconditions());
+		for(List<Premise> precondRow : preconds ){
+			for(Premise precond : precondRow ){
+				if(states.contains(precond.getLabel())){
 					//TODO: remove this. This is just for WEF Demo
 					return executable = true;
 				}
@@ -279,27 +283,23 @@ public class BehaviorPlus implements Comparable<BehaviorPlus>{
 			return executable = false;
 		}
 		return executable = true;
-
-//        executable = false;
-//        for(List<String> precondRow : preconds ){
-//            for(String precond : precondRow ){
-//                if(states.contains(precond)){
-//                    executable = true;
-//                    break;
-//                }
-//            }
-//            if( !executable ){
-//                return executable;
-//            }else{
-//                executable = false;
-//            }
-//        }
-//        return executable;
 	}
 
     public boolean isExecutable (int maximum){
-      return executable = numMatches >= maximum;
+		return executable = numMatches >= maximum;
     }
+
+	public boolean isExecutable (double maximum){
+		return executable = utility >= (maximum * .8);
+	}
+
+    /**
+     * Note: modified with weights.
+     * @return
+     */
+	public double computeUtility() {
+		return utility = this.getActivation() + (this.getNumMatches() * 5);
+	}
 
 	public void resetActivation(boolean reset){
 		if(reset){
@@ -310,6 +310,10 @@ public class BehaviorPlus implements Comparable<BehaviorPlus>{
 		activated = false;
 	}
 
+    /**
+     * Note: modified with weights.
+     * @param act
+     */
 	public void updateActivation(double act){
 		activation += act;
 		if(activation < 0)
@@ -325,21 +329,15 @@ public class BehaviorPlus implements Comparable<BehaviorPlus>{
 	}
 
     @Override
-    public int compareTo(BehaviorPlus o) {
-        return Double.compare(this.getActivation(), o.getActivation());
+    public int compareTo(Behavior other) {
+		double thisUtility = this.computeUtility();
+		double otherUtility = other.computeUtility();
+        return Double.compare( thisUtility, otherUtility);
     }
 
     @Override
-    public BehaviorPlus clone(){
-        BehaviorPlus bp = new BehaviorPlus( this.name );
-        bp.setActivation( this.activation );
-        bp.setActivated( this.activated );
-        bp.setAddList( this.getAddList() );
-        bp.setDeleteList( this.getDeleteList() );
-        bp.setDescription( this.getDescription() );
-        bp.setIdx(this.idx);
-        bp.setId(this.id);
-        return bp;
+    public Behavior clone(){
+		return Utils.clone(this);
     }
 
 	public void reset() {
@@ -349,19 +347,34 @@ public class BehaviorPlus implements Comparable<BehaviorPlus>{
 		numMatches = 0;
 	}
 
+    /**
+     * Note: modified with weights.
+     * @param states
+     * @return
+     */
     public int calculateMatchPreconditions(CopyOnWriteArrayList<String> states) {
         numMatches = 0;
-        for( List<String> precondList : preconditions ){
-            for( String precond : precondList ){
-                if( states.contains(precond) ){
+		stateMatches = "";
+        for( List<Premise> precondList : preconditions ){
+            for( Premise precond : precondList ){
+                if( states.contains(precond.getLabel()) ){
+					stateMatches += "[" + precond + "] ";
                     numMatches++;
                 }
             }
         }
-        return numMatches;
+		return numMatches;
     }
 
     public int getNumMatches() {
         return numMatches;
     }
+
+	public void setNumMatches(int numMatches) {
+		this.numMatches = numMatches;
+	}
+
+	public String getStateMatches() {
+		return stateMatches;
+	}
 }

@@ -1,11 +1,9 @@
 package edu.cmu.inmind.multiuser.socialreasoner.model.blackboard;
 
-import edu.cmu.inmind.multiuser.socialreasoner.control.controllers.BehaviorNetworkController;
+import edu.cmu.inmind.multiuser.socialreasoner.control.bn.BehaviorNetworkController;
 import edu.cmu.inmind.multiuser.socialreasoner.model.Constants;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -159,5 +157,23 @@ public class Blackboard {
 
     public static void reset(){
         instance.model.clear();
+    }
+
+    public String search(String partialMatch) {
+        String result = "NOT_" + partialMatch;
+        try {
+            lock.lock();
+            for( String state : model ){
+                if( state.equals(partialMatch) || state.startsWith(partialMatch) || state.startsWith("NOT_" + partialMatch) ){
+                    result = state;
+                    break;
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            lock.unlock();
+            return result;
+        }
     }
 }

@@ -1,21 +1,22 @@
 package edu.cmu.inmind.multiuser.socialreasoner.control;
 
-import edu.cmu.inmind.multiuser.socialreasoner.control.controllers.*;
-import edu.cmu.inmind.multiuser.socialreasoner.control.reasoners.*;
+import edu.cmu.inmind.multiuser.socialreasoner.control.reasoners.SocialReasoner;
 import edu.cmu.inmind.multiuser.socialreasoner.control.util.Utils;
-import edu.cmu.inmind.multiuser.socialreasoner.model.history.UserCSHistory;
+import edu.cmu.inmind.multiuser.socialreasoner.model.Constants;
 import edu.cmu.inmind.multiuser.socialreasoner.model.intent.SystemIntent;
-import edu.cmu.inmind.multiuser.socialreasoner.model.*;
+import edu.cmu.inmind.multiuser.socialreasoner.control.bn.BehaviorNetworkController;
+import edu.cmu.inmind.multiuser.socialreasoner.control.bn.ConversationalStrategyBN;
+import edu.cmu.inmind.multiuser.socialreasoner.model.history.UserCSHistory;
 import edu.cmu.inmind.multiuser.socialreasoner.model.blackboard.Blackboard;
 import edu.cmu.inmind.multiuser.socialreasoner.model.history.SocialHistory;
 
 import java.io.*;
 import java.util.*;
 
-/**Questions
- * Created by oscarr on 4/22/16.`
+/**
+ * Created by oscarr on 4/22/16.
  */
-public class SocialReasonerController{
+public class SocialReasonerController {
     public static boolean verbose = false;
     public static boolean isBeginningConversation = true;
     public static boolean isNonVerbalWindowON = true;
@@ -23,6 +24,8 @@ public class SocialReasonerController{
     private static int gazeCount;
     private static int noSmileCount;
     private static int noGazeCount;
+    public static String userUtterance = "";
+    public static String systemUtterance = "";
     private BehaviorNetworkController bnController;
     private SocialReasoner socialReasoner;
     public static UserCSHistory userCSHistory;
@@ -34,72 +37,73 @@ public class SocialReasonerController{
     public static String[] conversationalStrategies = new String[7];
     public static String behavior;
     public static boolean pause;
-    public static SocialReasonerController mainController;
+    public static SocialReasonerController socialReasonerController;
     public static boolean stop = false;
-    public static Queue<SystemIntent> intentsQueue ;
+    public static Queue<SystemIntent> intentsQueue;
     public static Properties properties = new Properties();
     public static int numberOfTurnsThreshold = 10;
     public static int currentTurn = 0;
     public static String outputResults = "";
+    public static long vectorID = 0L;
 
 
     //flags
-    public static boolean useWoZFlag = false;
-    public static boolean flagStart = true;
+    public static boolean flagStart = false;
     public static boolean flagStop = false;
     public static boolean flagReset = false;
     public static boolean flagResetTR = false;
-    public static boolean useVHTConnnector;
-    public static boolean useTianjinEmulator;
-    public static boolean useFakeNLU;
-    public static boolean useTRNotWoZ;
-    public static boolean useFSM;
-    public static boolean useSRPlot;
     public static boolean useManualMode;
     public static boolean useDummyGoals;
 
     // preconditions
     public static String rapportDelta;
-    public static String rapportLevel; // = Constants.HIGH_RAPPORT;
-    public static double rapportScore = 4; // = 6;
-    public static String userConvStrategy; // = Constants.VIOLATION_SOCIAL_NORM;
+    public static String rapportLevel;
+    public static double rapportScore = 2.0;
+    public static String userConvStrategy;
     public static String smile;
     public static String eyeGaze;
 
     //delays
     public static long delayMainLoop;
     public static long delayUserIntent;
-    private static long delaySystemIntent;
+
 
     private boolean isFirstTime = true;
     private boolean isProcessingIntent;
     private SystemIntent previousIntent;
+
     public static SystemIntent trIntent;
-    private static String availableSharedExp;
+    private static String availableSharedExp = "NOT_AVAILABLE";
     private static Double percSmileWindow;
     private static Double percGazeWindow;
-    private String pathToAnnotatedLog;
-    private String pathToExcelOutput;
+    public static String pathToDavosData;
+    public static String pathToDavosResults;
+    public static String pathToExcelOutput;
+    public static String wozerOutput;
 
     public SocialReasonerController(){
         System.out.println("Controller instanciated");
-
         loadProperties();
-        intentsQueue = new LinkedList<>();
         checkStart();
     }
 
-    public SocialReasoner getSocialReasoner(){
-        return socialReasoner;
+    public static void main(String args[]){
+        socialReasonerController = new SocialReasonerController();
+        socialReasonerController.loadProperties();
+        Scanner scanner = new Scanner( System.in );
+        while( !stop ) {
+            System.out.println("\nEnter an intent ('stop' to exit): ");
+            String command = scanner.nextLine();
+            if( command.equals("stop") ){
+                stop = true;
+            }else{
+                socialReasonerController.addSystemIntent( new SystemIntent(command, "phase") );
+            }
+        }
+        System.err.println("\nBye bye...");
+        System.exit(0);
     }
 
-    public double getRapportScore(){
-        return rapportScore;
-    }
-
-    public void setUserConvStrategy(String cs){
-        userConvStrategy = cs;
-    }
 
     public void setRapportScore(double rapport){
         rapportScore = rapport;
@@ -114,10 +118,7 @@ public class SocialReasonerController{
                     setNonVerbalWindow(false);
                     addContinousStates(trIntent);
                     socialReasoner.execute(trIntent);
-                    if (getConvStrategyFormatted().equals("NONE_SYSTEM_CS")){
-                        System.out.println("+++++++++++++++++++ " + getConvStrategyFormatted());
-                    }
-                    //printOutput();
+                    printOutput();
                     resetStates();
                 }
             } catch (Exception ex) {
@@ -136,14 +137,39 @@ public class SocialReasonerController{
         eyeGaze = null;
     }
 
-    public String getConvStrategyFormatted() {
-        //return conversationalStrategies[0].equals( Constants.ACK_SYSTEM_CS )? Constants.ACK_SYSTEM_CS + " -> "
-        //        + conversationalStrategies[1] : conversationalStrategies[0];
-        if (conversationalStrategies[0].equals("NONE_SYSTEM_CS")){
-            return conversationalStrategies[1];
-        } else {
-            return conversationalStrategies[0];
+    private void printOutput() {
+        String output = vectorID +"\t"+ removeSufix(trIntent.getIntent() + "\t" + rapportScore  + "\t" + rapportLevel
+                + "\t" + rapportDelta + "\t" + userConvStrategy  + "\t" + smile  + "\t" + eyeGaze + "\t" + availableSharedExp
+                + "\t" + blackboard.search("NUM_TURNS") + "\t" + blackboard.search(Constants.ASN_HISTORY_SYSTEM)
+                + "\t" + blackboard.search(Constants.VSN_HISTORY_SYSTEM) + "\t" + blackboard.search(Constants.SD_HISTORY_SYSTEM)
+                + "\t" + blackboard.search(Constants.QESD_HISTORY_SYSTEM) + "\t" + blackboard.search(Constants.PR_HISTORY_SYSTEM)
+                + "\t" + blackboard.search(Constants.ACK_HISTORY_SYSTEM) + "\t" + blackboard.search(Constants.RSE_HISTORY_SYSTEM)
+                + "\t" + blackboard.search(Constants.ASN_HISTORY_USER) + "\t" + blackboard.search(Constants.VSN_HISTORY_USER)
+                + "\t" + blackboard.search(Constants.SD_HISTORY_USER) + "\t" + blackboard.search(Constants.QESD_HISTORY_USER)
+                + "\t" + blackboard.search(Constants.PR_HISTORY_USER) + "\t" + blackboard.search(Constants.ACK_HISTORY_USER)
+                + "\t" + blackboard.search(Constants.RSE_HISTORY_USER) + "\t" + (wozerOutput + "_WOZER") + "\t" + (getConvStrategyFormatted() + "_SR")
+                + "\t" + Arrays.toString(conversationalStrategies) + "\t" + socialReasoner.getOutput())
+                + "\t" + socialReasoner.getStates() + "\t" + socialReasoner.getMatches() + "\t" + userUtterance
+                + "\t" + systemUtterance + "\n";
+        userUtterance = "";
+        systemUtterance = "";
+        if( verbose ) {
+            System.out.print(output);
         }
+        outputResults += output;
+        vectorID++;
+    }
+
+    private String getConvStrategyFormatted() {
+        if( conversationalStrategies == null || conversationalStrategies[0] == null ){
+            return Constants.NONE;
+        }
+        return conversationalStrategies[0].equals( Constants.ACK_SYSTEM_CS )? Constants.ACK_SYSTEM_CS + " -> "
+                + conversationalStrategies[1] : conversationalStrategies[0];
+    }
+
+    private String removeSufix(String s) {
+        return s.replace("_NONVERBAL", "");//.replace("_SYSTEM_CS", "").replace("_USER_CS", "");
     }
 
     private void createSocialReasoner() {
@@ -151,7 +177,7 @@ public class SocialReasonerController{
     }
 
     private void checkStart() {
-        // waiting for confirmation to start the reasoning process
+        // waiting for confirmation to process the reasoning process
         while( !flagStart ){
             Utils.sleep( 100 );
         }
@@ -163,14 +189,12 @@ public class SocialReasonerController{
             //singletons
             blackboard = Blackboard.getInstance();
             socialHistory = SocialHistory.getInstance();
-            System.out.println("Creating a user model...... Done!!!!!!!!!!!!!!\n\n");
 
             bnController = new ConversationalStrategyBN();
             blackboard.setModel( bnController.getStatesList() );
             blackboard.subscribe((ConversationalStrategyBN) bnController);
-            userConvStrategy = Constants.NONE_USER_CS; //model.getInitialUserConvStrat();
-            rapportLevel = calculateRapScore( "2" );//model.getInitialRapportLevel()
-
+            userConvStrategy = Constants.NONE_USER_CS;
+            rapportLevel = calculateRapScore( "2" );
             createSocialReasoner();
             isFirstTime = false;
             flagReset = false;
@@ -180,7 +204,6 @@ public class SocialReasonerController{
     private void checkReset() {
         if( flagReset ){
             Blackboard.reset();
-            //TaskReasoner.reset();
             SocialReasoner.reset();
             SocialHistory.reset();
             UserCSHistory.reset();
@@ -196,7 +219,7 @@ public class SocialReasonerController{
             System.out.println("Reseting...");
             reset();
             System.gc();
-            mainController.loadProperties();
+            socialReasonerController.loadProperties();
             outputResults = "";
         }
     }
@@ -214,8 +237,8 @@ public class SocialReasonerController{
     public static String calculateRapScore(String score) {
         try {
             double scoreTemp = Double.parseDouble(score);
-            rapportDelta = scoreTemp == rapportScore? Constants.RAPPORT_MAINTAINED : scoreTemp > rapportScore?
-                    Constants.RAPPORT_INCREASED : Constants.RAPPORT_DECREASED;
+            rapportDelta = scoreTemp >= (rapportScore + .05)? Constants.RAPPORT_INCREASED : scoreTemp <= (rapportScore - .05)?
+                    Constants.RAPPORT_DECREASED : Constants.RAPPORT_MAINTAINED;
             rapportScore = scoreTemp;
             rapportLevel = (rapportScore > 4.4? Constants.HIGH_RAPPORT : rapportScore < 3 ? Constants.LOW_RAPPORT
                     : Constants.MEDIUM_RAPPORT);
@@ -260,6 +283,7 @@ public class SocialReasonerController{
         noGazeCount = 0;
     }
 
+    /** we need a time window in order to calculate smile, gaze, etc. as user's non-verbals last several seconds**/
     public static void setNonVerbalWindow( boolean flag ){
         if(verbose) System.out.println("*** set window: " + flag);
         isNonVerbalWindowON = flag;
@@ -290,24 +314,24 @@ public class SocialReasonerController{
 
     private void addNewIntent(SystemIntent intent) {
         if( previousIntent != null ) {
-            blackboard.removeMessages(previousIntent.getIntent() + ":" + previousIntent.getPhase());
+            blackboard.removeMessages(previousIntent.getIntent() + ":" + previousIntent.getPhase() + ":" + "greeting" + ":" + "greetings");
         }
         blackboard.setStatesString(intent.getIntent() + ":" + intent.getPhase(), "SocialReasonerController" );
     }
 
     private void addUserCSstates() {
         blackboard.removeMessagesContain( "USER_CS");
-        blackboard.setStatesString( userConvStrategy, "mainController");
+        blackboard.setStatesString( userConvStrategy, "socialReasonerController");
     }
 
     private void addSystemCSstates() {
         blackboard.removeMessagesContain( "SYSTEM_CS");
-        blackboard.setStatesString( conversationalStrategies[0], "mainController");
+        blackboard.setStatesString( conversationalStrategies[0], "socialReasonerController");
     }
 
     private void addRapportstates() {
         blackboard.removeMessagesContain( "RAPPORT");
-        blackboard.setStatesString( rapportDelta + ":" + rapportLevel, "mainController");
+        blackboard.setStatesString( rapportDelta + ":" + rapportLevel, "socialReasonerController");
     }
 
     private void addTurnstates() {
@@ -326,7 +350,6 @@ public class SocialReasonerController{
         }
     }
 
-
     private void loadProperties(){
         InputStream input = null;
         try {
@@ -334,24 +357,18 @@ public class SocialReasonerController{
             // load a properties file
             properties.load(input);
 
-            // get the property value and print it out
-            useVHTConnnector = Boolean.valueOf(properties.getProperty("useVHTConnnector"));
-            useTianjinEmulator = Boolean.valueOf(properties.getProperty("useTianjinEmulator"));
-            useFakeNLU = Boolean.valueOf(properties.getProperty("useFakeNLU"));
-            useTRNotWoZ = Boolean.valueOf(properties.getProperty("useTRNotWoZ"));
-            useFSM = Boolean.valueOf(properties.getProperty("useFSM"));
-            useSRPlot = Boolean.valueOf(properties.getProperty("useSRPlot"));
+            // get the property value and printFileName it out
             useManualMode = Boolean.valueOf(properties.getProperty("useManualMode"));
-            //delayMainLoop = Long.valueOf(properties.getProperty("delayMainLoop"));
-            //delayUserIntent = Long.valueOf(properties.getProperty("delayUserIntent"));
-            //delaySystemIntent = Long.valueOf(properties.getProperty("delaySystemIntent"));
+            delayMainLoop = Long.valueOf(properties.getProperty("delayMainLoop"));
+            delayUserIntent = Long.valueOf(properties.getProperty("delayUserIntent"));
             useDummyGoals = Boolean.valueOf(properties.getProperty("useDummyGoals"));
             flagStart = Boolean.valueOf(properties.getProperty("shouldStartAutomatically"));
-            //numberOfTurnsThreshold = Integer.valueOf(properties.getProperty("numberOfTurnsThreshold"));
+            numberOfTurnsThreshold = Integer.valueOf(properties.getProperty("numberOfTurnsThreshold"));
             percSmileWindow = Double.valueOf(properties.getProperty("percSmileWindow"));
             percGazeWindow = Double.valueOf(properties.getProperty("percGazeWindow"));
-            //verbose = Boolean.valueOf(properties.getProperty("verbose"));
-            pathToAnnotatedLog = properties.getProperty("pathToAnnotatedLog");
+            verbose = Boolean.valueOf(properties.getProperty("verbose"));
+            pathToDavosData = properties.getProperty("pathToDavosData");
+            pathToDavosResults = properties.getProperty("pathToDavosResults");
             pathToExcelOutput = properties.getProperty("pathToExcelOutput");
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -369,15 +386,17 @@ public class SocialReasonerController{
     //TODO: we still need to receive ACK, QESD and Hedging
     public void calculateUserConvStrategy(String message) {
         String[] values = message.split(" ");
-        String agentId = values[0];
         boolean sd = Boolean.parseBoolean( values[2] );
         boolean se = Boolean.parseBoolean( values[5] );
         boolean pr = Boolean.parseBoolean( values[8] );
         boolean vsn = Boolean.parseBoolean( values[11] );
         boolean asn = Boolean.parseBoolean( values[14] );
         userConvStrategy =  sd? Constants.SD_USER_CS : se? Constants.RSE_USER_CS : pr? Constants.PR_USER_CS : vsn?
-                Constants.VSN_USER_CS : asn? Constants.ASN_USER_CS : Constants.NOT_PR_USER_CS;
+                Constants.VSN_USER_CS : asn? Constants.ASN_USER_CS : Constants.NONE_USER_CS;
         blackboard.setStatesString( userConvStrategy, "ConversationalStrategyClassifier");
+        if( !userConvStrategy.equals(Constants.PR_USER_CS) ){
+            blackboard.setStatesString( Constants.NOT_PR_USER_CS, "ConversationalStrategyClassifier");
+        }
 
         String winner = "NONE";
         double max = 0;
@@ -399,7 +418,7 @@ public class SocialReasonerController{
         availableSharedExp = "NOT_AVAILABLE";
     }
 
-    public void addSystemIntent(SystemIntent systemIntent) {
+    public void addSystemIntent( SystemIntent systemIntent) {
         try {
             intentsQueue.add( systemIntent );
             process();
@@ -409,7 +428,7 @@ public class SocialReasonerController{
     }
 
     private boolean extractTypeOfTRmessage(String message) {
-        if( message.contains("start") ) {
+        if( message.contains("process") ) {
             SocialReasonerController.flagStart = true;
         }else if( message.contains("set") ){
             return true;
@@ -421,4 +440,5 @@ public class SocialReasonerController{
         }
         return false;
     }
+
 }

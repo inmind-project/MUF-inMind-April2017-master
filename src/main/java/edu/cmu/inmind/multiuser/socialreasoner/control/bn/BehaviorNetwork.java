@@ -10,8 +10,8 @@ import java.util.regex.Pattern;
 /**
  * @author oromero
  */
-public class BehaviorNetworkPlus{
-	private List<BehaviorPlus> modules = new Vector<>();
+public class BehaviorNetwork {
+	private List<Behavior> modules = new Vector<>();
 //	private List<String> states = new Vector <>();
     private CopyOnWriteArrayList<String> states = new CopyOnWriteArrayList<>();
 	private List<String> goals = new Vector <>();
@@ -36,19 +36,19 @@ public class BehaviorNetworkPlus{
 	private transient Double[] activations;
     private transient boolean verbose = false;
     private transient List<String> previousStates;
-    private transient List<BehaviorPlus> modulesCopy = new Vector<>();
+    private transient List<Behavior> modulesCopy = new Vector<>();
     private transient String nameBehaviorActivated;
 	private String output;
 	private String matchesOutput;
 	private String statesOutput;
 
-	public BehaviorNetworkPlus(){}
+	BehaviorNetwork(){}
 
-	public List<BehaviorPlus> getModules() {
+	public List<Behavior> getModules() {
 		return modules;
 	}
 
-	public synchronized double[] getActivations() {
+	synchronized double[] getActivations() {
 		int size = activations.length;
 		double[] actvs = new double[ size ];
 		for( int i = 0; i < size; i++){
@@ -57,7 +57,7 @@ public class BehaviorNetworkPlus{
 		return actvs;
 	}
 
-	public int getIdxBehActivated() {
+	int getIdxBehActivated() {
 		return indexBehActivated;
 	}
 
@@ -65,7 +65,7 @@ public class BehaviorNetworkPlus{
         return removePrecond;
     }
 
-    public BehaviorPlus getBehaviorActivated(){
+    public Behavior getBehaviorActivated(){
 		if( indexBehActivated >= 0 ) {
 			return modules.get(indexBehActivated);
 		}
@@ -88,7 +88,7 @@ public class BehaviorNetworkPlus{
         return nameBehaviorActivated;
 	}
 
-	public void setModules(List<BehaviorPlus> modules) {
+	public void setModules(List<Behavior> modules) {
 		this.modules = modules;
 		activationSuccesors = new double[modules.size()][modules.size()];
 		activationPredeccesors = new double[modules.size()][modules.size()];
@@ -97,7 +97,7 @@ public class BehaviorNetworkPlus{
 		activationLinks = new double[modules.size()];
 	}
 
-	public void setModules(List<BehaviorPlus> modules, int size) {
+	void setModules(List<Behavior> modules, int size) {
 		this.modules = modules;
 		for( int i = 0; i < modules.size(); i++ ){
 			modules.get(i).setIdx(i);
@@ -168,7 +168,7 @@ public class BehaviorNetworkPlus{
 	 * (the state of the environment as perceived by the agent) S being implemented
 	 * by an independent process (or the real world),
 	 */
-	public CopyOnWriteArrayList<String> getState (){
+	CopyOnWriteArrayList<String> getState (){
 		if(states != null)
 			return states;
 		return new CopyOnWriteArrayList<>();
@@ -204,13 +204,6 @@ public class BehaviorNetworkPlus{
         }
 	}
 
-	// Many components hold a reference to the states list. Update in place to ensure that all components are up to date
-	// TODO: Refactor so there is a single source of truth for BN state
-	public synchronized void updateState(List<String> states) {
-		getState().clear();
-		getState().addAll(states);
-	}
-
 //	public void addState(List<String> states){
 //		if(states == null)
 //			this.states = null;
@@ -236,8 +229,7 @@ public class BehaviorNetworkPlus{
 		if(goals == null)
 			this.goals = null;
 		else
-			for(int i = 0; i < goals.size(); i++)
-				this.goals.add(goals.get(i));
+			this.goals.addAll(goals);
 	}
 
 	/**
@@ -245,18 +237,17 @@ public class BehaviorNetworkPlus{
 	 * has already been achieved at time t R being implemented by an independent
 	 * process (e.g. some internal or external goal creator),
 	 */
-	public Collection<String> getGoalsR (){
+	private Collection<String> getGoalsR (){
 		if(goalsResolved != null)
 			return goalsResolved;
 		return new Vector<>();
 	}
 
-	public void setGoalsR(List<String> goalsR){
+	private void setGoalsR(List<String> goalsR){
 		if(goalsR == null)
 			this.goalsResolved = null;
 		else
-			for(int i = 0; i < goalsR.size(); i++)
-				this.goalsResolved.add(goalsR.get(i));
+			this.goalsResolved.addAll(goalsR);
 	}
 
 	/**
@@ -282,14 +273,24 @@ public class BehaviorNetworkPlus{
         return false;
     }
 
+	private boolean executable (int idx, double maximum){
+		try {
+			return modules.get(idx).isExecutable(maximum);
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		return false;
+	}
+
 	/**
 	 * a function M (j), which returns the set of modules that match proposition j ,
 	 * i.e., the modules x for which j E cx,
+	 * Note: modified with weights.
 	 */
-	public List<BehaviorPlus> matchProposition(String proposition){
-		Vector<BehaviorPlus> behaviors = new Vector<>();
-		for(BehaviorPlus behavior : modules){
-			if(behavior.isPrecondition(proposition))
+	private List<Behavior> matchProposition(String proposition){
+		Vector<Behavior> behaviors = new Vector<>();
+		for(Behavior behavior : modules){
+			if(behavior.hasPrecondition(proposition))
 				behaviors.add(behavior);
 		}
 		return behaviors;
@@ -298,10 +299,11 @@ public class BehaviorNetworkPlus{
 	/**
 	 * a function A(j ), which returns the set of modules that achieve proposition j ,
 	 * i.e., the modules x for which j E ax,
+	 * Note: modified with weights.
 	 */
-	public Vector<BehaviorPlus> achieveProposition(String proposition){
-		Vector<BehaviorPlus> behaviors = new Vector<>();
-		for(BehaviorPlus beh : modules){
+	private Vector<Behavior> achieveProposition(String proposition){
+		Vector<Behavior> behaviors = new Vector<>();
+		for(Behavior beh : modules){
 			if( beh.isSuccesor(proposition) )
 				behaviors.add( beh );
 		}
@@ -312,9 +314,9 @@ public class BehaviorNetworkPlus{
 	 * a function U (j ), which returns the set of modules that undo proposition j , i.e.,
 	 * the modules x for which j E dx,
 	 */
-	public Vector<BehaviorPlus> undoProposition(String proposition){
-		Vector<BehaviorPlus> behaviors = new Vector<>();
-		for(BehaviorPlus beh : modules){
+	private Vector<Behavior> undoProposition(String proposition){
+		Vector<Behavior> behaviors = new Vector<>();
+		for(Behavior beh : modules){
 			if( beh.isInhibition(proposition) )
 				behaviors.add( beh );
 		}
@@ -324,10 +326,12 @@ public class BehaviorNetworkPlus{
 	/**
 	 * a function U (j ), which returns the set of modules that undo proposition j , i.e.,
 	 * the modules x for which j E dx, and j E S(t)
+	 *
+	 * Note: modified with weights.
 	 */
-	public Vector<BehaviorPlus> undoPropositionState(String proposition, int indexBehx){
-		Vector<BehaviorPlus> behaviors = new Vector<>();
-		for(BehaviorPlus behx : modules){
+	private Vector<Behavior> undoPropositionState(String proposition, int indexBehx){
+		Vector<Behavior> behaviors = new Vector<>();
+		for(Behavior behx : modules){
 			if(behx.getIdx() != indexBehx){
 				if( behx.isInhibition(proposition) && states.contains(proposition) )
 					behaviors.add(behx);
@@ -337,10 +341,10 @@ public class BehaviorNetworkPlus{
 	}
 
 	/**
-	 * The impact of the state, goals and protected goals on the activation level of a
-	 / module is computed.
+	 * The impact of the state, goals and protected goals on the activation level of a module is computed.
+	 Note: modified with weights.
 	 */
-	public void computeActivation (){
+	private void computeActivation (){
 		Vector<String> statesList = new Vector<>(getState());
 		Vector<String> goalsList = new Vector<>(getGoals());
 		Vector<String> goalsRList = new Vector<>(getGoalsR());
@@ -374,9 +378,12 @@ public class BehaviorNetworkPlus{
 	/**
 	 * The way the competence module activates and inhibits related modules through
 	 * its successor links, predecessor links and conflicter links is computed.
+	 *
+	 * Note: modified with weights.
 	 */
-	public void computeLinks (){
-        int highest = highestNumPreconditions();
+	private void computeLinks (){
+        //int highest = highestNumPreconditions();
+		double highest = highestUtility();
 		for(int i = 0; i < modules.size(); i++){
 			//boolean isExecutable = executable(i);
             boolean isExecutable = executable(i, highest);
@@ -386,18 +393,34 @@ public class BehaviorNetworkPlus{
 		}
 	}
 
-    /**
+	/**
+	 * Note: modified with weights.
+	 * @return
+	 */
+	private double highestUtility() {
+		double maximum = 0;
+		for (Behavior module : modules) {
+			module.calculateMatchPreconditions(states);
+			double utility = module.computeUtility();
+			if (utility > maximum) {
+				maximum = utility;
+			}
+		}
+		return maximum;
+	}
+
+	/**
      * This method returns the behavior with the highest number of preconditions present at the current state.
      * @return
      */
     private int highestNumPreconditions() {
         int maximum = 0;
-        for( int i = 0; i < modules.size(); i++ ){
-            int numMatched = modules.get( i ).calculateMatchPreconditions( states );
-            if( numMatched > maximum ){
-                maximum = numMatched;
-            }
-        }
+		for (Behavior module : modules) {
+			int numMatched = module.calculateMatchPreconditions(states);
+			if (numMatched > maximum) {
+				maximum = numMatched;
+			}
+		}
         return maximum;
     }
 
@@ -411,15 +434,17 @@ public class BehaviorNetworkPlus{
 	 * Formally, given that competence module x = (cx ax dx zx) is executable,
 	 * it spreads forward through those successor links for which the proposition
 	 * that defines them p E ax is false.
+	 *
+	 * Note: modified with weights.
 	 */
-	public double[] spreadsForward(int indexBehavior, boolean executable){
+	private double[] spreadsForward(int indexBehavior, boolean executable){
 		double[] activation = new double[modules.size()];
 		if(executable){
 			Vector<String> addList = new Vector<> ( modules.get(indexBehavior).getAddList() );
 			for(String addPremise : addList ){
 				if( !states.contains(addPremise) ){ //p E ax is false
-                    List<BehaviorPlus> sparseBehaviors = matchProposition(addPremise); //j E ax n cy
-					for(BehaviorPlus beh : sparseBehaviors ){
+                    List<Behavior> sparseBehaviors = matchProposition(addPremise); //j E ax n cy
+					for(Behavior beh : sparseBehaviors ){
 						int cardinalityMj = sparseBehaviors.size();
 						int cardinalityCy = beh.getPreconditions().size();
 						double temp = beh.getActivation() * (phi/gamma) * (1d / cardinalityMj) * (1d / cardinalityCy);
@@ -447,17 +472,18 @@ public class BehaviorNetworkPlus{
 	 * @param indexBehavior
 	 * @param executable
 	 * @return
+	 *
+	 * Note: modified with weights.
 	 */
-	public double[] spreadsBackward(int indexBehavior, boolean executable){
+	private double[] spreadsBackward(int indexBehavior, boolean executable){
 		double[] activation = new double[modules.size()];
 		if(!executable){
-			BehaviorPlus beh = modules.get(indexBehavior);
-			Collection<List<String>> condList = new Vector<> (beh.getPreconditions());
-
-			for(List<String> condRow : condList ){
-                for(String cond : condRow ){
-                    if( !states.contains( cond ) ) { //p E cx is false
-                        Vector<BehaviorPlus> sparseBehaviors = achieveProposition(cond); //j E cx n ay
+			Behavior beh = modules.get(indexBehavior);
+			Collection<List<Premise>> condList = new Vector<> (beh.getPreconditions());
+			for(List<Premise> condRow : condList ){
+                for(Premise cond : condRow ){
+                    if( !states.contains( cond.getLabel() ) ) { //p E cx is false
+                        Vector<Behavior> sparseBehaviors = achieveProposition(cond.getLabel()); //j E cx n ay
                         for (int j = 0; j < sparseBehaviors.size(); j++) {
 							int cardinalityAj = sparseBehaviors.size();
                             int cardinalityAy = sparseBehaviors.get(j).getAddList().size();
@@ -489,16 +515,18 @@ public class BehaviorNetworkPlus{
 	 * takes away activation energy through all of its conflicter links for which the
 	 * proposition that defines them p E cx is true, except those links for which there
 	 * exists an inverse conflicter link that is stronger.
+	 *
+	 * Note: modified with weights.
 	 */
-	public double[] takesAway(int indexBehavior){
+	private double[] takesAway(int indexBehavior){
 		double[] activation = new double[modules.size()];
-		BehaviorPlus behx = modules.get(indexBehavior);
-        Collection<List<String>> condListX = new Vector<>(behx.getPreconditions());
+		Behavior behx = modules.get(indexBehavior);
+        Collection<List<Premise>> condListX = new Vector<>(behx.getPreconditions());
 
-		for( List<String> condRow : condListX ){
-            for( String cond : condRow ) {
-				Vector<BehaviorPlus> sparseBehaviors = undoPropositionState(cond, indexBehavior); //j E cx n dy
-                for ( BehaviorPlus behy : sparseBehaviors) {
+		for( List<Premise> condRow : condListX ){
+            for( Premise cond : condRow ) {
+				Vector<Behavior> sparseBehaviors = undoPropositionState(cond.getLabel(), indexBehavior); //j E cx n dy
+                for ( Behavior behy : sparseBehaviors) {
                     double temp = 0;
                     if ((behx.getActivation() <= behy.getActivation()) && inverseTakesAway(indexBehavior, behy.getIdx())) {
                         activation[behy.getIdx()] = 0;
@@ -523,15 +551,17 @@ public class BehaviorNetworkPlus{
 	 * @param indexBehx
 	 * @param indexBehy
 	 * @return
+	 *
+	 * Note: modified with weights.
 	 */
 	private boolean inverseTakesAway(int indexBehx, int indexBehy){
-        Collection<List<String>> condsListy = new Vector<> (modules.get(indexBehy).getPreconditions());
-		BehaviorPlus behx = modules.get(indexBehx);
+        Collection<List<Premise>> condsListy = new Vector<> (modules.get(indexBehy).getPreconditions());
+		Behavior behx = modules.get(indexBehx);
 
-		for(List<String> condRow : condsListy ){
-            for( String cond : condRow ) {
-                if (behx.getDeleteList().contains(cond) ) //cy n dx
-                    if (states.contains( cond )) //cy n S(t)
+		for(List<Premise> condRow : condsListy ){
+            for( Premise cond : condRow ) {
+                if (behx.getDeleteList().contains(cond.getLabel()) ) //cy n dx
+                    if (states.contains( cond.getLabel() )) //cy n S(t)
                         return true;
             }
 		}
@@ -541,7 +571,7 @@ public class BehaviorNetworkPlus{
 	/**
 	 * A decay function ensures that the overall activation level remains constant.
 	 */
-	public void applyDecayFx (){
+	private void applyDecayFx (){
 		double sum = 0, factor, mayor = 0;
 		int indexMayor = 0;
 
@@ -554,14 +584,14 @@ public class BehaviorNetworkPlus{
 		}
 		if(sum > pi * modules.size()){
 			factor = pi * modules.size() / sum;
-			for(int i = 0; i < modules.size(); i++){
-				modules.get(i).decay(factor);
+			for (Behavior module : modules) {
+				module.decay(factor);
 			}
 		}
 		//ojrl decay bahavior which increments its activation continously and is not activated
 		if(modules.get(indexMayor).getActivation() > (theta * 1.5) && !modules.get(indexMayor).getActivated()){
 			modules.get(indexMayor).decay(0.5);
-			for (BehaviorPlus module : modules) {
+			for (Behavior module : modules) {
 				if (module.getExecutable() && module.getIdx() != modules.get(indexMayor).getIdx()
 						&& !module.getActivated() && indexBehActivated != -1) {
 					if (indexBehActivated != module.getIdx())
@@ -588,11 +618,13 @@ public class BehaviorNetworkPlus{
 	 * chosen randomly. The activation level of the module that has become active is
 	 * reinitialized to 0 2. If none of the modules fulfills conditions (i) and (ii), the
 	 * threshold is lowered by 10%.
+	 *
+	 * Note: modified with weights.
 	 */
-	public int activateBehavior (){
+	private int activateBehavior (){
 		double act = 0;
 		indexBehActivated = -1;
-		for( BehaviorPlus beh : modules ){
+		for( Behavior beh : modules ){
             if( beh.getActivation() >= theta && beh.getExecutable() && beh.getActivation() > act){
                 indexBehActivated = modules.indexOf(beh);
                 act = beh.getActivation();
@@ -600,33 +632,25 @@ public class BehaviorNetworkPlus{
             }
         }
         execution = false;
+		String values = "";
+		matchesOutput = "";
+		for( Behavior beh : modules ){
+			String matches = "$ " + beh.getName() + ": " + beh.getStateMatches();
+			int number = beh.getNumMatches();
+			if( SocialReasonerController.verbose ) {
+				System.err.println(matches.replace("$ ", "(" + number + "-" + beh.getActivation() + ") "));
+			}
+			matchesOutput += matches.replace("$ ", "(" + number + ") ") + ", ";
+			values += "["+beh.getName() + ": " + beh.getActivation() + "], ";
+		}
+		if( SocialReasonerController.verbose ) {
+			System.out.println(values + ", theta: " + theta);
+		}
         if( indexBehActivated >= 0 ){
 			statesOutput = Arrays.toString(states.toArray());
 			if(SocialReasonerController.verbose ) {
 				System.err.println("Executing Behavior: " + modules.get(indexBehActivated).getName());
 				System.err.println("States: " + statesOutput );
-			}
-			String values = "";
-			matchesOutput = "";
-			for( BehaviorPlus beh : modules ){
-				String matches = "$ " + beh.getName() + ": ";
-				int number = 0;
-				for( String state : states){
-					for( List<String> precond : beh.getPreconditions() ){
-						if( precond.contains(state) ){
-							matches += "[" + state + "] ";
-							number++;
-						}
-					}
-				}
-				if( SocialReasonerController.verbose ) {
-					System.err.println(matches.replace("$ ", "(" + number + "-" + beh.getActivation() + ") "));
-				}
-				matchesOutput += matches.replace("$ ", "(" + number + ") ") + ", ";
-				values += "["+beh.getName() + ": " + beh.getActivation() + "], ";
-			}
-			if( SocialReasonerController.verbose ) {
-				System.out.println(values + ", theta: " + theta);
 			}
             execution = true;
             modules.get(indexBehActivated).setActivated(true);
@@ -639,47 +663,43 @@ public class BehaviorNetworkPlus{
 	 *
 	 * @param behIndex
 	 */
-	public synchronized void triggerPostconditions(int behIndex){
+	private synchronized void triggerPostconditions(int behIndex){
 		if( behIndex >= 0 && behIndex < modules.size() ) {
-			BehaviorPlus beh = modules.get(behIndex);
+			Behavior beh = modules.get(behIndex);
 			Vector<String> addList = new Vector<>(beh.getAddList());
 			Vector<String> deleteList = new Vector<>(beh.getDeleteList());
 
-			synchronized (states) {
-				try {
-					previousStates = new Vector<>(states);
-					//we do not need to add preconditions to state since it is done by DMMain
-					//                for (String anAddList : addList) {
-					//                    if (!anAddList.contains("_history")) {
-					//                        states.remove(anAddList);
-					//                        states.add(anAddList);
-					//                    }
-					//                }
-					if (removePrecond) {
-						if( beh.getPreconditions() != null ) {
-							for (List<String> preconds : beh.getPreconditions()) {
-								for (String precond : preconds) {
-									states.remove(precond);
-								}
-							}
-						}
-					} else {
-						List<String> toRemove = new ArrayList<>();
-						for (String premise : deleteList) {
-							for (String st : states) {
-								if (premise.contains("*") && Pattern.compile(premise.replace("*", "[a-zA-Z0-9]*"))
-										.matcher(st).matches()) {
-									toRemove.add(st);
-								}
-							}
-							for (String st : toRemove) {
-								states.remove(st);
+			try {
+				previousStates = new Vector<>(states);
+				//we do not need to add preconditions to state since it is done by DMMain
+				//                for (String anAddList : addList) {
+				//                    if (!anAddList.contains("_history")) {
+				//                        states.remove(anAddList);
+				//                        states.add(anAddList);
+				//                    }
+				//                }
+				if (removePrecond) {
+					if( beh.getPreconditions() != null ) {
+						for (List<Premise> preconds : beh.getPreconditions()) {
+							for (Premise precond : preconds) {
+								states.remove(precond.getLabel());
 							}
 						}
 					}
-				} catch (Exception e) {
-					e.printStackTrace();
+				} else {
+					List<String> toRemove = new ArrayList<>();
+					for (String premise : deleteList) {
+						for (String st : states) {
+							if (premise.contains("*") && Pattern.compile(premise.replace("*", "[a-zA-Z0-9]*"))
+									.matcher(st).matches()) {
+								toRemove.add(st);
+							}
+						}
+						states.removeAll(toRemove);
+					}
 				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 			for (String goal : beh.getAddGoals()) {
 				goals.remove(goal);
@@ -690,9 +710,10 @@ public class BehaviorNetworkPlus{
 
 	/**
 	 * Protect the goals achieved
-	 * @param beh
+	 * @param beh behavior
+	 * Note: modified with weights.
 	 */
-	public void protectGoals(BehaviorPlus beh){
+	private void protectGoals(Behavior beh){
 		for (String goalTemp : beh.getAddList()) {
 			if (goals.contains(goalTemp)) {
 				goalsResolved.add(goalTemp);
@@ -703,8 +724,9 @@ public class BehaviorNetworkPlus{
 
 	/**
 	 * updates the activation of each behavior
+	 * Note: modified with weights.
 	 */
-	public void updateActivation(){
+	private void updateActivation(){
 		//activation level of a competence module y at time t
 		for(int i = 0; i < modules.size(); i++){
 			for(int j = 0; j < modules.size(); j++){
@@ -719,15 +741,19 @@ public class BehaviorNetworkPlus{
 	/**
 	 * Reset the activation of the behaviors
 	 */
-	public void reset(){
+	private void reset(){
 		//reseting
 		if(execution)
 			theta = initialTheta;
-		for (BehaviorPlus module : modules) {
+		for (Behavior module : modules) {
 			module.resetActivation(module.getActivated());
 		}
 	}
 
+	/**
+	 * Note: modified with weights.
+	 * @return
+	 */
     public int selectBehavior() {
         if (activations == null) {
             setModules(modules, modules.size() + 1);
@@ -752,9 +778,12 @@ public class BehaviorNetworkPlus{
         return indexBehActivated;
     }
 
-    private void recordActivations(){
+	/**
+	 * Note: modified with weights.
+	 */
+	private void recordActivations(){
         for (int i = 0; i < modules.size(); i++) {
-            BehaviorPlus b = modules.get(i);
+            Behavior b = modules.get(i);
             if (verbose) {
                 System.out.println("Behavior: " + b.getName() + "  activation: " + b.getActivation());
             }
@@ -786,7 +815,7 @@ public class BehaviorNetworkPlus{
         int idx = 5; //ASN
         double max = 0;
         for(int i = 0; i< modules.size(); i++){
-            BehaviorPlus beh = modules.get(i);
+            Behavior beh = modules.get(i);
             if( beh.getActivation() > theta && beh.getActivation() > max ){
                 idx = i;
             }
@@ -797,15 +826,18 @@ public class BehaviorNetworkPlus{
     }
 
 	public int getHighestActivationUsingNone(){
-		int idx = 7; //NONE
+		int idx = 7, maxPrecTrue = 0;
 		double max = 0;
 		for(int i = 0; i< modules.size(); i++){
-			BehaviorPlus beh = modules.get(i);
+			Behavior beh = modules.get(i);
 			if( beh.getName().equals("NONE")){
 				idx = i;
 			}
 			if( beh.getActivation() > theta && beh.getActivation() > max ){
 				max = beh.getActivation();
+			}
+			if( beh.getNumMatches() > maxPrecTrue ){
+				maxPrecTrue = beh.getNumMatches();
 			}
 		}
         if( max == 0){
@@ -814,6 +846,7 @@ public class BehaviorNetworkPlus{
         indexBehActivated = idx;
         nameBehaviorActivated = modules.get(idx).getId(); //getName();
         modules.get(idx).setActivation(max * 1.30);
+		modules.get(idx).setNumMatches(maxPrecTrue);
         modules.get(idx).setActivated(true);
         execution = true;
         recordActivations();
@@ -828,16 +861,17 @@ public class BehaviorNetworkPlus{
 		DecimalFormat formatter = new DecimalFormat("#0.00");
 		output = "";
         for( int i = 0; i < modulesCopy.size(); i++ ){
-            results[i] = modulesCopy.get(i).getId();
-			output += "["+modulesCopy.get(i).getName()+": "+formatter.format( modulesCopy.get(i).getActivation())+"], ";
+			Behavior bp = modulesCopy.get(i);
+            results[i] = bp.getId();
+			output += "["+bp.getName()+": ("+formatter.format( bp.getActivation())+") - ("+bp.getNumMatches()+")], ";
         }
 		output += "theta: " + theta;
         return results;
     }
 
-    public void getModulesCopy() {
+    private void getModulesCopy() {
         modulesCopy.clear();
-        for( BehaviorPlus beh : modules ){
+        for( Behavior beh : modules ){
             modulesCopy.add( beh.clone() );
         }
     }
@@ -860,7 +894,7 @@ public class BehaviorNetworkPlus{
 	}
 
 	public void resetAll() {
-		for( BehaviorPlus beh : modules ){
+		for( Behavior beh : modules ){
 			beh.reset();
 		}
 		theta = initialTheta;
