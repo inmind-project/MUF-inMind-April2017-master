@@ -1,8 +1,11 @@
 package edu.cmu.inmind.multiuser.socialreasoner.control.bn;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.regex.Pattern;
 
 /**
  * A competence module i can be described by a tuple (ci ai di zi). Where: 
@@ -14,46 +17,62 @@ import java.util.Vector;
  * @author oromero
  *
  */
-public class Behavior implements BehaviorInterface{
+public class BehaviorPlus implements Comparable<BehaviorPlus>{
 	private String name;
-	private List <String> preconditions = new Vector <String>();
-	private List <String> addList = new Vector <String>();
-	private List <String> deleteList = new Vector <String>();
-	private double activation = 0, priorActivation = 0;
-	private int id;
-	private boolean executable = false, activated = false, activatedPrior;
+    private String id;
+	private List<List<String>> preconditions = new Vector <>();
+	private List<String> addList = new Vector <>();
 	private String description;
-    private List<String> addGoals = new Vector<>();
+	private List<String> addGoals = new Vector<>();
+	private List<String> deleteList = new Vector <>();
 
-	public Behavior() {}
+	private transient double activation = 0;
+	private transient int idx;
+	private transient boolean executable = false, activated = false;
+	private transient boolean verbose = false;
+    private transient int numMatches;
 
-	public Behavior(String name, String[] preconds, String[] addlist, String[] deletelist){
+    public BehaviorPlus(String name){
 		this.name = name;
-		for(int i = 0; preconds != null && i < preconds.length; i++)
-			preconditions.add(preconds[i]);
-		for(int i = 0; addlist != null && i < addlist.length; i++)
-			addList.add(addlist[i]);
-		for(int i = 0; deletelist != null && i < deletelist.length; i++)
-			deleteList.add(deletelist[i]);
 	}
 
-    public Behavior(String name, String description, String[] preconds, String[] addlist, String[] deletelist){
+	public BehaviorPlus(String name, String[][] preconds, String[] addlist, String[] deletelist){
+		this.name = name;
+		addPreconditions(preconds);
+		addList.addAll(Arrays.asList(addlist));
+		deleteList.addAll(Arrays.asList(deletelist));
+	}
+
+    public BehaviorPlus(String name, String description, String[][] preconds, String[] addlist, String[] deletelist){
         this(name, preconds, addlist, deletelist);
         this.description = description;
     }
 
-    public Behavior(String name, String description, String[] preconds, String[] addlist, String[] deletelist, String[] addGoals){
+    public BehaviorPlus(String name, String description, String[][] preconds, String[] addlist, String[] deletelist, String[] addGoals){
         this(name, description, preconds, addlist, deletelist);
         this.description = description;
-        for(int i = 0; addGoals != null && i < addGoals.length; i++)
-            this.addGoals.add(addGoals[i]);
+        this.addGoals.addAll(Arrays.asList(addGoals));
 
     }
 
+    public void addPreconditions(String[][] preconds){
+        for(int i = 0; preconds != null && i < preconds.length; i++) {
+            List<String> precondList = new Vector<>();
+            for(int j = 0; j < preconds[i].length; j++){
+                precondList.add( preconds[i][j] );
+            }
+            preconditions.add( precondList );
+        }
+    }
+
+    public String getId() {return id;}
+    public void setId(String id) {this.id = id;}
     public String getDescription() {
         return description;
     }
-
+	public void setDescription(String description) {
+		this.description = description;
+	}
 	public List<String> getAddGoals() {
 		return addGoals;
 	}
@@ -62,6 +81,12 @@ public class Behavior implements BehaviorInterface{
 	}
 	public void setAddList(List <String> addList) {
 		this.addList = addList;
+	}
+	public void addAddList(List <String> addList) {
+		if( this.addList == null ){
+			addList = new Vector<>();
+		}
+		this.addList.addAll(addList);
 	}
 	public List <String> getDeleteList() {
 		return deleteList;
@@ -75,28 +100,13 @@ public class Behavior implements BehaviorInterface{
 	public void setActivation(double activation) {
 		this.activation = activation;
 	}
-	public double getPriorActivation() {
-		return priorActivation;
-	}
-	public void setPriorActivation(double activation) {
-		this.priorActivation = activation;
-	}
-	public boolean getActivatedPrior() {
-		return activatedPrior;
-	}
-	public void setActivationPrior(boolean activated) {
-		this.activatedPrior = activated;
-	}
-	public Collection<String> getPreconditions() {
+	public Collection<List<String>> getPreconditions() {
 		if(preconditions != null && preconditions.size() > 0)
 			return preconditions;
-		return new Vector<String>();
+		return new Vector<>();
 	}
-	public void setPreconditions(List <String> preconditions) {
-		this.preconditions = preconditions;
-	}
-	public int getId(){
-		return this.id;
+	public int getIdx(){
+		return this.idx;
 	}
 	public boolean getExecutable(){
 		return executable;
@@ -108,12 +118,7 @@ public class Behavior implements BehaviorInterface{
 		return activated;
 	}
 	public void setActivated(boolean a){
-		activatedPrior = activated;
 		activated = a;
-	}
-
-	public void setPrecondition(String proposition){
-		preconditions.add(proposition);
 	}
 
 	/**
@@ -122,9 +127,25 @@ public class Behavior implements BehaviorInterface{
 	 * @return
 	 */
 	public boolean isSuccesor(String proposition){
-		if(addList.contains(proposition) == true)
-			return true;
-		return false;
+        if( addList.contains(proposition) ) {
+            return true;
+        }else{
+            for( String premise : addList ){
+				if( ((premise.startsWith("do_") || premise.startsWith("start_") || premise.startsWith("feedback_")
+						|| premise.startsWith("end_") || premise.startsWith("feedback_") || premise.startsWith("ask_")
+						|| premise.startsWith("outcome_"))) &&
+						(proposition.startsWith("do_") || proposition.startsWith("start_") || proposition.startsWith("feedback_")
+								|| proposition.startsWith("end_") || proposition.startsWith("feedback_") || proposition.startsWith("ask_")
+								|| proposition.startsWith("outcome_"))){
+					System.out.println("");
+				}
+				if( premise.contains("*") && Pattern.compile(premise.replace("*", "[a-zA-Z0-9_]*"))
+                        .matcher(proposition).matches()) {
+                    return true;
+                }
+            }
+        }
+        return false;
 	}
 
 	/**
@@ -133,10 +154,19 @@ public class Behavior implements BehaviorInterface{
 	 * @return
 	 */
 	public boolean isInhibition(String proposition){
-		if(deleteList.contains(proposition) == true)
-			return true;
+		if( deleteList.contains(proposition) ) {
+            return true;
+        }else{
+            for( String premise : deleteList ){
+				if( premise.contains("*") && Pattern.compile(premise.replace("*", "[a-zA-Z0-9_]*"))
+                        .matcher(proposition).matches()) {
+                        return true;
+                }
+            }
+        }
 		return false;
 	}
+
 	public void setAddList(String proposition){
 		addList.add(proposition);
 	}
@@ -147,8 +177,18 @@ public class Behavior implements BehaviorInterface{
 	 * @return
 	 */
 	public boolean isPrecondition(String proposition){
-		if(preconditions.contains(proposition))
-			return true;
+       for(List<String> precondList : preconditions ){
+            for( String precond : precondList ){
+				if( precond.contains("*")){
+                    if ( Pattern.compile( precond.replace("*", "[a-zA-Z0-9_]*") ).matcher( proposition ).matches() ){
+                        return true;
+                    }
+                }else if( precond.equals(proposition) ){
+                    return true;
+                }
+
+            }
+        }
 		return false;
 	}
 
@@ -161,13 +201,17 @@ public class Behavior implements BehaviorInterface{
 	 */
 	public double calculateInputFromState(List<String> states, int[] matchedStates, double phi){
 		double activation = 0;
-		for(int i = 0; i < preconditions.size(); i++){
-			int index = states.indexOf(preconditions.get(i));
-			if(index != -1){
-				double temp = phi * (1.0d / (double) matchedStates[index]) * (1.0d / (double) preconditions.size());
-				activation += temp;
-				//System.out.println("state gives "+ this.name +" an extra activation of "+temp);
-			}
+		for(List<String> condList : preconditions ){
+            for(String cond : condList ) {
+                int index = states.indexOf( cond );
+                if (index != -1) {
+                    double temp = phi * (1.0d / (double) matchedStates[index]) * (1.0d / (double) preconditions.size());
+                    activation += temp;
+                    if(verbose) {
+						System.out.println("state gives " + this.name + " an extra activation of " + temp + " for " + cond);
+					}
+                }
+            }
 		}
 		return activation;
 	}
@@ -186,7 +230,9 @@ public class Behavior implements BehaviorInterface{
 			if(index != -1){
 				double temp = gamma * (1.0d / (double) achievedPropositions[index]) * (1.0d / (double) addList.size());
 				activation += temp;
-				//System.out.println("goals give "+ this.name +" an extra activation of "+temp);
+				if(verbose) {
+					System.out.println("goals give " + this.name + " an extra activation of " + temp);
+				}
 			}
 		}
 		return activation;
@@ -207,7 +253,9 @@ public class Behavior implements BehaviorInterface{
 			if(index != -1){
 				double temp = delta * (1.0d / (double) undoPropositions[index]) * (1.0d / (double) deleteList.size());
 				activation += temp;
-				//System.out.println("goalsR give "+ this.name +" an extra activation of "+temp);
+				if(verbose) {
+					System.out.println("goalsR give " + this.name + " an extra activation of " + temp);
+				}
 			}
 		}
 		return activation;
@@ -219,29 +267,50 @@ public class Behavior implements BehaviorInterface{
 	 * of S (t)), and 0 (false) otherwise.
 	 */
 	public boolean isExecutable (List <String> states){
-		List<String> preconds = new Vector<String> (this.getPreconditions());
-		for(int i = 0; i < preconds.size(); i++){
-			if(states.contains(preconds.get(i)) == false){
-				executable = false;
-				return executable;
+		Vector<List<String>> preconds = new Vector<> (this.getPreconditions());
+		external : for(List<String> precondRow : preconds ){
+			for(String precond : precondRow ){
+				if(states.contains(precond)){
+//					continue external;
+					//TODO: remove this. This is just for WEF Demo
+					return executable = true;
+				}
 			}
+			return executable = false;
 		}
-		executable = true;
-		return executable;
+		return executable = true;
+
+//        executable = false;
+//        for(List<String> precondRow : preconds ){
+//            for(String precond : precondRow ){
+//                if(states.contains(precond)){
+//                    executable = true;
+//                    break;
+//                }
+//            }
+//            if( !executable ){
+//                return executable;
+//            }else{
+//                executable = false;
+//            }
+//        }
+//        return executable;
 	}
+
+    public boolean isExecutable (int maximum){
+      return executable = numMatches >= maximum;
+    }
 
 	public void resetActivation(boolean reset){
 		if(reset){
-			priorActivation = activation;
-			activation = 0;
+//			activation = 0;
+			activation = activation/2;
 		}
 		executable = false;
-		activatedPrior = activated;
 		activated = false;
 	}
 
 	public void updateActivation(double act){
-		priorActivation = activation;
 		activation += act;
 		if(activation < 0)
 			activation = 1;
@@ -251,7 +320,48 @@ public class Behavior implements BehaviorInterface{
 		activation *= factor;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setIdx(int idx) {
+		this.idx = idx;
 	}
+
+    @Override
+    public int compareTo(BehaviorPlus o) {
+        return Double.compare(this.getActivation(), o.getActivation());
+    }
+
+    @Override
+    public BehaviorPlus clone(){
+        BehaviorPlus bp = new BehaviorPlus( this.name );
+        bp.setActivation( this.activation );
+        bp.setActivated( this.activated );
+        bp.setAddList( this.getAddList() );
+        bp.setDeleteList( this.getDeleteList() );
+        bp.setDescription( this.getDescription() );
+        bp.setIdx(this.idx);
+        bp.setId(this.id);
+        return bp;
+    }
+
+	public void reset() {
+		activation = 0;
+		executable = false;
+		activated = false;
+		numMatches = 0;
+	}
+
+    public int calculateMatchPreconditions(CopyOnWriteArrayList<String> states) {
+        numMatches = 0;
+        for( List<String> precondList : preconditions ){
+            for( String precond : precondList ){
+                if( states.contains(precond) ){
+                    numMatches++;
+                }
+            }
+        }
+        return numMatches;
+    }
+
+    public int getNumMatches() {
+        return numMatches;
+    }
 }

@@ -15,7 +15,7 @@ import java.util.*;
 /**Questions
  * Created by oscarr on 4/22/16.`
  */
-public class MainController{
+public class SocialReasonerController{
     public static boolean verbose = false;
     public static boolean isBeginningConversation = true;
     public static boolean isNonVerbalWindowON = true;
@@ -34,7 +34,7 @@ public class MainController{
     public static String[] conversationalStrategies = new String[7];
     public static String behavior;
     public static boolean pause;
-    public static MainController mainController;
+    public static SocialReasonerController mainController;
     public static boolean stop = false;
     public static Queue<SystemIntent> intentsQueue ;
     public static Properties properties = new Properties();
@@ -81,7 +81,7 @@ public class MainController{
     private String pathToAnnotatedLog;
     private String pathToExcelOutput;
 
-    public MainController(){
+    public SocialReasonerController(){
         System.out.println("Controller instanciated");
 
         loadProperties();
@@ -158,7 +158,7 @@ public class MainController{
         if( flagStart || isFirstTime ){
             System.out.println("\nRe-starting...");
             intentsQueue = new LinkedList<>();
-            MainController.userCSHistory = UserCSHistory.getInstance();
+            SocialReasonerController.userCSHistory = UserCSHistory.getInstance();
 
             //singletons
             blackboard = Blackboard.getInstance();
@@ -292,7 +292,7 @@ public class MainController{
         if( previousIntent != null ) {
             blackboard.removeMessages(previousIntent.getIntent() + ":" + previousIntent.getPhase());
         }
-        blackboard.setStatesString(intent.getIntent() + ":" + intent.getPhase(), "MainController" );
+        blackboard.setStatesString(intent.getIntent() + ":" + intent.getPhase(), "SocialReasonerController" );
     }
 
     private void addUserCSstates() {
@@ -410,14 +410,14 @@ public class MainController{
 
     private boolean extractTypeOfTRmessage(String message) {
         if( message.contains("start") ) {
-            MainController.flagStart = true;
+            SocialReasonerController.flagStart = true;
         }else if( message.contains("set") ){
             return true;
         } else if( message.contains( "reset" ) ){
-            MainController.flagReset = true;
+            SocialReasonerController.flagReset = true;
             return true;
         }else if( message.contains("stop") ){
-            MainController.stop = true;
+            SocialReasonerController.stop = true;
         }
         return false;
     }

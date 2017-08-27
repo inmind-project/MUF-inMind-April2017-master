@@ -1,6 +1,6 @@
 package edu.cmu.inmind.multiuser.socialreasoner.control.reasoners;
 
-import edu.cmu.inmind.multiuser.socialreasoner.control.MainController;
+import edu.cmu.inmind.multiuser.socialreasoner.control.SocialReasonerController;
 import edu.cmu.inmind.multiuser.socialreasoner.control.bn.BehaviorNetworkPlus;
 import edu.cmu.inmind.multiuser.socialreasoner.control.bn.BehaviorPlus;
 import edu.cmu.inmind.multiuser.socialreasoner.control.controllers.BehaviorNetworkController;
@@ -75,10 +75,10 @@ public class SocialReasoner {
     public void execute(SystemIntent intent){
         try {
             network.setState(blackboard.getModel());
-            if(MainController.verbose) System.out.println("*** States: " + Arrays.toString( blackboard.getModel().toArray() ) );
+            if(SocialReasonerController.verbose) System.out.println("*** States: " + Arrays.toString( blackboard.getModel().toArray() ) );
             boolean isDecisionMade = false, usingHighestActivation = false;
             while( !isDecisionMade ) {
-                if(MainController.verbose) {
+                if(SocialReasonerController.verbose) {
                     System.out.println("cycle: " + cycles);
                 }
                 int idx = network.selectBehavior();
@@ -88,15 +88,15 @@ public class SocialReasoner {
                         usingHighestActivation = true;
                     }
                     String behaviorName = network.getNameBehaviorActivated();
-                    socialHistory.add(System.currentTimeMillis(), behaviorName, MainController.rapportLevel, MainController.rapportScore);
-                    MainController.conversationalStrategies = network.getModuleNamesByHighestActivation();
+                    socialHistory.add(System.currentTimeMillis(), behaviorName, SocialReasonerController.rapportLevel, SocialReasonerController.rapportScore);
+                    SocialReasonerController.conversationalStrategies = network.getModuleNamesByHighestActivation();
                     if( !usingHighestActivation ){
-                        Utils.exchange(MainController.conversationalStrategies, behaviorName);
+                        Utils.exchange(SocialReasonerController.conversationalStrategies, behaviorName);
                     }
-                    MainController.currentTurn++;
+                    SocialReasonerController.currentTurn++;
 
                     isDecisionMade = true;
-                    if (MainController.useSRPlot) {
+                    if (SocialReasonerController.useSRPlot) {
                         //visualizer.printFSMOutput(output);
                         //visualizer.printStates(network.getStateString(), current.phase, current.name);
                         //Utils.sleep( 3000 );
@@ -108,7 +108,7 @@ public class SocialReasoner {
                 } else {
                     cycles++;
                 }
-                if (MainController.useSRPlot) {
+                if (SocialReasonerController.useSRPlot) {
                     visualizer.plot(network.getActivations(), network.getModules().size(), name, network.getTheta(),
                             network.getNameBehaviorActivated());
                 }
@@ -119,9 +119,9 @@ public class SocialReasoner {
         } catch (Exception e) {
             e.printStackTrace();
         }finally {
-            if( MainController.flagResetTR || MainController.flagReset ){
-                if( MainController.flagResetTR ) {
-                    MainController.flagResetTR = false;
+            if( SocialReasonerController.flagResetTR || SocialReasonerController.flagReset ){
+                if( SocialReasonerController.flagResetTR ) {
+                    SocialReasonerController.flagResetTR = false;
                 }
             }
         }
@@ -136,7 +136,7 @@ public class SocialReasoner {
         SROutputMessage srOutputMessage = new SROutputMessage();
         srOutputMessage.addIntent(intent, convStrategies);
         srOutputMessage.setPhase(intent.getPhase());
-        srOutputMessage.setRapport(MainController.rapportScore);
+        srOutputMessage.setRapport(SocialReasonerController.rapportScore);
 
         //json = json.replace("}],\"rapport\"", ",\"conversational_strategies\":" + jsonConvStrat + "}],\"rapport\"");
     }

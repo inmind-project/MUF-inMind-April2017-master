@@ -9,7 +9,7 @@ import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.controller.log.Loggable;
 import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
 import edu.cmu.inmind.multiuser.controller.plugin.StateType;
-import edu.cmu.inmind.multiuser.socialreasoner.control.MainController;
+import edu.cmu.inmind.multiuser.socialreasoner.control.SocialReasonerController;
 import edu.cmu.inmind.multiuser.socialreasoner.control.util.Utils;
 import edu.cmu.inmind.multiuser.socialreasoner.model.SocialReasonerOutput;
 import edu.cmu.inmind.multiuser.socialreasoner.model.intent.SystemIntent;
@@ -24,7 +24,7 @@ import edu.cmu.inmind.multiuser.socialreasoner.model.intent.SystemIntent;
         SaraCons.MSG_USER_MODEL_LOADED})
 public class SocialReasonerComponent extends PluggableComponent {
 
-    private MainController socialController;
+    private SocialReasonerController socialController;
     String systemStrategy = "";
     private SROutput sendToNLG;
     private int rapport=4;
@@ -37,7 +37,7 @@ public class SocialReasonerComponent extends PluggableComponent {
     public void startUp(){
         super.startUp();
         //Create a new thread for the social reasoner
-        socialController = new MainController();
+        socialController = new SocialReasonerController();
     }
 
     @Loggable

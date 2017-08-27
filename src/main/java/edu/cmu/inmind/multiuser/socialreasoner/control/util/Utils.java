@@ -263,10 +263,6 @@ public class Utils {
             while (sc.hasNextLine()) {
                 json += sc.nextLine();
             }
-//            if( clazz.equals(BehaviorNetworkPlus.class) ){
-//                gson = new GsonBuilder().registerTypeAdapter(BehaviorNetworkPlus.class, new InterfaceAdapter<BehaviorNetworkPlus>())
-//                        .create();
-//            }
             return gson.fromJson( json, clazz);
         }catch (Exception e){
             e.printStackTrace();
