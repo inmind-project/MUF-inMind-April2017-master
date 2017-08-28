@@ -1,7 +1,7 @@
 package edu.cmu.inmind.multiuser.socialreasoner;
 
 import edu.cmu.inmind.multiuser.common.model.Entity;
-import edu.cmu.inmind.multiuser.socialreasoner.control.MainController;
+import edu.cmu.inmind.multiuser.socialreasoner.control.SocialReasonerController;
 import edu.cmu.inmind.multiuser.socialreasoner.control.util.Utils;
 import edu.cmu.inmind.multiuser.socialreasoner.model.intent.SystemIntent;
 import org.junit.Assert;
@@ -16,7 +16,7 @@ public class SocialReasonerTest {
 
     @Test public void testSocialReasonerBasic() {
         // startup social reasoner,
-        MainController socialController = new MainController();
+        SocialReasonerController socialController = new SocialReasonerController();
         socialController.setNonVerbals(false, false);
         socialController.setUserConvStrategy("ASN");
         socialController.setRapportScore(4);

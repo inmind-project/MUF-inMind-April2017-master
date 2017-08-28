@@ -1,24 +1,26 @@
 package edu.cmu.inmind.multiuser.socialreasoner.control.emulators;
 
-import edu.cmu.inmind.multiuser.socialreasoner.control.MainController;
-import edu.cmu.inmind.multiuser.socialreasoner.control.util.Utils;
+
+import edu.cmu.inmind.multiuser.socialreasoner.control.SocialReasonerController;
 import edu.cmu.inmind.multiuser.socialreasoner.model.Constants;
+import edu.cmu.inmind.multiuser.socialreasoner.model.intent.SystemIntent;
 
 import java.util.ArrayList;
 
 /**
  * Created by oscarr on 9/12/16.
  */
-public class Emulator extends Thread {
+public class Emulator{
     private ArrayList<EmulationStep> steps = new ArrayList();
     private boolean stop = false;
+    private SocialReasonerController socialReasonerController;
+    private int step;
 
-    public Emulator() {
-        super("emulator thread");
+    public void setSocialReasonerController(SocialReasonerController socialReasonerController) {
+        this.socialReasonerController = socialReasonerController;
     }
 
-    @Override
-    public void run() {
+    public Emulator() {
 //        // incremental engagement
 //        steps.add( new EmulationStep( 1, Constants.ASN_USER_CS, false, false, 1 ) );
 //        steps.add( new EmulationStep( 2, Constants.ASN_USER_CS, false, true, 2 ) );
@@ -64,43 +66,53 @@ public class Emulator extends Thread {
 //        steps.add( new EmulationStep( 4, Constants.ASN_USER_CS, false, true, 20 ) );
 
         // low rapport
-        steps.add( new EmulationStep( 4, Constants.ASN_USER_CS, false, false) );
-        steps.add( new EmulationStep( 5, Constants.ASN_USER_CS, false, false ) );
-        steps.add( new EmulationStep( 6, Constants.ASN_USER_CS, false, false ) );
-        steps.add( new EmulationStep( 6, Constants.ASN_USER_CS, false, false) );
-        steps.add( new EmulationStep( 7, Constants.PR_USER_CS, false, false ) );
-        steps.add( new EmulationStep( 7, Constants.ASN_USER_CS, false, false ) );
-        steps.add( new EmulationStep( 6, Constants.ASN_USER_CS, false, false ) );
-        steps.add( new EmulationStep( 6, Constants.ASN_USER_CS, false, false ) );
-        steps.add( new EmulationStep( 5, Constants.ASN_USER_CS, false, false ) );
-        steps.add( new EmulationStep( 5, Constants.PR_USER_CS, false, false ) );
-        steps.add( new EmulationStep( 4, Constants.ASN_USER_CS, false, false ) );
-        steps.add( new EmulationStep( 4, Constants.ASN_USER_CS, false, false ) );
-        steps.add( new EmulationStep( 3, Constants.PR_USER_CS, false, false ) );
-        steps.add( new EmulationStep( 3, Constants.ASN_USER_CS, false, false ) );
-        steps.add( new EmulationStep( 2, Constants.ASN_USER_CS, false, false ) );
-        steps.add( new EmulationStep( 2, Constants.VSN_USER_CS, false, false ) );
-        steps.add( new EmulationStep( 2, Constants.ASN_USER_CS, false, false ) );
-        steps.add( new EmulationStep( 1, Constants.ASN_USER_CS, false, false ) );
-        steps.add( new EmulationStep( 1, Constants.ASN_USER_CS, false, false ) );
-        steps.add( new EmulationStep( 1, Constants.PR_USER_CS, false, false ) );
-        while( !stop ){
-            Utils.sleep(50);
-        }
+        steps.add( new EmulationStep( 4, Constants.ASN_USER_CS, false, false, true, "greeting") );
+        steps.add( new EmulationStep( 5, Constants.ASN_USER_CS, false, false, true, "greeting") );
+        steps.add( new EmulationStep( 6, Constants.ASN_USER_CS, false, false, true, "greeting" ) );
+        steps.add( new EmulationStep( 6, Constants.ASN_USER_CS, false, false, true, "greeting") );
+        steps.add( new EmulationStep( 7, Constants.PR_USER_CS, false, false, true, "greeting") );
+        steps.add( new EmulationStep( 7, Constants.ASN_USER_CS, false, false, true, "greeting") );
+        steps.add( new EmulationStep( 6, Constants.ASN_USER_CS, false, false, true, "greeting") );
+        steps.add( new EmulationStep( 6, Constants.ASN_USER_CS, false, false, true, "greeting") );
+        steps.add( new EmulationStep( 5, Constants.ASN_USER_CS, false, false, true, "greeting") );
+        steps.add( new EmulationStep( 5, Constants.PR_USER_CS, false, false, true, "greeting") );
+        steps.add( new EmulationStep( 4, Constants.ASN_USER_CS, false, false, true, "greeting") );
+        steps.add( new EmulationStep( 4, Constants.ASN_USER_CS, false, false, true, "greeting") );
+        steps.add( new EmulationStep( 3, Constants.PR_USER_CS, false, false, true, "greeting") );
+        steps.add( new EmulationStep( 3, Constants.ASN_USER_CS, false, false, true, "greeting") );
+        steps.add( new EmulationStep( 2, Constants.ASN_USER_CS, false, false, true, "greeting") );
+        steps.add( new EmulationStep( 2, Constants.VSN_USER_CS, false, false, true, "greeting") );
+        steps.add( new EmulationStep( 2, Constants.ASN_USER_CS, false, false, true, "greeting") );
+        steps.add( new EmulationStep( 1, Constants.ASN_USER_CS, false, false, true, "greeting") );
+        steps.add( new EmulationStep( 1, Constants.ASN_USER_CS, false, false, true, "greeting") );
+        steps.add( new EmulationStep( 1, Constants.PR_USER_CS, false, false, true, "greeting") );
     }
 
-    public EmulationStep execute(int step){
+    public EmulationStep execute(){
         EmulationStep scriptResult = null;
         if( !steps.isEmpty() ){
+            if( SocialReasonerController.verbose ) System.out.println(
+                    String.format("\n\n================================================================================" +
+                            "================================================================================\n" +
+                            "Running Emulator Step: %s\n|", (++step) ));
             EmulationStep scriptStep = steps.get(0);
-            MainController.calculateRapScore(String.valueOf(scriptStep.getRapportScore()));
-            MainController.setNonVerbals(scriptStep.isSmiling(), scriptStep.isGazeAtPartner());
-            MainController.userConvStrategy = scriptStep.getUserCS();
-            MainController.userCSHistory.add( );
-            MainController.setAvailableSE(scriptStep.isAvailableSharedExperiences());
+            // rapport level and rapport delta
+            SocialReasonerController.calculateRapScore(String.valueOf(scriptStep.getRapportScore()));
+            // so far, we are only using smile and eye gaze
+            SocialReasonerController.setNonVerbals(scriptStep.isSmiling(), scriptStep.isGazeAtPartner());
+            // this is UCS classifier's output
+            SocialReasonerController.userConvStrategy = scriptStep.getUserCS();
+            // just user history, system history is internally done by social reasoenr
+            SocialReasonerController.userCSHistory.add( );
+            // is there available shared experiences?
+            SocialReasonerController.setAvailableSE(scriptStep.isAvailableSharedExperiences());
             scriptResult = scriptStep;
             steps.remove( scriptStep );
+            // system intent according to DM or TR (movie recommendation?)
+            socialReasonerController.addSystemIntent( new SystemIntent( scriptStep.getSystemIntent(), "phase" ));
         }
         return scriptResult;
     }
+
+
 }

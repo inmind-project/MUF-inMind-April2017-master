@@ -1,6 +1,7 @@
 package edu.cmu.inmind.multiuser.socialreasoner.control.util;
 
 import com.google.gson.Gson;
+import com.rits.cloning.Cloner;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -8,10 +9,7 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Scanner;
-import java.util.TimeZone;
+import java.util.*;
 
 /**
  * Created by oscarr on 4/20/16.
@@ -263,8 +261,8 @@ public class Utils {
             while (sc.hasNextLine()) {
                 json += sc.nextLine();
             }
-//            if( clazz.equals(BehaviorNetworkPlus.class) ){
-//                gson = new GsonBuilder().registerTypeAdapter(BehaviorNetworkPlus.class, new InterfaceAdapter<BehaviorNetworkPlus>())
+//            if( clazz.equals(BehaviorNetwork.class) ){
+//                gson = new GsonBuilder().registerTypeAdapter(BehaviorNetwork.class, new InterfaceAdapter<BehaviorNetwork>())
 //                        .create();
 //            }
             return gson.fromJson( json, clazz);
@@ -328,13 +326,41 @@ public class Utils {
     }
 
     public static void exchange(String[] conversationalStrategies, String behaviorName) {
-        int idx = -1;
-        for( int i = 0; i < conversationalStrategies.length && idx == -1; i++ ){
-            if(conversationalStrategies[i].equals(behaviorName) ){
-                idx = i;
+        if( !conversationalStrategies[0].equals(behaviorName) ) {
+            ArrayList<String> list = new ArrayList(Arrays.asList(conversationalStrategies));
+            list.remove(behaviorName);
+            list.add(0, behaviorName);
+            for (int i = 0; i < list.size(); i++) {
+                conversationalStrategies[i] = list.get(i);
             }
         }
-        conversationalStrategies[idx] = conversationalStrategies[0];
-        conversationalStrategies[0] = behaviorName;
+    }
+
+    private static Cloner cloner = new Cloner();
+    public static <T> T clone( T object ){
+        return cloner.deepClone(object);
+    }
+
+    public static <T extends List> T cloneList( T list ){
+        return cloner.deepClone(list);
+    }
+
+    public static ArrayList cloneArray( ArrayList list ){
+        ArrayList result = new ArrayList(list.size());
+        for( Object element : list ){
+            result.add( cloner.deepClone(element) );
+        }
+        return result;
+    }
+
+    private static long time;
+    public static void startCrono(){
+        time = System.currentTimeMillis();
+    }
+
+    public static void stopCrono(String processName){
+        time = System.currentTimeMillis() - time;
+        System.out.println( String.format("   |-- ELAPSED TIME: %sms FOR PROCESS: %s", time, processName));
+        time = -1;
     }
 }

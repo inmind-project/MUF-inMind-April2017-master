@@ -1,6 +1,6 @@
 package edu.cmu.inmind.multiuser.socialreasoner.control.emulators;
 
-import edu.cmu.inmind.multiuser.socialreasoner.control.MainController;
+import edu.cmu.inmind.multiuser.socialreasoner.control.SocialReasonerController;
 import edu.cmu.inmind.multiuser.socialreasoner.model.intent.SystemIntent;
 
 import java.util.ArrayList;
@@ -12,17 +12,17 @@ import java.util.Scanner;
  */
 public class SystemIntentEmulator {
     private List<SystemIntentStep> steps = new ArrayList<>();
-    private boolean inputFromConsole = true;
+    private boolean inputFromConsole = false;
     private Scanner scanner = new Scanner(System.in);
-    private ExcelReaderWriter excelReaderWriter;
+    //private ExcelReaderWriter excelReaderWriter;
 
-    public boolean createScript(ExcelReaderWriter excelReaderWriter){
-        this.excelReaderWriter = excelReaderWriter;
-        excelReaderWriter.openWorkbook("SocialReasonerTests.xlsx");
-        steps = excelReaderWriter.readSheet();
-        System.out.println("Scenario: " + excelReaderWriter.getScenarioName() );
-        return !steps.isEmpty();
-    }
+//    public boolean createScript(ExcelReaderWriter excelReaderWriter){
+//        this.excelReaderWriter = excelReaderWriter;
+//        excelReaderWriter.openWorkbook("SocialReasonerTests.xlsx", true);
+//        steps = excelReaderWriter.readSheet();
+//        System.out.println("Scenario: " + excelReaderWriter.getScenarioName() );
+//        return !steps.isEmpty();
+//    }
 
     public SystemIntent execute(){
         SystemIntent scriptResult = null;
@@ -33,13 +33,13 @@ public class SystemIntentEmulator {
         }else{
             if( !steps.isEmpty() ){
                 SystemIntentStep scriptStep = steps.get(0);
-                MainController.userCSHistory.add( );
-                MainController.calculateRapScore(String.valueOf(scriptStep.getRapportScore()));
-                MainController.setNonVerbals(scriptStep.isSmiling(), scriptStep.isGazeAtPartner());
-                MainController.userConvStrategy = scriptStep.getUserCS();
-                MainController.setAvailableSE(scriptStep.isAvailableSharedExperiences());
+                SocialReasonerController.userCSHistory.add( );
+                SocialReasonerController.calculateRapScore(String.valueOf(scriptStep.getRapportScore()));
+                SocialReasonerController.setNonVerbals(scriptStep.isSmiling(), scriptStep.isGazeAtPartner());
+                SocialReasonerController.userConvStrategy = scriptStep.getUserCS();
+                SocialReasonerController.setAvailableSE(scriptStep.isAvailableSharedExperiences());
                 scriptResult = new SystemIntent( scriptStep.getIntent(), scriptStep.getPhase() );
-                if( MainController.verbose ) {
+                if( SocialReasonerController.verbose ) {
                     System.out.println("\n\n=============================================================\n" +
                             "Running Emulated Step: " + scriptStep.toString());
                 }
@@ -54,11 +54,11 @@ public class SystemIntentEmulator {
         return steps.isEmpty();
     }
 
-    public boolean checkReset() {
-        return isEmpty() && !excelReaderWriter.checkFinished();
-    }
-
-    public void writeComparison() {
-        excelReaderWriter.writeComparison();
-    }
+//    public boolean checkReset() {
+//        return isEmpty() && !excelReaderWriter.checkFinished();
+//    }
+//
+//    public void writeComparison() {
+//        excelReaderWriter.writeComparison();
+//    }
 }

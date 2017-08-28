@@ -11,12 +11,14 @@ public class EmulationStep {
     protected boolean isSmiling;
     protected boolean isGazeAtPartner;
     protected boolean availableSharedExperiences;
+    protected String systemIntent;
 
-    public EmulationStep(double rapportScore, String userCS, boolean isSmiling, boolean isGazeAtPartner) {
+    public EmulationStep(double rapportScore, String userCS, boolean isSmiling, boolean isGazeAtPartner, String systemIntent) {
         this.rapportScore = rapportScore;
         this.userCS = convertCS( userCS );
         this.isSmiling = isSmiling;
         this.isGazeAtPartner = isGazeAtPartner;
+        this.systemIntent = systemIntent;
     }
 
     private String convertCS(String userCS) {
@@ -36,12 +38,12 @@ public class EmulationStep {
             return Constants.QESD_USER_CS;
         else if( userCS.equals("ACK") )
             return Constants.ACK_USER_CS;
-        System.err.println("\n\n************** USER CONVERSATIONAL STRATEGY WASNT RECOGNIZED ******");
         return userCS;
     }
 
-    public EmulationStep(double rapportScore, String userCS, boolean isSmiling, boolean isGazeAtPartner, boolean availableSE) {
-        this(rapportScore, userCS, isSmiling, isGazeAtPartner);
+    public EmulationStep(double rapportScore, String userCS, boolean isSmiling, boolean isGazeAtPartner,
+                         boolean availableSE, String systemIntent) {
+        this(rapportScore, userCS, isSmiling, isGazeAtPartner, systemIntent);
         this.availableSharedExperiences = availableSE;
     }
 
@@ -83,5 +85,9 @@ public class EmulationStep {
 
     public void setIsGazeAtPartner(boolean isGazeAtPartner) {
         this.isGazeAtPartner = isGazeAtPartner;
+    }
+
+    public String getSystemIntent() {
+        return systemIntent;
     }
 }

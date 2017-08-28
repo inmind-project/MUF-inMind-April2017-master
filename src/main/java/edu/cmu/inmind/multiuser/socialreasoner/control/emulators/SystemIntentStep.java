@@ -10,14 +10,14 @@ public class SystemIntentStep extends EmulationStep {
 
     public SystemIntentStep(String intent, String phase, double rapportScore, String userCS, boolean isSmiling,
                                 boolean isGazeAtPartner) {
-        super(rapportScore, userCS, isSmiling, isGazeAtPartner);
+        super(rapportScore, userCS, isSmiling, isGazeAtPartner, "");
         this.intent = intent;
         this.phase = phase;
     }
 
     public SystemIntentStep(String intent, String phase, double rapportScore, String userCS, boolean isSmiling,
                                 boolean isGazeAtPartner, boolean availableSE) {
-        super(rapportScore, userCS, isSmiling, isGazeAtPartner, availableSE);
+        super(rapportScore, userCS, isSmiling, isGazeAtPartner, availableSE, "");
         this.intent = intent;
         this.phase = phase;
     }

@@ -1,6 +1,6 @@
 package edu.cmu.inmind.multiuser.socialreasoner.model.history;
 
-import edu.cmu.inmind.multiuser.socialreasoner.control.MainController;
+import edu.cmu.inmind.multiuser.socialreasoner.control.SocialReasonerController;
 import edu.cmu.inmind.multiuser.socialreasoner.model.Constants;
 import edu.cmu.inmind.multiuser.socialreasoner.model.blackboard.Blackboard;
 
@@ -27,8 +27,8 @@ public class UserCSHistory extends SocialHistory {
     }
 
     public void add(){
-        if( !MainController.isBeginningConversation ) {
-            add(System.currentTimeMillis(), MainController.userConvStrategy, MainController.rapportLevel, MainController.rapportScore);
+        if( !SocialReasonerController.isBeginningConversation ) {
+            add(System.currentTimeMillis(), SocialReasonerController.userConvStrategy, SocialReasonerController.rapportLevel, SocialReasonerController.rapportScore);
         }
     }
 
