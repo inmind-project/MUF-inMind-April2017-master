@@ -1,7 +1,5 @@
-package edu.cmu.inmind.multiuser.socialreasoner.control.controllers;
+package edu.cmu.inmind.multiuser.socialreasoner.control.bn;
 
-import edu.cmu.inmind.multiuser.socialreasoner.control.bn.BehaviorNetworkPlus;
-import edu.cmu.inmind.multiuser.socialreasoner.control.bn.BehaviorPlus;
 import edu.cmu.inmind.multiuser.socialreasoner.model.blackboard.Blackboard;
 
 import java.util.List;
@@ -12,11 +10,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * Created by oscarr on 4/28/16.
  */
 public class BehaviorNetworkController {
-    protected BehaviorNetworkPlus network;
+    protected BehaviorNetwork network;
 //    protected List<String> states = new Vector<>();
     protected CopyOnWriteArrayList<String> states = new CopyOnWriteArrayList<>();
     protected List<String> goals = new Vector<>();
-    protected List<BehaviorPlus> modules = new Vector<>();
+    protected List<Behavior> modules = new Vector<>();
     protected int NUM_BEHAVIORS;
     protected int NUM_VARIABLES;
     protected String title;
@@ -27,15 +25,15 @@ public class BehaviorNetworkController {
 
     protected String name;
 
-    public BehaviorNetworkPlus getBN() {
+    public BehaviorNetwork getBN() {
         return network;
     }
 
-    public void setBN(BehaviorNetworkPlus bn) {
+    public void setBN(BehaviorNetwork bn) {
         this.network = bn;
     }
 
-    public BehaviorNetworkPlus createBN(){
+    public BehaviorNetwork createBN(){
         return null;
     }
 
@@ -67,9 +65,9 @@ public class BehaviorNetworkController {
         String deleteString = "";
         try {
             if (network.isRemovePrecond()) {
-                for (List<String> preconds : network.getModules().get(network.getIdxBehActivated()).getPreconditions()) {
-                    for (String precond : preconds) {
-                        deleteString += precond + ":";
+                for (List<Premise> preconds : network.getModules().get(network.getIdxBehActivated()).getPreconditions()) {
+                    for (Premise precond : preconds) {
+                        deleteString += precond.getLabel() + ":";
                     }
                 }
             } else {
@@ -109,7 +107,7 @@ public class BehaviorNetworkController {
         return network.getState();
     }
 
-    public BehaviorNetworkPlus getNetwork() {
+    public BehaviorNetwork getNetwork() {
         return network;
     }
 

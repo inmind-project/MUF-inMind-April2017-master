@@ -1,6 +1,6 @@
 package edu.cmu.inmind.multiuser.socialreasoner.view.emulators;
 
-import edu.cmu.inmind.multiuser.socialreasoner.control.MainController;
+import edu.cmu.inmind.multiuser.socialreasoner.control.SocialReasonerController;
 import edu.cmu.inmind.multiuser.socialreasoner.control.util.Utils;
 import edu.cmu.inmind.multiuser.socialreasoner.model.Constants;
 import edu.cmu.inmind.multiuser.socialreasoner.model.blackboard.Blackboard;
@@ -314,20 +314,11 @@ public class InputController {
             utterance = winnerTemplate;
         }
         mapping = mappings.get( utterance );
-        if( MainController.useFSM ){
-            if (mapping != null) {
-                //TaskReasoner.inputFromUser = mapping.intention;
-            }else{
-                //TaskReasoner.inputFromUser = originalUtterance;
-            }
-            MainController.noInputFlag = false;
-        }else {
-            if (mapping != null) {
-                phase = mapping.phase;
-                String extracted = mapping.phase + ":" + mapping.intention;
-                blackboard.setStatesString(extracted, "InputEmulator");
-                return extracted;
-            }
+        if (mapping != null) {
+            phase = mapping.phase;
+            String extracted = mapping.phase + ":" + mapping.intention;
+            blackboard.setStatesString(extracted, "InputEmulator");
+            return extracted;
         }
         return "";
     }
@@ -352,7 +343,7 @@ public class InputController {
 
     public void extractInputa(String message) {
         String input = inputEmulator.userInput.getText() + "\n\n" + "Incoming message: " + message + "\n" +
-                "Extracted premises: " + extractPremises( message ) + "\n\nBehavior Activated: " + MainController.behavior;
+                "Extracted premises: " + extractPremises( message ) + "\n\nBehavior Activated: " + SocialReasonerController.behavior;
         inputEmulator.userInput.setText(input);
     }
 

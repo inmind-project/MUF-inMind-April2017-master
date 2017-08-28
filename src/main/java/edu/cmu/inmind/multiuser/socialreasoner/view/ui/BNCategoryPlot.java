@@ -82,7 +82,7 @@ public class BNCategoryPlot extends ApplicationFrame {
         super(title);
         this.series = series;
         JPanel chartPanel = createDemoPanel();
-        chartPanel.setPreferredSize(new java.awt.Dimension(1100, 1000));
+        chartPanel.setPreferredSize(new Dimension(1100, 1000));
         setContentPane(chartPanel);
     }
 

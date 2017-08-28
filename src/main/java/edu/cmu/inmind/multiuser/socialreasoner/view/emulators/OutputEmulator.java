@@ -1,6 +1,6 @@
 package edu.cmu.inmind.multiuser.socialreasoner.view.emulators;
 
-import edu.cmu.inmind.multiuser.socialreasoner.control.MainController;
+import edu.cmu.inmind.multiuser.socialreasoner.control.SocialReasonerController;
 
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
@@ -163,14 +163,9 @@ public class OutputEmulator extends JPanel{
         utteranceNum++;
     }
 
-    //public void printStates(String state){
-     //   states.setText(state + "\n\nSent to NLG. CS: " + Arrays.toString(MainController.conversationalStrategies) + "  Phase: " +
-     //           MainController.inputController.phase + "  Intention: " + MainController.behavior);
-    //}
-
     public void printStates(String state, String phase, String intention){
         String prefix = (++cont) + ". ";
-        statesOutput += prefix + "Sent to NLG --> Conversational Strategy: " +Arrays.toString(MainController.conversationalStrategies) + ",  Phase: " +
+        statesOutput += prefix + "Sent to NLG --> Conversational Strategy: " +Arrays.toString(SocialReasonerController.conversationalStrategies) + ",  Phase: " +
                 phase + ",  Intention: " + intention + "\n\nStates:\n" + state + "\n\n";
         states.setText( statesOutput );
     }

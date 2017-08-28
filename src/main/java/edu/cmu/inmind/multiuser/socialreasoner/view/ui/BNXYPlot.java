@@ -88,7 +88,7 @@ public class BNXYPlot extends ApplicationFrame {
         super(title);
         this.series = series;
         JPanel chartPanel = createPanel();
-        chartPanel.setPreferredSize(new java.awt.Dimension(1100, 1000));
+        chartPanel.setPreferredSize(new Dimension(1100, 1000));
         setContentPane(chartPanel);
         thresholds = new ArrayList<>();
         activations = new ArrayList<>();

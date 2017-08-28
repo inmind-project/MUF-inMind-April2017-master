@@ -1,12 +1,15 @@
 package edu.cmu.inmind.multiuser.socialreasoner.view.emulators;
 
-import edu.cmu.inmind.multiuser.socialreasoner.control.MainController;
+
+import edu.cmu.inmind.multiuser.socialreasoner.control.SocialReasonerController;
 import edu.cmu.inmind.multiuser.socialreasoner.model.Constants;
 
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.util.*;
 import java.util.List;
 
@@ -81,7 +84,7 @@ public class InputEmulator extends JPanel{
             public void keyReleased(KeyEvent e) {
                 e.consume();
                 if( e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    MainController.calculateRapScore(rapportScoreTA.getText());
+                    SocialReasonerController.calculateRapScore(rapportScoreTA.getText());
                 }
             }
         });
@@ -110,13 +113,13 @@ public class InputEmulator extends JPanel{
         ucsComboBox = new JComboBox<>( new String[]{Constants.ADHERE_SOCIAL_NORM, Constants.SELF_DISCLOSURE,
                 Constants.QUESTION_ELICIT_SD, Constants.SHARED_EXPERIENCES,
                 Constants.PRAISE, Constants.VIOLATION_SOCIAL_NORM, Constants.BACK_CHANNEL} );
-        if( MainController.userConvStrategy == null || MainController.userConvStrategy.isEmpty() ) {
-            MainController.userConvStrategy = (String) ucsComboBox.getSelectedItem();
+        if( SocialReasonerController.userConvStrategy == null || SocialReasonerController.userConvStrategy.isEmpty() ) {
+            SocialReasonerController.userConvStrategy = (String) ucsComboBox.getSelectedItem();
         }
         ucsComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MainController.userConvStrategy = (String)ucsComboBox.getSelectedItem();
+                SocialReasonerController.userConvStrategy = (String)ucsComboBox.getSelectedItem();
             }
         });
         ucsTextArea = new JTextArea();
@@ -160,7 +163,7 @@ public class InputEmulator extends JPanel{
             public void keyPressed(KeyEvent e) {
                 if(e.getKeyCode() == KeyEvent.VK_ENTER) {
                     e.consume();
-                    MainController.delayMainLoop = Long.valueOf(delay.getText());
+                    SocialReasonerController.delayMainLoop = Long.valueOf(delay.getText());
                 }
             }
 
@@ -360,7 +363,7 @@ public class InputEmulator extends JPanel{
         userInput.setText( input );
         numUtterance++;
 
-        String[] result = controller.extractNonVerbal( MainController.behavior );
+        String[] result = controller.extractNonVerbal( SocialReasonerController.behavior );
         rapportScoreTA.setText( result[0] );
         ucsTextArea.setText( result[1] );
         phaseComboBox.requestFocus();

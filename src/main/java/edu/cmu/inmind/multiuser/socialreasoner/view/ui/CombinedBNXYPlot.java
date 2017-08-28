@@ -40,7 +40,7 @@
 
 package edu.cmu.inmind.multiuser.socialreasoner.view.ui;
 
-import edu.cmu.inmind.multiuser.socialreasoner.control.MainController;
+import edu.cmu.inmind.multiuser.socialreasoner.control.SocialReasonerController;
 import edu.cmu.inmind.multiuser.socialreasoner.view.emulators.InputController;
 import edu.cmu.inmind.multiuser.socialreasoner.view.emulators.InputEmulator;
 import edu.cmu.inmind.multiuser.socialreasoner.view.emulators.OutputEmulator;
@@ -57,6 +57,7 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.experimental.chart.plot.CombinedXYPlot;
 import org.jfree.ui.*;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -275,10 +276,10 @@ public class CombinedBNXYPlot extends ApplicationFrame{
         panel.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if(MainController.pause ) {
-                    MainController.pause = false;
+                if(SocialReasonerController.pause ) {
+                    SocialReasonerController.pause = false;
                 }else{
-                    MainController.pause = true;
+                    SocialReasonerController.pause = true;
                 }
             }
 

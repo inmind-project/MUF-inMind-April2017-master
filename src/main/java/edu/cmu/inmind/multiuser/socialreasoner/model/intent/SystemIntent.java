@@ -1,7 +1,5 @@
 package edu.cmu.inmind.multiuser.socialreasoner.model.intent;
 
-import edu.cmu.inmind.multiuser.common.model.Entity;
-
 import java.util.List;
 
 /**
