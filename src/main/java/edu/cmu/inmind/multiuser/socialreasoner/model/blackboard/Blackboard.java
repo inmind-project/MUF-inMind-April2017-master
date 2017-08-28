@@ -176,4 +176,13 @@ public class Blackboard {
             return result;
         }
     }
+
+
+    public String toString(){
+        StringBuffer buffer = new StringBuffer();
+        for(String premise : model){
+            buffer.append( String.format( "(%s), ", premise ) );
+        }
+        return buffer.toString();
+    }
 }

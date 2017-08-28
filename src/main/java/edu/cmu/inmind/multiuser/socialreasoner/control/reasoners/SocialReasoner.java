@@ -67,11 +67,11 @@ public class SocialReasoner {
         try {
             Utils.startCrono();
             network.setState(blackboard.getModel());
-            if( SocialReasonerController.verbose ) System.out.println("*** States: " + Arrays.toString( blackboard.getModel().toArray() ) );
-            boolean isDecsionMade = false;
-            while( !isDecsionMade ) {
+            if( SocialReasonerController.verbose ) System.out.println("|-- CURRENT STATE: " + Arrays.toString( blackboard.getModel().toArray() ) );
+            boolean isDecisionMade = false;
+            while( !isDecisionMade ) {
                 if(SocialReasonerController.verbose) {
-                    System.out.println("cycle: " + cycles);
+                    System.out.println("|-- BEHAVIOR NETWORK CYCLE: " + cycles);
                 }
                 int idx = network.selectBehavior();
                 if ((idx >= 0 && cycles > 0) || cycles >= maxNumCycles) {
@@ -86,7 +86,13 @@ public class SocialReasoner {
                     // 2 turns: one the user one the system
                     SocialReasonerController.currentTurn = SocialReasonerController.currentTurn + 2;
 
-                    isDecsionMade = true;
+                    // send results to NLG and printFileName them out on the screen
+//                    sendBNActivations();
+//                    sendToNLG( intent, SocialReasonerController.conversationalStrategies );
+//                    sendToClassifier(SocialReasonerController.conversationalStrategies);
+//                    flagSentSROutput = true;
+
+                    isDecisionMade = true;
 
                     //update state
                     network.execute(cycles);
@@ -99,7 +105,7 @@ public class SocialReasoner {
                 System.gc();
             }
             Utils.stopCrono("SocialReasoner.execute");
-            System.out.println("Conversational Strategies: " + Arrays.toString( SocialReasonerController.conversationalStrategies ));
+            System.out.println("   |-- SR OUTPUT (SORTED CONVERSATIONAL STRATEGIES): " + Arrays.toString( SocialReasonerController.conversationalStrategies ));
         } catch (Exception e) {
             e.printStackTrace();
         }finally {
@@ -111,20 +117,14 @@ public class SocialReasoner {
         }
     }
 
+
     private void sendToNLG(SystemIntent intent, String[] convStrategies){
         if( convStrategies != null ){
             for( int i = 0; i< convStrategies.length; i++ ){
                 convStrategies[i] = convStrategies[i].substring( 0, convStrategies[i].indexOf("_") );
             }
         }
-        SROutputMessage srOutputMessage = new SROutputMessage();
-        srOutputMessage.addIntent(intent, convStrategies);
-        srOutputMessage.setPhase(intent.getPhase());
-        srOutputMessage.setRapport(MainController.rapportScore);
-
-        //json = json.replace("}],\"rapport\"", ",\"conversational_strategies\":" + jsonConvStrat + "}],\"rapport\"");
     }
-
 
     public void initialize() {
         List<Behavior> modules = network.getModules();

@@ -358,7 +358,7 @@ public class Behavior implements Comparable<Behavior>{ // implements BehaviorInt
         for( List<Premise> precondList : preconditions ){
             for( Premise precond : precondList ){
                 if( states.contains(precond.getLabel()) ){
-					stateMatches += "[" + precond + "] ";
+					stateMatches += String.format("[(%s, %s)] ",precond.getLabel(), precond.getWeight());
                     numMatches++;
                 }
             }

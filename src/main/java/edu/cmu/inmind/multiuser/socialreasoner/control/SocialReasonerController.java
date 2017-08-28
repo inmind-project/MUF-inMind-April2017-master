@@ -1,5 +1,6 @@
 package edu.cmu.inmind.multiuser.socialreasoner.control;
 
+import edu.cmu.inmind.multiuser.socialreasoner.control.emulators.Emulator;
 import edu.cmu.inmind.multiuser.socialreasoner.control.reasoners.SocialReasoner;
 import edu.cmu.inmind.multiuser.socialreasoner.control.util.Utils;
 import edu.cmu.inmind.multiuser.socialreasoner.model.Constants;
@@ -10,6 +11,7 @@ import edu.cmu.inmind.multiuser.socialreasoner.model.history.UserCSHistory;
 import edu.cmu.inmind.multiuser.socialreasoner.model.blackboard.Blackboard;
 import edu.cmu.inmind.multiuser.socialreasoner.model.history.SocialHistory;
 
+
 import java.io.*;
 import java.util.*;
 
@@ -17,7 +19,7 @@ import java.util.*;
  * Created by oscarr on 4/22/16.
  */
 public class SocialReasonerController {
-    public static boolean verbose = false;
+    public static boolean verbose = true;
     public static boolean isBeginningConversation = true;
     public static boolean isNonVerbalWindowON = true;
     private static int smileCount;
@@ -52,6 +54,7 @@ public class SocialReasonerController {
     public static boolean flagStop = false;
     public static boolean flagReset = false;
     public static boolean flagResetTR = false;
+    public static boolean useVHTConnnector;
     public static boolean useManualMode;
     public static boolean useDummyGoals;
 
@@ -79,10 +82,12 @@ public class SocialReasonerController {
     public static String pathToDavosData;
     public static String pathToDavosResults;
     public static String pathToExcelOutput;
+    private static String executeEmulator;
     public static String wozerOutput;
+    private static Scanner scanner;
+    private static Emulator emulator;
 
     public SocialReasonerController(){
-        System.out.println("Controller instanciated");
         loadProperties();
         checkStart();
     }
@@ -90,20 +95,34 @@ public class SocialReasonerController {
     public static void main(String args[]){
         socialReasonerController = new SocialReasonerController();
         socialReasonerController.loadProperties();
-        Scanner scanner = new Scanner( System.in );
+        scanner = new Scanner( System.in );
+        emulator = new Emulator();
+        emulator.setSocialReasonerController( socialReasonerController );
         while( !stop ) {
-            System.out.println("\nEnter an intent ('stop' to exit): ");
-            String command = scanner.nextLine();
-            if( command.equals("stop") ){
-                stop = true;
+            if( executeEmulator.equals("console") ){
+                executeConsoleMode();
             }else{
-                socialReasonerController.addSystemIntent( new SystemIntent(command, "phase") );
+                executeScriptMode();
             }
         }
-        System.err.println("\nBye bye...");
+        System.out.println("\n|-- DONE");
         System.exit(0);
     }
 
+
+    private static void executeConsoleMode(){
+        System.out.println("\nEnter an intent ('stop' to exit): ");
+        String command = scanner.nextLine();
+        if( command.equals("stop") ){
+            stop = true;
+        }else{
+            socialReasonerController.addSystemIntent( new SystemIntent(command, "phase") );
+        }
+    }
+
+    private static void executeScriptMode(){
+        stop = emulator.execute() == null;
+    }
 
     public void setRapportScore(double rapport){
         rapportScore = rapport;
@@ -132,13 +151,12 @@ public class SocialReasonerController {
     }
 
     private void resetStates() {
-        if(verbose) System.out.println("*** resetStates");
         smile = null;
         eyeGaze = null;
     }
 
     private void printOutput() {
-        String output = vectorID +"\t"+ removeSufix(trIntent.getIntent() + "\t" + rapportScore  + "\t" + rapportLevel
+        String output = removeSufix(trIntent.getIntent() + "\t" + rapportScore  + "\t" + rapportLevel
                 + "\t" + rapportDelta + "\t" + userConvStrategy  + "\t" + smile  + "\t" + eyeGaze + "\t" + availableSharedExp
                 + "\t" + blackboard.search("NUM_TURNS") + "\t" + blackboard.search(Constants.ASN_HISTORY_SYSTEM)
                 + "\t" + blackboard.search(Constants.VSN_HISTORY_SYSTEM) + "\t" + blackboard.search(Constants.SD_HISTORY_SYSTEM)
@@ -154,7 +172,7 @@ public class SocialReasonerController {
         userUtterance = "";
         systemUtterance = "";
         if( verbose ) {
-            System.out.print(output);
+            System.out.print("   |-- BLACKBOARD CONTENT: " + blackboard.toString());
         }
         outputResults += output;
         vectorID++;
@@ -182,7 +200,7 @@ public class SocialReasonerController {
             Utils.sleep( 100 );
         }
         if( flagStart || isFirstTime ){
-            System.out.println("\nRe-starting...");
+            System.out.println("\nStarting Social Reasoner...");
             intentsQueue = new LinkedList<>();
             SocialReasonerController.userCSHistory = UserCSHistory.getInstance();
 
@@ -275,7 +293,7 @@ public class SocialReasonerController {
                     : Constants.GAZE_ELSEWHERE_NONVERBAL;
         }
         if(verbose)
-            System.out.println("*** smileCount: " + smileCount + " noSmileCount: " + noSmileCount + " gazeCount: "
+            System.out.println("|-- NON-VERBALS: smileCount: " + smileCount + " noSmileCount: " + noSmileCount + " gazeCount: "
                 + gazeCount + " noGazeCount: " + noGazeCount + " smile: " + smile + " eyeGaze: " + eyeGaze);
         smileCount = 0;
         gazeCount = 0;
@@ -285,7 +303,6 @@ public class SocialReasonerController {
 
     /** we need a time window in order to calculate smile, gaze, etc. as user's non-verbals last several seconds**/
     public static void setNonVerbalWindow( boolean flag ){
-        if(verbose) System.out.println("*** set window: " + flag);
         isNonVerbalWindowON = flag;
         if( !isNonVerbalWindowON ){
             calculateNonVerbals();
@@ -358,6 +375,7 @@ public class SocialReasonerController {
             properties.load(input);
 
             // get the property value and printFileName it out
+            useVHTConnnector = Boolean.valueOf(properties.getProperty("useVHTConnnector"));
             useManualMode = Boolean.valueOf(properties.getProperty("useManualMode"));
             delayMainLoop = Long.valueOf(properties.getProperty("delayMainLoop"));
             delayUserIntent = Long.valueOf(properties.getProperty("delayUserIntent"));
@@ -370,6 +388,7 @@ public class SocialReasonerController {
             pathToDavosData = properties.getProperty("pathToDavosData");
             pathToDavosResults = properties.getProperty("pathToDavosResults");
             pathToExcelOutput = properties.getProperty("pathToExcelOutput");
+            executeEmulator = properties.getProperty("executeEmulator");
         } catch (IOException ex) {
             ex.printStackTrace();
         } finally {

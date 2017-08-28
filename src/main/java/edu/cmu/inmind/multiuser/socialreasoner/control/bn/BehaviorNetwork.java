@@ -634,23 +634,23 @@ public class BehaviorNetwork {
         execution = false;
 		String values = "";
 		matchesOutput = "";
+		if( SocialReasonerController.verbose ) System.out.println("   |-- PRECONDITIONS THAT ARE TRUE (PT) AND ACTIVATION (AC) -> (PT : AC) CS: [PRECONDITIONS]");
 		for( Behavior beh : modules ){
 			String matches = "$ " + beh.getName() + ": " + beh.getStateMatches();
 			int number = beh.getNumMatches();
 			if( SocialReasonerController.verbose ) {
-				System.err.println(matches.replace("$ ", "(" + number + "-" + beh.getActivation() + ") "));
+				System.out.println("      |-- "+ matches.replace("$ ", "(" + number + " : " + beh.getActivation() + ") "));
 			}
 			matchesOutput += matches.replace("$ ", "(" + number + ") ") + ", ";
 			values += "["+beh.getName() + ": " + beh.getActivation() + "], ";
 		}
 		if( SocialReasonerController.verbose ) {
-			System.out.println(values + ", theta: " + theta);
+			System.out.println("   |-- THETA (THRESHOLD): " + theta );
 		}
         if( indexBehActivated >= 0 ){
 			statesOutput = Arrays.toString(states.toArray());
 			if(SocialReasonerController.verbose ) {
-				System.err.println("Executing Behavior: " + modules.get(indexBehActivated).getName());
-				System.err.println("States: " + statesOutput );
+				System.out.println("   |-- EXECUTING CONVERSATIONAL STRATEGY: " + modules.get(indexBehActivated).getName());
 			}
             execution = true;
             modules.get(indexBehActivated).setActivated(true);

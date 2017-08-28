@@ -360,7 +360,7 @@ public class Utils {
 
     public static void stopCrono(String processName){
         time = System.currentTimeMillis() - time;
-        System.out.println( String.format("Elapsed time: %sms for process: %s", time, processName));
+        System.out.println( String.format("   |-- ELAPSED TIME: %sms FOR PROCESS: %s", time, processName));
         time = -1;
     }
 }
