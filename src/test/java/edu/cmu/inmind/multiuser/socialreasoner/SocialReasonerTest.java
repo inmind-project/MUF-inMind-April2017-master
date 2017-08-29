@@ -1,13 +1,9 @@
 package edu.cmu.inmind.multiuser.socialreasoner;
 
-import edu.cmu.inmind.multiuser.common.model.Entity;
 import edu.cmu.inmind.multiuser.socialreasoner.control.SocialReasonerController;
-import edu.cmu.inmind.multiuser.socialreasoner.control.util.Utils;
 import edu.cmu.inmind.multiuser.socialreasoner.model.intent.SystemIntent;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.util.Collections;
 
 /**
  * Created by timo on 2017-07-18
@@ -25,7 +21,6 @@ public class SocialReasonerTest {
         SystemIntent si = new SystemIntent();
         SystemIntent systemIntent =  new SystemIntent();
         systemIntent.setIntent("");
-        systemIntent.setEntities(Collections.<Entity>emptyList());
         systemIntent.setRecommendationResults("");
         socialController.addSystemIntent(si);
         String strat1 = socialController.getConvStrategyFormatted();

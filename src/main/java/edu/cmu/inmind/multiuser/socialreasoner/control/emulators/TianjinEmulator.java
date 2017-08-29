@@ -1,7 +1,5 @@
 package edu.cmu.inmind.multiuser.socialreasoner.control.emulators;
 
-import edu.cmu.inmind.multiuser.socialreasoner.control.vht.VHTConnector;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
