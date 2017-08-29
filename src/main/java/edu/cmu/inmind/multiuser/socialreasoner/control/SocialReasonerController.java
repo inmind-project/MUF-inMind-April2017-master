@@ -124,6 +124,10 @@ public class SocialReasonerController {
         stop = emulator.execute() == null;
     }
 
+    public void setUserConvStrategy(final String cs) {
+        userConvStrategy = cs;
+    }
+
     public void setRapportScore(double rapport){
         rapportScore = rapport;
     }
@@ -178,7 +182,7 @@ public class SocialReasonerController {
         vectorID++;
     }
 
-    private String getConvStrategyFormatted() {
+    public String getConvStrategyFormatted() {
         if( conversationalStrategies == null || conversationalStrategies[0] == null ){
             return Constants.NONE;
         }

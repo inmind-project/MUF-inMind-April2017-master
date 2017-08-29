@@ -11,7 +11,6 @@ import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
 import edu.cmu.inmind.multiuser.controller.plugin.StateType;
 import edu.cmu.inmind.multiuser.socialreasoner.control.SocialReasonerController;
 import edu.cmu.inmind.multiuser.socialreasoner.control.util.Utils;
-import edu.cmu.inmind.multiuser.socialreasoner.model.SocialReasonerOutput;
 import edu.cmu.inmind.multiuser.socialreasoner.model.intent.SystemIntent;
 //import edu.cmu.lti.rapport.pipline.csc.ConversationalStrategyDistribution;
 
@@ -80,7 +79,7 @@ public class SocialReasonerComponent extends PluggableComponent {
         Log4J.info(this, "Received user model");
         if (!model.getBehaviorNetworkStates().isEmpty()) {
             Log4J.info(this, "Updating states: " + Utils.toJson(model.getBehaviorNetworkStates()));
-            socialController.getSocialReasoner().getNetwork().updateState(model.getBehaviorNetworkStates());
+            // TODO: update network states
         } else {
             Log4J.info(this, "States were empty");
         }
@@ -103,17 +102,11 @@ public class SocialReasonerComponent extends PluggableComponent {
         if (dmOutput.getAction()!=null && socialController!=null) {
             SystemIntent systemIntent =  new SystemIntent( );
             systemIntent.setIntent(dmOutput.getAction());
-            systemIntent.setEntities(dmOutput.getEntities());
             systemIntent.setRecommendationResults( Utils.toJson(dmOutput.getRecommendation()));
             socialController.addSystemIntent( systemIntent );
             systemStrategy = socialController.getConvStrategyFormatted();
             srOutput.setStrategy(systemStrategy);
-            srOutput.setStates(socialController.getSocialReasoner().getNetwork().getState());
-
-            SocialReasonerOutput output = new SocialReasonerOutput();
-            output.setActivations(socialController.getSocialReasoner().getNetwork().getOnlyActivations());
-            output.setNames(socialController.getSocialReasoner().getNetwork().getModuleNames());
-            output.setThreshold(socialController.getSocialReasoner().getNetwork().getTheta());
+            // TODO: Add behavior network states to srOuput so that they can be added to the user model
 
             //System.out.println("---------------- System Strategy : " + systemStrategy);
             Log4J.info(this, "Input: " + dmOutput.getAction() + ", Output: " + srOutput.getStrategy() + "\n");
