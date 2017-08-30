@@ -25,8 +25,10 @@ public class UserModel {
     }
 
     public void updateBehaviorNetworkStates(final List<String> behaviorNetworkStates) {
-        this.behaviorNetworkStates.clear();
-        this.behaviorNetworkStates.addAll(behaviorNetworkStates);
+        if (behaviorNetworkStates != null && !behaviorNetworkStates.isEmpty()) {
+            this.behaviorNetworkStates.clear();
+            this.behaviorNetworkStates.addAll(behaviorNetworkStates);
+        }
     }
 
     public UserFrame getUserFrame() {
