@@ -204,6 +204,13 @@ public class BehaviorNetwork {
         }
 	}
 
+	// Many components hold a reference to the states list. Update in place to ensure that all components are up to date
+	// TODO: Refactor so there is a single source of truth for BN state
+	public synchronized void updateState(List<String> states) {
+		getState().clear();
+		getState().addAll(states);
+	}
+
 //	public void addState(List<String> states){
 //		if(states == null)
 //			this.states = null;
