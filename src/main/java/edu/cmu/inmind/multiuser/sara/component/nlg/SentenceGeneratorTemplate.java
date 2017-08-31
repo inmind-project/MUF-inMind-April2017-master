@@ -151,6 +151,10 @@ System.out.println("load SARA's preferences");
                         case "#reason":
                             value = srOutput.getRecommendation().getRexplanations().get(0).getExplanations().get(0);
                             break;
+                        case "#previousMovie":
+                            int size = srOutput.getUserFrame().getFrame().getMovies().getLike().size();
+                            value = srOutput.getUserFrame().getFrame().getMovies().getLike().get(size-1);
+                            break;
                         case "#actor":
                             value = srOutput.getUserFrame().getFrame().getActors().getLike().get(0).getValue();
                             break;
