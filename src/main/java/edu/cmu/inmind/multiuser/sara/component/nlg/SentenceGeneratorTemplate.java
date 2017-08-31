@@ -152,6 +152,7 @@ System.out.println("load SARA's preferences");
                             value = srOutput.getRecommendation().getRexplanations().get(0).getExplanations().get(0);
                             break;
                         case "#previousMovie":
+                            // Gets the latest movie that the user liked. Supposedly used to change greeting phase.
                             int size = srOutput.getUserFrame().getFrame().getMovies().getLike().size();
                             value = srOutput.getUserFrame().getFrame().getMovies().getLike().get(size-1);
                             break;
@@ -176,7 +177,7 @@ System.out.println("load SARA's preferences");
                         case "#latest":
                             latestUtterance = srOutput.getUserFrame().getLatestUtterance();
                             latestEntityValue = getLatestEntityValue(srOutput); // latest entity
-                            // if entity is from user's last utterance
+                            // If entity is from user's last utterance
                             if (latestUtterance.contains(latestEntityValue)) {
                                 value = latestEntityValue;
                             }
@@ -185,7 +186,7 @@ System.out.println("load SARA's preferences");
                             latestUtterance = srOutput.getUserFrame().getLatestUtterance();
                             latestEntityValue = getLatestEntityValue(srOutput); // latest entity value
                             latestEntityType = getLatestEntityType(srOutput);
-                            // if SARA shares the same preference
+                            // If SARA shares the same preference
                             if (preferencesMap.get(latestEntityType).contains(latestEntityValue)) {
                                 value = latestEntityValue;
                             }
@@ -194,7 +195,7 @@ System.out.println("load SARA's preferences");
                             latestUtterance = srOutput.getUserFrame().getLatestUtterance();
                             latestEntityValue = getLatestEntityValue(srOutput); // latest entity value
                             latestEntityType = getLatestEntityType(srOutput);
-                            // if SARA shares the same preference
+                            // If SARA have opposite preference
                             if (!preferencesMap.get(latestEntityType).contains(latestEntityValue)) {
                                 value = latestEntityValue;
                             }
@@ -203,7 +204,7 @@ System.out.println("load SARA's preferences");
                             latestUtterance = srOutput.getUserFrame().getLatestUtterance();
                             latestEntityValue = getLatestEntityValue(srOutput); // latest entity value
                             latestEntityType = getLatestEntityType(srOutput);
-                            // if SARA shares the same preference
+                            // If SARA has other preference
                             if (!preferencesMap.get(latestEntityType).contains(latestEntityValue)) {
                                 value = preferencesMap.get(latestEntityValue).get(0);
                             }
