@@ -139,4 +139,8 @@ public class SocialReasoner {
         instance.network.resetAll();
         instance = null;
     }
+
+    public BehaviorNetwork getNetwork() {
+        return network;
+    }
 }
