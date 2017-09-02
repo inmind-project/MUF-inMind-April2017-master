@@ -8,9 +8,9 @@ import java.util.List;
  * Created by yoichimatsuyama on 4/13/17.
  */
 public class UserFrame {
-    private Frame frame;
-    private List<String> ask_stack;
-    private List<String> universals;
+    private Frame frame = new Frame();
+    private List<String> ask_stack = new ArrayList<>();
+    private List<String> universals = new ArrayList<>();
     private String latestUtterance;
 
     public Frame getFrame() {

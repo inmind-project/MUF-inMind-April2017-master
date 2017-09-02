@@ -464,4 +464,7 @@ public class SocialReasonerController {
         return false;
     }
 
+    public SocialReasoner getSocialReasoner() {
+        return socialReasoner;
+    }
 }

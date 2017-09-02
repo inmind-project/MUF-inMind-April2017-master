@@ -68,6 +68,7 @@ public class TaskReasonerComponent extends PluggableComponent {
         } else if (cpt == 7) {
             dmOutput.setAction("goodbye");
         }
+        dmOutput.setFrame(new UserFrame());
 
         Log4J.info(this, "TaskReasoner: MSG_DM " + dmOutput.toString());
         return dmOutput;

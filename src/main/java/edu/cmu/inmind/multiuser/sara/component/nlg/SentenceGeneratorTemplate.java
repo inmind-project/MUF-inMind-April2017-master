@@ -139,6 +139,9 @@ System.out.println("load SARA's preferences");
 
         WeightedCandidate match(SROutput srOutput, Map<String,ArrayList<String>> preferencesMap) {
             String instantiation = template;
+            int size = 0;
+            int itemToRefer = 0;
+            Random r = new Random();
             Matcher m = slotMarker.matcher(instantiation);
             while (m.matches()) {
                 String slotName = m.group(1);
@@ -151,28 +154,47 @@ System.out.println("load SARA's preferences");
                         case "#reason":
                             value = srOutput.getRecommendation().getRexplanations().get(0).getExplanations().get(0);
                             break;
-                        case "#actor":
-                            value = srOutput.getUserFrame().getFrame().getActors().getLike().get(0).getValue();
+                        case "#previousMovie":
+                            // Gets the latest movie that the user liked. Supposedly used to change greeting phase.
+                            size = srOutput.getUserFrame().getFrame().getMovies().getLike().size();
+                            value = srOutput.getUserFrame().getFrame().getMovies().getLike().get(size-1);
+                            break;
+                        case "#likedActor":
+                            // Gets a random liked actor from the user model. Supposedly used when SARA refers to shared experience.
+                            size = srOutput.getUserFrame().getFrame().getActors().getLike().size() - 1;
+                            itemToRefer = r.nextInt(size-0);
+                            value = srOutput.getUserFrame().getFrame().getActors().getLike().get(itemToRefer).getValue();
                             break;
                         case "#dislikedActor":
-                            value = srOutput.getUserFrame().getFrame().getActors().getDislike().get(0).getValue();
+                            size = srOutput.getUserFrame().getFrame().getActors().getDislike().size() - 1;
+                            itemToRefer = r.nextInt(size-0);
+                            value = srOutput.getUserFrame().getFrame().getActors().getDislike().get(itemToRefer).getValue();
                             break;
-                        case "#genre":
-                            value = srOutput.getUserFrame().getFrame().getGenres().getLike().get(0).getValue();
+                        case "#likedGenre":
+                            size = srOutput.getUserFrame().getFrame().getGenres().getLike().size() - 1;
+                            itemToRefer = r.nextInt(size-0);
+                            value = srOutput.getUserFrame().getFrame().getGenres().getLike().get(itemToRefer).getValue();
                             break;
                         case "#dislikedGenre":
-                            value = srOutput.getUserFrame().getFrame().getGenres().getDislike().get(0).getValue();
+                            size = srOutput.getUserFrame().getFrame().getGenres().getDislike().size() - 1;
+                            itemToRefer = r.nextInt(size-0);
+                            value = srOutput.getUserFrame().getFrame().getGenres().getDislike().get(itemToRefer).getValue();
                             break;
                         case "#director":
-                            value = srOutput.getUserFrame().getFrame().getDirectors().getLike().get(0).getValue();
+                            size = srOutput.getUserFrame().getFrame().getDirectors().getLike().size() - 1;
+                            itemToRefer = r.nextInt(size-0);
+                            value = srOutput.getUserFrame().getFrame().getDirectors().getLike().get(itemToRefer).getValue();
                             break;
                         case "#dislikedDirector":
-                            value = srOutput.getUserFrame().getFrame().getDirectors().getDislike().get(0).getValue();
+                            size = srOutput.getUserFrame().getFrame().getDirectors().getDislike().size() - 1;
+                            itemToRefer = r.nextInt(size-0);
+                            value = srOutput.getUserFrame().getFrame().getDirectors().getDislike().get(itemToRefer).getValue();
                             break;
                         case "#latest":
+                            // Get the latest entity detected from the user
                             latestUtterance = srOutput.getUserFrame().getLatestUtterance();
                             latestEntityValue = getLatestEntityValue(srOutput); // latest entity
-                            // if entity is from user's last utterance
+                            // If entity is from user's last utterance
                             if (latestUtterance.contains(latestEntityValue)) {
                                 value = latestEntityValue;
                             }
@@ -181,8 +203,8 @@ System.out.println("load SARA's preferences");
                             latestUtterance = srOutput.getUserFrame().getLatestUtterance();
                             latestEntityValue = getLatestEntityValue(srOutput); // latest entity value
                             latestEntityType = getLatestEntityType(srOutput);
-                            // if SARA shares the same preference
-                            if (preferencesMap.get(latestEntityType).contains(latestEntityValue)) {
+                            // If SARA shares the same preference
+                            if (latestUtterance.contains(latestEntityValue) && preferencesMap.get(latestEntityType).contains(latestEntityValue)) {
                                 value = latestEntityValue;
                             }
                             break;
@@ -190,8 +212,8 @@ System.out.println("load SARA's preferences");
                             latestUtterance = srOutput.getUserFrame().getLatestUtterance();
                             latestEntityValue = getLatestEntityValue(srOutput); // latest entity value
                             latestEntityType = getLatestEntityType(srOutput);
-                            // if SARA shares the same preference
-                            if (!preferencesMap.get(latestEntityType).contains(latestEntityValue)) {
+                            // If SARA have opposite preference
+                            if (latestUtterance.contains(latestEntityValue) && !preferencesMap.get(latestEntityType).contains(latestEntityValue)) {
                                 value = latestEntityValue;
                             }
                             break;
@@ -199,8 +221,8 @@ System.out.println("load SARA's preferences");
                             latestUtterance = srOutput.getUserFrame().getLatestUtterance();
                             latestEntityValue = getLatestEntityValue(srOutput); // latest entity value
                             latestEntityType = getLatestEntityType(srOutput);
-                            // if SARA shares the same preference
-                            if (!preferencesMap.get(latestEntityType).contains(latestEntityValue)) {
+                            // If SARA has another preference
+                            if (latestUtterance.contains(latestEntityValue) && !preferencesMap.get(latestEntityType).contains(latestEntityValue)) {
                                 value = preferencesMap.get(latestEntityValue).get(0);
                             }
                             break;
