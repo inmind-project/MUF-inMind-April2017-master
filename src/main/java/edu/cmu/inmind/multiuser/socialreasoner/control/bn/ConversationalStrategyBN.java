@@ -164,7 +164,7 @@ public class ConversationalStrategyBN extends BehaviorNetworkController implemen
         return remove;
     }
 
-    private String getPhasesToRemove(String exceptPhase){
+    public String getPhasesToRemove(String exceptPhase){
         String result = "";
         for(String state : blackboard.getModel() ){
             if( state.startsWith("phase_") && !state.equals(exceptPhase) ){

@@ -152,7 +152,7 @@ public class Behavior implements Comparable<Behavior>{ // implements BehaviorInt
 
 
 
-	private boolean isKindOfLink(List<String> list, String proposition){
+	public boolean isKindOfLink(List<String> list, String proposition){
         if( list.contains(proposition) ) {
             return true;
         }else{

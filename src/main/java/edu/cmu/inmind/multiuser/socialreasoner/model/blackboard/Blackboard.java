@@ -33,7 +33,7 @@ public class Blackboard {
         this.model = model;
     }
 
-    private void postMessages(String messagesString, String subscriberName){
+    public void postMessages(String messagesString, String subscriberName){
         lock.lock();
         try {
             String[] messages = messagesString.split(":");

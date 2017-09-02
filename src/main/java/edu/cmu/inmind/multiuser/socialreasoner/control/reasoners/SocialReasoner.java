@@ -116,7 +116,7 @@ public class SocialReasoner {
     }
 
 
-    private void sendToNLG(SystemIntent intent, String[] convStrategies){
+    public void sendToNLG(SystemIntent intent, String[] convStrategies){
         if( convStrategies != null ){
             for( int i = 0; i< convStrategies.length; i++ ){
                 convStrategies[i] = convStrategies[i].substring( 0, convStrategies[i].indexOf("_") );

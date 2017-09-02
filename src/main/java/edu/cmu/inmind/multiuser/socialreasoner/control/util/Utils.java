@@ -320,7 +320,7 @@ public class Utils {
         log = "";
     }
 
-    private static String getDateString(){
+    public static String getDateString(){
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd_HH.mm");
         return format.format( new Date() );
     }

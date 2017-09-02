@@ -110,7 +110,7 @@ public class SocialReasonerController {
     }
 
 
-    private static void executeConsoleMode(){
+    public static void executeConsoleMode(){
         System.out.println("\nEnter an intent ('stop' to exit): ");
         String command = scanner.nextLine();
         if( command.equals("stop") ){
@@ -120,7 +120,7 @@ public class SocialReasonerController {
         }
     }
 
-    private static void executeScriptMode(){
+    public static void executeScriptMode(){
         stop = emulator.execute() == null;
     }
 
@@ -154,12 +154,12 @@ public class SocialReasonerController {
         checkReset();
     }
 
-    private void resetStates() {
+    public void resetStates() {
         smile = null;
         eyeGaze = null;
     }
 
-    private void printOutput() {
+    public void printOutput() {
         String output = removeSufix(trIntent.getIntent() + "\t" + rapportScore  + "\t" + rapportLevel
                 + "\t" + rapportDelta + "\t" + userConvStrategy  + "\t" + smile  + "\t" + eyeGaze + "\t" + availableSharedExp
                 + "\t" + blackboard.search("NUM_TURNS") + "\t" + blackboard.search(Constants.ASN_HISTORY_SYSTEM)
@@ -190,15 +190,15 @@ public class SocialReasonerController {
                 + conversationalStrategies[1] : conversationalStrategies[0];
     }
 
-    private String removeSufix(String s) {
+    public String removeSufix(String s) {
         return s.replace("_NONVERBAL", "");//.replace("_SYSTEM_CS", "").replace("_USER_CS", "");
     }
 
-    private void createSocialReasoner() {
+    public void createSocialReasoner() {
         socialReasoner = SocialReasoner.getInstance(bnController, "ConversationalStrategyBN");
     }
 
-    private void checkStart() {
+    public void checkStart() {
         // waiting for confirmation to process the reasoning process
         while( !flagStart ){
             Utils.sleep( 100 );
@@ -223,7 +223,7 @@ public class SocialReasonerController {
         }
     }
 
-    private void checkReset() {
+    public void checkReset() {
         if( flagReset ){
             Blackboard.reset();
             SocialReasoner.reset();
@@ -246,7 +246,7 @@ public class SocialReasonerController {
         }
     }
 
-    private void reset() {
+    public void reset() {
         bnController = null;
         socialReasoner = null;
         noInputFlag = true;
@@ -333,29 +333,29 @@ public class SocialReasonerController {
         addNonVerbals();
     }
 
-    private void addNewIntent(SystemIntent intent) {
+    public void addNewIntent(SystemIntent intent) {
         if( previousIntent != null ) {
             blackboard.removeMessages(previousIntent.getIntent() + ":" + previousIntent.getPhase() + ":" + "greeting" + ":" + "greetings");
         }
         blackboard.setStatesString(intent.getIntent() + ":" + intent.getPhase(), "SocialReasonerController" );
     }
 
-    private void addUserCSstates() {
+    public void addUserCSstates() {
         blackboard.removeMessagesContain( "USER_CS");
         blackboard.setStatesString( userConvStrategy, "socialReasonerController");
     }
 
-    private void addSystemCSstates() {
+    public void addSystemCSstates() {
         blackboard.removeMessagesContain( "SYSTEM_CS");
         blackboard.setStatesString( conversationalStrategies[0], "socialReasonerController");
     }
 
-    private void addRapportstates() {
+    public void addRapportstates() {
         blackboard.removeMessagesContain( "RAPPORT");
         blackboard.setStatesString( rapportDelta + ":" + rapportLevel, "socialReasonerController");
     }
 
-    private void addTurnstates() {
+    public void addTurnstates() {
         blackboard.removeMessagesContain( "NUM_TURNS");
         blackboard.setStatesString( currentTurn <= numberOfTurnsThreshold ? Constants.NUM_TURNS_LOWER_THAN_THRESHOLD
                 : Constants.NUM_TURNS_HIGHER_THAN_THRESHOLD, "DMMain");
@@ -364,14 +364,14 @@ public class SocialReasonerController {
         }
     }
 
-    private void addNonVerbals() {
+    public void addNonVerbals() {
         if( smile != null && eyeGaze != null ){
             blackboard.removeMessagesContain( "NONVERBAL");
             blackboard.setStatesString( smile + ":" + eyeGaze, "RapportEstimator");
         }
     }
 
-    private void loadProperties(){
+    public void loadProperties(){
         InputStream input = null;
         try {
             input = new FileInputStream("config.properties");
@@ -450,7 +450,7 @@ public class SocialReasonerController {
         }
     }
 
-    private boolean extractTypeOfTRmessage(String message) {
+    public boolean extractTypeOfTRmessage(String message) {
         if( message.contains("process") ) {
             SocialReasonerController.flagStart = true;
         }else if( message.contains("set") ){
