@@ -25,7 +25,7 @@ public class UserModel {
     }
 
     public void updateBehaviorNetworkStates(final List<String> behaviorNetworkStates) {
-        if (behaviorNetworkStates != null && !behaviorNetworkStates.isEmpty()) {
+        if (behaviorNetworkStates != null) {
             this.behaviorNetworkStates.clear();
             this.behaviorNetworkStates.addAll(behaviorNetworkStates);
         }
@@ -37,5 +37,15 @@ public class UserModel {
 
     public void setUserFrame(final UserFrame userFrame) {
         this.userFrame = userFrame;
+    }
+
+    /**
+     * If a field is not present in a json object, GSON will overwrite it with null even if it is final.
+     * Use this method to ensure that the object is in the expected state.
+     */
+    @SuppressWarnings("ConstantConditions")
+    public boolean isValid() {
+        return id != null && !id.isEmpty() &&
+                 behaviorNetworkStates != null;
     }
 }

@@ -42,12 +42,11 @@ public class UserModelComponent extends PluggableComponent {
 
     private static final Consumer<UserModel> resetEpisodicState = UserModelComponent::resetEpisodicState;
     private static final Consumer<UserModel> resetSemanticState = UserModelComponent::resetSemanticState;
-    private static final Consumer<UserModel> resetAll = resetEpisodicState.andThen(resetSemanticState);
 
     private static final Map<String, Consumer<UserModel>> USER_MODEL_RESETTERS = ImmutableMap.of(
             ResetOptions.EPISODIC, resetEpisodicState,
             ResetOptions.SEMANTIC, resetSemanticState,
-            ResetOptions.ALL, resetAll
+            ResetOptions.ALL, resetEpisodicState.andThen(resetSemanticState)
     );
 
     private static void resetSemanticState(final UserModel model) {
