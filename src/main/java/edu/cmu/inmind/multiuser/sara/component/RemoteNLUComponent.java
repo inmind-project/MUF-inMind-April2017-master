@@ -44,7 +44,7 @@ public class RemoteNLUComponent extends PluggableComponent {
         // Let's intercept the message coming from the client (MSG_ASR), then modify it and forward
         // it to the remote service:
         SaraInput saraInput = (SaraInput) blackboard().get(SaraCons.MSG_ASR);
-`        // sending message to remote service. You ALWAYS have to add the session id to message:
+        // sending message to remote service. You ALWAYS have to add the session id to message:
         send(new SessionMessage(SaraCons.MSG_ASR, Utils.toJson(saraInput)));
 
         // Receiving response from remote service. You need to process this response asynchronously,
