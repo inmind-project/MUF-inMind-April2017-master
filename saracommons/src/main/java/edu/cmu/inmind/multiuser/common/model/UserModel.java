@@ -7,9 +7,11 @@ import java.util.List;
  * This class represents data about the user that should be persisted between sessions
  */
 public class UserModel {
+    public static final double RAPPORT_UNDEFINED = 0.0;
+
     private final List<String> behaviorNetworkStates = new ArrayList<>();
     private UserFrame userFrame;
-    private double rapport;
+    private double rapport = RAPPORT_UNDEFINED;
 
     private final String id;
 

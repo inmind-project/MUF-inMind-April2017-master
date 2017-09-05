@@ -57,6 +57,7 @@ public class UserModelComponent extends PluggableComponent {
 
     private static void resetEpisodicState(final UserModel model) {
         model.updateBehaviorNetworkStates(ImmutableList.of());
+        model.setRapport(UserModel.RAPPORT_UNDEFINED);
     }
 
     private UserModelRepository repository;
