@@ -36,29 +36,27 @@ public class SaraOrchestratorEx15 extends ProcessOrchestratorImpl {
         Log4J.debug(this, "orchestrator received message " + message);
         super.process(message);
 
-        SessionMessage inputMessage = Utils.fromJson(message, SessionMessage.class);
-        if( inputMessage.getMessageId().equals(SaraCons.MSG_START_SESSION) ){
-            Log4J.info( this, "MSG_START_SESSION");
-            blackboard.post( this, inputMessage.getMessageId(), inputMessage.getPayload() );
-        }
-        else if( inputMessage.getMessageId().equals(SaraCons.R5STREAM_STARTED) ||
-                inputMessage.getMessageId().equals(SaraCons.R5STREAM_DISCONNECTED) ||
-                inputMessage.getMessageId().equals(SaraCons.R5STREAM_CLOSE) ||
-                inputMessage.getMessageId().equals(SaraCons.R5STREAM_TIMEOUT) ||
-                inputMessage.getMessageId().equals(SaraCons.R5STREAM_ERROR))
-        {
-            blackboard.post( this, inputMessage.getMessageId(), inputMessage.getPayload() );
-        }
-        else if( inputMessage.getMessageId().equals(SaraCons.MSG_START_DM) ){
-            Log4J.info( this, SaraCons.MSG_START_DM);
-            blackboard.post( this, inputMessage.getMessageId(), inputMessage.getPayload() );
-        }
-        else{
-            ASROutput asrOutput = Utils.fromJson(inputMessage.getPayload(), ASROutput.class);
-            blackboard.post( this, inputMessage.getMessageId(), asrOutput);
-            if( inputMessage.getMessageId().equals(SaraCons.MSG_ASR) ){
-              Log4J.info( this, "ASR - > utterance: " + asrOutput.getUtterance() + "  confidence: "
-                        + asrOutput.getConfidence());
+        if( message != null && !message.isEmpty() ) {
+            SessionMessage inputMessage = Utils.fromJson(message, SessionMessage.class);
+            if (inputMessage.getMessageId().equals(SaraCons.MSG_START_SESSION)) {
+                Log4J.info(this, "MSG_START_SESSION");
+                blackboard.post(this, inputMessage.getMessageId(), inputMessage.getPayload());
+            } else if (inputMessage.getMessageId().equals(SaraCons.R5STREAM_STARTED) ||
+                    inputMessage.getMessageId().equals(SaraCons.R5STREAM_DISCONNECTED) ||
+                    inputMessage.getMessageId().equals(SaraCons.R5STREAM_CLOSE) ||
+                    inputMessage.getMessageId().equals(SaraCons.R5STREAM_TIMEOUT) ||
+                    inputMessage.getMessageId().equals(SaraCons.R5STREAM_ERROR)) {
+                blackboard.post(this, inputMessage.getMessageId(), inputMessage.getPayload());
+            } else if (inputMessage.getMessageId().equals(SaraCons.MSG_START_DM)) {
+                Log4J.info(this, SaraCons.MSG_START_DM);
+                blackboard.post(this, inputMessage.getMessageId(), inputMessage.getPayload());
+            } else {
+                ASROutput asrOutput = Utils.fromJson(inputMessage.getPayload(), ASROutput.class);
+                blackboard.post(this, inputMessage.getMessageId(), asrOutput);
+                if (inputMessage.getMessageId().equals(SaraCons.MSG_ASR)) {
+                    Log4J.info(this, "ASR - > utterance: " + asrOutput.getUtterance() + "  confidence: "
+                            + asrOutput.getConfidence());
+                }
             }
         }
     }
