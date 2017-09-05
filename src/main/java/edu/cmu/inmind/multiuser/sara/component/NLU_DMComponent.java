@@ -20,7 +20,7 @@ import java.util.ArrayList;
  * Created by oscarr on 3/7/17.
  */
 @StateType( state = Constants.STATEFULL)
-@BlackboardSubscription( messages = {SaraCons.MSG_ASR, SaraCons.MSG_START_DM, SaraCons.MSG_USER_MODEL_LOADED} )
+@BlackboardSubscription( messages = {SaraCons.MSG_ASR, SaraCons.MSG_START_DM, SaraCons.MSG_UM} )
 public class NLU_DMComponent extends PluggableComponent {
     private static final String SESSION_MANAGER_SERVICE = "session-manager";
     private ClientCommController commController;
@@ -74,10 +74,18 @@ public class NLU_DMComponent extends PluggableComponent {
 
     @Override
     public void onEvent(BlackboardEvent blackboardEvent) throws Exception {
-        // store user's latest utterance
-        String utterance = blackboardEvent.toString().split("Utterance: ")[1].split(" confidence:")[0];
         // print full event
         Log4J.debug(this, "received " + blackboardEvent.toString());
+        // store user's latest utterance
+        String tryUtterance;
+        try { tryUtterance = blackboardEvent.toString().split("Utterance: ")[1].split(" confidence:")[0]; }
+        catch (ArrayIndexOutOfBoundsException aiobe) {
+            System.err.println(blackboardEvent.toString());
+            aiobe.printStackTrace();
+            tryUtterance = "";
+            Log4J.warn(this, aiobe.toString());
+        }
+        final String utterance = tryUtterance;
         // let's forward the ASR message to DialoguePython:
         if (blackboardEvent.getId().equals(SaraCons.MSG_START_DM)){
             ASROutput startDMMessage = new ASROutput(SaraCons.MSG_START_DM, 1.0);
@@ -85,7 +93,7 @@ public class NLU_DMComponent extends PluggableComponent {
     	    commController.send( getSessionId(), startDMMessage );
            // commController.send( getSessionId(), startDMMessage );
             Log4J.debug(this, "Sent Initial Greeting");
-        } else if (blackboardEvent.getId().equals(SaraCons.MSG_USER_MODEL_LOADED)) {
+        } else if (blackboardEvent.getId().equals(SaraCons.MSG_UM)) {
             final UserModel userModel = (UserModel) blackboardEvent.getElement();
             Log4J.info(this, "Received user model");
             if (userModel.getUserFrame() != null) {
@@ -103,47 +111,14 @@ public class NLU_DMComponent extends PluggableComponent {
         commController.receive(new ResponseListener() {
             @Override
             public void process(String message) {
-		Log4J.debug(NLU_DMComponent.this, "I've received: " + message);
+		        Log4J.debug(NLU_DMComponent.this, "I've received: " + message);
                 // store user's utterance (for NLG)
-                DMOutput dmOutput = Utils.fromJson(message, DMOutput.class);
+                SmartDMOutput dmOutput = Utils.fromJson(message, SmartDMOutput.class);
                 dmOutput.setUtterance(utterance);
-                // for incremental system
-                // if contains underspecified recommendation, create empty Recommendation
-                if (dmOutput.getRecommendation() != null) {
-                    dmOutput.setRecommendation(new Recommendation());
-                    dmOutput.setSessionID(getSessionId());
-                }
                 // post to Blackboard
                 blackboard().post(NLU_DMComponent.this, SaraCons.MSG_DM, dmOutput);
             }
         });
-    }
-
-    /** Fills in underspecified Recommmendation variable.
-     *  @return complete movie recommendation
-     */
-    public static Recommendation getRecommendation(Recommendation recommendation, String sessionID) {
-        // query for value
-        commController.send(sessionID, new ASROutput(SaraCons.MSG_QUERY, 1.0));
-        commController.receive(new ResponseListener() {
-            @Override
-            public void process(String message) {
-                // set recommendation to newly found value
-                recommendation.setRexplanations(Utils.fromJson(message, DMOutput.class).getRecommendation().getRexplanations());
-            }
-        });
-        // wait for DialoguePython to send the value
-        while (!recommendation.hasContent()) {
-            try {
-System.out.println("VIVIAN: waiting for specified rec");
-                Thread.sleep(50);
-            } catch (Exception e) {
-                System.out.println(e);
-                System.err.println(e);
-            }
-        }
-        // Recommendation object now contains value
-        return recommendation;
     }
 
     @Override
@@ -151,7 +126,6 @@ System.out.println("VIVIAN: waiting for specified rec");
         sendCloseMessage();
         super.shutDown();
     }
-
     /**
      * We need to send this message to the Python Dialogue System on a separate thread, otherwise
      * we will get some TimeOut exceptions because the communication process takes longer than the
@@ -168,4 +142,47 @@ System.out.println("VIVIAN: waiting for specified rec");
             }
         }.start();
     }
+
+    /** the smart kind of DMOutput that is able to load recommendations JIT */
+    public class SmartDMOutput extends DMOutput {
+        /** Fills in underspecified Recommmendation variable if necessary. */
+        public void fillInRecommendationTitle() {
+            // query for value
+            Log4J.info(SmartDMOutput.this, "sending recommendation title request");
+            commController.send(getSessionID(), new ASROutput(SaraCons.MSG_QUERY, 1.0));
+            Log4J.info(SmartDMOutput.this, "sent recommendation title request");
+            commController.receive(new ResponseListener() {
+                @Override
+                public void process(String message) {
+                    // set recommendation to newly found value
+                    System.err.println("XXXX: " + message);
+                    recommendation.setRexplanations(Utils.fromJson(message, DMOutput.class).getRecommendation().getRexplanations());
+                    System.err.println("done: " + message);
+                }
+            });
+            // wait for DialoguePython to send the value
+            while (!recommendation.hasContent()) {
+                try {
+                    System.out.println("VIVIAN: waiting for specified rec");
+                    Thread.sleep(50);
+                } catch (Exception e) {
+                    System.out.println(e);
+                    System.err.println(e);
+                }
+            }
+        }
+
+        @Override public String getRecommendationTitle() {
+            Log4J.info(NLU_DMComponent.this, "attempting to get recommendation title");
+            if (!recommendation.hasContent()) {
+                Log4J.info(NLU_DMComponent.this, "attempting to query for recommendation title");
+                System.err.println(recommendation.toString());
+                fillInRecommendationTitle();
+                System.err.println(recommendation.toString());
+            }
+            // Recommendation object now contains value
+            return recommendation.getTitle();
+        }
+    }
+
 }

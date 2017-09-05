@@ -18,23 +18,20 @@ public class SROutput {
     public String getAction() {
         return dmOutput.action;
     }
-
     public void setAction(String action) {
         dmOutput.action = action;
-    }
-
-    public void setSessionID(String sessionID) {
-        dmOutput.sessionID = sessionID;
     }
 
     public String getSessionID() {
         return dmOutput.sessionID;
     }
+    public void setSessionID(String sessionID) {
+        dmOutput.sessionID = sessionID;
+    }
 
     public String getStrategy() {
         return strategy;
     }
-
     public void setStrategy(String strategy) {
         this.strategy = strategy;
     }
@@ -42,7 +39,6 @@ public class SROutput {
     public double getRapport() {
         return rapport;
     }
-
     public void setRapport(double rapport) {
         this.rapport = rapport;
     }
@@ -50,19 +46,15 @@ public class SROutput {
     public List<Entity> getEntities() {
         return dmOutput.entities;
     }
-
     public void setEntities(List<Entity> entities) {
         dmOutput.entities = entities;
     }
 
+    public DMOutput getDMOutput() { return dmOutput; }
+
     public Recommendation getRecommendation() {
         return dmOutput.recommendation;
     }
-
-    public String getRecommendationTitle() {
-        return dmOutput.recommendation.getTitle();
-    }
-
     public void setRecommendation(Recommendation recommendation) {
         dmOutput.recommendation = recommendation;
     }
@@ -70,7 +62,6 @@ public class SROutput {
     public UserFrame getUserFrame() {
         return dmOutput.frame;
     }
-
     public void setUserFrame(UserFrame userFrame) {
         dmOutput.frame = userFrame;
     }
@@ -78,7 +69,6 @@ public class SROutput {
     public List<String> getStates() {
         return states;
     }
-
     public void setStates(final List<String> states) {
         this.states = states;
     }

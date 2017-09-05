@@ -8,7 +8,7 @@ import java.util.List;
 public class DMOutput {
     String action;
     List<Entity> entities;
-    Recommendation recommendation;
+    protected Recommendation recommendation;
     UserFrame frame;
     String utterance;
     String sessionID;
@@ -16,31 +16,30 @@ public class DMOutput {
     public String getAction() {
         return action;
     }
-
     public void setAction(String action) {
         this.action = action;
-    }
-
-    public void setSessionID(String sessionID) {
-        this.sessionID = sessionID;
     }
 
     public String getSessionID() {
         return sessionID;
     }
+    public void setSessionID(String sessionID) {
+        this.sessionID = sessionID;
+    }
 
     public List<Entity> getEntities() {
         return entities;
     }
-
     public void setEntities(List<Entity> entities) {
         this.entities = entities;
     }
 
+    public String getRecommendationTitle() { return recommendation.getTitle(); }
+    public boolean hasRecommendationTitle() { return recommendation != null; }
+
     public Recommendation getRecommendation() {
         return recommendation;
     }
-
     public void setRecommendation(Recommendation recommendation) {
         this.recommendation = recommendation;
     }
@@ -48,17 +47,15 @@ public class DMOutput {
     public UserFrame getUserFrame() {
         return frame;
     }
-
     public void setFrame(UserFrame frame) {
         this.frame = frame;
     }
 
-    public void setUtterance(String utterance) {
-        this.utterance = utterance;
-    }
-
     public String getUtterance() {
         return utterance;
+    }
+    public void setUtterance(String utterance) {
+        this.utterance = utterance;
     }
 
     public String toString(){

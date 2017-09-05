@@ -24,6 +24,8 @@ public class Recommendation {
     }
 
     public String getTitle() {
+        assert rexplanations.size() > 0;
+        assert rexplanations.get(0).getRecommendation() != null;
         return rexplanations.get(0).getRecommendation();
     }
 

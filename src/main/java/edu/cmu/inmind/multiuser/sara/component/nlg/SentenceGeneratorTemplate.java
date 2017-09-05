@@ -1,8 +1,11 @@
 package edu.cmu.inmind.multiuser.sara.component.nlg;
+import com.google.common.base.Strings;
+import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.sara.component.NLU_DMComponent;
 import edu.cmu.inmind.multiuser.common.model.SROutput;
 
 import java.io.*;
+import java.text.BreakIterator;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -11,10 +14,9 @@ import java.util.regex.Pattern;
  * Created by yoichimatsuyama on 4/12/17.
  *
  * The structure and functionality is as follows:
- * - given a task intent and conversational strategy, we select a sentence from the DB and fill in all templates in that sentence.
+ * - given a task intent and conversational strategy, we select a sentence (or sentences) from the DB and fill in all templates in it.
  * - if there is no specific conv. strategy for this intent, we select the NONE sentence, and if that does not exist, we back off to any strategy.
  * - if the intent does not exist, we fail.
- * -
  */
 public class SentenceGeneratorTemplate implements SentenceGenerator {
 
@@ -41,10 +43,31 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
 
     /** generate the final NLG output string for this task intent and social strategy */
     @Override
-    public String generate(SROutput srOutput){
+    public String generate(SROutput srOutput) {
+        List<String> sentences = generateAsList(srOutput);
+        return String.join("", sentences);
+    }
+
+    /** generate a list of sentences */
+    public List<String> generateAsList(SROutput srOutput){
         List<WeightedCandidate> candidates = selectCandidates(srOutput);
-        String sentence = selectByWeight(candidates);
-        return sentence;
+        String allText = selectByWeight(candidates);
+        return splitIntoSentences(allText);
+    }
+
+    /** split text into a list of sentences */
+    private List<String> splitIntoSentences(String allText){
+        BreakIterator splitter = BreakIterator.getSentenceInstance(Locale.US);
+        splitter.setText(allText);
+        int start = splitter.first();
+        int end;
+        List<String> sentences=new ArrayList<String>(3);
+        while ((end = splitter.next()) != BreakIterator.DONE) {
+            String sentence = allText.substring(start,end);
+            start = end;
+            sentences.add(sentence);
+        }
+        return sentences;
     }
 
     /* select candidates from the DB based on the task intent and conversational strategy */
@@ -69,11 +92,11 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
         return candidates;
     }
 
-    public static List<WeightedCandidate> filterFillable(List<Template> candidates, SROutput srOutput, Map<String,ArrayList<String>> preferencesMap) {
+    private static List<WeightedCandidate> filterFillable(List<Template> candidates, SROutput srOutput, Map<String,ArrayList<String>> preferencesMap) {
         List<WeightedCandidate> filteredCandidates = new ArrayList<>();
         if (candidates != null) {
             for (Template template : candidates) {
-                WeightedCandidate match = template.match(srOutput, preferencesMap);
+                WeightedCandidate match = template.match(srOutput, false);
                 if (match != null) {
                     // add to head if has greater weight (else add to tail)
                     if (filteredCandidates.size() > 0 && match.weight >= filteredCandidates.get(0).weight) {
@@ -87,30 +110,116 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
         return filteredCandidates;
     }
 
-    public static String selectByWeight(List<WeightedCandidate> candidates) {
+    private static String selectByWeight(List<WeightedCandidate> candidates) {
         assert candidates.size() > 0 : "filtering ended without any options.";
         // FIXME: to be implemented
         // temporarily implemented in filterFillable (when adding candidates to list)
         return candidates.get(0).sentence;
     }
 
-    /*
-    public String fillValues(String sentence, SROutput srOutput){
-        String out = sentence;
-        if(sentence.contains("#title")) {
-            if (srOutput.getRecommendation().getRexplanations().get(0).getRecommendation() != null) {
-                String title = srOutput.getRecommendation().getRexplanations().get(0).getRecommendation();
-                out = sentence.replaceAll("#title", title);
-            }
-        } if(sentence.contains("#entity")) {
-            if (srOutput.getEntities().size()>0) {
-                String entity = srOutput.getEntities().get(0).getValue();
-                out = sentence.replaceAll("#entity", entity);
-            }
-        }
-        return out;
+    public boolean matchesPattern(String template, SROutput srOutput) {
+        return replacePatterns(template, srOutput, false) != null;
     }
-    */
+
+    public String replacePatterns(String template, SROutput srOutput) {
+        return replacePatterns(template, srOutput, true);
+    }
+
+    /**
+     * replaces all #patterns in template
+     * @return template with patterns filled in OR null if a pattern could not be filled
+     */
+    private String replacePatterns(String template, SROutput srOutput, boolean replace) {
+        Matcher m = slotMarker.matcher(template);
+        while (m.matches()) {
+            String slotName = m.group(1);
+            String value = null, latestEntityValue, latestEntityType, latestUtterance;
+            try {
+                switch (slotName) {
+                    case "#title":
+                        Log4J.info(this, "attempting to work on #title");
+                        if (replace) {
+                            Log4J.info(this, "attempting to replace #title");
+                            Log4J.info(this, srOutput.getDMOutput().getClass().toString());
+                            ((NLU_DMComponent.SmartDMOutput)srOutput.getDMOutput()).fillInRecommendationTitle();
+                            value = srOutput.getDMOutput().getRecommendationTitle();
+                        } else
+                            value = srOutput.getDMOutput().hasRecommendationTitle() ? "" : null;
+                        break;
+                    case "#reason":
+                        value = srOutput.getRecommendation().getRexplanations().get(0).getExplanations().get(0);
+                        break;
+                    case "#actor":
+                        value = srOutput.getUserFrame().getFrame().getActors().getLike().get(0).getValue();
+                        break;
+                    case "#dislikedActor":
+                        value = srOutput.getUserFrame().getFrame().getActors().getDislike().get(0).getValue();
+                        break;
+                    case "#genre":
+                        value = srOutput.getUserFrame().getFrame().getGenres().getLike().get(0).getValue();
+                        break;
+                    case "#dislikedGenre":
+                        value = srOutput.getUserFrame().getFrame().getGenres().getDislike().get(0).getValue();
+                        break;
+                    case "#director":
+                        value = srOutput.getUserFrame().getFrame().getDirectors().getLike().get(0).getValue();
+                        break;
+                    case "#dislikedDirector":
+                        value = srOutput.getUserFrame().getFrame().getDirectors().getDislike().get(0).getValue();
+                        break;
+                    case "#latest":
+                        latestUtterance = srOutput.getUserFrame().getLatestUtterance();
+                        latestEntityValue = getLatestEntityValue(srOutput); // latest entity
+                        // if entity is from user's last utterance
+                        if (latestUtterance.contains(latestEntityValue)) {
+                            value = latestEntityValue;
+                        }
+                        break;
+                    case "#agree":
+                        latestEntityValue = getLatestEntityValue(srOutput); // latest entity value
+                        latestEntityType = getLatestEntityType(srOutput);
+                        // if SARA shares the same preference
+                        if (preferencesMap.get(latestEntityType).contains(latestEntityValue)) {
+                            value = latestEntityValue;
+                        }
+                        break;
+                    case "#disagree":
+                        latestEntityValue = getLatestEntityValue(srOutput); // latest entity value
+                        latestEntityType = getLatestEntityType(srOutput);
+                        // if SARA shares the same preference
+                        if (!preferencesMap.get(latestEntityType).contains(latestEntityValue)) {
+                            value = latestEntityValue;
+                        }
+                        break;
+                    case "#different":
+                        latestEntityValue = getLatestEntityValue(srOutput); // latest entity value
+                        latestEntityType = getLatestEntityType(srOutput);
+                        // if SARA shares the same preference
+                        if (!preferencesMap.get(latestEntityType).contains(latestEntityValue)) {
+                            value = preferencesMap.get(latestEntityValue).get(0);
+                        }
+                        break;
+                    default:
+                        throw new RuntimeException("SentenceGeneratorTemplate#replacePatterns() found a marker that I do not understand: " + slotName);
+                }
+            } catch (NullPointerException | IndexOutOfBoundsException npe) {
+                // null pointer exceptions occur when we're unable to access the field
+                // it's much simpler to catch them than to handle them individually for all cases
+                value = null;
+            }
+            if (value == null) {
+                template = null;
+                break;
+            }
+            if (replace) {
+                template = template.replaceAll(slotName, value); // fill in template
+            } else {
+                template = template.replaceAll(slotName, ""); // remove template so we do not match on it again
+            }
+            m = slotMarker.matcher(template);
+        }
+        return template;
+    }
 
     private static class WeightedCandidate {
         String sentence;
@@ -121,131 +230,20 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
         }
     }
 
+    private final static Pattern slotMarker = Pattern.compile(".*?(#[^ \\.,\\?!]*).*");
 
     /** a template that can return a string with values filled in from a frame/explanation/... */
-    private static class Template {
-        private final static Pattern slotMarker = Pattern.compile(".*?(#[^ \\.,\\?!]*).*");
+    private class Template {
 
         final String template;
         final double weight;
-        /* Template(String template) {
-            this.template = template;
-        } */
         Template(String template, double weight) {
             this.template = template;
             this.weight = weight;
         }
 
-        WeightedCandidate match(SROutput srOutput, Map<String,ArrayList<String>> preferencesMap) {
-            String instantiation = template;
-            int size = 0;
-            int itemToRefer = 0;
-            Random r = new Random();
-            Matcher m = slotMarker.matcher(instantiation);
-            while (m.matches()) {
-                String slotName = m.group(1);
-                String value = null, latestEntityValue = null, latestEntityType = null, latestUtterance = null;
-                try {
-                    switch (slotName) {
-                        case "#title":
-                            // value = srOutput.getRecommendation().getRexplanations().get(0).getRecommendation();
-                            // fill underspecified variable
-                            NLU_DMComponent.getRecommendation(srOutput.getRecommendation(), srOutput.getSessionID());
-System.out.println("VIVIAN: found recommendation " + srOutput.getRecommendation());
-                            value = srOutput.getRecommendationTitle();
-                            break;
-                        case "#reason":
-                            value = srOutput.getRecommendation().getRexplanations().get(0).getExplanations().get(0);
-                            break;
-                        case "#previousMovie":
-                            // Gets the latest movie that the user liked. Supposedly used to change greeting phase.
-                            size = srOutput.getUserFrame().getFrame().getMovies().getLike().size();
-                            value = srOutput.getUserFrame().getFrame().getMovies().getLike().get(size-1);
-                            break;
-                        case "#likedActor":
-                            // Gets a random liked actor from the user model. Supposedly used when SARA refers to shared experience.
-                            size = srOutput.getUserFrame().getFrame().getActors().getLike().size() - 1;
-                            itemToRefer = r.nextInt(size-0);
-                            value = srOutput.getUserFrame().getFrame().getActors().getLike().get(itemToRefer).getValue();
-                            break;
-                        case "#dislikedActor":
-                            size = srOutput.getUserFrame().getFrame().getActors().getDislike().size() - 1;
-                            itemToRefer = r.nextInt(size-0);
-                            value = srOutput.getUserFrame().getFrame().getActors().getDislike().get(itemToRefer).getValue();
-                            break;
-                        case "#likedGenre":
-                            size = srOutput.getUserFrame().getFrame().getGenres().getLike().size() - 1;
-                            itemToRefer = r.nextInt(size-0);
-                            value = srOutput.getUserFrame().getFrame().getGenres().getLike().get(itemToRefer).getValue();
-                            break;
-                        case "#dislikedGenre":
-                            size = srOutput.getUserFrame().getFrame().getGenres().getDislike().size() - 1;
-                            itemToRefer = r.nextInt(size-0);
-                            value = srOutput.getUserFrame().getFrame().getGenres().getDislike().get(itemToRefer).getValue();
-                            break;
-                        case "#director":
-                            size = srOutput.getUserFrame().getFrame().getDirectors().getLike().size() - 1;
-                            itemToRefer = r.nextInt(size-0);
-                            value = srOutput.getUserFrame().getFrame().getDirectors().getLike().get(itemToRefer).getValue();
-                            break;
-                        case "#dislikedDirector":
-                            size = srOutput.getUserFrame().getFrame().getDirectors().getDislike().size() - 1;
-                            itemToRefer = r.nextInt(size-0);
-                            value = srOutput.getUserFrame().getFrame().getDirectors().getDislike().get(itemToRefer).getValue();
-                            break;
-                        case "#latest":
-                            // Get the latest entity detected from the user
-                            latestUtterance = srOutput.getUserFrame().getLatestUtterance();
-                            latestEntityValue = getLatestEntityValue(srOutput); // latest entity
-                            // If entity is from user's last utterance
-                            if (latestUtterance.contains(latestEntityValue)) {
-                                value = latestEntityValue;
-                            }
-                            break;
-                        case "#agree":
-                            latestUtterance = srOutput.getUserFrame().getLatestUtterance();
-                            latestEntityValue = getLatestEntityValue(srOutput); // latest entity value
-                            latestEntityType = getLatestEntityType(srOutput);
-                            // If SARA shares the same preference
-                            if (latestUtterance.contains(latestEntityValue) && preferencesMap.get(latestEntityType).contains(latestEntityValue)) {
-                                value = latestEntityValue;
-                            }
-                            break;
-                        case "#disagree":
-                            latestUtterance = srOutput.getUserFrame().getLatestUtterance();
-                            latestEntityValue = getLatestEntityValue(srOutput); // latest entity value
-                            latestEntityType = getLatestEntityType(srOutput);
-                            // If SARA have opposite preference
-                            if (latestUtterance.contains(latestEntityValue) && !preferencesMap.get(latestEntityType).contains(latestEntityValue)) {
-                                value = latestEntityValue;
-                            }
-                            break;
-                        case "#different":
-                            latestUtterance = srOutput.getUserFrame().getLatestUtterance();
-                            latestEntityValue = getLatestEntityValue(srOutput); // latest entity value
-                            latestEntityType = getLatestEntityType(srOutput);
-                            // If SARA has another preference
-                            if (latestUtterance.contains(latestEntityValue) && !preferencesMap.get(latestEntityType).contains(latestEntityValue)) {
-                                value = preferencesMap.get(latestEntityValue).get(0);
-                            }
-                            break;
-                        default:
-                            throw new RuntimeException("SentenceGeneratorTemplate.Template#match() found a marker that I do not understand: " + slotName);
-                    }
-                } catch (NullPointerException | IndexOutOfBoundsException npe) {
-                    // null pointer exceptions occur when we're unable to access the field
-                    // it's much simpler to catch them than to handle them individually for all cases
-                    value = null;
-                }
-                if (value == null) {
-                    instantiation = null;
-                    break;
-                }
-                instantiation = instantiation.replaceAll(slotName, value);
-                m = slotMarker.matcher(instantiation);
-            }
-            // return instantiation;
-            return (instantiation == null) ? null : new WeightedCandidate(instantiation, weight);
+        WeightedCandidate match(SROutput srOutput, boolean replace) {
+            return matchesPattern(template, srOutput) ? new WeightedCandidate(template, weight) : null;
         }
     }
 
@@ -299,32 +297,11 @@ System.out.println("VIVIAN: found recommendation " + srOutput.getRecommendation(
     /**
      * Created by yoichimatsuyama on 4/12/17.
      */
-    private static class Sentence {
+    private class Sentence {
         String intent;
         String strategy;
         String sentence;
         double weight;
-
-        /**
-         * turn a line formatted in the following way into a sentence object:
-         * - empty lines are OK, lines starting with a # character are OK (both are disregarded)
-         * - tab-separated fields: phase \t intent \t conversational strategy \t weight (as a double) \t sentence (possibly with attribute markers)
-         * @return the Sentence object or NULL if comment
-         * @throws IllegalArgumentException for lines that are neither comments nor properly formatted sentenceDB entries
-         */
-        public static Sentence fromLine(String line) {
-            Sentence sentence = null;
-            if(!line.startsWith("#") && !line.trim().isEmpty()){
-                String[] tokens = line.split("\t");
-                if(tokens.length > 3){
-                    // assumes that weight (token[3]) is a double
-                    sentence = new Sentence(tokens[1], tokens[2], Double.parseDouble(tokens[3]), tokens[4]);
-                } else {
-                    throw new IllegalArgumentException("line was not a comment and did not have the right format: " + line);
-                }
-            }
-            return sentence;
-        }
 
         Sentence(String intent, String strategy, double weight, String sentence) {
             this.intent = intent;
@@ -335,9 +312,29 @@ System.out.println("VIVIAN: found recommendation " + srOutput.getRecommendation(
 
         String getIntent() { return intent; }
         String getStrategy() { return strategy; }
-        String getSentence() { return sentence; }
         double getWeight() { return weight; }
         Template getTemplate() {return new Template(sentence, weight);}
+    }
+
+    /**
+     * turn a line formatted in the following way into a sentence object:
+     * - empty lines are OK, lines starting with a # character are OK (both are disregarded)
+     * - tab-separated fields: phase \t intent \t conversational strategy \t weight (as a double) \t sentence (possibly with attribute markers)
+     * @return the Sentence object or NULL if comment
+     * @throws IllegalArgumentException for lines that are neither comments nor properly formatted sentenceDB entries
+     */
+    public Sentence fromLine(String line) {
+        Sentence sentence = null;
+        if(!line.startsWith("#") && !line.trim().isEmpty()){
+            String[] tokens = line.split("\t");
+            if(tokens.length > 3){
+                // assumes that weight (token[3]) is a double
+                sentence = new Sentence(tokens[1], tokens[2], Double.parseDouble(tokens[3]), tokens[4]);
+            } else {
+                throw new IllegalArgumentException("line was not a comment and did not have the right format: " + line);
+            }
+        }
+        return sentence;
     }
 
     /**
@@ -349,7 +346,7 @@ System.out.println("VIVIAN: found recommendation " + srOutput.getRecommendation(
             BufferedReader in = new BufferedReader(new InputStreamReader(sentenceDB));
             String line = null;
             while((line = in.readLine()) != null) {
-                Sentence sentence = Sentence.fromLine(line);
+                Sentence sentence = fromLine(line);
                 if (sentence != null) {
                     String intent = sentence.getIntent();
                     String strategy = sentence.getStrategy();

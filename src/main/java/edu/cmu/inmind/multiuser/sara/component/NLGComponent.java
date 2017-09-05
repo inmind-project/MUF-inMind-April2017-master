@@ -16,6 +16,7 @@ import edu.cmu.inmind.multiuser.controller.plugin.StateType;
 import edu.cmu.inmind.multiuser.sara.component.nlg.SentenceGeneratorTemplate;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 
 /**
  * Created by oscarr on 3/7/17.
@@ -24,7 +25,6 @@ import java.io.FileNotFoundException;
 @BlackboardSubscription( messages = {SaraCons.MSG_SR})
 public class NLGComponent extends PluggableComponent implements BeatCallback {
     SentenceGeneratorTemplate gen;
-    SROutput srOutput;
     BEAT beat;
 
     public NLGComponent() {
@@ -54,18 +54,24 @@ public class NLGComponent extends PluggableComponent implements BeatCallback {
     }
     @Loggable
     private void extractAndProcess() {
-        srOutput = (SROutput) blackboard().get(SaraCons.MSG_SR);
+        SROutput srOutput = (SROutput) blackboard().get(SaraCons.MSG_SR);
         /**
          * generation
          */
-        Log4J.info(this, "NLG srOutput: " + srOutput);
-        String sentence = gen.generate(srOutput);
-        /**
-         * send sentence to BEAT
-         */
-        beat.getBsonCompiler().setPlainText(sentence);
-        beat.startProcess(sentence);
-        Log4J.info(this, "NLG sentence: " + sentence);
+        Log4J.info(this, "NLG srOutput: " + srOutput.toString());
+        List<String> sentences = gen.generateAsList(srOutput);
+        Log4J.info(this, "NLG generated: " + sentences);
+        for (String sentence : sentences) {
+            Log4J.info(this, "for sentence pattern: " + sentence);
+            sentence = gen.replacePatterns(sentence, srOutput);
+            Log4J.info(this, "replaced pattern to: " + sentence);
+            /**
+             * send sentence to BEAT
+             */
+            beat.getBsonCompiler().setPlainText(sentence);
+            beat.startProcess(sentence);
+            Log4J.info(this, "NLG sentence: " + sentence);
+        }
     }
 
     /**
@@ -75,7 +81,6 @@ public class NLGComponent extends PluggableComponent implements BeatCallback {
     @Override
     public void onEvent(BlackboardEvent event) throws Exception
     {
-        //TODO: add code here
         if(event.getId().equals(SaraCons.MSG_SR)) {
             extractAndProcess();
         }
@@ -93,7 +98,7 @@ public class NLGComponent extends PluggableComponent implements BeatCallback {
         /**
          * update the blackboard
          */
-        Log4J.info(this, "Input: " + srOutput.getAction() + " " + srOutput.getStrategy() + " Output: " +bson.getSpeech());
+        Log4J.info(this, "SessionID: " + this.getSessionId() + "Output: " +bson.getSpeech());
         blackboard().post( this, SaraCons.MSG_NLG, bson );
         Log4J.info(this, "BSON to Android: " + Utils.toJson(bson));
     }
