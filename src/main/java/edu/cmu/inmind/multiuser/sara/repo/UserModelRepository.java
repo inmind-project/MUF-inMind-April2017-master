@@ -24,7 +24,8 @@ public class UserModelRepository {
     public Optional<UserModel> readModel() {
         try {
             return Optional.ofNullable(Utils.fromJsonFile(getFilePath(), UserModel.class))
-                    .filter(model -> model.getId().equals(sessionId));
+                    .filter(UserModel::isValid)
+                    .filter(model -> sessionId.equals(model.getId()));
         } catch (Exception exception) {
             Log4J.error(this, "Unable to load user userModel for " + sessionId);
         }

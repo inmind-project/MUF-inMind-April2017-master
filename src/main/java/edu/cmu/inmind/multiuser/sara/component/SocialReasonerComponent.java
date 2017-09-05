@@ -20,13 +20,13 @@ import edu.cmu.inmind.multiuser.socialreasoner.model.intent.SystemIntent;
 
 @StateType( state = Constants.STATEFULL)
 @BlackboardSubscription( messages = {SaraCons.MSG_DM, SaraCons.MSG_RPT, SaraCons.MSG_CSC, SaraCons.MSG_NVB,
-        SaraCons.MSG_USER_MODEL_LOADED})
+        SaraCons.MSG_UM})
 public class SocialReasonerComponent extends PluggableComponent {
 
     private final SocialReasonerController socialController = new SocialReasonerController();
     String systemStrategy = "";
     private SROutput sendToNLG;
-    private int rapport=4;
+    private double rapport=4.0;
     private String userCS="";
     private boolean isSmiling;
     private boolean isGazing;
@@ -43,7 +43,7 @@ public class SocialReasonerComponent extends PluggableComponent {
         RapportOutput rapportOutput = edu.cmu.inmind.multiuser.common.Utils.fromJson(
                 (String) blackboard().get(SaraCons.MSG_RPT), RapportOutput.class );
 
-        rapport = (int)rapportOutput.getRapportScore();
+        rapport = rapportOutput.getRapportScore();
         socialController.setRapportScore(rapport);
         socialController.addContinousStates(null);
 
@@ -130,7 +130,7 @@ public class SocialReasonerComponent extends PluggableComponent {
         if (event.getId().equals(SaraCons.MSG_CSC)) {
             updateStrategy();
         }
-        if (event.getId().equals(SaraCons.MSG_USER_MODEL_LOADED)) {
+        if (event.getId().equals(SaraCons.MSG_UM)) {
             updateUserModel(((UserModel) event.getElement()));
         }
         if (event.getId().equals(SaraCons.MSG_DM)) {

@@ -41,7 +41,6 @@ public class SaraCons {
     public static final String MSG_LOG_COMPONENT = "MSG_LOG_COMPONENT";
     public static final String MSG_DIALOGUE_RESPONSE = "MSG_DIALOGUE_RESPONSE";
     public static final String MSG_START_STREAMING = "MSG_START_STREAMING";
-    public static final String MSG_USER_MODEL_LOADED = "MSG_USER_MODEL_LOADED";
 
     //services
     public static final String NLU_SERVICE = "NLU_SERVICE";

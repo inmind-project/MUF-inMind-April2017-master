@@ -42,12 +42,11 @@ public class UserModelComponent extends PluggableComponent {
 
     private static final Consumer<UserModel> resetEpisodicState = UserModelComponent::resetEpisodicState;
     private static final Consumer<UserModel> resetSemanticState = UserModelComponent::resetSemanticState;
-    private static final Consumer<UserModel> resetAll = resetEpisodicState.andThen(resetSemanticState);
 
     private static final Map<String, Consumer<UserModel>> USER_MODEL_RESETTERS = ImmutableMap.of(
             ResetOptions.EPISODIC, resetEpisodicState,
             ResetOptions.SEMANTIC, resetSemanticState,
-            ResetOptions.ALL, resetAll
+            ResetOptions.ALL, resetEpisodicState.andThen(resetSemanticState)
     );
 
     private static void resetSemanticState(final UserModel model) {
@@ -58,6 +57,7 @@ public class UserModelComponent extends PluggableComponent {
 
     private static void resetEpisodicState(final UserModel model) {
         model.updateBehaviorNetworkStates(ImmutableList.of());
+        model.setRapport(UserModel.RAPPORT_UNDEFINED);
     }
 
     private UserModelRepository repository;
@@ -93,7 +93,7 @@ public class UserModelComponent extends PluggableComponent {
 
         Log4J.info(this, "Loaded user model: " + Utils.toJson(userModel));
 
-        blackboard().post(this, SaraCons.MSG_USER_MODEL_LOADED, userModel);
+        blackboard().post(this, SaraCons.MSG_UM, userModel);
     }
 
     private void handleMsgSR(BlackboardEvent event)
@@ -101,6 +101,7 @@ public class UserModelComponent extends PluggableComponent {
         final SROutput srOutput = (SROutput) event.getElement();
         userModel.updateBehaviorNetworkStates(srOutput.getStates());
         userModel.setUserFrame(srOutput.getUserFrame());
+        userModel.setRapport(srOutput.getRapport());
     }
 
     @Override
