@@ -20,7 +20,7 @@ import edu.cmu.inmind.multiuser.socialreasoner.model.intent.SystemIntent;
 
 @StateType( state = Constants.STATEFULL)
 @BlackboardSubscription( messages = {SaraCons.MSG_DM, SaraCons.MSG_RPT, SaraCons.MSG_CSC, SaraCons.MSG_NVB,
-        SaraCons.MSG_USER_MODEL_LOADED})
+        SaraCons.MSG_UM})
 public class SocialReasonerComponent extends PluggableComponent {
 
     private final SocialReasonerController socialController = new SocialReasonerController();
@@ -130,7 +130,7 @@ public class SocialReasonerComponent extends PluggableComponent {
         if (event.getId().equals(SaraCons.MSG_CSC)) {
             updateStrategy();
         }
-        if (event.getId().equals(SaraCons.MSG_USER_MODEL_LOADED)) {
+        if (event.getId().equals(SaraCons.MSG_UM)) {
             updateUserModel(((UserModel) event.getElement()));
         }
         if (event.getId().equals(SaraCons.MSG_DM)) {

@@ -92,7 +92,7 @@ public class UserModelComponent extends PluggableComponent {
 
         Log4J.info(this, "Loaded user model: " + Utils.toJson(userModel));
 
-        blackboard().post(this, SaraCons.MSG_USER_MODEL_LOADED, userModel);
+        blackboard().post(this, SaraCons.MSG_UM, userModel);
     }
 
     private void handleMsgSR(BlackboardEvent event)

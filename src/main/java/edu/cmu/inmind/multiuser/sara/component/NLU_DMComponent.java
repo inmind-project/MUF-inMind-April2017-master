@@ -20,7 +20,7 @@ import java.util.ArrayList;
  * Created by oscarr on 3/7/17.
  */
 @StateType( state = Constants.STATEFULL)
-@BlackboardSubscription( messages = {SaraCons.MSG_ASR, SaraCons.MSG_START_DM, SaraCons.MSG_USER_MODEL_LOADED} )
+@BlackboardSubscription( messages = {SaraCons.MSG_ASR, SaraCons.MSG_START_DM, SaraCons.MSG_UM} )
 public class NLU_DMComponent extends PluggableComponent {
     private static final String SESSION_MANAGER_SERVICE = "session-manager";
     private ClientCommController commController;
@@ -83,7 +83,7 @@ public class NLU_DMComponent extends PluggableComponent {
     	    commController.send( getSessionId(), startDMMessage );
            // commController.send( getSessionId(), startDMMessage );
             Log4J.debug(this, "Sent Initial Greeting");
-        } else if (blackboardEvent.getId().equals(SaraCons.MSG_USER_MODEL_LOADED)) {
+        } else if (blackboardEvent.getId().equals(SaraCons.MSG_UM)) {
             final UserModel userModel = (UserModel) blackboardEvent.getElement();
             Log4J.info(this, "Received user model");
             if (userModel.getUserFrame() != null) {
