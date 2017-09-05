@@ -26,7 +26,7 @@ public class SocialReasonerComponent extends PluggableComponent {
     private final SocialReasonerController socialController = new SocialReasonerController();
     String systemStrategy = "";
     private SROutput sendToNLG;
-    private int rapport=4;
+    private double rapport=4.0;
     private String userCS="";
     private boolean isSmiling;
     private boolean isGazing;
@@ -43,7 +43,7 @@ public class SocialReasonerComponent extends PluggableComponent {
         RapportOutput rapportOutput = edu.cmu.inmind.multiuser.common.Utils.fromJson(
                 (String) blackboard().get(SaraCons.MSG_RPT), RapportOutput.class );
 
-        rapport = (int)rapportOutput.getRapportScore();
+        rapport = rapportOutput.getRapportScore();
         socialController.setRapportScore(rapport);
         socialController.addContinousStates(null);
 

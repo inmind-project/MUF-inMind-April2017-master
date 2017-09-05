@@ -100,6 +100,7 @@ public class UserModelComponent extends PluggableComponent {
         final SROutput srOutput = (SROutput) event.getElement();
         userModel.updateBehaviorNetworkStates(srOutput.getStates());
         userModel.setUserFrame(srOutput.getUserFrame());
+        userModel.setRapport(srOutput.getRapport());
     }
 
     @Override

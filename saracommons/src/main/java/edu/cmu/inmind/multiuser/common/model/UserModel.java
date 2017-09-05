@@ -9,6 +9,7 @@ import java.util.List;
 public class UserModel {
     private final List<String> behaviorNetworkStates = new ArrayList<>();
     private UserFrame userFrame;
+    private double rapport;
 
     private final String id;
 
@@ -37,6 +38,14 @@ public class UserModel {
 
     public void setUserFrame(final UserFrame userFrame) {
         this.userFrame = userFrame;
+    }
+
+    public double getRapport() {
+        return rapport;
+    }
+
+    public void setRapport(final double rapport) {
+        this.rapport = rapport;
     }
 
     /**

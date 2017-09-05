@@ -8,7 +8,7 @@ import java.util.List;
 public class SROutput {
     String action;
     String strategy;
-    int rapport;
+    double rapport;
     List<Entity> entities;
     Recommendation recommendation;
     UserFrame userFrame;
@@ -30,11 +30,11 @@ public class SROutput {
         this.strategy = strategy;
     }
 
-    public int getRapport() {
+    public double getRapport() {
         return rapport;
     }
 
-    public void setRapport(int rapport) {
+    public void setRapport(double rapport) {
         this.rapport = rapport;
     }
 
