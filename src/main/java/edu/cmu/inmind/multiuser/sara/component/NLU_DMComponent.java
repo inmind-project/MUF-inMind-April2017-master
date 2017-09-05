@@ -101,7 +101,7 @@ public class NLU_DMComponent extends PluggableComponent {
         commController.receive(new ResponseListener() {
             @Override
             public void process(String message) {
-		Log4J.debug(NLU_DMComponent.this, "I've received: " + message);
+		        Log4J.debug(NLU_DMComponent.this, "I've received: " + message);
                 DMOutput dmOutput = Utils.fromJson(message, DMOutput.class);
                 blackboard().post(NLU_DMComponent.this, SaraCons.MSG_DM, dmOutput);
             }
