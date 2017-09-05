@@ -6,7 +6,8 @@
       "msgSubscriptions": [
         "MSG_ASR",
         "MSG_CSC",
-        "MSG_TR"
+        "MSG_SR",
+        "MSG_UM"
       ]
     }
   ]
