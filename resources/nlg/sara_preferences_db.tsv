@@ -1,4 +1,10 @@
-genre	action
-director	Christopher McQuarrie
-actor	Tom Cruise
-actor	Bruce Willis
+genre	liked   action
+genre   liked   horror
+genre   disliked    romantic
+director    liked	Christopher McQuarrie
+director    liked   Steven Spielberg
+director    disliked    Woody Allen
+actor   liked   Tom Cruise
+actor	liked   Bruce Willis
+actor   disliked    Owen Wilson
+actor   disliked    Jennifer Lawrence

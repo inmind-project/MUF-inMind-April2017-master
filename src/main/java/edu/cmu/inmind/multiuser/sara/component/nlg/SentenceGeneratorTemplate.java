@@ -1,6 +1,8 @@
 package edu.cmu.inmind.multiuser.sara.component.nlg;
 
+import edu.cmu.inmind.multiuser.common.model.Entity;
 import edu.cmu.inmind.multiuser.common.model.SROutput;
+import edu.cmu.inmind.multiuser.common.model.UserFrame;
 
 import java.io.*;
 import java.util.*;
@@ -21,7 +23,8 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
     // the outer map maps from task intent to map of social intent to a list of candidate sentence templates to be filled in
     private final Map<String,Map<String, List<Template>>> templateMap = new HashMap<>();
     // maps from entity to list of SARA's preferences for that entity
-    private final Map<String,ArrayList<String>> preferencesMap = new HashMap<>();
+    //private final Map<String,ArrayList<String>> preferencesMap = new HashMap<>();
+    private final UserFrame.Frame systemPreferences = new UserFrame.Frame();
     private static final String ANY_STRATEGY = "ANY";
 
     /** sentence DB to be loaded by default */
@@ -57,24 +60,24 @@ System.out.println("load SARA's preferences");
         if (intentMap == null)
             throw new IllegalArgumentException("you're querying an unknown intent: " + intent);
         // get the sentence candidates that match the intent and strategy
-        List<WeightedCandidate> candidates = filterFillable(intentMap.get(strategy), srOutput, preferencesMap);
+        List<WeightedCandidate> candidates = filterFillable(intentMap.get(strategy), srOutput, systemPreferences);
         // if no strategy is known, try "NONE" as strategy
         if (candidates == null || candidates.isEmpty()) {
-            candidates = filterFillable(intentMap.get("NONE"), srOutput, preferencesMap);
+            candidates = filterFillable(intentMap.get("NONE"), srOutput, systemPreferences);
         }
         // if none does not exist either, use all available social strategies
         if (candidates == null || candidates.isEmpty()) {
-            candidates = filterFillable(intentMap.get(ANY_STRATEGY), srOutput, preferencesMap);
+            candidates = filterFillable(intentMap.get(ANY_STRATEGY), srOutput, systemPreferences);
         }
         assert candidates != null && !candidates.isEmpty() : "could not find any intent for " + intent + "+" + strategy;
         return candidates;
     }
 
-    public static List<WeightedCandidate> filterFillable(List<Template> candidates, SROutput srOutput, Map<String,ArrayList<String>> preferencesMap) {
+    public static List<WeightedCandidate> filterFillable(List<Template> candidates, SROutput srOutput, UserFrame.Frame systemPreferences) {
         List<WeightedCandidate> filteredCandidates = new ArrayList<>();
         if (candidates != null) {
             for (Template template : candidates) {
-                WeightedCandidate match = template.match(srOutput, preferencesMap);
+                WeightedCandidate match = template.match(srOutput, systemPreferences);
                 if (match != null) {
                     // add to head if has greater weight (else add to tail)
                     if (filteredCandidates.size() > 0 && match.weight >= filteredCandidates.get(0).weight) {
@@ -137,7 +140,7 @@ System.out.println("load SARA's preferences");
             this.weight = weight;
         }
 
-        WeightedCandidate match(SROutput srOutput, Map<String,ArrayList<String>> preferencesMap) {
+        WeightedCandidate match(SROutput srOutput, UserFrame.Frame systemPreferences) {
             String instantiation = template;
             int size = 0;
             int itemToRefer = 0;
@@ -145,6 +148,7 @@ System.out.println("load SARA's preferences");
             Matcher m = slotMarker.matcher(instantiation);
             while (m.matches()) {
                 String slotName = m.group(1);
+                float latestEntityValence = 0;
                 String value = null, latestEntityValue = null, latestEntityType = null, latestUtterance = null;
                 try {
                     switch (slotName) {
@@ -159,33 +163,33 @@ System.out.println("load SARA's preferences");
                             size = srOutput.getUserFrame().getFrame().getMovies().getLike().size();
                             value = srOutput.getUserFrame().getFrame().getMovies().getLike().get(size-1);
                             break;
-                        case "#likedActor":
+                        case "#userLikedActor":
                             // Gets a random liked actor from the user model. Supposedly used when SARA refers to shared experience.
                             size = srOutput.getUserFrame().getFrame().getActors().getLike().size() - 1;
                             itemToRefer = r.nextInt(size-0);
                             value = srOutput.getUserFrame().getFrame().getActors().getLike().get(itemToRefer).getValue();
                             break;
-                        case "#dislikedActor":
+                        case "#userDislikedActor":
                             size = srOutput.getUserFrame().getFrame().getActors().getDislike().size() - 1;
                             itemToRefer = r.nextInt(size-0);
                             value = srOutput.getUserFrame().getFrame().getActors().getDislike().get(itemToRefer).getValue();
                             break;
-                        case "#likedGenre":
+                        case "#userLikedGenre":
                             size = srOutput.getUserFrame().getFrame().getGenres().getLike().size() - 1;
                             itemToRefer = r.nextInt(size-0);
                             value = srOutput.getUserFrame().getFrame().getGenres().getLike().get(itemToRefer).getValue();
                             break;
-                        case "#dislikedGenre":
+                        case "#userDislikedGenre":
                             size = srOutput.getUserFrame().getFrame().getGenres().getDislike().size() - 1;
                             itemToRefer = r.nextInt(size-0);
                             value = srOutput.getUserFrame().getFrame().getGenres().getDislike().get(itemToRefer).getValue();
                             break;
-                        case "#director":
+                        case "#userLikedDirector":
                             size = srOutput.getUserFrame().getFrame().getDirectors().getLike().size() - 1;
                             itemToRefer = r.nextInt(size-0);
                             value = srOutput.getUserFrame().getFrame().getDirectors().getLike().get(itemToRefer).getValue();
                             break;
-                        case "#dislikedDirector":
+                        case "#userDislikedDirector":
                             size = srOutput.getUserFrame().getFrame().getDirectors().getDislike().size() - 1;
                             itemToRefer = r.nextInt(size-0);
                             value = srOutput.getUserFrame().getFrame().getDirectors().getDislike().get(itemToRefer).getValue();
@@ -199,32 +203,157 @@ System.out.println("load SARA's preferences");
                                 value = latestEntityValue;
                             }
                             break;
-                        case "#agree":
+                        case "#noPref":
+                            // Returns "" if the user did not give any preferred entity. Supposedly used to get a coherent answer during the ask_whatever phase.
                             latestUtterance = srOutput.getUserFrame().getLatestUtterance();
-                            latestEntityValue = getLatestEntityValue(srOutput); // latest entity value
-                            latestEntityType = getLatestEntityType(srOutput);
-                            // If SARA shares the same preference
-                            if (latestUtterance.contains(latestEntityValue) && preferencesMap.get(latestEntityType).contains(latestEntityValue)) {
-                                value = latestEntityValue;
+                            latestEntityValue = getLatestEntityValue(srOutput);
+                            if (!latestUtterance.contains(latestEntityValue)) {
+                                value = "";
                             }
                             break;
-                        case "#disagree":
+                        case "#likeAgree":
+                            // Returns the user's previous entity detected if the system shares the same preference (both like the same entity). Supposedly useful during the SD strategy, to answer to the user previous disclosure
                             latestUtterance = srOutput.getUserFrame().getLatestUtterance();
                             latestEntityValue = getLatestEntityValue(srOutput); // latest entity value
+                            latestEntityValence = getLatestEntityValence(srOutput);
                             latestEntityType = getLatestEntityType(srOutput);
-                            // If SARA have opposite preference
-                            if (latestUtterance.contains(latestEntityValue) && !preferencesMap.get(latestEntityType).contains(latestEntityValue)) {
-                                value = latestEntityValue;
-                            }
+                            if (latestUtterance.contains(latestEntityValue))
+                                if (latestEntityType.contains("genre")) {
+                                    if (latestEntityValence > 0) {
+                                        for (Entity genre : systemPreferences.getGenres().getLike()) {
+                                            if (genre.getValue().equals(latestEntityValue)) {
+                                                value = latestEntityValue;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                } else if (latestEntityType.contains("director")) {
+                                    if (latestEntityValence > 0) {
+                                        for (Entity genre : systemPreferences.getDirectors().getLike()) {
+                                            if (genre.getValue().equals(latestEntityValue)) {
+                                                value = latestEntityValue;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                } else if (latestEntityType.contains("actor")) {
+                                    if (latestEntityValence > 0) {
+                                        for (Entity genre : systemPreferences.getActors().getLike()) {
+                                            if (genre.getValue().equals(latestEntityValue)) {
+                                                value = latestEntityValue;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
                             break;
-                        case "#different":
+                        case "#likeDisagree":
+                            // Returns the user's previous entity detected if the system have opposite preferences (the user likes it but not the system). Supposedly useful during the SD strategy, to answer to the user previous disclosure
                             latestUtterance = srOutput.getUserFrame().getLatestUtterance();
                             latestEntityValue = getLatestEntityValue(srOutput); // latest entity value
+                            latestEntityValence = getLatestEntityValence(srOutput);
                             latestEntityType = getLatestEntityType(srOutput);
-                            // If SARA has another preference
-                            if (latestUtterance.contains(latestEntityValue) && !preferencesMap.get(latestEntityType).contains(latestEntityValue)) {
-                                value = preferencesMap.get(latestEntityValue).get(0);
-                            }
+                            if (latestUtterance.contains(latestEntityValue))
+                                if (latestEntityType.contains("genre")) {
+                                    if (latestEntityValence > 0) {
+                                        for (Entity genre : systemPreferences.getGenres().getDislike()) {
+                                            if (genre.getValue().equals(latestEntityValue)) {
+                                                value = latestEntityValue;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                } else if (latestEntityType.contains("director")) {
+                                    if (latestEntityValence > 0) {
+                                        for (Entity genre : systemPreferences.getDirectors().getDislike()) {
+                                            if (genre.getValue().equals(latestEntityValue)) {
+                                                value = latestEntityValue;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                } else if (latestEntityType.contains("actor")) {
+                                    if (latestEntityValence > 0) {
+                                        for (Entity genre : systemPreferences.getActors().getDislike()) {
+                                            if (genre.getValue().equals(latestEntityValue)) {
+                                                value = latestEntityValue;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            break;
+                        case "#dislikeAgree":
+                            // Returns the user's previous entity detected if the system shares the same dislikes (both dislikes the same entity). Supposedly useful during the SD strategy, to answer to the user previous disclosure
+                            latestUtterance = srOutput.getUserFrame().getLatestUtterance();
+                            latestEntityValue = getLatestEntityValue(srOutput); // latest entity value
+                            latestEntityValence = getLatestEntityValence(srOutput);
+                            latestEntityType = getLatestEntityType(srOutput);
+                            if (latestUtterance.contains(latestEntityValue))
+                                if (latestEntityType.contains("genre")) {
+                                    if (latestEntityValence < 0) {
+                                        for (Entity genre : systemPreferences.getGenres().getDislike()) {
+                                            if (genre.getValue().equals(latestEntityValue)) {
+                                                value = latestEntityValue;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                } else if (latestEntityType.contains("director")) {
+                                    if (latestEntityValence < 0) {
+                                        for (Entity genre : systemPreferences.getDirectors().getDislike()) {
+                                            if (genre.getValue().equals(latestEntityValue)) {
+                                                value = latestEntityValue;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                } else if (latestEntityType.contains("actor")) {
+                                    if (latestEntityValence < 0) {
+                                        for (Entity genre : systemPreferences.getActors().getDislike()) {
+                                            if (genre.getValue().equals(latestEntityValue)) {
+                                                value = latestEntityValue;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            break;
+                        case "#dislikeDisagree":
+                            // Returns the user's previous entity detected if the system have opposite dislikes (the user dislikes but the system likes it). Supposedly useful during the SD strategy, to answer to the user previous disclosure
+                            latestUtterance = srOutput.getUserFrame().getLatestUtterance();
+                            latestEntityValue = getLatestEntityValue(srOutput); // latest entity value
+                            latestEntityValence = getLatestEntityValence(srOutput);
+                            latestEntityType = getLatestEntityType(srOutput);
+                            if (latestUtterance.contains(latestEntityValue))
+                                if (latestEntityType.contains("genre")) {
+                                    if (latestEntityValence < 0) {
+                                        for (Entity genre : systemPreferences.getGenres().getLike()) {
+                                            if (genre.getValue().equals(latestEntityValue)) {
+                                                value = latestEntityValue;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                } else if (latestEntityType.contains("director")) {
+                                    if (latestEntityValence < 0) {
+                                        for (Entity genre : systemPreferences.getDirectors().getLike()) {
+                                            if (genre.getValue().equals(latestEntityValue)) {
+                                                value = latestEntityValue;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                } else if (latestEntityType.contains("actor")) {
+                                    if (latestEntityValence < 0) {
+                                        for (Entity genre : systemPreferences.getActors().getLike()) {
+                                            if (genre.getValue().equals(latestEntityValue)) {
+                                                value = latestEntityValue;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
                             break;
                         default:
                             throw new RuntimeException("SentenceGeneratorTemplate.Template#match() found a marker that I do not understand: " + slotName);
@@ -264,6 +393,30 @@ System.out.println("load SARA's preferences");
                     return srOutput.getUserFrame().getFrame().getActors().getLike().get(latestEntityIndex).getValue();
                 default:
                     return null;
+            }
+        } catch (NullPointerException npe) {
+            throw new NullPointerException();
+        }
+    }
+
+    /**
+     * Uses latest intent to get latest entity valence (liked or disliked).
+     */
+    private static float getLatestEntityValence(SROutput srOutput) {
+        int latestEntityIndex = 0;
+        try {
+            switch(srOutput.getAction()) {
+                case "ask_directors": // refer to genre
+                    latestEntityIndex = srOutput.getUserFrame().getFrame().getGenres().getLike().size() - 1;
+                    return srOutput.getUserFrame().getFrame().getGenres().getLike().get(latestEntityIndex).getPolarity();
+                case "ask_actors": // refer to director
+                    latestEntityIndex = srOutput.getUserFrame().getFrame().getDirectors().getLike().size() - 1;
+                    return srOutput.getUserFrame().getFrame().getDirectors().getLike().get(latestEntityIndex).getPolarity();
+                case "recommend": // refer to actor
+                    latestEntityIndex = srOutput.getUserFrame().getFrame().getActors().getLike().size() - 1;
+                    return srOutput.getUserFrame().getFrame().getActors().getLike().get(latestEntityIndex).getPolarity();
+                default:
+                    return 0;
             }
         } catch (NullPointerException npe) {
             throw new NullPointerException();
@@ -367,20 +520,47 @@ System.out.println("load SARA's preferences");
     }
 
     /**
-     * load SARA's preferences
+     * Load SARA's preferences
      */
     private void loadSARAPreferences(InputStream saraDB) {
-        preferencesMap.clear();
+        //preferencesMap.clear();
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(saraDB));
             String line = null;
+            Entity tmpEntity = null;
             while((line = in.readLine()) != null && !line.startsWith("#") && !line.trim().isEmpty()) {
+                //tmpEntity = null;
                 String[] tokens = line.split("\t");
-                if (tokens.length == 2) {
-                    String entity = tokens[0], preference = tokens[1];
-                    // create map objects if entity doesn't already exist
-                    preferencesMap.putIfAbsent(entity, new ArrayList<>());
-                    preferencesMap.get(entity).add(preference);
+                if (tokens.length == 3) {
+                    String entity = tokens[0], valence = tokens[1], preference = tokens[2];
+                    // Create UserFrame-like object to store system's preferences
+                    if (entity == "genre") {
+                        if (valence == "liked"){
+                            tmpEntity.setValue(preference);
+                            systemPreferences.getGenres().getLike().add(tmpEntity);
+                        } else if (valence == "disliked") {
+                            tmpEntity.setValue(preference);
+                            systemPreferences.getGenres().getDislike().add(tmpEntity);
+                        }
+                    }
+                    if (entity == "directors") {
+                        if (valence == "liked"){
+                            tmpEntity.setValue(preference);
+                            systemPreferences.getDirectors().getLike().add(tmpEntity);
+                        } else if (valence == "disliked") {
+                            tmpEntity.setValue(preference);
+                            systemPreferences.getDirectors().getDislike().add(tmpEntity);
+                        }
+                    }
+                    if (entity == "actors") {
+                        if (valence == "liked"){
+                            tmpEntity.setValue(preference);
+                            systemPreferences.getActors().getLike().add(tmpEntity);
+                        } else if (valence == "disliked") {
+                            tmpEntity.setValue(preference);
+                            systemPreferences.getActors().getDislike().add(tmpEntity);
+                        }
+                    }
                 }
             }
             in.close();
