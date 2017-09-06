@@ -64,6 +64,7 @@ public class NLGComponent extends PluggableComponent implements BeatCallback {
         for (String sentence : sentences) {
             Log4J.info(this, "for sentence pattern: " + sentence);
             sentence = gen.replacePatterns(sentence, srOutput);
+            assert sentence != null : "I haven't been able to fill in any pattern. Duh.";
             Log4J.info(this, "replaced pattern to: " + sentence);
             /**
              * send sentence to BEAT

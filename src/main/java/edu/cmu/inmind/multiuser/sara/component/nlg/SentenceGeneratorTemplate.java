@@ -1,5 +1,7 @@
 package edu.cmu.inmind.multiuser.sara.component.nlg;
 import com.google.common.base.Strings;
+import edu.cmu.inmind.multiuser.common.model.Entity;
+import edu.cmu.inmind.multiuser.common.model.UserFrame;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.sara.component.NLU_DMComponent;
 import edu.cmu.inmind.multiuser.common.model.SROutput;
@@ -125,6 +127,15 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
         return replacePatterns(template, srOutput, true);
     }
 
+    private static Random r = new Random();
+    private String getAnyOf(List<?> list) {
+        Object selected = list.get(r.nextInt(list.size()));
+        if (selected instanceof Entity)
+            return ((Entity) selected).getValue();
+        else
+            return selected.toString();
+    }
+
     /**
      * replaces all #patterns in template
      * @return template with patterns filled in OR null if a pattern could not be filled
@@ -134,6 +145,7 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
         while (m.matches()) {
             String slotName = m.group(1);
             String value = null, latestEntityValue, latestEntityType, latestUtterance;
+            UserFrame.Frame frame = srOutput.getUserFrame().getFrame();
             try {
                 switch (slotName) {
                     case "#title":
@@ -147,25 +159,31 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
                         // TODO: this is not yet adapted for incrementality (otherwise, will never be possible to talk about reasons in incremental case!)
                         value = srOutput.getRecommendation().getRexplanations().get(0).getExplanations().get(0);
                         break;
-                    case "#actor":
-                        value = srOutput.getUserFrame().getFrame().getActors().getLike().get(0).getValue();
+                    case "#previousMovie":
+                        // Gets the latest movie that the user liked. Supposedly used to change greeting phase.
+                        int size = frame.getMovies().getLike().size();
+                        value = size > 0 ? frame.getMovies().getLike().get(size-1) : null;
+                        break;
+                    case "#likedActor":
+                        value = getAnyOf(frame.getActors().getLike());
                         break;
                     case "#dislikedActor":
-                        value = srOutput.getUserFrame().getFrame().getActors().getDislike().get(0).getValue();
+                        value = getAnyOf(frame.getActors().getDislike());
                         break;
-                    case "#genre":
-                        value = srOutput.getUserFrame().getFrame().getGenres().getLike().get(0).getValue();
+                    case "#likedGenre":
+                        value = getAnyOf(frame.getGenres().getLike());
                         break;
                     case "#dislikedGenre":
-                        value = srOutput.getUserFrame().getFrame().getGenres().getDislike().get(0).getValue();
+                        value = getAnyOf(frame.getGenres().getDislike());
                         break;
-                    case "#director":
-                        value = srOutput.getUserFrame().getFrame().getDirectors().getLike().get(0).getValue();
+                    case "#likedDirector":
+                        value = getAnyOf(frame.getDirectors().getLike());
                         break;
                     case "#dislikedDirector":
-                        value = srOutput.getUserFrame().getFrame().getDirectors().getDislike().get(0).getValue();
+                        value = getAnyOf(frame.getDirectors().getDislike());
                         break;
                     case "#latest":
+                        // Get the latest entity detected from the user
                         latestUtterance = srOutput.getUserFrame().getLatestUtterance();
                         latestEntityValue = getLatestEntityValue(srOutput); // latest entity
                         // if entity is from user's last utterance
@@ -266,6 +284,7 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
                     return null;
             }
         } catch (NullPointerException npe) {
+            npe.printStackTrace();
             throw new NullPointerException();
         }
     }

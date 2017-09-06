@@ -23,7 +23,7 @@ import java.util.ArrayList;
 @BlackboardSubscription( messages = {SaraCons.MSG_ASR, SaraCons.MSG_START_DM, SaraCons.MSG_UM} )
 public class NLU_DMComponent extends PluggableComponent {
     private static final String SESSION_MANAGER_SERVICE = "session-manager";
-    private ClientCommController commController;
+    private static ClientCommController commController;
     private final String pythonDialogueAddress = Utils.getProperty("pythonDialogueAddress");
 
     @Override
@@ -155,7 +155,6 @@ public class NLU_DMComponent extends PluggableComponent {
         /** Fills in underspecified Recommmendation variable if necessary. */
         public void fillInRecommendationTitle() {
             // query for value
-            Log4J.info(ActiveDMOutput.this, "sending recommendation title request");
             commController.send(sessionID, new ASROutput(SaraCons.MSG_QUERY, 1.0));
             Log4J.info(ActiveDMOutput.this, "sent recommendation title request");
             commController.receive(new ResponseListener() {
