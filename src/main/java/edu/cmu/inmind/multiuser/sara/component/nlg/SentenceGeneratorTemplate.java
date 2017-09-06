@@ -137,16 +137,14 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
             try {
                 switch (slotName) {
                     case "#title":
-                        Log4J.info(this, "attempting to work on #title");
                         if (replace) {
                             Log4J.info(this, "attempting to replace #title");
-                            Log4J.info(this, srOutput.getDMOutput().getClass().toString());
-                            ((NLU_DMComponent.SmartDMOutput)srOutput.getDMOutput()).fillInRecommendationTitle();
                             value = srOutput.getDMOutput().getRecommendationTitle();
                         } else
                             value = srOutput.getDMOutput().hasRecommendationTitle() ? "" : null;
                         break;
                     case "#reason":
+                        // TODO: this is not yet adapted for incrementality (otherwise, will never be possible to talk about reasons in incremental case!)
                         value = srOutput.getRecommendation().getRexplanations().get(0).getExplanations().get(0);
                         break;
                     case "#actor":
@@ -205,6 +203,7 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
             } catch (NullPointerException | IndexOutOfBoundsException npe) {
                 // null pointer exceptions occur when we're unable to access the field
                 // it's much simpler to catch them than to handle them individually for all cases
+                npe.printStackTrace();
                 value = null;
             }
             if (value == null) {

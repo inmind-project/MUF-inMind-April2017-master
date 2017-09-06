@@ -22,13 +22,6 @@ public class SROutput {
         dmOutput.action = action;
     }
 
-    public String getSessionID() {
-        return dmOutput.sessionID;
-    }
-    public void setSessionID(String sessionID) {
-        dmOutput.sessionID = sessionID;
-    }
-
     public String getStrategy() {
         return strategy;
     }

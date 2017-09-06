@@ -77,21 +77,15 @@ public class NLU_DMComponent extends PluggableComponent {
         // print full event
         Log4J.debug(this, "received " + blackboardEvent.toString());
         // store user's latest utterance
-        String tryUtterance;
-        try { tryUtterance = blackboardEvent.toString().split("Utterance: ")[1].split(" confidence:")[0]; }
-        catch (ArrayIndexOutOfBoundsException aiobe) {
-            System.err.println(blackboardEvent.toString());
-            aiobe.printStackTrace();
-            tryUtterance = "";
-            Log4J.warn(this, aiobe.toString());
-        }
-        final String utterance = tryUtterance;
+        final String utterance = blackboardEvent.toString().contains("confidence:") ? blackboardEvent.toString().split("Utterance: ")[1].split(" confidence:")[0] : "";
         // let's forward the ASR message to DialoguePython:
+        /** should be set to true if we expect a response from python */
+        boolean receiveRequest = false;
         if (blackboardEvent.getId().equals(SaraCons.MSG_START_DM)){
             ASROutput startDMMessage = new ASROutput(SaraCons.MSG_START_DM, 1.0);
             Log4J.debug(this, "about to send initial greeting ...");
     	    commController.send( getSessionId(), startDMMessage );
-           // commController.send( getSessionId(), startDMMessage );
+            receiveRequest = true;
             Log4J.debug(this, "Sent Initial Greeting");
         } else if (blackboardEvent.getId().equals(SaraCons.MSG_UM)) {
             final UserModel userModel = (UserModel) blackboardEvent.getElement();
@@ -105,21 +99,31 @@ public class NLU_DMComponent extends PluggableComponent {
         } else {
             Log4J.debug(this, "sending on " + blackboardEvent.toString() );
             commController.send( getSessionId(), blackboardEvent.getElement() );
-//	    Log4J.debug(this, "now something was sent");
+            receiveRequest = true;
         }
         // here we receive the response from DialoguePython:
-        commController.receive(new ResponseListener() {
-            @Override
-            public void process(String message) {
-		        Log4J.debug(NLU_DMComponent.this, "I've received: " + message);
-                // store user's utterance (for NLG)
-                SmartDMOutput dmOutput = Utils.fromJson(message, SmartDMOutput.class);
-                dmOutput.setUtterance(utterance);
-                // post to Blackboard
-                blackboard().post(NLU_DMComponent.this, SaraCons.MSG_DM, dmOutput);
-            }
-        });
+        if (receiveRequest) {
+//            final int receiveRequestNumber = ++receiveCounter;
+//            Log4J.debug(this, "receive request " + receiveRequestNumber);
+            commController.receive(new ResponseListener() {
+                @Override
+                public void process(String message) {
+//                    Log4J.debug(NLU_DMComponent.this, "I've received for request: " + receiveRequestNumber);
+                    Log4J.debug(NLU_DMComponent.this, "I've received: " + message);
+                    // store user's utterance (for NLG)
+                    ActiveDMOutput dmOutput = Utils.fromJson(message, ActiveDMOutput.class);
+                    dmOutput.setUtterance(utterance);
+                    if (dmOutput.getRecommendation() != null)
+                        dmOutput.getRecommendation().setRexplanations(null);
+                    dmOutput.sessionID = getSessionId();
+                    // post to Blackboard
+                    blackboard().post(NLU_DMComponent.this, SaraCons.MSG_DM, dmOutput);
+                }
+            });
+        }
     }
+
+//    int receiveCounter = 0;
 
     @Override
     public void shutDown(){
@@ -144,26 +148,28 @@ public class NLU_DMComponent extends PluggableComponent {
     }
 
     /** the smart kind of DMOutput that is able to load recommendations JIT */
-    public class SmartDMOutput extends DMOutput {
+    public class ActiveDMOutput extends DMOutput {
+
+        String sessionID;
+
         /** Fills in underspecified Recommmendation variable if necessary. */
         public void fillInRecommendationTitle() {
             // query for value
-            Log4J.info(SmartDMOutput.this, "sending recommendation title request");
-            commController.send(getSessionID(), new ASROutput(SaraCons.MSG_QUERY, 1.0));
-            Log4J.info(SmartDMOutput.this, "sent recommendation title request");
+            Log4J.info(ActiveDMOutput.this, "sending recommendation title request");
+            commController.send(sessionID, new ASROutput(SaraCons.MSG_QUERY, 1.0));
+            Log4J.info(ActiveDMOutput.this, "sent recommendation title request");
             commController.receive(new ResponseListener() {
                 @Override
                 public void process(String message) {
                     // set recommendation to newly found value
-                    System.err.println("XXXX: " + message);
                     recommendation.setRexplanations(Utils.fromJson(message, DMOutput.class).getRecommendation().getRexplanations());
-                    System.err.println("done: " + message);
+                    Log4J.info(ActiveDMOutput.this, "received recommendation title: " + message);
                 }
             });
             // wait for DialoguePython to send the value
             while (!recommendation.hasContent()) {
                 try {
-                    System.out.println("VIVIAN: waiting for specified rec");
+                    Log4J.debug(ActiveDMOutput.this, "waiting for recommendation specification");
                     Thread.sleep(50);
                 } catch (Exception e) {
                     System.out.println(e);
@@ -172,13 +178,11 @@ public class NLU_DMComponent extends PluggableComponent {
             }
         }
 
-        @Override public String getRecommendationTitle() {
-            Log4J.info(NLU_DMComponent.this, "attempting to get recommendation title");
+        @Override public synchronized String getRecommendationTitle() {
             if (!recommendation.hasContent()) {
-                Log4J.info(NLU_DMComponent.this, "attempting to query for recommendation title");
-                System.err.println(recommendation.toString());
+                // System.err.println(recommendation.toString());
                 fillInRecommendationTitle();
-                System.err.println(recommendation.toString());
+                // System.err.println(recommendation.toString());
             }
             // Recommendation object now contains value
             return recommendation.getTitle();

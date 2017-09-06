@@ -20,7 +20,7 @@ public class Recommendation {
      *  @return true if contains recommendation, else false
      */
     public boolean hasContent() {
-        return rexplanations == null;
+        return rexplanations != null;
     }
 
     public String getTitle() {

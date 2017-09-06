@@ -11,20 +11,12 @@ public class DMOutput {
     protected Recommendation recommendation;
     UserFrame frame;
     String utterance;
-    String sessionID;
 
     public String getAction() {
         return action;
     }
     public void setAction(String action) {
         this.action = action;
-    }
-
-    public String getSessionID() {
-        return sessionID;
-    }
-    public void setSessionID(String sessionID) {
-        this.sessionID = sessionID;
     }
 
     public List<Entity> getEntities() {
@@ -35,7 +27,7 @@ public class DMOutput {
     }
 
     public String getRecommendationTitle() { return recommendation.getTitle(); }
-    public boolean hasRecommendationTitle() { return recommendation != null; }
+    public boolean hasRecommendationTitle() { return recommendation != null || recommendation.rexplanations == null; }
 
     public Recommendation getRecommendation() {
         return recommendation;
