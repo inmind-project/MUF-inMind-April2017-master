@@ -29,11 +29,7 @@ public class SentenceGeneratorTemplateTest {
         String recommendedMovie = "Silver Linings Playbook (2012)";
         DMOutput dmout = Utils.fromJson("{'action': 'recommend', 'entities': [], 'frame': {'frame': {'actors': {'like': [{'entity': 'actors', 'value': 'jennifer lawrence', 'start': 0, 'end': 17, 'confidence': 1, 'id': 'jennifer_iii_lawrence', 'polarity': 0.0}], 'dislike': []}, 'genres': {'like': [{'entity': 'genres', 'id': 'romance', 'value': 'romantic', 'start': 0, 'end': 8, 'polarity': 0.0}, {'entity': 'genres', 'id': 'comedy', 'value': 'comedy', 'start': 9, 'end': 15, 'polarity': 0.0}], 'dislike': []}, 'directors': {'like': [{'entity': 'directors', 'value': 'david o. russell', 'start': 0, 'end': 13, 'confidence': 0.5, 'id': 'david_o._russell', 'polarity': 0.0}], 'dislike': []}, 'movies': {'like': ['Silver Linings Playbook (2012)'], 'dislike': [], 'history': []}}, 'ask_stack': ['recommend'], 'universals': ['help', 'start_over']}, 'recommendation': {'rexplanations': [{'recommendation': '"+recommendedMovie+"', 'explanations': ['David O. Russell', 'Jennifer (III) Lawrence']}]}}",
                 DMOutput.class);
-        SROutput srOutput = new SROutput();
-        srOutput.setAction(dmout.getAction());
-        srOutput.setEntities(dmout.getEntities());
-        srOutput.setRecommendation(dmout.getRecommendation());
-        srOutput.setUserFrame(dmout.getUserFrame());
+        SROutput srOutput = new SROutput(dmout);
         srOutput.setRapport(7);
         srOutput.setStrategy("NONE");
         String nlgout = gen.generate(srOutput);

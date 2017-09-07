@@ -26,9 +26,6 @@ public class DMOutput {
         this.entities = entities;
     }
 
-    public String getRecommendationTitle() { return recommendation.getTitle(); }
-    public boolean hasRecommendationTitle() { return recommendation != null || recommendation.rexplanations == null; }
-
     public Recommendation getRecommendation() {
         return recommendation;
     }

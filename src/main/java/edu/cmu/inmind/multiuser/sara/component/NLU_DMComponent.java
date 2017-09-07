@@ -153,7 +153,7 @@ public class NLU_DMComponent extends PluggableComponent {
         String sessionID;
 
         /** Fills in underspecified Recommmendation variable if necessary. */
-        public void fillInRecommendationTitle() {
+        private void fillInRecommendationTitle() {
             // query for value
             commController.send(sessionID, new ASROutput(SaraCons.MSG_QUERY, 1.0));
             Log4J.info(ActiveDMOutput.this, "sent recommendation title request");
@@ -162,7 +162,7 @@ public class NLU_DMComponent extends PluggableComponent {
                 public void process(String message) {
                     // set recommendation to newly found value
                     recommendation.setRexplanations(Utils.fromJson(message, DMOutput.class).getRecommendation().getRexplanations());
-                    Log4J.info(ActiveDMOutput.this, "received recommendation title: " + message);
+                    Log4J.info(ActiveDMOutput.this, "received recommendation specification: " + message);
                 }
             });
             // wait for DialoguePython to send the value
@@ -170,22 +170,22 @@ public class NLU_DMComponent extends PluggableComponent {
                 try {
                     Log4J.debug(ActiveDMOutput.this, "waiting for recommendation specification");
                     Thread.sleep(50);
-                } catch (Exception e) {
-                    System.out.println(e);
-                    System.err.println(e);
+                } catch (InterruptedException e) {
+                    Log4J.warn(ActiveDMOutput.this, e.toString());
                 }
             }
         }
 
-        @Override public synchronized String getRecommendationTitle() {
-            if (!recommendation.hasContent()) {
+        @Override public synchronized Recommendation getRecommendation() {
+            if (recommendation != null && !recommendation.hasContent()) {
                 // System.err.println(recommendation.toString());
                 fillInRecommendationTitle();
                 // System.err.println(recommendation.toString());
             }
             // Recommendation object now contains value
-            return recommendation.getTitle();
+            return recommendation;
         }
+
     }
 
 }

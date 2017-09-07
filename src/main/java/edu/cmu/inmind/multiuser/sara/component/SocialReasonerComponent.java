@@ -83,7 +83,6 @@ public class SocialReasonerComponent extends PluggableComponent {
         Log4J.info(this,"dmOutput : "+dmOutput.toString() );
         SROutput srOutput = new SROutput(dmOutput);
         // temporary: fix this while fixing incremental system
-        srOutput.getUserFrame().setLatestUtterance(dmOutput.getUtterance());
         srOutput.setRapport(rapport);
 
         if (dmOutput.getAction() != null) {
