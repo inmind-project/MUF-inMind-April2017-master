@@ -40,10 +40,6 @@
         ],
         [
           {
-            "label": "recommend",
-            "weight": 1.0
-          },
-          {
             "label": "start_*",
             "weight": 1.0
           },
@@ -79,7 +75,7 @@
           },
           {
             "label": "VSN_HISTORY_SYSTEM",
-            "weight": 1.0
+            "weight": 150
           },
           {
             "label": "NUM_TURNS_LOWER_THAN_THRESHOLD",
@@ -186,18 +182,6 @@
         ],
         [
           {
-            "label": "ask_directors",
-            "weight": 1.0
-          },
-          {
-            "label": "recommend",
-            "weight": 1.0
-          },
-          {
-            "label": "goodbye",
-            "weight": 1.0
-          },
-          {
             "label": "end_*",
             "weight": 1.0
           },
@@ -217,104 +201,6 @@
         "NOT_PR_HISTORY_SYSTEM"
       ],
       "description": "Praise",
-      "addGoals": []
-    },
-    {
-      "name": "ACK",
-      "id": "ACK_SYSTEM_CS",
-      "preconditions": [
-        [
-          {
-            "label": "HIGH_RAPPPORT",
-            "weight": 1.0
-          },
-          {
-            "label": "RAPPORT_INCREASED",
-            "weight": 1.0
-          }
-        ],
-        [
-          {
-            "label": "SD_USER_CS",
-            "weight": 1.0
-          },
-          {
-            "label": "VSN_USER_CS",
-            "weight": 1.0
-          }
-        ],
-        [
-          {
-            "label": "NOT_SMILE_NONVERBAL",
-            "weight": 1.0
-          },
-          {
-            "label": "GAZE_ELSEWHERE_NONVERBAL",
-            "weight": 1.0
-          }
-        ],
-        [
-          {
-            "label": "NOT_ACK_HISTORY_USER",
-            "weight": 1.0
-          },
-          {
-            "label": "NOT_ACK_HISTORY_SYSTEM",
-            "weight": 1.0
-          },
-          {
-            "label": "NOT_ASN_HISTORY_SYSTEM",
-            "weight": 1.0
-          },
-          {
-            "label": "NOT_QESD_HISTORY_SYSTEM",
-            "weight": 1.0
-          },
-          {
-            "label": "NOT_ASN_HISTORY_USER",
-            "weight": 1.0
-          },
-          {
-            "label": "NOT_VSN_HISTORY_USER",
-            "weight": 1.0
-          },
-          {
-            "label": "NOT_ACK_HISTORY_USER",
-            "weight": 1.0
-          }
-        ],
-        [
-          {
-            "label": "feedback_*",
-            "weight": 1.0
-          },
-          {
-            "label": "bye",
-            "weight": 1.0
-          },
-          {
-            "label": "farewell",
-            "weight": 1.0
-          },
-          {
-            "label": "greeting",
-            "weight": 1.0
-          },
-          {
-            "label": "elicit_feedback",
-            "weight": 1.0
-          }
-        ]
-      ],
-      "addList": [
-        "ACK_HISTORY_SYSTEM",
-        "RAPPORT_MAINTAINED"
-      ],
-      "deleteList": [
-        "NOT_ACK_HISTORY_SYSTEM",
-        "feedback_*"
-      ],
-      "description": "Acknowledgement",
       "addGoals": []
     },
     {
@@ -352,7 +238,7 @@
           },
           {
             "label": "ask_*",
-            "weight": 1.0
+            "weight": 100
           }
         ]
       ],
@@ -416,11 +302,11 @@
         [
           {
             "label": "VSN_HISTORY_SYSTEM",
-            "weight": 1.0
+            "weight": 100
           },
           {
             "label": "VSN_HISTORY_USER",
-            "weight": 1.0
+            "weight": 100
           },
           {
             "label": "NOT_RSE_HISTORY_SYSTEM",
@@ -463,10 +349,6 @@
         [
           {
             "label": "HIGH_RAPPORT",
-            "weight": 1.0
-          },
-          {
-            "label": "RAPPORT_INCREASED",
             "weight": 1.0
           }
         ],
@@ -517,18 +399,6 @@
           }
         ],
         [
-          {
-            "label": "ask_actors",
-            "weight": 1.0
-          },
-          {
-            "label": "recommend",
-            "weight": 1.0
-          },
-          {
-            "label": "goodbye",
-            "weight": 1.0
-          },
           {
             "label": "do_*_elicit*",
             "weight": 1.0
@@ -602,18 +472,6 @@
           }
         ],
         [
-          {
-            "label": "recommend",
-            "weight": 1.0
-          },
-          {
-            "label": "ask_genres",
-            "weight": 1.0
-          },
-          {
-            "label": "greeting",
-            "weight": 1.0
-          },
           {
             "label": "feedback_*",
             "weight": 1.0
