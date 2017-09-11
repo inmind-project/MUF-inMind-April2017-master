@@ -15,6 +15,7 @@ import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
 import edu.cmu.inmind.multiuser.controller.plugin.StateType;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by oscarr on 3/7/17.
@@ -111,7 +112,7 @@ public class NLU_DMComponent extends PluggableComponent {
 //                    Log4J.debug(NLU_DMComponent.this, "I've received for request: " + receiveRequestNumber);
                     Log4J.debug(NLU_DMComponent.this, "I've received: " + message);
                     // store user's utterance (for NLG)
-                    ActiveDMOutput dmOutput = Utils.fromJson(message, ActiveDMOutput.class);
+                    ActiveDMOutput dmOutput = new ActiveDMOutput(message);
                     dmOutput.setUtterance(utterance);
                     if (dmOutput.plainGetRecommendation() != null)
                         dmOutput.getRecommendation().setRexplanations(null);
@@ -153,6 +154,16 @@ public class NLU_DMComponent extends PluggableComponent {
         String sessionID;
         public String getSessionID() { return sessionID; }
         public void setSessionID(String sessionID) { this.sessionID = sessionID; }
+
+        public ActiveDMOutput() {}
+
+        public ActiveDMOutput(String message) {
+            DMOutput other = Utils.fromJson(message, DMOutput.class);
+            this.setAction(other.getAction());
+            this.setEntities(other.getEntities());
+            this.recommendation = other.getRecommendation();
+            this.setFrame(other.getUserFrame());
+        }
 
         /** Fills in underspecified Recommmendation variable if necessary. */
         private void fillInRecommendationTitle() {
