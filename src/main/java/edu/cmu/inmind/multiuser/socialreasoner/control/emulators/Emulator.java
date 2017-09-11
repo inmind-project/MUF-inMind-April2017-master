@@ -66,7 +66,7 @@ public class Emulator{
 //        steps.add( new EmulationStep( 4, Constants.ASN_USER_CS, false, true, 20 ) );
 
         // low rapport
-        steps.add( new EmulationStep( 4, Constants.ASN_USER_CS, false, false, true, "greeting") );
+        steps.add( new EmulationStep( 1, Constants.ASN_USER_CS, false, false, true, "ask_something") );
         steps.add( new EmulationStep( 5, Constants.ASN_USER_CS, false, false, true, "greeting") );
         steps.add( new EmulationStep( 6, Constants.ASN_USER_CS, false, false, true, "greeting" ) );
         steps.add( new EmulationStep( 6, Constants.ASN_USER_CS, false, false, true, "greeting") );
