@@ -103,7 +103,7 @@ public class UserModelComponentTest {
     public void updatesModelOnSREvent() throws Exception {
         component.onEvent(new BlackboardEvent("status", SaraCons.MSG_START_SESSION, null));
 
-        final SROutput srOutput = new SROutput();
+        final SROutput srOutput = new SROutput(null);
         final ImmutableList<String> states = ImmutableList.of("new_state_1", "new_state_2");
         srOutput.setStates(states);
         final BlackboardEvent event = new BlackboardEvent("status", SaraCons.MSG_SR, srOutput);

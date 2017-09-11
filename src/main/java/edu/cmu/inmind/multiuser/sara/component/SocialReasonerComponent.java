@@ -88,7 +88,7 @@ public class SocialReasonerComponent extends PluggableComponent {
         if (dmOutput.getAction() != null) {
             SystemIntent systemIntent =  new SystemIntent( );
             systemIntent.setIntent(dmOutput.getAction());
-            systemIntent.setRecommendationResults( Utils.toJson(dmOutput.getRecommendation()));
+            //systemIntent.setRecommendationResults( Utils.toJson(dmOutput.getRecommendation()));
             socialController.addSystemIntent( systemIntent );
             systemStrategy = socialController.getConvStrategyFormatted();
             srOutput.setStrategy(systemStrategy);

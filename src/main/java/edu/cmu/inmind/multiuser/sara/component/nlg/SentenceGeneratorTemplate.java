@@ -54,6 +54,7 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
     /** generate a list of sentences */
     public List<String> generateAsList(SROutput srOutput){
         List<WeightedCandidate> candidates = selectCandidates(srOutput);
+        assert candidates != null && candidates.size() > 0;
         String allText = selectByWeight(candidates);
         return splitIntoSentences(allText);
     }
