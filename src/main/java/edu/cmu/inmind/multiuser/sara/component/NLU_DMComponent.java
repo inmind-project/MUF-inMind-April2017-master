@@ -15,6 +15,8 @@ import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
 import edu.cmu.inmind.multiuser.controller.plugin.StateType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by oscarr on 3/7/17.
@@ -23,8 +25,10 @@ import java.util.ArrayList;
 @BlackboardSubscription( messages = {SaraCons.MSG_ASR, SaraCons.MSG_START_DM, SaraCons.MSG_UM} )
 public class NLU_DMComponent extends PluggableComponent {
     private static final String SESSION_MANAGER_SERVICE = "session-manager";
-    private static ClientCommController commController;
+    private ClientCommController commController;
     private final String pythonDialogueAddress = Utils.getProperty("pythonDialogueAddress");
+
+    private static Map<String,ClientCommController> sessionControllers = new HashMap<>();
 
     @Override
     public void startUp(){
@@ -61,6 +65,7 @@ public class NLU_DMComponent extends PluggableComponent {
                 .setMuf( true? null : null ) //when TCP is off, we need to explicitly tell the client who the MUF is
                 .setSessionManagerService(SESSION_MANAGER_SERVICE)
                 .build();
+        sessionControllers.put(getSessionId(), commController);
     }
 
     private SaraOutput extractAndProcess() {
@@ -123,6 +128,10 @@ public class NLU_DMComponent extends PluggableComponent {
         }
     }
 
+    public static ClientCommController getCCC(String sessionID) {
+        return sessionControllers.get(sessionID);
+    }
+
 //    int receiveCounter = 0;
 
     @Override
@@ -148,16 +157,17 @@ public class NLU_DMComponent extends PluggableComponent {
     }
 
     /** the smart kind of DMOutput that is able to load recommendations JIT */
-    public class ActiveDMOutput extends DMOutput {
+    public static class ActiveDMOutput extends DMOutput {
 
         String sessionID;
 
         /** Fills in underspecified Recommmendation variable if necessary. */
         private void fillInRecommendationTitle() {
             // query for value
-            commController.send(sessionID, new ASROutput(SaraCons.MSG_QUERY, 1.0));
+            // commController.send(sessionID, new ASROutput(SaraCons.MSG_QUERY, 1.0));
+            NLU_DMComponent.getCCC(sessionID).send(sessionID, new ASROutput(SaraCons.MSG_QUERY, 1.0));
             Log4J.info(ActiveDMOutput.this, "sent recommendation title request");
-            commController.receive(new ResponseListener() {
+            NLU_DMComponent.getCCC(sessionID).receive(new ResponseListener() {
                 @Override
                 public void process(String message) {
                     // set recommendation to newly found value
