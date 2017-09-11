@@ -23,7 +23,7 @@ import java.util.ArrayList;
 @BlackboardSubscription( messages = {SaraCons.MSG_ASR, SaraCons.MSG_START_DM, SaraCons.MSG_UM} )
 public class NLU_DMComponent extends PluggableComponent {
     private static final String SESSION_MANAGER_SERVICE = "session-manager";
-    private static ClientCommController commController;
+    public ClientCommController commController;
     private final String pythonDialogueAddress = Utils.getProperty("pythonDialogueAddress");
 
     @Override
@@ -113,7 +113,7 @@ public class NLU_DMComponent extends PluggableComponent {
                     // store user's utterance (for NLG)
                     ActiveDMOutput dmOutput = Utils.fromJson(message, ActiveDMOutput.class);
                     dmOutput.setUtterance(utterance);
-                    if (dmOutput.getRecommendation() != null)
+                    if (dmOutput.plainGetRecommendation() != null)
                         dmOutput.getRecommendation().setRexplanations(null);
                     dmOutput.sessionID = getSessionId();
                     // post to Blackboard
@@ -151,10 +151,14 @@ public class NLU_DMComponent extends PluggableComponent {
     public class ActiveDMOutput extends DMOutput {
 
         String sessionID;
+        public String getSessionID() { return sessionID; }
+        public void setSessionID(String sessionID) { this.sessionID = sessionID; }
 
         /** Fills in underspecified Recommmendation variable if necessary. */
         private void fillInRecommendationTitle() {
             // query for value
+            assert (NLU_DMComponent.this != null) : "the world is a weird place";
+            assert commController != null : "cannot access commController!";
             commController.send(sessionID, new ASROutput(SaraCons.MSG_QUERY, 1.0));
             Log4J.info(ActiveDMOutput.this, "sent recommendation title request");
             commController.receive(new ResponseListener() {
@@ -184,6 +188,10 @@ public class NLU_DMComponent extends PluggableComponent {
             }
             // Recommendation object now contains value
             return recommendation;
+        }
+
+        private Recommendation plainGetRecommendation() {
+            return super.getRecommendation();
         }
 
     }
