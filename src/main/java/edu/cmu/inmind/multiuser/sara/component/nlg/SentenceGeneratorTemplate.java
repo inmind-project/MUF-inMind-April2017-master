@@ -1,5 +1,6 @@
 package edu.cmu.inmind.multiuser.sara.component.nlg;
 import com.google.common.base.Strings;
+import edu.cmu.inmind.multiuser.common.model.DMOutput;
 import edu.cmu.inmind.multiuser.common.model.Entity;
 import edu.cmu.inmind.multiuser.common.model.UserFrame;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
@@ -74,7 +75,7 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
 
     /* select candidates from the DB based on the task intent and conversational strategy */
     public List<WeightedCandidate> selectCandidates(SROutput srOutput) {
-        String intent = srOutput.getAction();
+        String intent = srOutput.getDMOutput().getAction();
         // srOutput strategy is formatted as [STRATEGY]_CS_SYSTEM; we only want [STRATEGY]
         String strategy = srOutput.getStrategy().split("_")[0];
         Map<String, List<Template>> intentMap = templateMap.get(intent);
@@ -145,19 +146,22 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
         while (m.matches()) {
             String slotName = m.group(1);
             String value = null, latestEntityValue, latestEntityType, latestUtterance;
-            UserFrame.Frame frame = srOutput.getUserFrame().getFrame();
+            UserFrame.Frame frame = srOutput.getDMOutput().getUserFrame().getFrame();
+            DMOutput dmOutput = srOutput.getDMOutput();
             try {
                 switch (slotName) {
                     case "#title":
                         if (replace) {
-                            Log4J.info(this, "attempting to replace #title");
-                            value = srOutput.getDMOutput().getRecommendationTitle();
+                            value = dmOutput.getRecommendation().getTitle();
                         } else
-                            value = srOutput.getDMOutput().hasRecommendationTitle() ? "" : null;
+                            value = dmOutput.getRecommendation().hasContent() ? "" : null;
                         break;
                     case "#reason":
-                        // TODO: this is not yet adapted for incrementality (otherwise, will never be possible to talk about reasons in incremental case!)
-                        value = srOutput.getRecommendation().getRexplanations().get(0).getExplanations().get(0);
+                        if (replace) {
+                            value = dmOutput.getRecommendation().getRexplanations().get(0).getExplanations().get(0);
+                        } else {
+                            value = dmOutput.getRecommendation().hasContent() ? "" : null;
+                        }
                         break;
                     case "#previousMovie":
                         // Gets the latest movie that the user liked. Supposedly used to change greeting phase.
@@ -184,7 +188,7 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
                         break;
                     case "#latest":
                         // Get the latest entity detected from the user
-                        latestUtterance = srOutput.getUserFrame().getLatestUtterance();
+                        latestUtterance = dmOutput.getUtterance();
                         latestEntityValue = getLatestEntityValue(srOutput); // latest entity
                         // if entity is from user's last utterance
                         if (latestUtterance.contains(latestEntityValue)) {
@@ -270,16 +274,16 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
     private static String getLatestEntityValue(SROutput srOutput) {
         int latestEntityIndex = 0;
         try {
-            switch(srOutput.getAction()) {
+            switch(srOutput.getDMOutput().getAction()) {
                 case "ask_directors": // refer to genre
-                    latestEntityIndex = srOutput.getUserFrame().getFrame().getGenres().getLike().size() - 1;
-                    return srOutput.getUserFrame().getFrame().getGenres().getLike().get(latestEntityIndex).getValue();
+                    latestEntityIndex = srOutput.getDMOutput().getUserFrame().getFrame().getGenres().getLike().size() - 1;
+                    return srOutput.getDMOutput().getUserFrame().getFrame().getGenres().getLike().get(latestEntityIndex).getValue();
                 case "ask_actors": // refer to director
-                    latestEntityIndex = srOutput.getUserFrame().getFrame().getDirectors().getLike().size() - 1;
-                    return srOutput.getUserFrame().getFrame().getDirectors().getLike().get(latestEntityIndex).getValue();
+                    latestEntityIndex = srOutput.getDMOutput().getUserFrame().getFrame().getDirectors().getLike().size() - 1;
+                    return srOutput.getDMOutput().getUserFrame().getFrame().getDirectors().getLike().get(latestEntityIndex).getValue();
                 case "recommend": // refer to actor
-                    latestEntityIndex = srOutput.getUserFrame().getFrame().getActors().getLike().size() - 1;
-                    return srOutput.getUserFrame().getFrame().getActors().getLike().get(latestEntityIndex).getValue();
+                    latestEntityIndex = srOutput.getDMOutput().getUserFrame().getFrame().getActors().getLike().size() - 1;
+                    return srOutput.getDMOutput().getUserFrame().getFrame().getActors().getLike().get(latestEntityIndex).getValue();
                 default:
                     return null;
             }
@@ -295,7 +299,7 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
     private static String getLatestEntityType(SROutput srOutput) {
         int latestEntityIndex = 0;
         try {
-            switch(srOutput.getAction()) {
+            switch(srOutput.getDMOutput().getAction()) {
                 case "ask_directors": // refer to genre
                     return "genre";
                 case "ask_actors": // refer to director

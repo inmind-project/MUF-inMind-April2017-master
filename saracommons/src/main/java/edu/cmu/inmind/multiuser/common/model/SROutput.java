@@ -6,21 +6,19 @@ import java.util.List;
  * Created by yoichimatsuyama on 4/11/17.
  */
 public class SROutput {
+
     DMOutput dmOutput;
+    /** one of the strategies, hopefully as defined in ConversationalStrategy */
     String strategy;
+    /** real value between 1-7 or 0 for undefined */
     double rapport;
+    /** list of BehaviorNetwork states */
     List<String> states;
 
     public SROutput(DMOutput dmOutput) { 
         this.dmOutput = dmOutput;
     }
-
-    public String getAction() {
-        return dmOutput.action;
-    }
-    public void setAction(String action) {
-        dmOutput.action = action;
-    }
+    public DMOutput getDMOutput() { return dmOutput; }
 
     public String getStrategy() {
         return strategy;
@@ -34,29 +32,6 @@ public class SROutput {
     }
     public void setRapport(double rapport) {
         this.rapport = rapport;
-    }
-
-    public List<Entity> getEntities() {
-        return dmOutput.entities;
-    }
-    public void setEntities(List<Entity> entities) {
-        dmOutput.entities = entities;
-    }
-
-    public DMOutput getDMOutput() { return dmOutput; }
-
-    public Recommendation getRecommendation() {
-        return dmOutput.recommendation;
-    }
-    public void setRecommendation(Recommendation recommendation) {
-        dmOutput.recommendation = recommendation;
-    }
-
-    public UserFrame getUserFrame() {
-        return dmOutput.frame;
-    }
-    public void setUserFrame(UserFrame userFrame) {
-        dmOutput.frame = userFrame;
     }
 
     public List<String> getStates() {
