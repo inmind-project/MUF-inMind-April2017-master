@@ -25,7 +25,6 @@ import java.util.Map;
 @BlackboardSubscription( messages = {SaraCons.MSG_ASR, SaraCons.MSG_START_DM, SaraCons.MSG_UM} )
 public class NLU_DMComponent extends PluggableComponent {
     private static final String SESSION_MANAGER_SERVICE = "session-manager";
-    private ClientCommController commController;
     private final String pythonDialogueAddress = Utils.getProperty("pythonDialogueAddress");
 
     private static Map<String,ClientCommController> sessionControllers = new HashMap<>();
@@ -56,7 +55,7 @@ public class NLU_DMComponent extends PluggableComponent {
         /*commController = new ClientCommController(pythonDialogueAddress, getSessionId(),
                 Utils.getProperty("dialogAddress"),
                 Constants.REQUEST_CONNECT, msgWrapper, msgSubscriptions);*/
-        commController =  new ClientCommController.Builder()
+        ClientCommController commController =  new ClientCommController.Builder()
                 .setServerAddress( pythonDialogueAddress)
                 .setServiceName(getSessionId())
                 .setClientAddress( Utils.getProperty("dialogAddress") )
@@ -89,7 +88,7 @@ public class NLU_DMComponent extends PluggableComponent {
         if (blackboardEvent.getId().equals(SaraCons.MSG_START_DM)){
             ASROutput startDMMessage = new ASROutput(SaraCons.MSG_START_DM, 1.0);
             Log4J.debug(this, "about to send initial greeting ...");
-    	    commController.send( getSessionId(), startDMMessage );
+    	    NLU_DMComponent.getCCC(getSessionId()).send( getSessionId(), startDMMessage );
             receiveRequest = true;
             Log4J.debug(this, "Sent Initial Greeting");
         } else if (blackboardEvent.getId().equals(SaraCons.MSG_UM)) {
@@ -97,20 +96,20 @@ public class NLU_DMComponent extends PluggableComponent {
             Log4J.info(this, "Received user model");
             if (userModel.getUserFrame() != null) {
                 Log4J.info(this, "Sending user frame to python: " + Utils.toJson(userModel.getUserFrame()));
-                commController.send(getSessionId(), userModel.getUserFrame());
+                NLU_DMComponent.getCCC(getSessionId()).send(getSessionId(), userModel.getUserFrame());
             } else {
                 Log4J.info(this, "User frame was empty");
             }
         } else {
             Log4J.debug(this, "sending on " + blackboardEvent.toString() );
-            commController.send( getSessionId(), blackboardEvent.getElement() );
+            NLU_DMComponent.getCCC(getSessionId()).send( getSessionId(), blackboardEvent.getElement() );
             receiveRequest = true;
         }
         // here we receive the response from DialoguePython:
         if (receiveRequest) {
 //            final int receiveRequestNumber = ++receiveCounter;
 //            Log4J.debug(this, "receive request " + receiveRequestNumber);
-            commController.receive(new ResponseListener() {
+            NLU_DMComponent.getCCC(getSessionId()).receive(new ResponseListener() {
                 @Override
                 public void process(String message) {
 //                    Log4J.debug(NLU_DMComponent.this, "I've received for request: " + receiveRequestNumber);
@@ -118,7 +117,7 @@ public class NLU_DMComponent extends PluggableComponent {
                     // store user's utterance (for NLG)
                     ActiveDMOutput dmOutput = Utils.fromJson(message, ActiveDMOutput.class);
                     dmOutput.setUtterance(utterance);
-                    if (dmOutput.getRecommendation() != null)
+                    if (dmOutput.plainGetRecommendation() != null)
                         dmOutput.getRecommendation().setRexplanations(null);
                     dmOutput.sessionID = getSessionId();
                     // post to Blackboard
@@ -150,8 +149,8 @@ public class NLU_DMComponent extends PluggableComponent {
                 SessionMessage sessionMessage = new SessionMessage();
                 sessionMessage.setRequestType( Constants.REQUEST_DISCONNECT );
                 sessionMessage.setSessionId(getSessionId());
-                commController.send( SESSION_MANAGER_SERVICE, sessionMessage );
-                commController.close();
+                NLU_DMComponent.getCCC(getSessionId()).send( SESSION_MANAGER_SERVICE, sessionMessage );
+                NLU_DMComponent.getCCC(getSessionId()).close();
             }
         }.start();
     }
@@ -194,6 +193,10 @@ public class NLU_DMComponent extends PluggableComponent {
             }
             // Recommendation object now contains value
             return recommendation;
+        }
+
+        private Recommendation plainGetRecommendation() {
+            return super.getRecommendation();
         }
 
     }
