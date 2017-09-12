@@ -27,7 +27,10 @@ public class NLU_DMComponent extends PluggableComponent {
     private static final String SESSION_MANAGER_SERVICE = "session-manager";
     private final String pythonDialogueAddress = Utils.getProperty("pythonDialogueAddress");
 
-    private static Map<String,ClientCommController> sessionControllers = new HashMap<>();
+    private static Map<String,ClientCommController> sessionControllers;
+    static {
+        sessionControllers = new HashMap<>();
+    }
 
     @Override
     public void startUp(){
