@@ -34,7 +34,7 @@ public class Ex15_WholePipeline extends MainClass {
                         .addPlugin(NLGComponent.class, SaraCons.ID_NLG)
                         //.addPlugin(OpenFaceComponent.class, SaraCons.ID_OF)
                         //.addPlugin(R5StreamComponent.class, SaraCons.ID_R5)
-                        //.addPlugin(UserModelComponent.class, SaraCons.ID_UM)
+                        .addPlugin(UserModelComponent.class, SaraCons.ID_UM)
                         .build()
         };
 

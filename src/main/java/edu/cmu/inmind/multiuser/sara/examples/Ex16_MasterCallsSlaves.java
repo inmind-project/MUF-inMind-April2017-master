@@ -47,7 +47,7 @@ public class Ex16_MasterCallsSlaves extends MainClassNew {
                         .addPlugin(SocialReasonerComponent.class, SaraCons.ID_SR)
                         .addPlugin(NLGComponent.class, SaraCons.ID_NLG)
                         //.addPlugin(R5StreamComponent.class, SaraCons.ID_R5)
-                        //.addPlugin(UserModelComponent.class, SaraCons.ID_UM)
+                        .addPlugin(UserModelComponent.class, SaraCons.ID_UM)
                         .build()
         };
     }
