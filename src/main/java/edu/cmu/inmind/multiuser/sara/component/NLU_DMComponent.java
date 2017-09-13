@@ -134,7 +134,7 @@ public class NLU_DMComponent extends PluggableComponent {
         return sessionControllers.get(sessionID);
     }
 
-    int receiveCounter = 0;
+    static int receiveCounter = 0;
 
     @Override
     public void shutDown(){
@@ -168,10 +168,13 @@ public class NLU_DMComponent extends PluggableComponent {
             // query for value
             // commController.send(sessionID, new ASROutput(SaraCons.MSG_QUERY, 1.0));
             NLU_DMComponent.getCCC(sessionID).send(sessionID, new ASROutput(SaraCons.MSG_QUERY, 1.0));
+            final int receiveRequestNumber = ++receiveCounter;
+            Log4J.debug(ActiveDMOutput.this, "receive request " + receiveRequestNumber);
             Log4J.info(ActiveDMOutput.this, "sent recommendation title request");
             NLU_DMComponent.getCCC(sessionID).receive(new ResponseListener() {
                 @Override
                 public void process(String message) {
+                    Log4J.debug(this, "I've received for request: " + receiveRequestNumber);
                     // set recommendation to newly found value
                     recommendation.setRexplanations(Utils.fromJson(message, DMOutput.class).getRecommendation().getRexplanations());
                     Log4J.info(ActiveDMOutput.this, "received recommendation specification: " + message);
