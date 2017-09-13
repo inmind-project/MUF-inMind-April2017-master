@@ -52,7 +52,7 @@ public class NLU_DMComponent extends PluggableComponent {
     }
 
     public void postCreate(){
-        Log4J.info(this, "postCreate is called, sessionID is " + getSessionId());
+        Log4J.info(this, "postCreate is called, sessionID is " + getSessionId() + " in object " + this.hashCode());
         String[] msgSubscriptions = { SaraCons.MSG_ASR };
         ZMsgWrapper msgWrapper = new ZMsgWrapper();
         /*commController = new ClientCommController(pythonDialogueAddress, getSessionId(),
@@ -110,12 +110,12 @@ public class NLU_DMComponent extends PluggableComponent {
         }
         // here we receive the response from DialoguePython:
         if (receiveRequest) {
-//            final int receiveRequestNumber = ++receiveCounter;
-//            Log4J.debug(this, "receive request " + receiveRequestNumber);
+            final int receiveRequestNumber = ++receiveCounter;
+            Log4J.debug(this, "receive request " + receiveRequestNumber);
             NLU_DMComponent.getCCC(getSessionId()).receive(new ResponseListener() {
                 @Override
                 public void process(String message) {
-//                    Log4J.debug(NLU_DMComponent.this, "I've received for request: " + receiveRequestNumber);
+                    Log4J.debug(NLU_DMComponent.this, "I've received for request: " + receiveRequestNumber);
                     Log4J.debug(NLU_DMComponent.this, "I've received: " + message);
                     // store user's utterance (for NLG)
                     ActiveDMOutput dmOutput = Utils.fromJson(message, ActiveDMOutput.class);
@@ -134,7 +134,7 @@ public class NLU_DMComponent extends PluggableComponent {
         return sessionControllers.get(sessionID);
     }
 
-//    int receiveCounter = 0;
+    int receiveCounter = 0;
 
     @Override
     public void shutDown(){

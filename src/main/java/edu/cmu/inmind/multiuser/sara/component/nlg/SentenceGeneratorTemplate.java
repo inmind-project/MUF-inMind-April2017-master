@@ -52,7 +52,7 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
     }
 
     /** generate a list of sentences */
-    public List<String> generateAsList(SROutput srOutput){
+    public List<String> generateAsList(SROutput srOutput) {
         List<WeightedCandidate> candidates = selectCandidates(srOutput);
         assert candidates != null && candidates.size() > 0;
         String allText = selectByWeight(candidates);
@@ -60,7 +60,7 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
     }
 
     /** split text into a list of sentences */
-    private List<String> splitIntoSentences(String allText){
+    private List<String> splitIntoSentences(String allText) {
         BreakIterator splitter = BreakIterator.getSentenceInstance(Locale.US);
         splitter.setText(allText);
         int start = splitter.first();
