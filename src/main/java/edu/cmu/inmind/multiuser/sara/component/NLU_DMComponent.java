@@ -148,12 +148,19 @@ public class NLU_DMComponent extends PluggableComponent {
      */
     private void sendCloseMessage(){
         new Thread("send-message-close-python-dialogue") {
-            public void run(){
+            public void run() {
                 SessionMessage sessionMessage = new SessionMessage();
-                sessionMessage.setRequestType( Constants.REQUEST_DISCONNECT );
+                sessionMessage.setRequestType(Constants.REQUEST_DISCONNECT);
                 sessionMessage.setSessionId(getSessionId());
-                NLU_DMComponent.getCCC(getSessionId()).send( SESSION_MANAGER_SERVICE, sessionMessage );
-                NLU_DMComponent.getCCC(getSessionId()).close();
+                NLU_DMComponent.getCCC(getSessionId()).send(SESSION_MANAGER_SERVICE, sessionMessage);
+                try {
+                    Thread.sleep(400);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } finally {
+                    NLU_DMComponent.getCCC(getSessionId()).close();
+                    NLU_DMComponent.sessionControllers.remove(getSessionId());
+                }
             }
         }.start();
     }
