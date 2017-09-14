@@ -10,7 +10,7 @@ import edu.cmu.inmind.multiuser.sara.orchestrator.SaraOrchestratorEx04;
 /**
  * Created by oscarr on 4/10/17.
  *
- * You can execute each component in your system (e.g., NLUComponent, TR, SR, NLGComponent)
+ * You can execute each component in your system (e.g., FakeNLUComponent, TR, SR, NLGComponent)
  * synchronously. This is an example of how to execute your components sequentially and it
  * assumes all components run synchronously (i.e., they do NOT run on separate threads):
  */
@@ -32,7 +32,7 @@ public class Ex04_SyncExecution extends MainClass {
                         // you can either load classes from the config.properties file:
                         .addPlugin(Utils.getProperty("NLUComponent"), SaraCons.ID_NLU)
                                 // or you can directly specify the complete name of your component
-                        .addPlugin("edu.cmu.inmind.multiuser.sara.component.TaskReasonerComponent", SaraCons.ID_DM)
+                        .addPlugin("edu.cmu.inmind.multiuser.sara.component.FakeTaskReasonerComponent", SaraCons.ID_DM)
                                 // or you can directly refer to classes in your project
                         .addPlugin(SocialReasonerComponent.class, SaraCons.ID_SR)
                         .addPlugin(NLGComponent.class, SaraCons.ID_NLG)

@@ -33,7 +33,7 @@ public class SaraOrchestratorEx09 extends ProcessOrchestratorImpl {
 
         // you don't have to do anything else. Messages coming from clients (MSG_ASR) will be automatically
         // forwarded to the remote service (NLU) and then you will receive the response at TaskReasoner.
-        // Note that TaskReasonerComponent has a subscription annotation to MSG_DIALOGUE_RESPONSE.
+        // Note that FakeTaskReasonerComponent has a subscription annotation to MSG_DIALOGUE_RESPONSE.
     }
 
 

@@ -2,7 +2,7 @@ package edu.cmu.inmind.multiuser.sara.examples;
 
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.controller.plugin.PluginModule;
-import edu.cmu.inmind.multiuser.sara.component.TaskReasonerComponent;
+import edu.cmu.inmind.multiuser.sara.component.FakeTaskReasonerComponent;
 import edu.cmu.inmind.multiuser.sara.orchestrator.SaraOrchestratorEx09;
 
 /**
@@ -24,7 +24,7 @@ public class Ex09_RemoteServiceAutomaticSubscription extends MainClass {
     protected PluginModule[] createModules() {
         return new PluginModule[]{
                 new PluginModule.Builder(SaraOrchestratorEx09.class)
-                        .addPlugin(TaskReasonerComponent.class, SaraCons.ID_DM)
+                        .addPlugin(FakeTaskReasonerComponent.class, SaraCons.ID_DM)
                         .build()
         };
     }

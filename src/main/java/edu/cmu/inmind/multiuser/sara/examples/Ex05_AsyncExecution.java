@@ -29,7 +29,7 @@ public class Ex05_AsyncExecution extends MainClass {
         return new PluginModule[]{
                 new PluginModule.Builder(SaraOrchestratorEx05.class)
                         .addPlugin(Utils.getProperty("NLUComponent"), SaraCons.ID_NLU)
-                        .addPlugin("edu.cmu.inmind.multiuser.sara.component.TaskReasonerComponent",
+                        .addPlugin("edu.cmu.inmind.multiuser.sara.component.FakeTaskReasonerComponent",
                                 SaraCons.ID_DM)
                         .addPlugin(SocialReasonerComponent.class, SaraCons.ID_SR)
                         .addPlugin(NLGComponent.class, SaraCons.ID_NLG)
