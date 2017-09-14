@@ -61,7 +61,8 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
 
     /** split text into a list of sentences */
     private List<String> splitIntoSentences(String allText) {
-        BreakIterator splitter = BreakIterator.getSentenceInstance(Locale.US);
+        return Arrays.asList(allText.split("\\|"));
+/*        BreakIterator splitter = BreakIterator.getSentenceInstance(Locale.US);
         splitter.setText(allText);
         int start = splitter.first();
         int end;
@@ -71,7 +72,7 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
             start = end;
             sentences.add(sentence);
         }
-        return sentences;
+        return sentences;*/
     }
 
     /* select candidates from the DB based on the task intent and conversational strategy */
