@@ -6,10 +6,7 @@ import edu.cmu.inmind.multiuser.common.Utils;
 import edu.cmu.inmind.multiuser.common.model.*;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardSubscription;
-import edu.cmu.inmind.multiuser.controller.communication.ClientCommController;
-import edu.cmu.inmind.multiuser.controller.communication.ResponseListener;
-import edu.cmu.inmind.multiuser.controller.communication.SessionMessage;
-import edu.cmu.inmind.multiuser.controller.communication.ZMsgWrapper;
+import edu.cmu.inmind.multiuser.controller.communication.*;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
 import edu.cmu.inmind.multiuser.controller.plugin.StateType;
@@ -23,13 +20,13 @@ import java.util.Map;
  */
 @StateType( state = Constants.STATEFULL)
 @BlackboardSubscription( messages = {SaraCons.MSG_ASR, SaraCons.MSG_START_DM, SaraCons.MSG_UM} )
+@ConnectRemoteService(remoteService = SaraCons.NLU_DM_SERVICE)
 public class NLU_DMComponent extends PluggableComponent {
     private static final String SESSION_MANAGER_SERVICE = "session-manager";
-    private final String pythonDialogueAddress = Utils.getProperty("pythonDialogueAddress");
 
-    private static Map<String,ClientCommController> sessionControllers;
+    private static Map<String,NLU_DMComponent> selfMap;
     static {
-        sessionControllers = new HashMap<>();
+        selfMap = new HashMap<>();
     }
 
     @Override
@@ -58,16 +55,7 @@ public class NLU_DMComponent extends PluggableComponent {
         /*commController = new ClientCommController(pythonDialogueAddress, getSessionId(),
                 Utils.getProperty("dialogAddress"),
                 Constants.REQUEST_CONNECT, msgWrapper, msgSubscriptions);*/
-        ClientCommController commController =  new ClientCommController.Builder()
-                .setServerAddress( pythonDialogueAddress)
-                .setServiceName(getSessionId())
-                .setClientAddress( Utils.getProperty("dialogAddress") )
-                .setRequestType( Constants.REQUEST_CONNECT )
-                .setTCPon( true )
-                .setMuf( true? null : null ) //when TCP is off, we need to explicitly tell the client who the MUF is
-                .setSessionManagerService(SESSION_MANAGER_SERVICE)
-                .build();
-        sessionControllers.put(getSessionId(), commController);
+        selfMap.put(getSessionId(), this);
     }
 
     private SaraOutput extractAndProcess() {
@@ -78,6 +66,11 @@ public class NLU_DMComponent extends PluggableComponent {
         Log4J.info(this, "Input: " + saraInput + ", Output: " + saraOutput + "\n");
         return saraOutput;
     }
+
+    static void send(String sessionID, Object message, boolean shouldProcessReply) {
+        NLU_DMComponent.getCCC(sessionID).send(new SessionMessage(SaraCons.MSG_ASR, Utils.toJson(message)));
+    }
+
 
     @Override
     public void onEvent(BlackboardEvent blackboardEvent) throws Exception {
@@ -91,7 +84,7 @@ public class NLU_DMComponent extends PluggableComponent {
         if (blackboardEvent.getId().equals(SaraCons.MSG_START_DM)){
             ASROutput startDMMessage = new ASROutput(SaraCons.MSG_START_DM, 1.0);
             Log4J.debug(this, "about to send initial greeting ...");
-    	    NLU_DMComponent.getCCC(getSessionId()).send( getSessionId(), startDMMessage );
+    	    send(getSessionId(), startDMMessage, true);
             receiveRequest = true;
             Log4J.debug(this, "Sent Initial Greeting");
         } else if (blackboardEvent.getId().equals(SaraCons.MSG_UM)) {
@@ -99,71 +92,40 @@ public class NLU_DMComponent extends PluggableComponent {
             Log4J.info(this, "Received user model");
             if (userModel.getUserFrame() != null) {
                 Log4J.info(this, "Sending user frame to python: " + Utils.toJson(userModel.getUserFrame()));
-                NLU_DMComponent.getCCC(getSessionId()).send(getSessionId(), userModel.getUserFrame());
+                // no reply for user model stuff
+                send(getSessionId(), userModel.getUserFrame(), false);
             } else {
                 Log4J.info(this, "User frame was empty");
             }
         } else {
             Log4J.debug(this, "sending on " + blackboardEvent.toString() );
-            NLU_DMComponent.getCCC(getSessionId()).send( getSessionId(), blackboardEvent.getElement() );
+            send(getSessionId(), blackboardEvent.getElement(), true);
             receiveRequest = true;
         }
         // here we receive the response from DialoguePython:
         if (receiveRequest) {
             final int receiveRequestNumber = ++receiveCounter;
             Log4J.debug(this, "receive request " + receiveRequestNumber);
-            NLU_DMComponent.getCCC(getSessionId()).receive(new ResponseListener() {
-                @Override
-                public void process(String message) {
-                    Log4J.debug(NLU_DMComponent.this, "I've received for request: " + receiveRequestNumber);
-                    Log4J.debug(NLU_DMComponent.this, "I've received: " + message);
-                    // store user's utterance (for NLG)
-                    ActiveDMOutput dmOutput = Utils.fromJson(message, ActiveDMOutput.class);
-                    dmOutput.setUtterance(utterance);
-                    if (dmOutput.plainGetRecommendation() != null)
-                        dmOutput.getRecommendation().setRexplanations(null);
-                    dmOutput.sessionID = getSessionId();
-                    // post to Blackboard
-                    blackboard().post(NLU_DMComponent.this, SaraCons.MSG_DM, dmOutput);
-                }
+            NLU_DMComponent.getCCC(getSessionId()).receive(message -> {
+                Log4J.debug(NLU_DMComponent.this, "I've received for request: " + receiveRequestNumber);
+                Log4J.debug(NLU_DMComponent.this, "I've received: " + message);
+                // store user's utterance (for NLG)
+                ActiveDMOutput dmOutput = Utils.fromJson(message, ActiveDMOutput.class);
+                dmOutput.setUtterance(utterance);
+                if (dmOutput.plainGetRecommendation() != null)
+                    dmOutput.getRecommendation().setRexplanations(null);
+                dmOutput.sessionID = getSessionId();
+                // post to Blackboard
+                blackboard().post(NLU_DMComponent.this, SaraCons.MSG_DM, dmOutput);
             });
         }
     }
 
-    public static ClientCommController getCCC(String sessionID) {
-        return sessionControllers.get(sessionID);
+    public static NLU_DMComponent getCCC(String sessionID) {
+        return selfMap.get(sessionID);
     }
 
     static int receiveCounter = 0;
-
-    @Override
-    public void shutDown(){
-        sendCloseMessage();
-        super.shutDown();
-    }
-    /**
-     * We need to send this message to the Python Dialogue System on a separate thread, otherwise
-     * we will get some TimeOut exceptions because the communication process takes longer than the
-     * shuttingdown process
-     */
-    private void sendCloseMessage(){
-        new Thread("send-message-close-python-dialogue") {
-            public void run() {
-                SessionMessage sessionMessage = new SessionMessage();
-                sessionMessage.setRequestType(Constants.REQUEST_DISCONNECT);
-                sessionMessage.setSessionId(getSessionId());
-                NLU_DMComponent.getCCC(getSessionId()).send(SESSION_MANAGER_SERVICE, sessionMessage);
-                try {
-                    Thread.sleep(400);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } finally {
-                    NLU_DMComponent.getCCC(getSessionId()).close();
-                    NLU_DMComponent.sessionControllers.remove(getSessionId());
-                }
-            }
-        }.start();
-    }
 
     /** the smart kind of DMOutput that is able to load recommendations JIT */
     public static class ActiveDMOutput extends DMOutput {
@@ -174,18 +136,15 @@ public class NLU_DMComponent extends PluggableComponent {
         private void fillInRecommendationTitle() {
             // query for value
             // commController.send(sessionID, new ASROutput(SaraCons.MSG_QUERY, 1.0));
-            NLU_DMComponent.getCCC(sessionID).send(sessionID, new ASROutput(SaraCons.MSG_QUERY, 1.0));
+            NLU_DMComponent.send(sessionID, new ASROutput(SaraCons.MSG_QUERY, 1.0), true);
             final int receiveRequestNumber = ++receiveCounter;
             Log4J.debug(ActiveDMOutput.this, "receive request " + receiveRequestNumber);
             Log4J.info(ActiveDMOutput.this, "sent recommendation title request");
-            NLU_DMComponent.getCCC(sessionID).receive(new ResponseListener() {
-                @Override
-                public void process(String message) {
-                    Log4J.debug(this, "I've received for request: " + receiveRequestNumber);
-                    // set recommendation to newly found value
-                    recommendation.setRexplanations(Utils.fromJson(message, DMOutput.class).getRecommendation().getRexplanations());
-                    Log4J.info(ActiveDMOutput.this, "received recommendation specification: " + message);
-                }
+            NLU_DMComponent.getCCC(sessionID).receive(message -> {
+                Log4J.debug(this, "I've received for request: " + receiveRequestNumber);
+                // set recommendation to newly found value
+                recommendation.setRexplanations(Utils.fromJson(message, DMOutput.class).getRecommendation().getRexplanations());
+                Log4J.info(ActiveDMOutput.this, "received recommendation specification: " + message);
             });
             // wait for DialoguePython to send the value
             while (!recommendation.hasContent()) {

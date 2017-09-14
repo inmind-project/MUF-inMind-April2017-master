@@ -44,7 +44,7 @@ public class SaraCons {
     public static final String MSG_START_STREAMING = "MSG_START_STREAMING";
 
     //services
-    public static final String NLU_SERVICE = "NLU_SERVICE";
+    public static final String NLU_DM_SERVICE = "NLU_DM_SERVICE";
     public static final String NLG_SERVICE = "NLG_SERVICE";
     public static final String DM_SERVICE = "DM_SERVICE";
     public static final String SR_SERVICE = "SR_SERVICE";

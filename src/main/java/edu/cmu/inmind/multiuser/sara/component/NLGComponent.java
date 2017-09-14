@@ -52,6 +52,7 @@ public class NLGComponent extends PluggableComponent implements BeatCallback {
         Log4J.info(this, "NLGComponent: " + hashCode());
         extractAndProcess();
     }
+
     @Loggable
     private void extractAndProcess() {
         SROutput srOutput = (SROutput) blackboard().get(SaraCons.MSG_SR);

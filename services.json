@@ -9,6 +9,14 @@
         "MSG_SR",
         "MSG_UM"
       ]
+    },
+    {
+      "serviceName": "NLU_DM_SERVICE",
+      "__comment" : "set this address to where your python-dialogue manager lives.",
+      "clientAddress": "tcp://34.203.160.208:5590",
+      "__clientAddress": "tcp://localhost:5590",
+      "msgSubscriptions": []
     }
+
   ]
 }

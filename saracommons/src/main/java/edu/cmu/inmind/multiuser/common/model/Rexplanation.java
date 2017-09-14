@@ -9,6 +9,12 @@ public class Rexplanation {
     String recommendation;
     List<String> explanations;
 
+    public Rexplanation() {}
+    public Rexplanation(String recommendation, List<String> explanations) {
+        this.recommendation = recommendation;
+        this.explanations = explanations;
+    }
+
     public String getRecommendation() {
         return recommendation;
     }
