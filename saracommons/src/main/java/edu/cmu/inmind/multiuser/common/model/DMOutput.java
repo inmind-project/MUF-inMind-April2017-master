@@ -33,6 +33,15 @@ public class DMOutput {
         this.recommendation = recommendation;
     }
 
+    /**
+     *  @return true if contains recommendation, else false
+     */
+    public boolean hasFullContent() {
+        return recommendation != null &&  recommendation.rexplanations != null;
+    }
+
+
+
     public UserFrame getUserFrame() {
         return frame;
     }

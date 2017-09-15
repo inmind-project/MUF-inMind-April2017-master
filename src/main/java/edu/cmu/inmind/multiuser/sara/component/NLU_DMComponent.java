@@ -147,7 +147,7 @@ public class NLU_DMComponent extends PluggableComponent {
                 Log4J.info(ActiveDMOutput.this, "received recommendation specification: " + message);
             });
             // wait for DialoguePython to send the value
-            while (!recommendation.hasContent()) {
+            while (!hasFullContent()) {
                 try {
                     Log4J.debug(ActiveDMOutput.this, "waiting for recommendation specification");
                     Thread.sleep(50);
@@ -158,7 +158,8 @@ public class NLU_DMComponent extends PluggableComponent {
         }
 
         @Override public synchronized Recommendation getRecommendation() {
-            if (recommendation != null && !recommendation.hasContent()) {
+            Thread.dumpStack();
+            if (!hasFullContent()) {
                 // System.err.println(recommendation.toString());
                 fillInRecommendationTitle();
                 // System.err.println(recommendation.toString());

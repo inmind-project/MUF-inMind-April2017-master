@@ -156,13 +156,13 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
                         if (replace) {
                             value = dmOutput.getRecommendation().getTitle();
                         } else
-                            value = dmOutput.getRecommendation().hasContent() ? "" : null;
+                            value = dmOutput.hasFullContent() ? "" : null;
                         break;
                     case "#reason":
                         if (replace) {
                             value = dmOutput.getRecommendation().getRexplanations().get(0).getExplanations().get(0);
                         } else {
-                            value = dmOutput.getRecommendation().hasContent() ? "" : null;
+                            value = dmOutput.hasFullContent() ? "" : null;
                         }
                         break;
                     case "#previousMovie":
