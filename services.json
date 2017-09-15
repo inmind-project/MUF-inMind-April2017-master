@@ -13,9 +13,9 @@
     {
       "serviceName": "NLU_DM_SERVICE",
       "__comment" : "set this address to where your python-dialogue manager lives.",
-      "clientAddress": "tcp://34.203.160.208:5590",
-      "__clientAddress": "tcp://localhost:5590",
-      "msgSubscriptions": []
+      "__clientAddress": "tcp://34.203.160.208:5590",
+      "clientAddress": "tcp://127.0.0.1:5590",
+      "msgSubscriptions": ]
     }
 
   ]

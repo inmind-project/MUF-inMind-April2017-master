@@ -21,6 +21,9 @@ repositories {
         url "http://www.cs.cmu.edu/afs/cs/project/inmind-cmu-yahoo/www/maven2"
     }
     jcenter()
+    maven { 
+        url 'https://oss.jfrog.org/libs-snapshot' 
+    }
 }
 
 buildscript {
@@ -47,7 +50,7 @@ configurations.all {
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.+'
     testCompile "org.mockito:mockito-core:1.+"
-    compile 'edu.cmu.inmind.framework:multiuser:2.12'        // this is the Multiuser Framework 2.5.3 current working
+    compile 'edu.cmu.inmind.framework:multiuser:2.13-RxJava'        // this is the Multiuser Framework 2.5.3 current working
     // version
     compile project(":saracommons")
     compile project(":saracsc")

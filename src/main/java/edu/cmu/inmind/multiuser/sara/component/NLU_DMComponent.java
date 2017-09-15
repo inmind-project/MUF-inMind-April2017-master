@@ -50,8 +50,8 @@ public class NLU_DMComponent extends PluggableComponent {
 
     public void postCreate(){
         Log4J.info(this, "postCreate is called, sessionID is " + getSessionId() + " in object " + this.hashCode());
-        String[] msgSubscriptions = { SaraCons.MSG_ASR };
-        ZMsgWrapper msgWrapper = new ZMsgWrapper();
+        //String[] msgSubscriptions = { SaraCons.MSG_ASR };
+        //ZMsgWrapper msgWrapper = new ZMsgWrapper();
         /*commController = new ClientCommController(pythonDialogueAddress, getSessionId(),
                 Utils.getProperty("dialogAddress"),
                 Constants.REQUEST_CONNECT, msgWrapper, msgSubscriptions);*/
@@ -68,7 +68,8 @@ public class NLU_DMComponent extends PluggableComponent {
     }
 
     static void send(String sessionID, Object message, boolean shouldProcessReply) {
-        NLU_DMComponent.getCCC(sessionID).send(new SessionMessage(SaraCons.MSG_ASR, Utils.toJson(message)));
+        System.err.println(sessionID + message + shouldProcessReply);
+        NLU_DMComponent.getCCC(sessionID).send(new SessionMessage(SaraCons.MSG_ASR, Utils.toJson(message)), shouldProcessReply);
     }
 
 
@@ -80,34 +81,48 @@ public class NLU_DMComponent extends PluggableComponent {
         final String utterance = blackboardEvent.toString().contains("confidence:") ? blackboardEvent.toString().split("Utterance: ")[1].split(" confidence:")[0] : "";
         // let's forward the ASR message to DialoguePython:
         /** should be set to true if we expect a response from python */
+        Log4J.debug(this, "Oscar 1");
         boolean receiveRequest = false;
         if (blackboardEvent.getId().equals(SaraCons.MSG_START_DM)){
-            ASROutput startDMMessage = new ASROutput(SaraCons.MSG_START_DM, 1.0);
+            Log4J.debug(this, "Oscar 2");
+	    ASROutput startDMMessage = new ASROutput(SaraCons.MSG_START_DM, 1.0);
             Log4J.debug(this, "about to send initial greeting ...");
     	    send(getSessionId(), startDMMessage, true);
-            receiveRequest = true;
+            Log4J.debug(this, "Oscar 3");
+	    receiveRequest = true;
             Log4J.debug(this, "Sent Initial Greeting");
+	    Log4J.debug(this, "Oscar 4");
         } else if (blackboardEvent.getId().equals(SaraCons.MSG_UM)) {
-            final UserModel userModel = (UserModel) blackboardEvent.getElement();
+            Log4J.debug(this, "Oscar 5");
+	    final UserModel userModel = (UserModel) blackboardEvent.getElement();
             Log4J.info(this, "Received user model");
+	    Log4J.debug(this, "Oscar 6");
             if (userModel.getUserFrame() != null) {
                 Log4J.info(this, "Sending user frame to python: " + Utils.toJson(userModel.getUserFrame()));
+                Log4J.debug(this, "Oscar 7");
                 // no reply for user model stuff
                 send(getSessionId(), userModel.getUserFrame(), false);
+		Log4J.debug(this, "Oscar 8");
             } else {
+		Log4J.debug(this, "Oscar 9");
                 Log4J.info(this, "User frame was empty");
             }
         } else {
+	    Log4J.debug(this, "Oscar 10");
             Log4J.debug(this, "sending on " + blackboardEvent.toString() );
             send(getSessionId(), blackboardEvent.getElement(), true);
             receiveRequest = true;
+	    Log4J.debug(this, "Oscar 11");
         }
         // here we receive the response from DialoguePython:
         if (receiveRequest) {
-            final int receiveRequestNumber = ++receiveCounter;
+            Log4J.debug(this, "Oscar 12");
+	    final int receiveRequestNumber = ++receiveCounter;
             Log4J.debug(this, "receive request " + receiveRequestNumber);
-            NLU_DMComponent.getCCC(getSessionId()).receive(message -> {
-                Log4J.debug(NLU_DMComponent.this, "I've received for request: " + receiveRequestNumber);
+            Log4J.debug(this, "Oscar 13");
+	    NLU_DMComponent.getCCC(getSessionId()).receive(message -> {
+                Log4J.debug(this, "Oscar 14");
+		Log4J.debug(NLU_DMComponent.this, "I've received for request: " + receiveRequestNumber);
                 Log4J.debug(NLU_DMComponent.this, "I've received: " + message);
                 // store user's utterance (for NLG)
                 ActiveDMOutput dmOutput = Utils.fromJson(message, ActiveDMOutput.class);
@@ -117,6 +132,7 @@ public class NLU_DMComponent extends PluggableComponent {
                 dmOutput.sessionID = getSessionId();
                 // post to Blackboard
                 blackboard().post(NLU_DMComponent.this, SaraCons.MSG_DM, dmOutput);
+		Log4J.debug(this, "Oscar 15");
             });
         }
     }
