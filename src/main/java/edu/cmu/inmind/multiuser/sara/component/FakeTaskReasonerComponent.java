@@ -10,6 +10,7 @@ import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
 import edu.cmu.inmind.multiuser.controller.plugin.StateType;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -19,7 +20,7 @@ import java.util.List;
 //@BlackboardSubscription(messages = {SaraCons.MSG_NLU, SaraCons.MSG_START_SESSION})
 @StateType( state = Constants.STATEFULL)
 @BlackboardSubscription(messages = {SaraCons.MSG_NLU, SaraCons.MSG_DIALOGUE_RESPONSE, SaraCons.MSG_START_DM})
-public class TaskReasonerComponent extends PluggableComponent {
+public class FakeTaskReasonerComponent extends PluggableComponent {
 
     private SaraInput saraInput;
     private SaraOutput saraOutput;
@@ -34,7 +35,7 @@ public class TaskReasonerComponent extends PluggableComponent {
 
     @Override
     public void execute() {
-        Log4J.info(this, "TaskReasonerComponent: " + hashCode());
+        Log4J.info(this, "FakeTaskReasonerComponent: " + hashCode());
 
     }
 
@@ -76,10 +77,8 @@ public class TaskReasonerComponent extends PluggableComponent {
 
     private void setFakeMovie(DMOutput output, String movieTitle){
         Recommendation reco = new Recommendation();
-        Rexplanation movie = new Rexplanation();
-        List<Rexplanation> list = new ArrayList<Rexplanation>();
-        list.add(movie);
-        movie.setRecommendation(movieTitle);
+        Rexplanation movie = new Rexplanation(movieTitle, Collections.singletonList("because duh"));
+        List<Rexplanation> list = Collections.singletonList(movie);
         reco.setRexplanations(list);
         output.setRecommendation(reco);
     }
@@ -93,7 +92,7 @@ public class TaskReasonerComponent extends PluggableComponent {
     {
         //TODO: add code here
         //...
-        Log4J.info(this, "TaskReasonerComponent. These objects have been updated at the blackboard: " + event.toString());
+        Log4J.info(this, "FakeTaskReasonerComponent. These objects have been updated at the blackboard: " + event.toString());
         //Log4J.info(this, "Input: " + saraInput.getASRinput() + " Output: " + saraOutput.getSystemIntent() );
         if (event.getId().equals(SaraCons.MSG_START_SESSION)) {
 		    System.out.println("Fake DM is initiating dialogue");

@@ -35,7 +35,6 @@ public class SocialReasonerComponent extends PluggableComponent {
     @Override
     public void execute() {
         Log4J.info(this, "SocialReasonerComponent: " + hashCode());
-
     }
 
 
@@ -65,7 +64,7 @@ public class SocialReasonerComponent extends PluggableComponent {
 
         socialController.setNonVerbals(isSmiling, isGazing);
         socialController.addContinousStates(null);
-     }
+    }
 
     private void updateUserModel(final UserModel model) {
         Log4J.info(this, "Received user model");
@@ -79,22 +78,16 @@ public class SocialReasonerComponent extends PluggableComponent {
 
     private SROutput selectStrategy(){
         long time = System.nanoTime();
-        SROutput srOutput = new SROutput();
-
         DMOutput dmOutput = (DMOutput) blackboard().get(SaraCons.MSG_DM);
         Log4J.info(this,"dmOutput : "+dmOutput.toString() );
-        srOutput.setAction(dmOutput.getAction());
-        srOutput.setEntities(dmOutput.getEntities());
-        srOutput.setRecommendation(dmOutput.getRecommendation());
-        srOutput.setUserFrame(dmOutput.getUserFrame());
+        SROutput srOutput = new SROutput(dmOutput);
         // temporary: fix this while fixing incremental system
-        srOutput.getUserFrame().setLatestUtterance(dmOutput.getUtterance());
         srOutput.setRapport(rapport);
 
         if (dmOutput.getAction() != null) {
             SystemIntent systemIntent =  new SystemIntent( );
             systemIntent.setIntent(dmOutput.getAction());
-            systemIntent.setRecommendationResults( Utils.toJson(dmOutput.getRecommendation()));
+            //systemIntent.setRecommendationResults( Utils.toJson(dmOutput.getRecommendation()));
             socialController.addSystemIntent( systemIntent );
             systemStrategy = socialController.getConvStrategyFormatted();
             srOutput.setStrategy(systemStrategy);

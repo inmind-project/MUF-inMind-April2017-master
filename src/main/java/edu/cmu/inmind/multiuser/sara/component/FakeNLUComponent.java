@@ -17,7 +17,7 @@ import java.util.ArrayList;
  */
 @StateType( state = Constants.STATELESS)
 @BlackboardSubscription( messages = {SaraCons.MSG_ASR})
-public class NLUComponent extends PluggableComponent {
+public class FakeNLUComponent extends PluggableComponent {
 
     @Override
     public void startUp(){
@@ -27,7 +27,7 @@ public class NLUComponent extends PluggableComponent {
 
     @Override
     public void execute() {
-        Log4J.info(this, "NLUComponent: " + hashCode());
+        Log4J.info(this, "FakeNLUComponent: " + hashCode());
 
     }
 
@@ -41,7 +41,7 @@ public class NLUComponent extends PluggableComponent {
     }
 
     /**
-     * If the blackboard model is modified externally, does NLUComponent have to do anything? this is useful when running multiple
+     * If the blackboard model is modified externally, does FakeNLUComponent have to do anything? this is useful when running multiple
      * processes in parallel rather than sequentially.
      */
     @Override
@@ -49,7 +49,7 @@ public class NLUComponent extends PluggableComponent {
     {
         //TODO: add code here
         //...
-        Log4J.info(this, "NLUComponent. These objects have been updated at the blackboard: " + event.toString());
+        Log4J.info(this, "FakeNLUComponent. These objects have been updated at the blackboard: " + event.toString());
 
         SaraOutput saraOutput = extractAndProcess();
 

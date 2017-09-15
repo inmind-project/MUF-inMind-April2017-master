@@ -6,26 +6,23 @@ import java.util.List;
  * Created by yoichimatsuyama on 4/11/17.
  */
 public class SROutput {
-    String action;
+
+    DMOutput dmOutput;
+    /** one of the strategies, hopefully as defined in ConversationalStrategy */
     String strategy;
+    /** real value between 1-7 or 0 for undefined */
     double rapport;
-    List<Entity> entities;
-    Recommendation recommendation;
-    UserFrame userFrame;
+    /** list of BehaviorNetwork states */
     List<String> states;
 
-    public String getAction() {
-        return action;
+    public SROutput(DMOutput dmOutput) { 
+        this.dmOutput = dmOutput;
     }
-
-    public void setAction(String action) {
-        this.action = action;
-    }
+    public DMOutput getDMOutput() { return dmOutput; }
 
     public String getStrategy() {
         return strategy;
     }
-
     public void setStrategy(String strategy) {
         this.strategy = strategy;
     }
@@ -33,44 +30,18 @@ public class SROutput {
     public double getRapport() {
         return rapport;
     }
-
     public void setRapport(double rapport) {
         this.rapport = rapport;
-    }
-
-    public List<Entity> getEntities() {
-        return entities;
-    }
-
-    public void setEntities(List<Entity> entities) {
-        this.entities = entities;
-    }
-
-    public Recommendation getRecommendation() {
-        return recommendation;
-    }
-
-    public void setRecommendation(Recommendation recommendation) {
-        this.recommendation = recommendation;
-    }
-
-    public UserFrame getUserFrame() {
-        return userFrame;
-    }
-
-    public void setUserFrame(UserFrame userFrame) {
-        this.userFrame = userFrame;
     }
 
     public List<String> getStates() {
         return states;
     }
-
     public void setStates(final List<String> states) {
         this.states = states;
     }
 
     public String toString(){
-        return "Component: " + this.getClass().toString() + " System Action: " + action + " Strategy:" + strategy;
+        return "Component: " + this.getClass().toString() + " System Action: " + dmOutput.action + " Strategy:" + strategy;
     }
 }

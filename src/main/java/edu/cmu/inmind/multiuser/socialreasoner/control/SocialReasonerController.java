@@ -177,7 +177,7 @@ public class SocialReasonerController {
         vectorID++;
     }
 
-    private String getConvStrategyFormatted() {
+    public String getConvStrategyFormatted() {
         if( conversationalStrategies == null || conversationalStrategies[0] == null ){
             return Constants.NONE;
         }
@@ -472,4 +472,19 @@ public class SocialReasonerController {
         return false;
     }
 
+    /**
+     * Added by Oscar. Otherwise, SocialReasonerComponent complains
+     * @param userConvStrategy
+     */
+    public static void setUserConvStrategy(String userConvStrategy) {
+        SocialReasonerController.userConvStrategy = userConvStrategy;
+    }
+
+    /**
+     * Added by Oscar. Otherwise, SocialReasonerComponent complains
+     * @param
+     */
+    public SocialReasoner getSocialReasoner() {
+        return socialReasoner;
+    }
 }

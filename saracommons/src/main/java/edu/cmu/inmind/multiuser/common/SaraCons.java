@@ -26,6 +26,7 @@ public class SaraCons {
     public static final String MSG_START_SESSION = "MSG_START_SESSION";
     public static final String MSG_NLU = "MSG_NLU";
     public static final String MSG_DM = "MSG_DM";
+    public static final String MSG_QUERY = "MSG_QUERY";
     public static final String MSG_SR = "MSG_SR";
     public static final String MSG_NLG = "MSG_NLG";
     public static final String MSG_LOCAL = "MSG_LOCAL";
@@ -41,9 +42,15 @@ public class SaraCons {
     public static final String MSG_LOG_COMPONENT = "MSG_LOG_COMPONENT";
     public static final String MSG_DIALOGUE_RESPONSE = "MSG_DIALOGUE_RESPONSE";
     public static final String MSG_START_STREAMING = "MSG_START_STREAMING";
+    public static final String MSG_START_DM_PYTHON = "MSG_START_DM_PYTHON";
+    public static final String MSG_USER_FRAME = "MSG_USER_FRAME";
+    public static final String MSG_ASR_DM = "MSG_ASR_DM";
+    public static final String MSG_RESPONSE_PYTHON = "MSG_RESPONSE_PYTHON";
+    public static final String MSG_QUERY_RESPONSE = "MSG_QUERY_RESPONSE";
+
 
     //services
-    public static final String NLU_SERVICE = "NLU_SERVICE";
+    public static final String NLU_DM_SERVICE = "NLU_DM_SERVICE";
     public static final String NLG_SERVICE = "NLG_SERVICE";
     public static final String DM_SERVICE = "DM_SERVICE";
     public static final String SR_SERVICE = "SR_SERVICE";

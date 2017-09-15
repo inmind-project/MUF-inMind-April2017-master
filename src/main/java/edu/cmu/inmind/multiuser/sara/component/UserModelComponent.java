@@ -17,8 +17,6 @@ import edu.cmu.inmind.multiuser.controller.session.Session;
 import edu.cmu.inmind.multiuser.sara.repo.UserModelRepository;
 import edu.cmu.inmind.multiuser.socialreasoner.control.util.Utils;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -101,12 +99,8 @@ public class UserModelComponent extends PluggableComponent {
     private void handleMsgSR(BlackboardEvent event)
     {
         final SROutput srOutput = (SROutput) event.getElement();
-        final List<String> states = new ArrayList<>(srOutput.getStates());
-        // The social reasoner states include the current stage of the dialog. We do not want to store this
-        // across interactions as it is not expected to stay the same. Remove it from the list
-        states.remove(srOutput.getAction());
-        userModel.updateBehaviorNetworkStates(states);
-        userModel.setUserFrame(srOutput.getUserFrame());
+        userModel.updateBehaviorNetworkStates(srOutput.getStates());
+        userModel.setUserFrame(srOutput.getDMOutput().getUserFrame());
         userModel.setRapport(srOutput.getRapport());
     }
 

@@ -8,14 +8,13 @@ import java.util.List;
 public class DMOutput {
     String action;
     List<Entity> entities;
-    Recommendation recommendation;
+    protected Recommendation recommendation;
     UserFrame frame;
     String utterance;
 
     public String getAction() {
         return action;
     }
-
     public void setAction(String action) {
         this.action = action;
     }
@@ -23,7 +22,6 @@ public class DMOutput {
     public List<Entity> getEntities() {
         return entities;
     }
-
     public void setEntities(List<Entity> entities) {
         this.entities = entities;
     }
@@ -31,25 +29,31 @@ public class DMOutput {
     public Recommendation getRecommendation() {
         return recommendation;
     }
-
     public void setRecommendation(Recommendation recommendation) {
         this.recommendation = recommendation;
     }
 
+    /**
+     *  @return true if contains recommendation, else false
+     */
+    public boolean hasFullContent() {
+        return recommendation != null &&  recommendation.rexplanations != null;
+    }
+
+
+
     public UserFrame getUserFrame() {
         return frame;
     }
-
     public void setFrame(UserFrame frame) {
         this.frame = frame;
     }
 
-    public void setUtterance(String utterance) {
-        this.utterance = utterance;
-    }
-
     public String getUtterance() {
         return utterance;
+    }
+    public void setUtterance(String utterance) {
+        this.utterance = utterance;
     }
 
     public String toString(){

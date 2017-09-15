@@ -37,13 +37,12 @@ public class Ex16_MasterCallsSlaves extends MainClassNew {
     @Override
     protected PluginModule[] createModules() {
         return new PluginModule[]{
-                new PluginModule.Builder(SaraOrchestratorEx15.class)
+                new PluginModule.Builder(SaraOrchestratorEx15.class, FakeCSCComponent.class, SaraCons.ID_CSC)
                         //comment out the line below if you want to use remote DialogueSystem
-                        .addPlugin(NLUComponent.class, SaraCons.ID_NLU)
-                        .addPlugin(FakeCSCComponent.class, SaraCons.ID_CSC)
-                        //.addPlugin(NLU_DMComponent.class, SaraCons.ID_NLU)
+                        //.addPlugin(FakeNLUComponent.class, SaraCons.ID_NLU)
+                        //.addPlugin(FakeTaskReasonerComponent.class, SaraCons.ID_DM)
+                        .addPlugin(NLU_DMComponent.class, SaraCons.ID_NLU)
                         //.addPlugin(RapportEstimator.class, SaraCons.ID_RPT)
-                        .addPlugin(TaskReasonerComponent.class, SaraCons.ID_DM)
                         .addPlugin(SocialReasonerComponent.class, SaraCons.ID_SR)
                         .addPlugin(NLGComponent.class, SaraCons.ID_NLG)
                         //.addPlugin(R5StreamComponent.class, SaraCons.ID_R5)

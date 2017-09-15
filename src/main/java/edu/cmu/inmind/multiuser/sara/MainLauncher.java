@@ -20,10 +20,10 @@ public class MainLauncher extends MainClass {
         return new PluginModule[]{
                 new PluginModule.Builder(SaraOrchestratorEx15.class)
                         //comment out the line below if you want to use remote DialogueSystem
-                        .addPlugin(NLUComponent.class, SaraCons.ID_NLU)
+                        .addPlugin(FakeNLUComponent.class, SaraCons.ID_NLU)
                         //.addPlugin(NLU_DMComponent.class, SaraCons.ID_NLU)
                         //.addPlugin(RapportEstimator.class, SaraCons.ID_RPT)
-                        .addPlugin(TaskReasonerComponent.class, SaraCons.ID_DM)
+                        .addPlugin(FakeTaskReasonerComponent.class, SaraCons.ID_DM)
                         .addPlugin(SocialReasonerComponent.class, SaraCons.ID_SR)
                         .addPlugin(NLGComponent.class, SaraCons.ID_NLG)
                         //.addPlugin(OpenFaceComponent.class, SaraCons.ID_OF)

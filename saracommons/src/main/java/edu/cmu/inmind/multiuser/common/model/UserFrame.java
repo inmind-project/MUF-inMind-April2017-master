@@ -11,12 +11,10 @@ public class UserFrame {
     private Frame frame = new Frame();
     private List<String> ask_stack = new ArrayList<>();
     private List<String> universals = new ArrayList<>();
-    private String latestUtterance;
 
     public Frame getFrame() {
         return frame;
     }
-
     public void setFrame(Frame frame) {
         this.frame = frame;
     }
@@ -24,7 +22,6 @@ public class UserFrame {
     public List<String> getAsk_stack() {
         return ask_stack;
     }
-
     public void setAsk_stack(List<String> ask_stack) {
         this.ask_stack = ask_stack;
     }
@@ -32,17 +29,8 @@ public class UserFrame {
     public List<String> getUniversals() {
         return universals;
     }
-
     public void setUniversals(List<String> universals) {
         this.universals = universals;
-    }
-
-    public String getLatestUtterance() {
-        return latestUtterance;
-    }
-
-    public void setLatestUtterance(String string) {
-        this.latestUtterance = string;
     }
 
 
