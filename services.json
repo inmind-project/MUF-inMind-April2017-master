@@ -6,8 +6,8 @@
       "serverAddress": "tcp://34.203.160.208:5590",
       "clientAddress": "tcp://34.203.160.208:5590",
       "msgSubscriptions": [
-        "MSG_ASR",
         "MSG_START_DM_PYTHON",
+        "MSG_RESPONSE_START_DM_PYTHON",
         "MSG_USER_FRAME",
         "MSG_ASR_DM",
         "MSG_QUERY",

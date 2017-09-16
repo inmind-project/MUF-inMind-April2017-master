@@ -6,21 +6,18 @@ import edu.cmu.inmind.multiuser.common.Utils;
 import edu.cmu.inmind.multiuser.common.model.*;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardSubscription;
-import edu.cmu.inmind.multiuser.controller.communication.*;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
 import edu.cmu.inmind.multiuser.controller.plugin.StateType;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by oscarr on 3/7/17.
  */
 @StateType( state = Constants.STATEFULL)
 @BlackboardSubscription( messages = {SaraCons.MSG_ASR, SaraCons.MSG_START_DM, SaraCons.MSG_UM,
-        SaraCons.MSG_RESPONSE_PYTHON, SaraCons.MSG_QUERY_RESPONSE} )
+        SaraCons.MSG_RESPONSE_START_PYTHON, SaraCons.MSG_QUERY_RESPONSE, SaraCons.MSG_ASR_DM_RESPONSE} )
 public class NLU_DMComponent extends PluggableComponent {
     private ActiveDMOutput dmOutput;
     private int receiveRequestNumber;
@@ -63,7 +60,7 @@ public class NLU_DMComponent extends PluggableComponent {
 	        processUserModel( blackboardEvent.getElement() );
         }else if(blackboardEvent.getId().equals(SaraCons.MSG_QUERY_RESPONSE)) {
             processQueryResponse( blackboardEvent.getElement().toString() );
-        }else if(blackboardEvent.getId().equals(SaraCons.MSG_RESPONSE_PYTHON)) {
+        }else if(blackboardEvent.getId().equals(SaraCons.MSG_RESPONSE_START_PYTHON)) {
             processPythonResponse( blackboardEvent.getElement().toString(), utterance, receiveRequestNumber );
         }else {
             Log4J.debug(this, "sending on " + blackboardEvent.toString() );
@@ -77,7 +74,7 @@ public class NLU_DMComponent extends PluggableComponent {
         }
     }
 
-    //TODO: Python has to send back message: MSG_RESPONSE_PYTHON
+    //TODO: Python has to send back message: MSG_RESPONSE_START_PYTHON
     private void processPythonResponse(String message, String utterance, int receiveRequestNumber) {
         Log4J.debug(NLU_DMComponent.this, "I've received for request: " + receiveRequestNumber);
         Log4J.debug(NLU_DMComponent.this, "I've received: " + message);
