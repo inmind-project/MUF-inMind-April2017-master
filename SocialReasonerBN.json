@@ -238,7 +238,7 @@
           },
           {
             "label": "ask_*",
-            "weight": 100
+            "weight": 1.0
           }
         ]
       ],
