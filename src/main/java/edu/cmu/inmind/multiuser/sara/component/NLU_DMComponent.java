@@ -75,8 +75,9 @@ public class NLU_DMComponent extends PluggableComponent {
         // let's forward the ASR message to DialoguePython:
         /** should be set to true if we expect a response from python */
         boolean receiveRequest = false;
-        if (blackboardEvent.getId().equals(SaraCons.MSG_START_DM)) {
-            receiveRequest = processStartDM();
+        if (blackboardEvent.getId().equals(SaraCons.MSG_START_DM)){
+            processStartDM();
+            receiveRequest = true;
         } else if (blackboardEvent.getId().equals(SaraCons.MSG_UM)) {
 	        processUserModel(blackboardEvent.getElement());
         } else if (blackboardEvent.getId().equals(SaraCons.MSG_QUERY_RESPONSE)) {
@@ -97,11 +98,10 @@ public class NLU_DMComponent extends PluggableComponent {
         }
     }
 
-    private boolean processStartDM() {
+    private void processStartDM() {
         Log4J.debug(this, "about to send initial greeting ...");
         blackboard().post(this, SaraCons.MSG_START_DM_PYTHON, null);
         Log4J.debug(this, "Sent Initial Greeting");
-        return true;
     }
 
     private void processUserModel(Object element) {
@@ -131,7 +131,7 @@ public class NLU_DMComponent extends PluggableComponent {
     }
 
     private void processQueryResponse(String message) {
-        Log4J.debug(this, "I've received for request: " + receiveRequestNumber);
+        //Log4J.debug(this, "I've received for request: " + receiveRequestNumber);
         // set recommendation to newly found value
         dmOutput.getRecommendation().setRexplanations(Utils.fromJson(message, DMOutput.class).getRecommendation().getRexplanations());
         Log4J.info(this, "received recommendation specification: " + message);
