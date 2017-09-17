@@ -2,6 +2,7 @@ stdout.*
 stderr.*
 /logs/stderr.*
 /logs/stdout.*
+/logs/user_models/*
 /.idea/libraries
 .DS_Store
 /build

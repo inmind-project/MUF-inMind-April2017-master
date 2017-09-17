@@ -39,7 +39,9 @@ public class DMOutput {
     public boolean hasFullContent() {
         return recommendation != null &&  recommendation.rexplanations != null;
     }
-
+    public boolean isRecommendation() {
+        return action.equals("recommend");
+    }
 
 
     public UserFrame getUserFrame() {

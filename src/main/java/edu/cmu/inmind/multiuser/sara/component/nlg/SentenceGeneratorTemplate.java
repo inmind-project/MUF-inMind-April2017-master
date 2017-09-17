@@ -1,14 +1,10 @@
 package edu.cmu.inmind.multiuser.sara.component.nlg;
-import com.google.common.base.Strings;
 import edu.cmu.inmind.multiuser.common.model.DMOutput;
 import edu.cmu.inmind.multiuser.common.model.Entity;
 import edu.cmu.inmind.multiuser.common.model.UserFrame;
-import edu.cmu.inmind.multiuser.controller.log.Log4J;
-import edu.cmu.inmind.multiuser.sara.component.NLU_DMComponent;
 import edu.cmu.inmind.multiuser.common.model.SROutput;
 
 import java.io.*;
-import java.text.BreakIterator;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -62,17 +58,6 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
     /** split text into a list of sentences */
     private List<String> splitIntoSentences(String allText) {
         return Arrays.asList(allText.split("\\|"));
-/*        BreakIterator splitter = BreakIterator.getSentenceInstance(Locale.US);
-        splitter.setText(allText);
-        int start = splitter.first();
-        int end;
-        List<String> sentences=new ArrayList<String>(3);
-        while ((end = splitter.next()) != BreakIterator.DONE) {
-            String sentence = allText.substring(start,end);
-            start = end;
-            sentences.add(sentence);
-        }
-        return sentences;*/
     }
 
     /* select candidates from the DB based on the task intent and conversational strategy */
@@ -156,13 +141,13 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
                         if (replace) {
                             value = dmOutput.getRecommendation().getTitle();
                         } else
-                            value = dmOutput.hasFullContent() ? "" : null;
+                            value = dmOutput.isRecommendation() ? "" : null;
                         break;
                     case "#reason":
                         if (replace) {
                             value = dmOutput.getRecommendation().getRexplanations().get(0).getExplanations().get(0);
                         } else {
-                            value = dmOutput.hasFullContent() ? "" : null;
+                            value = dmOutput.isRecommendation() ? "" : null;
                         }
                         break;
                     case "#previousMovie":
@@ -267,6 +252,10 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
 
         WeightedCandidate match(SROutput srOutput, boolean replace) {
             return matchesPattern(template, srOutput) ? new WeightedCandidate(template, weight) : null;
+        }
+
+        @Override public String toString() {
+            return template + " (" + Double.toString(weight) + ")";
         }
     }
 
