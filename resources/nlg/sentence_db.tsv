@@ -36,9 +36,9 @@ recommendation	ask_directors	VSN	1	Well, okay then. Favorite directors?
 recommendation	ask_directors	VSN	2	#disagree movies are the worst... What about your favorite directors?
 recommendation	ask_directors	VSN	2	Well, I didn't expect you to like #agree too. How about favorite directors?
 recommendation	ask_directors	VSN	2	#disagree is not what I would say, but to each their own! What about your favorite directors?
-recommendation	ask_directors	RSE	2	I remember you like #likedDirectors. Do you have any other favorite directors?
-recommendation	ask_directors	RSE	2	Last time you told me about #likedDirectors . Is there another director you like?
-recommendation	ask_directors	RSE	2	Do you have any other favorite director besides #likedDirectors ?
+recommendation	ask_directors	RSE	2	I remember you like #likedDirector. Do you have any other favorite directors?
+recommendation	ask_directors	RSE	2	Last time you told me about #likedDirector. Is there another director you like?
+recommendation	ask_directors	RSE	2	Do you have any other favorite director besides #likedDirector?
 recommendation	ask_directors	ASN	2	#latest sounds good. Can you tell me your favorite directors?
 recommendation	ask_directors	ASN	1	Thanks for the answer. What about your favorite directors?
 recommendation	ask_directors	HE	2	I kinda like #latest movies too... Would you mind telling me your favorite director?
