@@ -1,4 +1,4 @@
-package edu.cmu.inmind.multiuser.sara.examples;
+package edu.cmu.inmind.multiuser.sara;
 
 import edu.cmu.inmind.multiuser.common.Constants;
 import edu.cmu.inmind.multiuser.common.SaraCons;
@@ -19,15 +19,8 @@ import java.util.concurrent.TimeUnit;
  * Created by oscarr on 3/20/17.
  * Main class for MUF 2.8+
  */
-public class MainClassNew {
+public class MainClassBase {
     protected MultiuserFramework muf;
-
-    /**
-     * This method controls the whole app. If shutdown is entered, it will completely stop the system.
-     */
-    public static void main(String args[]) throws Throwable {
-        new MainClassNew().execute();
-    }
 
     protected void execute() throws Throwable{
          execute( null );

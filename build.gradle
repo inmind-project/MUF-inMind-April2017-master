@@ -89,12 +89,16 @@ compileJava {
     options.encoding = "UTF-8"
 }
 
+mainClassName = 'edu.cmu.inmind.multiuser.sara.SaraServerMainClass'
+applicationDefaultJvmArgs = ["-ea"]
+
+
 //create a single Jar with all dependencies
 jar {
     manifest {
         attributes 'Implementation-Title': 'SARA Multiuser',
                 'Implementation-Version': version,
-                'Main-Class': 'edu.cmu.inmind.multiuser.sara.examples.Ex16_MasterCallsSlaves'
+                'Main-Class': mainClassName
     }
     baseName = project.name + '-with-dependencies'
     from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
@@ -103,8 +107,3 @@ jar {
     exclude 'META-INF/*.RSA'
     zip64 true
 }
-
-
-
-mainClassName = 'edu.cmu.inmind.multiuser.sara.examples.Ex16_MasterCallsSlaves'
-applicationDefaultJvmArgs = ["-ea"]

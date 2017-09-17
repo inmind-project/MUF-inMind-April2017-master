@@ -1,11 +1,11 @@
-package edu.cmu.inmind.multiuser.sara.examples;
+package edu.cmu.inmind.multiuser.sara;
 
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.controller.ShutdownHook;
 import edu.cmu.inmind.multiuser.controller.plugin.PluginModule;
 import edu.cmu.inmind.multiuser.controller.resources.Config;
 import edu.cmu.inmind.multiuser.sara.component.*;
-import edu.cmu.inmind.multiuser.sara.orchestrator.SaraOrchestratorEx15;
+import edu.cmu.inmind.multiuser.sara.orchestrator.SaraOrchestrator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.List;
  * you have to define the connection information of your slaves MUF's into a json file (e.g., services.json)
  * and set it to the config object.
  */
-public class Ex16_MasterCallsSlaves extends MainClassNew {
+public class SaraServerMainClass extends MainClassBase {
 
     public static void main(String args[]) throws Throwable{
         List<ShutdownHook> hooks = new ArrayList<>();
@@ -31,22 +31,23 @@ public class Ex16_MasterCallsSlaves extends MainClassNew {
                 //TODO: do something
             }
         });
-        new Ex16_MasterCallsSlaves().execute( hooks );
+        new SaraServerMainClass().execute( hooks );
     }
 
     @Override
     protected PluginModule[] createModules() {
         return new PluginModule[]{
-                new PluginModule.Builder(SaraOrchestratorEx15.class, FakeCSCComponent.class, SaraCons.ID_CSC)
+                new PluginModule.Builder(SaraOrchestrator.class, FakeCSCComponent.class, SaraCons.ID_CSC)
                         //comment out the line below if you want to use remote DialogueSystem
                         //.addPlugin(FakeNLUComponent.class, SaraCons.ID_NLU)
                         //.addPlugin(FakeTaskReasonerComponent.class, SaraCons.ID_DM)
-                        .addPlugin(NLU_DMComponent.class, SaraCons.ID_NLU)
-                        //.addPlugin(RapportEstimator.class, SaraCons.ID_RPT)
-                        .addPlugin(SocialReasonerComponent.class, SaraCons.ID_SR)
-                        .addPlugin(NLGComponent.class, SaraCons.ID_NLG)
-                        //.addPlugin(R5StreamComponent.class, SaraCons.ID_R5)
                         .addPlugin(UserModelComponent.class, SaraCons.ID_UM)
+                        .addPlugin(NLU_DMComponent.class, SaraCons.ID_NLU)
+                        .addPlugin(NLGComponent.class, SaraCons.ID_NLG)
+                        .addPlugin(SocialReasonerComponent.class, SaraCons.ID_SR)
+                        //.addPlugin(CSCComponent.class, SaraCons.ID_R5)
+                        //.addPlugin(FakeCSCComponent.class, SaraCons.ID_CSC)
+                        //.addPlugin(R5StreamComponent.class, SaraCons.ID_R5)
                         .build()
         };
     }
