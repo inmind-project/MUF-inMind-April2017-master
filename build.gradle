@@ -6,6 +6,8 @@ apply plugin: 'maven'
 // used for zip big files
 apply plugin: 'com.github.johnrengelman.shadow'
 
+apply plugin: 'application'
+
 sourceCompatibility = 1.8
 
 repositories {
@@ -101,3 +103,8 @@ jar {
     exclude 'META-INF/*.RSA'
     zip64 true
 }
+
+
+
+mainClassName = 'edu.cmu.inmind.multiuser.sara.examples.Ex16_MasterCallsSlaves'
+applicationDefaultJvmArgs = ["-ea"]
