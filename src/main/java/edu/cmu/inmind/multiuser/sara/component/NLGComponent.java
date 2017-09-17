@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * Created by oscarr on 3/7/17.
  */
-@StateType( state = Constants.STATELESS)
+@StateType( state = Constants.STATEFULL)
 @BlackboardSubscription( messages = {SaraCons.MSG_SR})
 public class NLGComponent extends PluggableComponent implements BeatCallback {
     SentenceGeneratorTemplate gen;
