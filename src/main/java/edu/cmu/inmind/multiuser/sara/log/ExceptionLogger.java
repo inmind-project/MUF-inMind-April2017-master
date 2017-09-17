@@ -1,9 +1,7 @@
 package edu.cmu.inmind.multiuser.sara.log;
 
-import edu.cmu.inmind.multiuser.common.Utils;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.controller.log.MessageLog;
-import org.jfree.util.Log;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -32,16 +30,18 @@ public class ExceptionLogger implements MessageLog {
 
     @Override
     public void add(String messageId, String messageContent) {
+        Log4J.warn(this, messageId + messageContent);
         if( turnedOn ) {
-            log.append(String.format("%-20s %-20s %s", System.currentTimeMillis(), messageId, messageContent) + "\n");
+            log.append(String.format("%-20s %-20s %s", System.currentTimeMillis(), messageId, messageContent));
+            log.append("\n");
         }
     }
 
     @Override
     public void store() throws Throwable{
-        Log4J.info(this, "storing log file is called, sessionID is " );
         if( turnedOn && !log.toString().isEmpty() ) {
             File file = new File(path + id + ".log");
+            Log4J.info(this, "storing log file to " + file.toString());
             PrintWriter printWriter = new PrintWriter(file);
             printWriter.write(log.toString());
             printWriter.flush();
