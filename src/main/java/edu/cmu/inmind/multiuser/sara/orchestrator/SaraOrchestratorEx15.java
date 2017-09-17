@@ -11,6 +11,10 @@ import edu.cmu.inmind.multiuser.controller.communication.SessionMessage;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.controller.orchestrator.ProcessOrchestratorImpl;
 import edu.cmu.inmind.multiuser.controller.session.Session;
+import org.apache.commons.collections4.map.HashedMap;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by oscarr on 3/3/17.
@@ -20,11 +24,15 @@ SaraCons.R5STREAM_CLOSE, SaraCons.R5STREAM_TIMEOUT, SaraCons.R5STREAM_ERROR, Sar
 public class SaraOrchestratorEx15 extends ProcessOrchestratorImpl {
     private BSON response = new BSON();
     private R5StreamListener r5StreamListener= new R5StreamListener();
+    private long time;
+    private boolean resetCrono = true;
 
     @Override
     public void initialize(Session session) throws Exception{
         try {
             super.initialize( session );
+            //turn off the logger to make the system faster
+            //Log4J.turnOn(false);
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
@@ -34,6 +42,10 @@ public class SaraOrchestratorEx15 extends ProcessOrchestratorImpl {
     @Override
     public void process(String message) {
         Log4J.debug(this, "orchestrator received message " + message);
+        if( resetCrono ) {
+            time = System.currentTimeMillis();
+            resetCrono = false;
+        }
         super.process(message);
 
         if( message != null && !message.isEmpty() ) {
@@ -70,6 +82,8 @@ public class SaraOrchestratorEx15 extends ProcessOrchestratorImpl {
             response = (BSON) blackboard.get(SaraCons.MSG_NLG);
             Log4J.debug(this, "sending out to client: " + Utils.toJson(response));
             sendResponse(new SessionMessage(SaraCons.MSG_NLG, Utils.toJson(response)));
+            Log4J.error(this, "TIME FOR PROCESSING WHOLE PIPELINE: " + (System.currentTimeMillis() - time));
+            resetCrono = true;
             //sendResponse(new SessionMessage("test", "test"));
         }
         else if(event.getId().equals(SaraCons.MSG_START_STREAMING))
@@ -77,6 +91,8 @@ public class SaraOrchestratorEx15 extends ProcessOrchestratorImpl {
             r5StreamListener = (R5StreamListener) blackboard.get(SaraCons.MSG_START_STREAMING);
             Log4J.info(this, "Message from MUF to Start Streaming " + r5StreamListener.toString());
             sendResponse((new SessionMessage(SaraCons.MSG_START_STREAMING, Utils.toJson(r5StreamListener))));
+            Log4J.error(this, "TIME FOR PROCESSING WHOLE PIPELINE: " + (System.currentTimeMillis() - time));
+            resetCrono = true;
         }
         else if(event.getId().equals(SaraCons.MSG_DM))
         {

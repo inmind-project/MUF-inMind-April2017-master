@@ -78,7 +78,7 @@ public class NLU_DMComponent extends PluggableComponent {
         if (blackboardEvent.getId().equals(SaraCons.MSG_START_DM)) {
             receiveRequest = processStartDM();
         } else if (blackboardEvent.getId().equals(SaraCons.MSG_UM)) {
-	    processUserModel(blackboardEvent.getElement());
+	        processUserModel(blackboardEvent.getElement());
         } else if (blackboardEvent.getId().equals(SaraCons.MSG_QUERY_RESPONSE)) {
             processQueryResponse(blackboardEvent.getElement().toString());
         } else if (blackboardEvent.getId().equals(SaraCons.MSG_ASR_DM_RESPONSE)) {
