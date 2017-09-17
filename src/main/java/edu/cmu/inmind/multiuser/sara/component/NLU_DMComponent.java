@@ -25,6 +25,8 @@ public class NLU_DMComponent extends PluggableComponent {
     private ActiveDMOutput dmOutput;
     private int receiveRequestNumber;
 
+    private Blackboard blackboard;
+
     private static Map<String, NLU_DMComponent> components;
     static {
         components = new HashMap<>();
@@ -33,7 +35,7 @@ public class NLU_DMComponent extends PluggableComponent {
         NLU_DMComponent nluc = components.get(sessionID);
         nluc.dmOutput = dmoutput;
         Log4J.debug(nluc, "the local activedmoutput is " + nluc.dmOutput.hashCode());
-            nluc.blackboard().post(nluc, msgId, "");
+            nluc.blackboard.post(nluc, msgId, "");
     }
 
     @Override
@@ -45,6 +47,7 @@ public class NLU_DMComponent extends PluggableComponent {
     @Override
     public void postCreate() {
         components.put(getSessionId(), this);
+        this.blackboard = blackboard();
     }
 
     @Override
