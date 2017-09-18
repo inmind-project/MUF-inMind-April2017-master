@@ -11,6 +11,12 @@ public class Entity {
     int start;
     int end;
 
+    public Entity() {}
+    public Entity(String entity, float polarity) {
+        this.entity = entity;
+        this.polarity = polarity;
+    }
+
     public String getEntity() {
         return entity;
     }
