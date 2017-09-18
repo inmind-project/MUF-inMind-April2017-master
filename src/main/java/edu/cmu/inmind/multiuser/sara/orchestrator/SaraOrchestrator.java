@@ -15,8 +15,7 @@ import edu.cmu.inmind.multiuser.controller.session.Session;
 /**
  * Created by oscarr on 3/3/17.
  */
-@BlackboardSubscription( messages = {SaraCons.MSG_NLG, SaraCons.MSG_START_STREAMING, SaraCons.R5STREAM_DISCONNECTED,
-SaraCons.R5STREAM_CLOSE, SaraCons.R5STREAM_TIMEOUT, SaraCons.R5STREAM_ERROR, SaraCons.R5STREAM_STARTED})
+@BlackboardSubscription( messages = {SaraCons.MSG_NLG, SaraCons.MSG_START_STREAMING})
 public class SaraOrchestrator extends ProcessOrchestratorImpl {
     private BSON response = new BSON();
     private R5StreamListener r5StreamListener= new R5StreamListener();
