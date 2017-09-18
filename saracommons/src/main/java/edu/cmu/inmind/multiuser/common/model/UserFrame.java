@@ -1,5 +1,6 @@
 package edu.cmu.inmind.multiuser.common.model;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +12,7 @@ public class UserFrame {
     private Frame frame = new Frame();
     private List<String> ask_stack = new ArrayList<>();
     private List<String> universals = new ArrayList<>();
+    private String latestUtterance;
 
     public Frame getFrame() {
         return frame;
@@ -33,44 +35,56 @@ public class UserFrame {
         this.universals = universals;
     }
 
+    public String getLatestUtterance() {
+        return latestUtterance;
+    }
+    public void setLatestUtterance(String string) {
+        this.latestUtterance = string;
+    }
+
 
     /**
      * Frame
      */
     public static class Frame {
-        private Actors actors = new Actors();
-        private Genres genres = new Genres();
-        private Directors directors = new Directors();
+        private PreferenceList actors = new PreferenceList();
+        private PreferenceList genres = new PreferenceList();
+        private PreferenceList directors = new PreferenceList();
         private Movies movies = new Movies();
 
-        public Actors getActors() {
-            return actors;
+        public PreferenceList getList(String listName) throws IOException {
+            Utils.checkContents(listName, "genre", "director", "actor");
+            switch (listName) {
+                case "genre": return getGenres();
+                case "director": return getDirectors();
+                case "actor": return getActors();
+                default:
+                    throw new RuntimeException("you're kidding me.");
+            }
         }
 
-        public void setActors(Actors actors) {
+        public PreferenceList getActors() {
+            return actors;
+        }
+        public void setActors(PreferenceList actors) {
             this.actors = actors;
         }
 
-        public Genres getGenres() {
-            return genres;
-        }
-
-        public void setGenres(Genres genres) {
+        public PreferenceList getGenres() { return genres; }
+        public void setGenres(PreferenceList genres) {
             this.genres = genres;
         }
 
-        public Directors getDirectors() {
+        public PreferenceList getDirectors() {
             return directors;
         }
-
-        public void setDirectors(Directors directors) {
+        public void setDirectors(PreferenceList directors) {
             this.directors = directors;
         }
 
         public Movies getMovies() {
             return movies;
         }
-
         public void setMovies(Movies movies) {
             this.movies = movies;
         }
@@ -78,16 +92,15 @@ public class UserFrame {
 
 
     /**
-     * Movies
+     * Actors, Genres, Directors
      */
-    public static class Actors {
+    public static class PreferenceList {
         private List<Entity> like = new ArrayList<>();
         private List<Entity> dislike = new ArrayList<>();
 
         public List<Entity> getLike() {
             return like;
         }
-
         public void setLike(List<Entity> like) {
             this.like = like;
         }
@@ -95,59 +108,9 @@ public class UserFrame {
         public List<Entity> getDislike() {
             return dislike;
         }
-
         public void setDislike(List<Entity> dislike) {
             this.dislike = dislike;
         }
-    }
-
-    /**
-     * Genres
-     */
-    public static class Genres {
-        private List<Entity> like = new ArrayList<>();
-        private List<Entity> dislike = new ArrayList<>();
-
-        public List<Entity> getLike() {
-            return like;
-        }
-
-        public void setLike(List<Entity> like) {
-            this.like = like;
-        }
-
-        public List<Entity> getDislike() {
-            return dislike;
-        }
-
-        public void setDislike(List<Entity> dislike) {
-            this.dislike = dislike;
-        }
-    }
-
-    /**
-     * Directors
-     */
-    public static class Directors {
-        private List<Entity> like = new ArrayList<>();
-        private List<Entity> dislike = new ArrayList<>();
-
-        public List<Entity> getLike() {
-            return like;
-        }
-
-        public void setLike(List<Entity> like) {
-            this.like = like;
-        }
-
-        public List<Entity> getDislike() {
-            return dislike;
-        }
-
-        public void setDislike(List<Entity> dislike) {
-            this.dislike = dislike;
-        }
-
     }
 
     public static class Movies {
@@ -158,7 +121,6 @@ public class UserFrame {
         public List<String> getLike() {
             return like;
         }
-
         public void setLike(List<String> like) {
             this.like = like;
         }
@@ -166,7 +128,6 @@ public class UserFrame {
         public List<String> getDislike() {
             return dislike;
         }
-
         public void setDislike(List<String> dislike) {
             this.dislike = dislike;
         }
@@ -174,7 +135,6 @@ public class UserFrame {
         public List<String> getHistory() {
             return history;
         }
-
         public void setHistory(List<String> history) {
             this.history = history;
         }

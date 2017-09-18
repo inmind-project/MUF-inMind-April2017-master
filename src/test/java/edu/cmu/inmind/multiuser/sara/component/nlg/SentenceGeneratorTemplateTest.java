@@ -1,11 +1,15 @@
 package edu.cmu.inmind.multiuser.sara.component.nlg;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import edu.cmu.inmind.multiuser.common.Utils;
 import edu.cmu.inmind.multiuser.common.model.ConversationalStrategy;
 import edu.cmu.inmind.multiuser.common.model.DMOutput;
 import edu.cmu.inmind.multiuser.common.model.SROutput;
+import edu.cmu.inmind.multiuser.common.model.UserFrame;
 import org.junit.Test;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
@@ -50,5 +54,11 @@ public class SentenceGeneratorTemplateTest {
     @Test(expected = AssertionError.class)
     public void testException2() throws FileNotFoundException {
         new SentenceGeneratorTemplate((InputStream) null, null);
+    }
+
+    @Test public void testSaraFrameLoading() throws FileNotFoundException {
+        UserFrame.Frame frame = SentenceGeneratorTemplate.loadSARAPreferences(new FileInputStream("resources/nlg/sara_preferences_db.tsv"));
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        System.err.println(gson.toJson(frame));
     }
 }
