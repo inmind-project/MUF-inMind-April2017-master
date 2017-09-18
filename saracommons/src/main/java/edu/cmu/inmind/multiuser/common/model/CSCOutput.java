@@ -10,9 +10,8 @@ public class CSCOutput {
 
     public String toString(){
         String message = "";
-        for(Strategy s : userStrategies){
-            message += userStrategies.get(0).getName() + " " + userStrategies.get(0).getScore();
-            message += " ";
+        for(Strategy s : userStrategies) {
+            message += s.getName() + " " + s.getScore() + " ";
         }
         return "Component: " + this.getClass().toString() + message;
     }
