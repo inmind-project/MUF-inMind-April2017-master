@@ -23,7 +23,6 @@ import java.util.Map;
         SaraCons.MSG_RESPONSE_START_PYTHON, SaraCons.MSG_QUERY_RESPONSE, SaraCons.MSG_ASR_DM_RESPONSE} )
 public class NLU_DMComponent extends PluggableComponent {
     private ActiveDMOutput dmOutput;
-    private int receiveRequestNumber;
 
     private Blackboard blackboard;
 
@@ -35,7 +34,7 @@ public class NLU_DMComponent extends PluggableComponent {
         NLU_DMComponent nluc = components.get(sessionID);
         nluc.dmOutput = dmoutput;
         Log4J.debug(nluc, "the local activedmoutput is " + nluc.dmOutput.hashCode());
-            nluc.blackboard.post(nluc, msgId, "");
+        nluc.blackboard.post(nluc, msgId, "");
     }
 
     @Override
@@ -74,33 +73,25 @@ public class NLU_DMComponent extends PluggableComponent {
         final String utterance = blackboardEvent.toString().contains("confidence:") ? blackboardEvent.toString().split("Utterance: ")[1].split(" confidence:")[0] : "";
         // let's forward the ASR message to DialoguePython:
         /** should be set to true if we expect a response from python */
-        boolean receiveRequest = false;
         if (blackboardEvent.getId().equals(SaraCons.MSG_START_DM)){
             processStartDM();
-            receiveRequest = true;
         } else if (blackboardEvent.getId().equals(SaraCons.MSG_UM)) {
 	        processUserModel(blackboardEvent.getElement());
         } else if (blackboardEvent.getId().equals(SaraCons.MSG_QUERY_RESPONSE)) {
             processQueryResponse(blackboardEvent.getElement().toString());
         } else if (blackboardEvent.getId().equals(SaraCons.MSG_ASR_DM_RESPONSE)) {
-            processPythonResponse(blackboardEvent.getElement().toString(), utterance, receiveRequestNumber);
+            processPythonResponse(blackboardEvent.getElement().toString(), utterance);
         } else if (blackboardEvent.getId().equals(SaraCons.MSG_ASR)) {
             Log4J.debug(this, "sending on " + blackboardEvent.toString());
             blackboard().post(this, SaraCons.MSG_ASR_DM, blackboardEvent.getElement());
-            receiveRequest = true;
         } else {
             Log4J.error(this, "got a message I could not understand: " + blackboardEvent.toString());
-        }
-        // here we receive the response from DialoguePython:
-        if (receiveRequest) {
-            receiveRequestNumber = ++receiveCounter;
-            Log4J.debug(this, "receive request " + receiveRequestNumber);
         }
     }
 
     private void processStartDM() {
         Log4J.debug(this, "about to send initial greeting ...");
-        blackboard().post(this, SaraCons.MSG_START_DM_PYTHON, null);
+        blackboard().post(this, SaraCons.MSG_START_DM_PYTHON, "");
         Log4J.debug(this, "Sent Initial Greeting");
     }
 
@@ -116,28 +107,25 @@ public class NLU_DMComponent extends PluggableComponent {
         }
     }
 
-    private void processPythonResponse(String message, String utterance, int receiveRequestNumber) {
-        Log4J.debug(NLU_DMComponent.this, "I've received for request: " + receiveRequestNumber);
-        Log4J.debug(NLU_DMComponent.this, "I've received: " + message);
+    private void processPythonResponse(String message, String utterance) {
+        Log4J.debug(NLU_DMComponent.this, "I've received python response: " + message);
         // store user's utterance (for NLG)
         dmOutput = Utils.fromJson(message, ActiveDMOutput.class);
         dmOutput.setUtterance(utterance);
         /* uncomment the next two lines for incrementality: */
-        //if (dmOutput.plainGetRecommendation() != null)
-        //    dmOutput.getRecommendation().setRexplanations(null);
+        if (dmOutput.plainGetRecommendation() != null)
+            dmOutput.plainGetRecommendation().setRexplanations(null);
         dmOutput.sessionID = getSessionId();
         // post to Blackboard
         blackboard().post(NLU_DMComponent.this, SaraCons.MSG_DM, dmOutput);
     }
 
     private void processQueryResponse(String message) {
-        //Log4J.debug(this, "I've received for request: " + receiveRequestNumber);
+    Log4J.debug(this, "I've received a query response: " + message);
         // set recommendation to newly found value
-        dmOutput.getRecommendation().setRexplanations(Utils.fromJson(message, DMOutput.class).getRecommendation().getRexplanations());
+        dmOutput.plainGetRecommendation().setRexplanations(Utils.fromJson(message, DMOutput.class).getRecommendation().getRexplanations());
         Log4J.info(this, "received recommendation specification: " + message);
     }
-
-    static int receiveCounter = 0;
 
     /** the smart kind of DMOutput that is able to load recommendations JIT */
     public static class ActiveDMOutput extends DMOutput {
@@ -148,8 +136,6 @@ public class NLU_DMComponent extends PluggableComponent {
         private void fillInRecommendationTitle() {
             // query for value
             sendToBBforSession(sessionID, SaraCons.MSG_QUERY, ActiveDMOutput.this);
-            final int receiveRequestNumber = ++receiveCounter;
-            Log4J.debug(ActiveDMOutput.this, "receive request " + receiveRequestNumber);
             Log4J.info(ActiveDMOutput.this, "sent recommendation title request in object " + this.hashCode());
 
             // wait for DialoguePython to send the value
