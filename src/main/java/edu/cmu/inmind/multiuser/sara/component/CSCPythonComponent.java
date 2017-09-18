@@ -24,7 +24,7 @@ import java.util.Random;
 public class CSCPythonComponent extends PluggableComponent {
     private ZMQ.Context context;
     private ZMQ.Socket requester;
-    private String cscServerIpHost = "localhost"; //host name of CSC server
+    private String cscServerIpHost = "54.196.30.224"; //host name of CSC server
 
     @Override
     public void startUp(){
