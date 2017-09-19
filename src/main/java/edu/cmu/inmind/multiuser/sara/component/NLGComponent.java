@@ -31,20 +31,17 @@ public class NLGComponent extends PluggableComponent implements BeatCallback {
         try {
             beat = new BEAT();
             beat.setCallback(this);
+            gen = new SentenceGeneratorTemplate();
         } catch (Exception e) {
             e.printStackTrace();
+            throw new RuntimeException("could not start SentenceGenerator (or BEAT). Exiting.");
         }
     }
 
     @Override
     public void startUp(){
         super.startUp();
-        try {
-            gen = new SentenceGeneratorTemplate();
-        } catch (FileNotFoundException fnfe) {
-            fnfe.printStackTrace();
-            throw new RuntimeException("could not start SentenceGenerator. Exiting.");
-        }
+        Log4J.debug(this, "startup");
     }
 
     @Override

@@ -7,6 +7,12 @@ public class Strategy{
     private String name;
     private double score;
 
+    public Strategy() {}
+    public Strategy(String name, double score) {
+        this.name = name;
+        this.score = score;
+    }
+
     public String getName() {
         return name;
     }
