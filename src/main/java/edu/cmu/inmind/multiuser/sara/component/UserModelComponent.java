@@ -102,6 +102,7 @@ public class UserModelComponent extends PluggableComponent {
         userModel.updateBehaviorNetworkStates(srOutput.getStates());
         userModel.setUserFrame(srOutput.getDMOutput().getUserFrame());
         userModel.setRapport(srOutput.getRapport());
+        repository.writeModel(userModel);
     }
 
     @Override
