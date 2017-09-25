@@ -70,7 +70,6 @@ public class NLU_DMComponent extends PluggableComponent {
         // print full event
         Log4J.debug(this, "received " + blackboardEvent.toString());
         // store user's latest utterance
-        final String utterance = blackboardEvent.toString().contains("confidence:") ? blackboardEvent.toString().split("Utterance: ")[1].split(" confidence:")[0] : "";
         // let's forward the ASR message to DialoguePython:
         /** should be set to true if we expect a response from python */
         if (blackboardEvent.getId().equals(SaraCons.MSG_START_DM)){
@@ -80,7 +79,7 @@ public class NLU_DMComponent extends PluggableComponent {
         } else if (blackboardEvent.getId().equals(SaraCons.MSG_QUERY_RESPONSE)) {
             processQueryResponse(blackboardEvent.getElement().toString());
         } else if (blackboardEvent.getId().equals(SaraCons.MSG_ASR_DM_RESPONSE)) {
-            processPythonResponse(blackboardEvent.getElement().toString(), utterance);
+            processPythonResponse(blackboardEvent.getElement().toString());
         } else if (blackboardEvent.getId().equals(SaraCons.MSG_ASR)) {
             Log4J.debug(this, "sending on " + blackboardEvent.toString());
             blackboard().post(this, SaraCons.MSG_ASR_DM, blackboardEvent.getElement());
@@ -107,14 +106,13 @@ public class NLU_DMComponent extends PluggableComponent {
         }
     }
 
-    private void processPythonResponse(String message, String utterance) {
+    private void processPythonResponse(String message) {
         Log4J.debug(NLU_DMComponent.this, "I've received python response: " + message);
         // store user's utterance (for NLG)
         dmOutput = Utils.fromJson(message, ActiveDMOutput.class);
-        dmOutput.setUtterance(utterance);
         /* uncomment the next two lines for incrementality: */
-        if (dmOutput.plainGetRecommendation() != null)
-            dmOutput.plainGetRecommendation().setRexplanations(null);
+        //if (dmOutput.plainGetRecommendation() != null)
+        //    dmOutput.plainGetRecommendation().setRexplanations(null);
         dmOutput.sessionID = getSessionId();
         // post to Blackboard
         blackboard().post(NLU_DMComponent.this, SaraCons.MSG_DM, dmOutput);

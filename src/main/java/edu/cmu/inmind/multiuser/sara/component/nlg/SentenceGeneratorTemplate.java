@@ -227,8 +227,10 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
                         // if SARA shares the same positive preference (Both user and SARA like it)
                         latestEntityValue = getLatestEntityValue(srOutput);
                         latestEntityValence = getLatestEntityValence(srOutput);
-                        latestUtterance = dmOutput.getUtterance();
+                        latestUtterance = dmOutput.getUtterance().toLowerCase();
+			System.out.println("--------------Agree Testing on " + latestEntityValue + "--------------- in " + latestUtterance);
                         if (latestUtterance.contains(latestEntityValue)){
+				System.out.println("-----------Contained --------------");
                             if (containEntity(srOutput, 1) && latestEntityValence >0){
                                 value = latestEntityValue;
                             }
@@ -238,7 +240,7 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
                         // if SARA shares the same negative preference (Both user and SARA dislike it)
                         latestEntityValue = getLatestEntityValue(srOutput);
                         latestEntityValence = getLatestEntityValence(srOutput);
-                        latestUtterance = dmOutput.getUtterance();
+                        latestUtterance = dmOutput.getUtterance().toLowerCase();
                         if (latestUtterance.contains(latestEntityValue)){
                             if (containEntity(srOutput, -1) && latestEntityValence <0){
                                 value = latestEntityValue;
@@ -248,7 +250,8 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
                     case "#disagree":
                         // if SARA has opposite preference (User likes but SARA dislikes)
                         latestEntityValue = getLatestEntityValue(srOutput);
-                        latestUtterance = dmOutput.getUtterance();
+			latestEntityValence = getLatestEntityValence(srOutput);
+                        latestUtterance = dmOutput.getUtterance().toLowerCase();
                         if (latestUtterance.contains(latestEntityValue)){
                             if (containEntity(srOutput, -1) && latestEntityValence >0){
                                 value = latestEntityValue;
@@ -259,7 +262,7 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
                         // if SARA shares the same negative preference (Both user and SARA dislike it)
                         latestEntityValue = getLatestEntityValue(srOutput);
                         latestEntityValence = getLatestEntityValence(srOutput);
-                        latestUtterance = dmOutput.getUtterance();
+                        latestUtterance = dmOutput.getUtterance().toLowerCase();
                         if (latestUtterance.contains(latestEntityValue)){
                             if (containEntity(srOutput, 1) && latestEntityValence <0){
                                 value = latestEntityValue;
@@ -269,7 +272,7 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
                     case "#different":
                         // if SARA has different preferences (User likes, but SARA neither likes or dislikes)
                         latestEntityValue = getLatestEntityValue(srOutput);
-                        latestUtterance = dmOutput.getUtterance();
+                        latestUtterance = dmOutput.getUtterance().toLowerCase();
                         if (latestUtterance.contains(latestEntityValue)){
                             if (!containEntity(srOutput, -1) && !containEntity(srOutput, 1)){
                                 value = latestEntityValue;
@@ -497,7 +500,7 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
                     throw new IOException(line);
             }
             System.out.println("-----------------SARA Preferred genres: " + systemPreferences.getGenres().getLike().toString());
-            in.close();
+	    in.close();
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException(e);

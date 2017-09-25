@@ -52,7 +52,7 @@ configurations.all {
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.+'
     testCompile "org.mockito:mockito-core:1.+"
-    compile 'edu.cmu.inmind.framework:multiuser:2.14-reconnection'        // this is the Multiuser Framework 2.5.3 current working
+    compile 'edu.cmu.inmind.framework:multiuser:2.15'        // this is the Multiuser Framework 2.5.3 current working
     // version
     compile project(":saracommons")
     compile project(":saracsc")

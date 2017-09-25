@@ -67,9 +67,9 @@ public class MainClassBase {
                 .setDefaultNumOfPoolInstances(10)
                         // or you can refer to values in your config.properties file:
                 .setPathLogs(Utils.getProperty("pathLogs"))
-                .setSessionTimeout(5, TimeUnit.MINUTES)
+                .setSessionTimeout(5, TimeUnit.DAYS) // dirty workaround for broken close-session
                 .setServerAddress("127.0.0.1") //use IP instead of 'localhost'
-                .setExceptionTraceLevel( Constants.SHOW_MUF_EXCEPTIONS)
+                .setExceptionTraceLevel( Constants.SHOW_ALL_EXCEPTIONS)
                 .setExceptionLogger( getExceptionLogger() )// MUF Exceptions/NON_MUF Exceptions
                 .build();
     }

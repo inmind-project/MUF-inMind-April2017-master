@@ -6,6 +6,7 @@ import edu.cmu.inmind.multiuser.controller.plugin.PluginModule;
 import edu.cmu.inmind.multiuser.controller.resources.Config;
 import edu.cmu.inmind.multiuser.sara.component.*;
 import edu.cmu.inmind.multiuser.sara.orchestrator.SaraOrchestrator;
+import edu.cmu.lti.rapport.pipline.csc.ConversationalStrategyUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,10 @@ import java.util.List;
  */
 public class SaraServerMainClass extends MainClassBase {
 
-    public static void main(String args[]) throws Throwable{
+    public static void main(String args[]) throws Throwable {
+
+        ConversationalStrategyUtil.preloadRecipes();
+
         List<ShutdownHook> hooks = new ArrayList<>();
         // You can add hooks that will be executed when the MUF is stopped
         hooks.add( new ShutdownHook() {
@@ -37,16 +41,20 @@ public class SaraServerMainClass extends MainClassBase {
     @Override
     protected PluginModule[] createModules() {
         return new PluginModule[]{
-                new PluginModule.Builder(SaraOrchestrator.class, FakeCSCComponent.class, SaraCons.ID_CSC)
-                        //comment out the line below if you want to use remote DialogueSystem
+                new PluginModule.Builder(SaraOrchestrator.class, UserModelComponent.class, SaraCons.ID_UM)
+                        //.addPlugin(UserModelComponent.class, SaraCons.ID_UM)
+
                         //.addPlugin(FakeNLUComponent.class, SaraCons.ID_NLU)
                         //.addPlugin(FakeTaskReasonerComponent.class, SaraCons.ID_DM)
-                        .addPlugin(UserModelComponent.class, SaraCons.ID_UM)
                         .addPlugin(NLU_DMComponent.class, SaraCons.ID_NLU)
+
                         .addPlugin(NLGComponent.class, SaraCons.ID_NLG)
+
+                        .addPlugin(CSCComponent.class, SaraCons.ID_CSC)
+//                        .addPlugin(FakeCSCComponent.class, SaraCons.ID_CSC)
+
                         .addPlugin(SocialReasonerComponent.class, SaraCons.ID_SR)
-                        //.addPlugin(CSCComponent.class, SaraCons.ID_R5)
-                        .addPlugin(FakeCSCComponent.class, SaraCons.ID_CSC)
+
                         //.addPlugin(R5StreamComponent.class, SaraCons.ID_R5)
                         .build()
         };
