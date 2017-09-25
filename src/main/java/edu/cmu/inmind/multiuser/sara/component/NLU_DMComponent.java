@@ -80,7 +80,7 @@ public class NLU_DMComponent extends PluggableComponent {
             processQueryResponse(blackboardEvent.getElement().toString());
         } else if (blackboardEvent.getId().equals(SaraCons.MSG_ASR_DM_RESPONSE)) {
             new Thread(() ->
-                processDMIntent(blackboardEvent.getElement().toString(), utterance),
+                processDMIntent(blackboardEvent.getElement().toString()),
                     "DM intent process thread").start();
         } else if (blackboardEvent.getId().equals(SaraCons.MSG_ASR)) {
             Log4J.debug(this, "sending on " + blackboardEvent.toString());
@@ -108,7 +108,7 @@ public class NLU_DMComponent extends PluggableComponent {
         }
     }
 
-    private void processDMIntent(String message, String utterance) {
+    private void processDMIntent(String message) {
         Log4J.debug(NLU_DMComponent.this, "I've received python response: " + message);
         // store user's utterance (for NLG)
         dmOutput = Utils.fromJson(message, ActiveDMOutput.class);
