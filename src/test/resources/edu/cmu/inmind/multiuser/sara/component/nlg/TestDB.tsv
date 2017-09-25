@@ -13,11 +13,13 @@
 # Please let me know if you want more, I'm very open to discussing further slots (and their grounding).
 
 
-recommendation	recommend	ASN	How about #title. Do you want another #genre movie, or what other genre do you want?
-recommendation	recommend	VSN	How about #title. I remember you do not like #dislikedGenre. What other genre would you want me to recommend?
-recommendation	recommend	NONE	#title has #reason.
-recommendation	recommend	NONE	I would love to recommend you something, but I've run out of options.
-recommendation	recommend	SD	Wow, here is one I'd love to go to. It's called #title.
-recommendation	recommend	PR	Here's a movie that might be worth your time. What do you think of #title?
-recommendation	recommend	ASN	I think this movie fits your tastes. How about #title?
-recommendation	recommend	HE	I think this one might possibly be a good fit. How about #title?
+recommendation	recommend	ASN 1   How about #title. Do you want another #likedGenre movie, or what other genre do you want?
+recommendation	recommend	ASN 1   How about #title.
+recommendation	recommend	VSN 1   How about #title. I remember you do not like #dislikedGenre. What other genre would you want me to recommend?
+recommendation	recommend	VSN 1   How about #title. What other genre would you want me to recommend?
+recommendation	recommend	NONE	1   #title has #reason.
+#recommendation	recommend	NONE	1   I would love to recommend you something, but I've run out of options.
+recommendation	recommend	SD	1   Wow, here is one I'd love to go to. It's called #title.
+recommendation	recommend	PR	1   Here's a movie that might be worth your time. What do you think of #title?
+recommendation	recommend	ASN	1   I think this movie fits your tastes. How about #title?
+recommendation	recommend	HE	1   I think this one might possibly be a good fit. How about #title?

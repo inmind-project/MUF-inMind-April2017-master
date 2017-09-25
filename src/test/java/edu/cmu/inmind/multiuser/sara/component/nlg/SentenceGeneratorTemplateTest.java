@@ -3,12 +3,13 @@ package edu.cmu.inmind.multiuser.sara.component.nlg;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import edu.cmu.inmind.multiuser.common.Utils;
-import edu.cmu.inmind.multiuser.common.model.ConversationalStrategy;
 import edu.cmu.inmind.multiuser.common.model.DMOutput;
 import edu.cmu.inmind.multiuser.common.model.SROutput;
 import edu.cmu.inmind.multiuser.common.model.UserFrame;
+import edu.cmu.lti.rapport.pipline.csc.ConversationalStrategy;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -25,7 +26,7 @@ public class SentenceGeneratorTemplateTest {
     }
 
     @Test public void testTestDB() throws FileNotFoundException {
-        SentenceGenerator gen = new SentenceGeneratorTemplate(this.getClass().getResourceAsStream("TestDB.tsv"), this.getClass().getResourceAsStream("resources/nlg/sara_preferences_db.tsv"));
+        SentenceGenerator gen = new SentenceGeneratorTemplate(this.getClass().getResourceAsStream("TestDB.tsv"), new FileInputStream("resources/nlg/sara_preferences_db.tsv"));
         doTest(gen);
     }
 
@@ -37,12 +38,13 @@ public class SentenceGeneratorTemplateTest {
         srOutput.setRapport(7);
         srOutput.setStrategy("NONE");
         String nlgout = gen.generate(srOutput);
-        System.out.println("NONE\t" + nlgout);
-        assert(nlgout.contains(recommendedMovie));
+        System.err.println("NONE\t" + nlgout);
+        assert nlgout.contains(recommendedMovie) : nlgout;
         for (ConversationalStrategy cs : ConversationalStrategy.values()) {
-            srOutput.setStrategy(cs.name());
+            System.err.print(cs.shortName() + "\t");System.err.flush();
+            srOutput.setStrategy(cs.shortName());
             nlgout = gen.generate(srOutput);
-            System.out.println(cs.name() + "\t" + nlgout);
+            System.err.println(nlgout);
             assert(nlgout.contains(recommendedMovie));
         }
     }

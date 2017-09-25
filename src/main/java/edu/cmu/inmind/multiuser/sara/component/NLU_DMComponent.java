@@ -34,7 +34,7 @@ public class NLU_DMComponent extends PluggableComponent {
         NLU_DMComponent nluc = components.get(sessionID);
         nluc.dmOutput = dmoutput;
         Log4J.debug(nluc, "the local activedmoutput is " + nluc.dmOutput.hashCode());
-        nluc.blackboard.post(nluc, msgId, "");
+        nluc.blackboard.post(nluc, msgId, "query");
     }
 
     @Override
@@ -79,7 +79,9 @@ public class NLU_DMComponent extends PluggableComponent {
         } else if (blackboardEvent.getId().equals(SaraCons.MSG_QUERY_RESPONSE)) {
             processQueryResponse(blackboardEvent.getElement().toString());
         } else if (blackboardEvent.getId().equals(SaraCons.MSG_ASR_DM_RESPONSE)) {
-            processPythonResponse(blackboardEvent.getElement().toString());
+            new Thread(() ->
+                processDMIntent(blackboardEvent.getElement().toString(), utterance),
+                    "DM intent process thread").start();
         } else if (blackboardEvent.getId().equals(SaraCons.MSG_ASR)) {
             Log4J.debug(this, "sending on " + blackboardEvent.toString());
             blackboard().post(this, SaraCons.MSG_ASR_DM, blackboardEvent.getElement());
@@ -106,13 +108,13 @@ public class NLU_DMComponent extends PluggableComponent {
         }
     }
 
-    private void processPythonResponse(String message) {
+    private void processDMIntent(String message, String utterance) {
         Log4J.debug(NLU_DMComponent.this, "I've received python response: " + message);
         // store user's utterance (for NLG)
         dmOutput = Utils.fromJson(message, ActiveDMOutput.class);
         /* uncomment the next two lines for incrementality: */
-        //if (dmOutput.plainGetRecommendation() != null)
-        //    dmOutput.plainGetRecommendation().setRexplanations(null);
+        if (dmOutput.plainGetRecommendation() != null)
+            dmOutput.plainGetRecommendation().setRexplanations(null);
         dmOutput.sessionID = getSessionId();
         // post to Blackboard
         blackboard().post(NLU_DMComponent.this, SaraCons.MSG_DM, dmOutput);

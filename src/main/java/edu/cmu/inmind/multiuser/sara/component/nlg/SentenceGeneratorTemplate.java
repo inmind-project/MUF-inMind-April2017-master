@@ -5,6 +5,7 @@ import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Created by yoichimatsuyama on 4/12/17.
@@ -43,7 +44,7 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
     @Override
     public String generate(SROutput srOutput) {
         List<String> sentences = generateAsList(srOutput);
-        return String.join("", sentences);
+        return String.join("", sentences.stream().map(s -> replacePatterns(s, srOutput)).collect(Collectors.toList()));
     }
 
     /** generate a list of sentences */
@@ -116,6 +117,8 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
 
     private static Random r = new Random();
     private String getAnyOf(List<?> list) {
+        if (list.isEmpty())
+            return null;
         Object selected = list.get(r.nextInt(list.size()));
         if (selected instanceof Entity)
             return ((Entity) selected).getValue();
@@ -172,7 +175,7 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
         Matcher m = slotMarker.matcher(template);
         while (m.matches()) {
             String slotName = m.group(1);
-            String value = null, latestEntityValue, latestEntityType, latestUtterance;
+            String value = null, latestEntityValue, latestUtterance;
             float latestEntityValence = 0;
             UserFrame.Frame frame = srOutput.getDMOutput().getUserFrame().getFrame();
             DMOutput dmOutput = srOutput.getDMOutput();
@@ -435,12 +438,12 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
     public Sentence fromLine(String line) {
         Sentence sentence = null;
         if(!line.startsWith("#") && !line.trim().isEmpty()){
-            String[] tokens = line.split("\t");
-            if(tokens.length > 3){
+            String[] tokens = line.split("\\s+", 5);
+            if(tokens.length == 5){
                 // assumes that weight (token[3]) is a double
                 sentence = new Sentence(tokens[1], tokens[2], Double.parseDouble(tokens[3]), tokens[4]);
             } else {
-                throw new IllegalArgumentException("line was not a comment and did not have the right format: " + line);
+                throw new IllegalArgumentException("line was not a comment and did not have the right format: " + line + Arrays.toString(tokens));
             }
         }
         return sentence;
@@ -484,7 +487,7 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
             BufferedReader in = new BufferedReader(new InputStreamReader(saraDB));
             String line = null;
             while((line = in.readLine()) != null && !line.startsWith("#") && !line.trim().isEmpty()) {
-                String[] tokens = line.split("[ \t]+", 3);
+                String[] tokens = line.split("\\s+", 3);
                 if (tokens.length == 3) {
                     String entity = tokens[0], valence = tokens[1], preference = tokens[2];
                     Utils.checkContents(entity, "genre", "director", "actor");
@@ -499,8 +502,7 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
                 } else
                     throw new IOException(line);
             }
-            System.out.println("-----------------SARA Preferred genres: " + systemPreferences.getGenres().getLike().toString());
-	    in.close();
+            in.close();
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
