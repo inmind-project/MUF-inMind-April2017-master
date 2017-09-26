@@ -190,7 +190,8 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
                     case "#reason":
                         if (replace) {
                             value = dmOutput.getRecommendation().getRexplanations().get(0).getExplanations().get(0);
-                        } else {
+                            value = value.replaceAll("\\(I*\\)", ""); // remove weird ID stuff ("Jennifer (III) Lawrence" -> "Jennifer Lawrence")
+                            } else {
                             value = dmOutput.isRecommendation() ? "" : null;
                         }
                         break;
