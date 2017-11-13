@@ -2,7 +2,7 @@ package edu.cmu.inmind.multiuser.openface.eventDetector;
 
 import java.util.Map;
 
-import edu.cmu.inmind.multiuser.openface.Event;
+import edu.cmu.inmind.multiuser.openface.OpenFaceEvent;
 import edu.cmu.inmind.multiuser.openface.FeatureType;
 import edu.cmu.inmind.multiuser.openface.input.OpenFaceInput;
 
@@ -15,7 +15,7 @@ public class LinearClassifierDetector extends EventDetector {
 	}
 
 	@Override
-	Event consumeFrame(Map<FeatureType, Float> f) {
+    OpenFaceEvent consumeFrame(Map<FeatureType, Float> f) {
 		// parameters as estimated from Justine's video:
 		double smileScore = 0.74 + 
 		f.get(FeatureType.confidence) * -4.37 +
@@ -51,7 +51,7 @@ public class LinearClassifierDetector extends EventDetector {
 		System.arraycopy(scoringWindow, 0, scoringWindow, 1, scoringWindow.length - 1);
 		scoringWindow[0] = smileScore;
 		double scoreSum = scoringWindow[0] + scoringWindow[1] + scoringWindow[2] + scoringWindow[3] + scoringWindow[4];  
-		return (new Event()).setSmile(scoreSum >= 5, (float) smileScore);
+		return (new OpenFaceEvent()).setSmile(scoreSum >= 5, (float) smileScore);
 	}
 
 }

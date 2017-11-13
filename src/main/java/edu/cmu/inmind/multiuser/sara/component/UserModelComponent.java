@@ -3,13 +3,14 @@ package edu.cmu.inmind.multiuser.sara.component;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import edu.cmu.inmind.multiuser.common.Constants;
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.common.model.SROutput;
 import edu.cmu.inmind.multiuser.common.model.UserFrame;
 import edu.cmu.inmind.multiuser.common.model.UserModel;
+import edu.cmu.inmind.multiuser.controller.blackboard.Blackboard;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardSubscription;
+import edu.cmu.inmind.multiuser.controller.common.Constants;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
 import edu.cmu.inmind.multiuser.controller.plugin.StateType;
@@ -66,7 +67,7 @@ public class UserModelComponent extends PluggableComponent {
     private UserModel userModel;
 
     @Override
-    public void onEvent(BlackboardEvent event) throws Exception {
+    public void onEvent(Blackboard blackboard, BlackboardEvent event) throws Exception {
         final String eventId = event.getId();
         if (SaraCons.MSG_START_SESSION.equals(eventId)) {
             onStartSession(event);
@@ -95,7 +96,11 @@ public class UserModelComponent extends PluggableComponent {
 
         Log4J.info(this, "Loaded user model: " + Utils.toJson(userModel));
 
-        blackboard().post(this, SaraCons.MSG_UM, userModel);
+        try {
+            getBlackBoard(getSessionId()).post(this, SaraCons.MSG_UM, userModel);
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
     }
 
     private void handleMsgSR(BlackboardEvent event)

@@ -3,17 +3,19 @@ package edu.cmu.inmind.multiuser.sara.component;
 import beat.BEAT;
 import beat.BeatCallback;
 import beat.bson.BSON;
-import edu.cmu.inmind.multiuser.common.Constants;
 import edu.cmu.inmind.multiuser.common.SaraCons;
-import edu.cmu.inmind.multiuser.common.Utils;
 import edu.cmu.inmind.multiuser.common.model.SROutput;
+import edu.cmu.inmind.multiuser.controller.blackboard.Blackboard;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardSubscription;
+import edu.cmu.inmind.multiuser.controller.common.Constants;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.controller.log.Loggable;
 import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
 import edu.cmu.inmind.multiuser.controller.plugin.StateType;
 import edu.cmu.inmind.multiuser.sara.component.nlg.SentenceGeneratorTemplate;
+import edu.cmu.inmind.multiuser.socialreasoner.control.util.Utils;
+import scala.reflect.generic.Trees;
 
 import java.io.FileNotFoundException;
 import java.util.List;
@@ -52,7 +54,12 @@ public class NLGComponent extends PluggableComponent implements BeatCallback {
 
     @Loggable
     private void extractAndProcess() {
-        SROutput srOutput = (SROutput) blackboard().get(SaraCons.MSG_SR);
+        SROutput srOutput = null;
+        try {
+            srOutput = (SROutput) getBlackBoard(getSessionId()).get(SaraCons.MSG_SR);
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
         /**
          * generation
          */
@@ -78,7 +85,7 @@ public class NLGComponent extends PluggableComponent implements BeatCallback {
      * processes in parallel rather than sequentially.
      */
     @Override
-    public void onEvent(BlackboardEvent event) throws Exception
+    public void onEvent(Blackboard blackboard, BlackboardEvent event) throws Exception
     {
         if(event.getId().equals(SaraCons.MSG_SR)) {
             extractAndProcess();
@@ -98,7 +105,11 @@ public class NLGComponent extends PluggableComponent implements BeatCallback {
          * update the blackboard
          */
         Log4J.info(this, "SessionID: " + this.getSessionId() + "Output: " +bson.getSpeech());
-        blackboard().post( this, SaraCons.MSG_NLG, bson );
+        try {
+            getBlackBoard(getSessionId()).post( this, SaraCons.MSG_NLG, bson );
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
         Log4J.info(this, "BSON to Android: " + Utils.toJson(bson));
     }
 }

@@ -1,10 +1,11 @@
 package edu.cmu.inmind.multiuser.sara.component;
 
-import edu.cmu.inmind.multiuser.common.Constants;
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.common.model.*;
+import edu.cmu.inmind.multiuser.controller.blackboard.Blackboard;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardSubscription;
+import edu.cmu.inmind.multiuser.controller.common.Constants;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
 import edu.cmu.inmind.multiuser.controller.plugin.StateType;
@@ -88,7 +89,7 @@ public class FakeTaskReasonerComponent extends PluggableComponent {
      * processes in parallel rather than sequentially.
      */
     @Override
-    public void onEvent(BlackboardEvent event) throws Exception
+    public void onEvent(Blackboard blackboard,BlackboardEvent event) throws Throwable
     {
         //TODO: add code here
         //...
@@ -97,7 +98,7 @@ public class FakeTaskReasonerComponent extends PluggableComponent {
         if (event.getId().equals(SaraCons.MSG_START_SESSION)) {
 		    System.out.println("Fake DM is initiating dialogue");
 	    }
-	    blackboard().post(this, SaraCons.MSG_DM, sendToSR());
+	    blackboard.post(this, SaraCons.MSG_DM, sendToSR());
     }
 
     @Override

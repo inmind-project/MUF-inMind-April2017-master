@@ -1,14 +1,16 @@
 package edu.cmu.inmind.multiuser.sara.component;
 
-import edu.cmu.inmind.multiuser.common.Constants;
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.common.model.*;
+import edu.cmu.inmind.multiuser.controller.blackboard.Blackboard;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardSubscription;
+import edu.cmu.inmind.multiuser.controller.common.Constants;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
 import edu.cmu.inmind.multiuser.controller.plugin.StateType;
 import edu.cmu.lti.rapport.pipline.csc.ConversationalStrategy;
+import scala.reflect.generic.Trees;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -39,7 +41,7 @@ public class FakeCSCComponent extends PluggableComponent {
 
     }
 
-    public void onEvent(BlackboardEvent blackboardEvent) throws Exception
+    public void onEvent(Blackboard blackboard,BlackboardEvent blackboardEvent) throws Throwable
     {
         CSCOutput cscOutput = new CSCOutput();
         Random r = new Random();
@@ -47,7 +49,7 @@ public class FakeCSCComponent extends PluggableComponent {
         List<Strategy> strategyList = new ArrayList<Strategy>();
 
         for (ConversationalStrategy cs : EnumSet.of(SD, SE, Praise, QESD, VSN, ASN)) {
-            strategyList.add(new Strategy(cs.shortName(), r.nextDouble()));
+            strategyList.add(new Strategy(cs.name(), r.nextDouble()));
         }
         cscOutput.setUserStrategies(strategyList);
 
@@ -55,7 +57,7 @@ public class FakeCSCComponent extends PluggableComponent {
             System.out.println(s.getName() + " " + s.getScore());
         }
 
-        blackboard().post(this, SaraCons.MSG_CSC, cscOutput);
+        blackboard.post(this, SaraCons.MSG_CSC, cscOutput);
     }
 
 }

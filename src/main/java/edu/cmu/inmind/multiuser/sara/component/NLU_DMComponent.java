@@ -1,12 +1,12 @@
 package edu.cmu.inmind.multiuser.sara.component;
 
-import edu.cmu.inmind.multiuser.common.Constants;
 import edu.cmu.inmind.multiuser.common.SaraCons;
-import edu.cmu.inmind.multiuser.common.Utils;
+import edu.cmu.inmind.multiuser.controller.common.Utils;
 import edu.cmu.inmind.multiuser.common.model.*;
 import edu.cmu.inmind.multiuser.controller.blackboard.Blackboard;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardSubscription;
+import edu.cmu.inmind.multiuser.controller.common.Constants;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
 import edu.cmu.inmind.multiuser.controller.plugin.StateType;
@@ -34,7 +34,11 @@ public class NLU_DMComponent extends PluggableComponent {
         NLU_DMComponent nluc = components.get(sessionID);
         nluc.dmOutput = dmoutput;
         Log4J.debug(nluc, "the local activedmoutput is " + nluc.dmOutput.hashCode());
-        nluc.blackboard.post(nluc, msgId, "query");
+        try {
+            nluc.blackboard.post(nluc, msgId, "query");
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
     }
 
     @Override
@@ -46,19 +50,28 @@ public class NLU_DMComponent extends PluggableComponent {
     @Override
     public void postCreate() {
         components.put(getSessionId(), this);
-        this.blackboard = blackboard();
+        this.blackboard = getBlackBoard(getSessionId());
     }
 
     @Override
     public void execute() {
         Log4J.info(this, "NLU_DMComponent: " + hashCode());
-        SaraOutput saraOutput = extractAndProcess();
+        SaraOutput saraOutput = null;
+        try {
+            saraOutput = extractAndProcess();
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
         //update the blackboard
-        blackboard().post(this, SaraCons.MSG_NLU, saraOutput );
+        try {
+            getBlackBoard(getSessionId()).post(this, SaraCons.MSG_NLU, saraOutput );
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
     }
 
-    private SaraOutput extractAndProcess() {
-        SaraInput saraInput = (SaraInput) blackboard().get(SaraCons.MSG_ASR);
+    private SaraOutput extractAndProcess() throws Throwable {
+        SaraInput saraInput = (SaraInput) getBlackBoard(getSessionId()).get(SaraCons.MSG_ASR);
         SaraOutput saraOutput = new SaraOutput();
         saraOutput.setUserIntent( new UserIntent( "user-intent", new ArrayList<>() ) );
         Log4J.info(this, "Input: " + saraInput + ", Output: " + saraOutput + "\n");
@@ -66,7 +79,7 @@ public class NLU_DMComponent extends PluggableComponent {
     }
 
     @Override
-    public void onEvent(BlackboardEvent blackboardEvent) throws Exception {
+    public void onEvent(Blackboard blackboard, BlackboardEvent blackboardEvent) throws Throwable {
         // print full event
         Log4J.debug(this, "received " + blackboardEvent.toString());
         // store user's latest utterance
@@ -84,7 +97,7 @@ public class NLU_DMComponent extends PluggableComponent {
                     "DM intent process thread").start();
         } else if (blackboardEvent.getId().equals(SaraCons.MSG_ASR)) {
             Log4J.debug(this, "sending on " + blackboardEvent.toString());
-            blackboard().post(this, SaraCons.MSG_ASR_DM, blackboardEvent.getElement());
+            blackboard.post(this, SaraCons.MSG_ASR_DM, blackboardEvent.getElement());
         } else {
             Log4J.error(this, "got a message I could not understand: " + blackboardEvent.toString());
         }
@@ -92,7 +105,11 @@ public class NLU_DMComponent extends PluggableComponent {
 
     private void processStartDM() {
         Log4J.debug(this, "about to send initial greeting ...");
-        blackboard().post(this, SaraCons.MSG_START_DM_PYTHON, "");
+        try {
+            getBlackBoard(getSessionId()).post(this, SaraCons.MSG_START_DM_PYTHON, "");
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
         Log4J.debug(this, "Sent Initial Greeting");
     }
 
@@ -100,9 +117,13 @@ public class NLU_DMComponent extends PluggableComponent {
         final UserModel userModel = (UserModel) element;
         Log4J.info(this, "Received user model");
         if (userModel.getUserFrame() != null) {
-            Log4J.info(this, "Sending user frame to python: " + Utils.toJson(userModel.getUserFrame()));
+            Log4J.info(this, "Sending user frame to python: " + edu.cmu.inmind.multiuser.controller.common.Utils.toJson(userModel.getUserFrame()));
             // no reply for user model stuff
-            blackboard().post(this, SaraCons.MSG_USER_FRAME, userModel.getUserFrame());
+            try {
+                getBlackBoard(getSessionId()).post(this, SaraCons.MSG_USER_FRAME, userModel.getUserFrame());
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+            }
         } else {
             Log4J.info(this, "User frame was empty");
         }
@@ -111,13 +132,17 @@ public class NLU_DMComponent extends PluggableComponent {
     private void processDMIntent(String message) {
         Log4J.debug(NLU_DMComponent.this, "I've received python response: " + message);
         // store user's utterance (for NLG)
-        dmOutput = Utils.fromJson(message, ActiveDMOutput.class);
+        dmOutput = edu.cmu.inmind.multiuser.controller.common.Utils.fromJson(message, ActiveDMOutput.class);
         /* uncomment the next two lines for incrementality: */
         if (dmOutput.plainGetRecommendation() != null)
             dmOutput.plainGetRecommendation().setRexplanations(null);
         dmOutput.sessionID = getSessionId();
         // post to Blackboard
-        blackboard().post(NLU_DMComponent.this, SaraCons.MSG_DM, dmOutput);
+        try {
+            getBlackBoard(getSessionId()).post(NLU_DMComponent.this, SaraCons.MSG_DM, dmOutput);
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
     }
 
     private void processQueryResponse(String message) {

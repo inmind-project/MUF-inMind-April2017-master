@@ -2,7 +2,8 @@ package edu.cmu.inmind.multiuser.sara.orchestrator;
 
 import beat.bson.BSON;
 import edu.cmu.inmind.multiuser.common.SaraCons;
-import edu.cmu.inmind.multiuser.common.Utils;
+import edu.cmu.inmind.multiuser.controller.blackboard.Blackboard;
+import edu.cmu.inmind.multiuser.controller.common.Utils;
 import edu.cmu.inmind.multiuser.common.model.ASROutput;
 import edu.cmu.inmind.multiuser.common.model.R5StreamListener;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
@@ -35,7 +36,7 @@ public class SaraOrchestrator extends ProcessOrchestratorImpl {
     }
 
     @Override
-    public void process(String message) {
+    public void process(String message) throws Throwable {
         Log4J.debug(this, "orchestrator received message " + message);
         if( resetCrono ) {
             time = System.currentTimeMillis();
@@ -72,7 +73,7 @@ public class SaraOrchestrator extends ProcessOrchestratorImpl {
     /**
      * This method will be called when the system has a response to send out, that is (in our example).
      */
-    public void onEvent(BlackboardEvent event){
+    public void onEvent(Blackboard blackboard, BlackboardEvent event) throws Throwable{
         if(event.getId().equals(SaraCons.MSG_NLG)) {
             response = (BSON) blackboard.get(SaraCons.MSG_NLG);
             Log4J.debug(this, "sending out to client: " + Utils.toJson(response));

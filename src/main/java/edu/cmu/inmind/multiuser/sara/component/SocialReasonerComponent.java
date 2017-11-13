@@ -1,10 +1,11 @@
 package edu.cmu.inmind.multiuser.sara.component;
 
-import edu.cmu.inmind.multiuser.common.Constants;
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.common.model.*;
+import edu.cmu.inmind.multiuser.controller.blackboard.Blackboard;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardSubscription;
+import edu.cmu.inmind.multiuser.controller.common.Constants;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.controller.log.Loggable;
 import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
@@ -39,8 +40,13 @@ public class SocialReasonerComponent extends PluggableComponent {
 
 
     private void updateRapport(){
-        RapportOutput rapportOutput = edu.cmu.inmind.multiuser.common.Utils.fromJson(
-                (String) blackboard().get(SaraCons.MSG_RPT), RapportOutput.class );
+        RapportOutput rapportOutput = null;
+        try {
+            rapportOutput = Utils.fromJson(
+                    (String) getBlackBoard(getSessionId()).get(SaraCons.MSG_RPT), RapportOutput.class );
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
 
         rapport = rapportOutput.getRapportScore();
         socialController.setRapportScore(rapport);
@@ -50,7 +56,12 @@ public class SocialReasonerComponent extends PluggableComponent {
     }
 
     private void updateStrategy(){
-        CSCOutput csc = (CSCOutput) blackboard().get(SaraCons.MSG_CSC);
+        CSCOutput csc = null;
+        try {
+            csc = (CSCOutput) getBlackBoard(getSessionId()).get(SaraCons.MSG_CSC);
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
         userCS = csc.getBest().getName();
         Log4J.info(this,"User's strategy updated : " + userCS );
         socialController.setUserConvStrategy(userCS);
@@ -58,7 +69,12 @@ public class SocialReasonerComponent extends PluggableComponent {
     }
 
     private void updateNVB(){
-        NonVerbalOutput nvbOutput = (NonVerbalOutput) blackboard().get(SaraCons.MSG_NVB);
+        NonVerbalOutput nvbOutput = null;
+        try {
+            nvbOutput = (NonVerbalOutput) getBlackBoard(getSessionId()).get(SaraCons.MSG_NVB);
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
         isGazing = nvbOutput.isGazeAtPartner();
         isSmiling = nvbOutput.isSmiling();
 
@@ -78,7 +94,12 @@ public class SocialReasonerComponent extends PluggableComponent {
 
     private SROutput selectStrategy(){
         long time = System.nanoTime();
-        DMOutput dmOutput = (DMOutput) blackboard().get(SaraCons.MSG_DM);
+        DMOutput dmOutput = null;
+        try {
+            dmOutput = (DMOutput) getBlackBoard(getSessionId()).get(SaraCons.MSG_DM);
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
         Log4J.info(this,"dmOutput : "+dmOutput.toString() );
         SROutput srOutput = new SROutput(dmOutput);
         // temporary: fix this while fixing incremental system
@@ -108,7 +129,7 @@ public class SocialReasonerComponent extends PluggableComponent {
      */
     @Loggable
     @Override
-    public void onEvent(BlackboardEvent event) throws Exception {
+    public void onEvent(Blackboard blackboard, BlackboardEvent event) throws Throwable {
         //TODO: add code here
         //...
         Log4J.info(this, "SocialReasonerComponent. These objects have been updated at the blackboard: "
@@ -128,7 +149,7 @@ public class SocialReasonerComponent extends PluggableComponent {
         }
         if (event.getId().equals(SaraCons.MSG_DM)) {
             sendToNLG = selectStrategy();
-            blackboard().post(this, SaraCons.MSG_SR, sendToNLG);
+            blackboard.post(this, SaraCons.MSG_SR, sendToNLG);
         }
 
     }

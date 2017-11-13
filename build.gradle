@@ -52,7 +52,11 @@ configurations.all {
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.+'
     testCompile "org.mockito:mockito-core:1.+"
-    compile 'edu.cmu.inmind.framework:multiuser:2.15'
+    //compile 'edu.cmu.inmind.framework:multiuser:2.15'
+    compile ('edu.cmu.inmind.framework.multiuser:server:3.0-rc1:all')
+            {
+                transitive = true
+            }
     // version
     compile project(":saracommons")
     compile project(":saracsc")

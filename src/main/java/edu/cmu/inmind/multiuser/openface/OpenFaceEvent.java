@@ -6,9 +6,7 @@ package edu.cmu.inmind.multiuser.openface;
  * (I'd really prefer something that merrits the name "event", ie., comes at some point or span in time
  * and then the three things we investigate should be three separate events of separate types. Let's discuss this later.)
  */
-public class Event {
-
-	
+public class OpenFaceEvent {
 	private boolean smile = false;
 	private boolean gaze_at = false;
 	private float smileStrength = 0f;
@@ -16,7 +14,7 @@ public class Event {
 		return smile;
 	}
 	
-	public Event setSmile(boolean sm, float smileStrength){
+	public OpenFaceEvent setSmile(boolean sm, float smileStrength){
 		smile = sm;
 //		assert smileStrength >= 0f : smileStrength;
 //		assert smileStrength <= 1.0f : smileStrength;
@@ -34,7 +32,7 @@ public class Event {
 	
 	@Override
 	public String toString() {
-		return "Event smile: " + getSmile() + ", gaze: " + getGaze(); 
+		return "OpenFaceEvent smile: " + getSmile() + ", gaze: " + getGaze();
 	}
 
 	public float getSmileStrength() {

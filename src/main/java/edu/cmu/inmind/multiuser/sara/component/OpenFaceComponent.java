@@ -2,16 +2,17 @@ package edu.cmu.inmind.multiuser.sara.component;
 
 import java.io.IOException;
 
-import edu.cmu.inmind.multiuser.common.Constants;
 import edu.cmu.inmind.multiuser.common.SaraCons;
-import edu.cmu.inmind.multiuser.common.Utils;
 import edu.cmu.inmind.multiuser.common.model.NonVerbalOutput;
+import edu.cmu.inmind.multiuser.controller.blackboard.Blackboard;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardSubscription;
+import edu.cmu.inmind.multiuser.controller.common.Constants;
+import edu.cmu.inmind.multiuser.controller.common.Utils;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
 import edu.cmu.inmind.multiuser.controller.plugin.StateType;
-import edu.cmu.inmind.multiuser.openface.Event;
+import edu.cmu.inmind.multiuser.openface.OpenFaceEvent;
 import edu.cmu.inmind.multiuser.openface.eventDetector.EventDetector;
 import edu.cmu.inmind.multiuser.openface.eventDetector.RuleBasedEventDetector;
 import edu.cmu.inmind.multiuser.openface.input.OpenFaceInput;
@@ -40,7 +41,7 @@ public class OpenFaceComponent extends PluggableComponent {
 	} // we do the heavy lifting from an event, rather than in execute()
 
 	@Override
-	public void onEvent(BlackboardEvent event) throws Exception
+	public void onEvent(Blackboard blackboard, BlackboardEvent event) throws Exception
 	{
 		Log4J.debug(this, "received " + event.toString());
 		if( event.getId().equals(SaraCons.R5STREAM_STARTED)) {
@@ -80,12 +81,16 @@ public class OpenFaceComponent extends PluggableComponent {
 	/** send stuff towards MUF from our blackboard */
 	private class MUFOutput implements EventOutput {
 		@Override
-		public void nextEvent(Event e) {
+		public void nextEvent(OpenFaceEvent e) {
 			if (e != null) {
 				NonVerbalOutput nvb = new NonVerbalOutput();
 				nvb.setSmiling(e.getSmile());
 				nvb.setGazeAtPartner(e.getGaze());
-				OpenFaceComponent.this.blackboard().post(OpenFaceComponent.this, SaraCons.MSG_NVB, nvb);
+				try {
+					OpenFaceComponent.this.getBlackBoard(getSessionId()).post(OpenFaceComponent.this, SaraCons.MSG_NVB, nvb);
+				} catch (Throwable throwable) {
+					throwable.printStackTrace();
+				}
 			}
 		}
 	}
