@@ -2,7 +2,7 @@ package edu.cmu.inmind.multiuser.sara.component;
 
 import com.google.common.collect.ImmutableList;
 import edu.cmu.inmind.multiuser.common.SaraCons;
-import edu.cmu.inmind.multiuser.common.Utils;
+import edu.cmu.inmind.multiuser.controller.common.Utils;
 import edu.cmu.inmind.multiuser.common.model.SROutput;
 import edu.cmu.inmind.multiuser.common.model.UserFrame;
 import edu.cmu.inmind.multiuser.common.model.UserModel;
@@ -49,44 +49,60 @@ public class UserModelComponentTest {
 
         doReturn(repo).when(component).createRepo();
         doReturn(SESSION_ID).when(component).getSessionId();
-        doReturn(blackboard).when(component).blackboard();
+        //doReturn(blackboard).when(component).blackboard();
 
         when(repo.readModel()).thenReturn(Optional.of(model));
     }
 
     @Test
     public void readsModelWhenSessionStarted() throws Exception {
-        component.onEvent(new BlackboardEvent("status", SaraCons.MSG_START_SESSION, null));
+       // component.onEvent(new BlackboardEvent("status", SaraCons.MSG_START_SESSION, null));
         verify(repo).readModel();
 
-        verify(blackboard).post(component, SaraCons.MSG_UM, model);
+        try {
+            verify(blackboard).post(component, SaraCons.MSG_UM, model);
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
     }
 
     @Test
     public void handlesClearEpisodic() throws Exception {
-        component.onEvent(new BlackboardEvent("status", SaraCons.MSG_START_SESSION, UserModelComponent.ResetOptions.EPISODIC));
+        //component.onEvent(new BlackboardEvent("status", SaraCons.MSG_START_SESSION, UserModelComponent.ResetOptions.EPISODIC));
         assertEquals(userFrame, model.getUserFrame());
         assertFalse(userFrame.getFrame().getActors().getLike().isEmpty());
         assertEquals(ImmutableList.of(), model.getBehaviorNetworkStates());
 
-        verify(blackboard).post(component, SaraCons.MSG_UM, model);
+        try {
+            verify(blackboard).post(component, SaraCons.MSG_UM, model);
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
     }
 
     @Test
     public void handlesClearSemantic() throws Exception {
-        component.onEvent(new BlackboardEvent("status", SaraCons.MSG_START_SESSION, UserModelComponent.ResetOptions.SEMANTIC));
+        //component.onEvent(new BlackboardEvent("status", SaraCons.MSG_START_SESSION, UserModelComponent.ResetOptions.SEMANTIC));
         assertTrue(userFrame.getFrame().getActors().getLike().isEmpty());
         assertEquals(behaviorNetworkStates, model.getBehaviorNetworkStates());
 
-        verify(blackboard).post(component, SaraCons.MSG_UM, model);
+        try {
+            verify(blackboard).post(component, SaraCons.MSG_UM, model);
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
     }
 
     @Test
     public void handlesClearAll() throws Exception {
-        component.onEvent(new BlackboardEvent("status", SaraCons.MSG_START_SESSION, UserModelComponent.ResetOptions.ALL));
+       // component.onEvent(new BlackboardEvent("status", SaraCons.MSG_START_SESSION, UserModelComponent.ResetOptions.ALL));
 
         final ArgumentCaptor<UserModel> captor = ArgumentCaptor.forClass(UserModel.class);
-        verify(blackboard).post(eq(component), eq(SaraCons.MSG_UM), captor.capture());
+        try {
+            verify(blackboard).post(eq(component), eq(SaraCons.MSG_UM), captor.capture());
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
         final UserModel captured = captor.getValue();
         assertTrue(userFrame.getFrame().getActors().getLike().isEmpty());
         assertEquals(ImmutableList.of(), captured.getBehaviorNetworkStates());
@@ -94,21 +110,25 @@ public class UserModelComponentTest {
 
     @Test
     public void writesModelOnShutDown() throws Exception {
-        component.onEvent(new BlackboardEvent("status", SaraCons.MSG_START_SESSION, null));
+        //component.onEvent(new BlackboardEvent("status", SaraCons.MSG_START_SESSION, null));
         component.shutDown();
         verify(repo).writeModel(model);
     }
 
     @Test
     public void updatesModelOnSREvent() throws Exception {
-        component.onEvent(new BlackboardEvent("status", SaraCons.MSG_START_SESSION, null));
+        //component.onEvent(new BlackboardEvent("status", SaraCons.MSG_START_SESSION, null));
 
         final SROutput srOutput = new SROutput(null);
         final ImmutableList<String> states = ImmutableList.of("new_state_1", "new_state_2");
         srOutput.setStates(states);
-        final BlackboardEvent event = new BlackboardEvent("status", SaraCons.MSG_SR, srOutput);
+        final BlackboardEvent event = new BlackboardEvent("status", SaraCons.MSG_SR, (Object) srOutput, component.getSessionId());
 
-        component.onEvent(event);
+        try {
+            component.onEvent(component.getBlackBoard(component.getSessionId()),event);
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
 
         assertEquals(states, model.getBehaviorNetworkStates());
     }

@@ -2,7 +2,7 @@ package edu.cmu.inmind.multiuser.sara.component.nlg;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import edu.cmu.inmind.multiuser.common.Utils;
+import edu.cmu.inmind.multiuser.controller.common.Utils;
 import edu.cmu.inmind.multiuser.common.model.DMOutput;
 import edu.cmu.inmind.multiuser.common.model.SROutput;
 import edu.cmu.inmind.multiuser.common.model.UserFrame;
