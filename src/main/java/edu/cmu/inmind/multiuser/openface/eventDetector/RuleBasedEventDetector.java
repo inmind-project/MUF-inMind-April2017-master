@@ -2,7 +2,7 @@ package edu.cmu.inmind.multiuser.openface.eventDetector;
 
 import java.util.Map;
 
-import edu.cmu.inmind.multiuser.openface.Event;
+import edu.cmu.inmind.multiuser.openface.OpenFaceEvent;
 import edu.cmu.inmind.multiuser.openface.FeatureType;
 import edu.cmu.inmind.multiuser.openface.input.OpenFaceInput;
 
@@ -16,13 +16,13 @@ public class RuleBasedEventDetector extends EventDetector {
 	}
 
 	@Override
-	Event consumeFrame(Map<FeatureType,Float> f) {
+    OpenFaceEvent consumeFrame(Map<FeatureType,Float> f) {
 		assert f != null;
 		assert f.containsKey(FeatureType.AU12_r);
 
 		boolean isSmiling = f.get(FeatureType.AU12_r) > 1.3; 
 		wasSmiling = isSmiling;
-		return (new Event()).setSmile(isSmiling, f.get(FeatureType.AU12_r));
+		return (new OpenFaceEvent()).setSmile(isSmiling, f.get(FeatureType.AU12_r));
 	}
 
 }

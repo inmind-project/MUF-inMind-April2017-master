@@ -1,13 +1,14 @@
 package edu.cmu.inmind.multiuser.sara.component;
 
-import edu.cmu.inmind.multiuser.controller.blackboard.Blackboard;
-import edu.cmu.inmind.multiuser.controller.common.Constants;
+
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.common.model.ASROutput;
 import edu.cmu.inmind.multiuser.common.model.CSCOutput;
 import edu.cmu.inmind.multiuser.common.model.Strategy;
+import edu.cmu.inmind.multiuser.controller.blackboard.Blackboard;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardSubscription;
+import edu.cmu.inmind.multiuser.controller.common.Constants;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
 import edu.cmu.inmind.multiuser.controller.plugin.StateType;
@@ -57,6 +58,7 @@ public class CSCComponent extends PluggableComponent {
 
     public void onEvent(Blackboard blackboard, BlackboardEvent blackboardEvent) throws Throwable {
 
+
         Log4J.info(this, "CSCComponent: starting classifying.");
 
         Object input = blackboard.get("MSG_ASR");
@@ -80,7 +82,7 @@ public class CSCComponent extends PluggableComponent {
         List<Strategy> strategies = new ArrayList<Strategy>();
 
         for (ConversationalStrategy cs : EnumSet.of(SD, SE, Praise, QESD, VSN, ASN)) {
-            strategies.add(new Strategy(cs.shortName(), strategyList.get(cs)));
+            strategies.add(new Strategy(cs.name(), strategyList.get(cs)));
         }
         cscOutput.setUserStrategies(strategies);
 

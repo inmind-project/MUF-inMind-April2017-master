@@ -1,6 +1,7 @@
 package edu.cmu.inmind.multiuser.sara.component;
 
 import edu.cmu.inmind.multiuser.controller.common.Constants;
+
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.controller.common.Utils;
 import edu.cmu.inmind.multiuser.common.model.*;
@@ -36,6 +37,7 @@ public class NLU_DMComponent extends PluggableComponent {
         Log4J.debug(nluc, "the local activedmoutput is " + nluc.dmOutput.hashCode());
         try {
             NLU_DMComponent.blackboard.post(nluc, msgId, "query");
+
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
@@ -51,15 +53,22 @@ public class NLU_DMComponent extends PluggableComponent {
     public void postCreate() {
         components.put(getSessionId(), this);
         NLU_DMComponent.blackboard = getBlackBoard(getSessionId());
+
     }
 
     @Override
     public void execute() {
         Log4J.info(this, "NLU_DMComponent: " + hashCode());
-        SaraOutput saraOutput = extractAndProcess();
+        SaraOutput saraOutput = null;
+        try {
+            saraOutput = extractAndProcess();
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
         //update the blackboard
         try {
             NLU_DMComponent.blackboard.post(this, SaraCons.MSG_NLU, saraOutput );
+
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
@@ -98,6 +107,7 @@ public class NLU_DMComponent extends PluggableComponent {
         } else if (blackboardEvent.getId().equals(SaraCons.MSG_ASR)) {
             Log4J.debug(this, "sending on " + blackboardEvent.toString());
             NLU_DMComponent.blackboard.post(this, SaraCons.MSG_ASR_DM, blackboardEvent.getElement());
+
         } else {
             Log4J.error(this, "got a message I could not understand: " + blackboardEvent.toString());
         }
@@ -107,6 +117,7 @@ public class NLU_DMComponent extends PluggableComponent {
         Log4J.debug(this, "about to send initial greeting ...");
         try {
             NLU_DMComponent.blackboard.post(this, SaraCons.MSG_START_DM_PYTHON, "");
+
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
@@ -117,10 +128,11 @@ public class NLU_DMComponent extends PluggableComponent {
         final UserModel userModel = (UserModel) element;
         Log4J.info(this, "Received user model");
         if (userModel.getUserFrame() != null) {
-            Log4J.info(this, "Sending user frame to python: " + Utils.toJson(userModel.getUserFrame()));
+            Log4J.info(this, "Sending user frame to python: " + edu.cmu.inmind.multiuser.controller.common.Utils.toJson(userModel.getUserFrame()));
             // no reply for user model stuff
             try {
                 NLU_DMComponent.blackboard.post(this, SaraCons.MSG_USER_FRAME, userModel.getUserFrame());
+
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
             }
@@ -132,7 +144,7 @@ public class NLU_DMComponent extends PluggableComponent {
     private void processDMIntent(String message) {
         Log4J.debug(NLU_DMComponent.this, "I've received python response: " + message);
         // store user's utterance (for NLG)
-        dmOutput = Utils.fromJson(message, ActiveDMOutput.class);
+        dmOutput = edu.cmu.inmind.multiuser.controller.common.Utils.fromJson(message, ActiveDMOutput.class);
         /* uncomment the next two lines for incrementality: */
         if (dmOutput.plainGetRecommendation() != null)
             dmOutput.plainGetRecommendation().setRexplanations(null);
@@ -140,6 +152,7 @@ public class NLU_DMComponent extends PluggableComponent {
         // post to Blackboard
         try {
             NLU_DMComponent.blackboard.post(NLU_DMComponent.this, SaraCons.MSG_DM, dmOutput);
+
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }

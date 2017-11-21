@@ -1,8 +1,8 @@
 package edu.cmu.inmind.multiuser.sara.component;
 
 import edu.cmu.inmind.multiuser.controller.blackboard.Blackboard;
-import edu.cmu.inmind.multiuser.controller.common.Constants;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
+import edu.cmu.inmind.multiuser.controller.common.Constants;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
 import edu.cmu.inmind.multiuser.controller.plugin.StateType;
@@ -55,6 +55,7 @@ public class GuavaServiceComponent extends PluggableComponent {
 
     @Override
     public void onEvent(Blackboard blackboard, BlackboardEvent event) throws Exception
+
     {
         //TODO: add code here
         //...

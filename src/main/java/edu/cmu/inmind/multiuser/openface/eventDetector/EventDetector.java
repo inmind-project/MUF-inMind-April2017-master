@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import edu.cmu.inmind.multiuser.openface.Event;
+import edu.cmu.inmind.multiuser.openface.OpenFaceEvent;
 import edu.cmu.inmind.multiuser.openface.FeatureType;
 import edu.cmu.inmind.multiuser.openface.input.OpenFaceInput;
-import edu.cmu.inmind.multiuser.openface.output.CSVOutput;
 import edu.cmu.inmind.multiuser.openface.output.EventOutput;
 
 public abstract class EventDetector {
@@ -27,9 +26,9 @@ public abstract class EventDetector {
 	 * at present, this just produces output every 1 second and null otherwise
 	 * @return null if no event occurs, return an actual event when something has changed
 	 */
-	abstract Event consumeFrame(Map<FeatureType,Float> f);
+	abstract OpenFaceEvent consumeFrame(Map<FeatureType,Float> f);
 	
-	private void notifyListeners(Event e) {
+	private void notifyListeners(OpenFaceEvent e) {
 		for (EventOutput eo : listeners) {
 			eo.nextEvent(e);
 		}
@@ -41,7 +40,7 @@ public abstract class EventDetector {
 			Map<FeatureType, Float> f = ofi.getFeaturesForNextFrame();
 			//out.consumeFrame(f);
 			if (f != null) {
-				Event e = consumeFrame(f);
+				OpenFaceEvent e = consumeFrame(f);
 				notifyListeners(e);
 			}
 		}

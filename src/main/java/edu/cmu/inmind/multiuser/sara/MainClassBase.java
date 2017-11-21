@@ -26,7 +26,7 @@ public class MainClassBase {
          execute( null );
     }
 
-    protected void execute(List<ShutdownHook> hooks) throws Throwable{
+    public void execute(List<ShutdownHook> hooks) throws Throwable{
         // starting the Multiuser framework
         muf = MUFLifetimeManager.startFramework(
                 createModules(), createConfig(), null );
