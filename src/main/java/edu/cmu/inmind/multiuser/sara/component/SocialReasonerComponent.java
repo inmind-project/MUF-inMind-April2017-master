@@ -1,6 +1,7 @@
 package edu.cmu.inmind.multiuser.sara.component;
 
-import edu.cmu.inmind.multiuser.common.Constants;
+import edu.cmu.inmind.multiuser.controller.blackboard.Blackboard;
+import edu.cmu.inmind.multiuser.controller.common.Constants;
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.common.model.*;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
@@ -38,9 +39,14 @@ public class SocialReasonerComponent extends PluggableComponent {
     }
 
 
-    private void updateRapport(){
-        RapportOutput rapportOutput = edu.cmu.inmind.multiuser.common.Utils.fromJson(
-                (String) blackboard().get(SaraCons.MSG_RPT), RapportOutput.class );
+    private void updateRapport(BlackboardEvent blackboardEvent){
+        RapportOutput rapportOutput = null;
+        try {
+            rapportOutput = Utils.fromJson(
+                    (String) blackboardEvent.getElement(), RapportOutput.class );
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
 
         rapport = rapportOutput.getRapportScore();
         socialController.setRapportScore(rapport);
@@ -49,16 +55,26 @@ public class SocialReasonerComponent extends PluggableComponent {
         Log4J.info(this,"RapporEstimator : " + rapport );
     }
 
-    private void updateStrategy(){
-        CSCOutput csc = (CSCOutput) blackboard().get(SaraCons.MSG_CSC);
+    private void updateStrategy(BlackboardEvent event){
+        CSCOutput csc = null;
+        try {
+            csc = (CSCOutput) event.getElement();
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
         userCS = csc.getBest().getName();
         Log4J.info(this,"User's strategy updated : " + userCS );
         socialController.setUserConvStrategy(userCS);
         socialController.addContinousStates(null);
     }
 
-    private void updateNVB(){
-        NonVerbalOutput nvbOutput = (NonVerbalOutput) blackboard().get(SaraCons.MSG_NVB);
+    private void updateNVB(BlackboardEvent blackboardEvent){
+        NonVerbalOutput nvbOutput = null;
+        try {
+            nvbOutput = (NonVerbalOutput) blackboardEvent.getElement();
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
         isGazing = nvbOutput.isGazeAtPartner();
         isSmiling = nvbOutput.isSmiling();
 
@@ -76,9 +92,16 @@ public class SocialReasonerComponent extends PluggableComponent {
         }
     }
 
-    private SROutput selectStrategy(){
+    private SROutput selectStrategy(BlackboardEvent event){
+
         long time = System.nanoTime();
-        DMOutput dmOutput = (DMOutput) blackboard().get(SaraCons.MSG_DM);
+        DMOutput dmOutput = null;
+        try {
+            dmOutput = (DMOutput) event.getElement();
+                    //blackboard.get(SaraCons.MSG_DM);
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
         Log4J.info(this,"dmOutput : "+dmOutput.toString() );
         SROutput srOutput = new SROutput(dmOutput);
         // temporary: fix this while fixing incremental system
@@ -108,27 +131,31 @@ public class SocialReasonerComponent extends PluggableComponent {
      */
     @Loggable
     @Override
-    public void onEvent(BlackboardEvent event) throws Exception {
+    public void onEvent(Blackboard blackboard, BlackboardEvent event) throws Throwable {
         //TODO: add code here
         //...
         Log4J.info(this, "SocialReasonerComponent. These objects have been updated at the blackboard: "
                 + event.toString());
-
+        if(blackboard==null)
+        {
+            Log4J.info(this, "blackboard is null");
+        }
         if (event.getId().equals(SaraCons.MSG_NVB)) {
-            updateNVB();
+            updateNVB(event);
         }
         if (event.getId().equals(SaraCons.MSG_RPT)) {
-            updateRapport();
+            updateRapport(event);
         }
         if (event.getId().equals(SaraCons.MSG_CSC)) {
-            updateStrategy();
+            updateStrategy(event);
         }
         if (event.getId().equals(SaraCons.MSG_UM)) {
             updateUserModel(((UserModel) event.getElement()));
         }
         if (event.getId().equals(SaraCons.MSG_DM)) {
-            sendToNLG = selectStrategy();
-            blackboard().post(this, SaraCons.MSG_SR, sendToNLG);
+            if(blackboard!=null)
+                sendToNLG = selectStrategy( event);
+            blackboard.post(this, SaraCons.MSG_SR, sendToNLG);
         }
 
     }

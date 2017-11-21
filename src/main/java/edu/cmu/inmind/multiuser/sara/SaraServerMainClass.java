@@ -1,7 +1,7 @@
 package edu.cmu.inmind.multiuser.sara;
 
 import edu.cmu.inmind.multiuser.common.SaraCons;
-import edu.cmu.inmind.multiuser.controller.ShutdownHook;
+import edu.cmu.inmind.multiuser.controller.muf.ShutdownHook;
 import edu.cmu.inmind.multiuser.controller.plugin.PluginModule;
 import edu.cmu.inmind.multiuser.controller.resources.Config;
 import edu.cmu.inmind.multiuser.sara.component.*;
@@ -25,7 +25,7 @@ public class SaraServerMainClass extends MainClassBase {
 
     public static void main(String args[]) throws Throwable {
 
-        ConversationalStrategyUtil.preloadRecipes();
+        //ConversationalStrategyUtil.preloadRecipes();
 
         List<ShutdownHook> hooks = new ArrayList<>();
         // You can add hooks that will be executed when the MUF is stopped
@@ -44,14 +44,14 @@ public class SaraServerMainClass extends MainClassBase {
                 new PluginModule.Builder(SaraOrchestrator.class, UserModelComponent.class, SaraCons.ID_UM)
                         //.addPlugin(UserModelComponent.class, SaraCons.ID_UM)
 
-                        //.addPlugin(FakeNLUComponent.class, SaraCons.ID_NLU)
-                        //.addPlugin(FakeTaskReasonerComponent.class, SaraCons.ID_DM)
-                        .addPlugin(NLU_DMComponent.class, SaraCons.ID_NLU)
+                        .addPlugin(FakeNLUComponent.class, SaraCons.ID_NLU)
+                        .addPlugin(FakeTaskReasonerComponent.class, SaraCons.ID_DM)
+                        //.addPlugin(NLU_DMComponent.class, SaraCons.ID_NLU)
 
-                        .addPlugin(NLGComponent.class, SaraCons.ID_NLG)
+                        //.addPlugin(NLGComponent.class, SaraCons.ID_NLG)
 
-                        .addPlugin(CSCComponent.class, SaraCons.ID_CSC)
-//                        .addPlugin(FakeCSCComponent.class, SaraCons.ID_CSC)
+                        //.addPlugin(CSCComponent.class, SaraCons.ID_CSC)
+                        .addPlugin(FakeCSCComponent.class, SaraCons.ID_CSC)
 
                         .addPlugin(SocialReasonerComponent.class, SaraCons.ID_SR)
 
@@ -62,7 +62,7 @@ public class SaraServerMainClass extends MainClassBase {
 
     @Override
     protected Config createConfig() {
-        return super.createConfig()
-                .setJsonServicesConfig("services.json");
+        return super.createConfig();
+                //.setJsonServicesConfig("services.json");
     }
 }

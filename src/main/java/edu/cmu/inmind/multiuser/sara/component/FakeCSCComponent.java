@@ -1,6 +1,7 @@
 package edu.cmu.inmind.multiuser.sara.component;
 
-import edu.cmu.inmind.multiuser.common.Constants;
+import edu.cmu.inmind.multiuser.controller.blackboard.Blackboard;
+import edu.cmu.inmind.multiuser.controller.common.Constants;
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.common.model.*;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
@@ -39,7 +40,7 @@ public class FakeCSCComponent extends PluggableComponent {
 
     }
 
-    public void onEvent(BlackboardEvent blackboardEvent) throws Exception
+    public void onEvent(Blackboard blackboard,BlackboardEvent blackboardEvent) throws Throwable
     {
         CSCOutput cscOutput = new CSCOutput();
         Random r = new Random();
@@ -55,7 +56,7 @@ public class FakeCSCComponent extends PluggableComponent {
             System.out.println(s.getName() + " " + s.getScore());
         }
 
-        blackboard().post(this, SaraCons.MSG_CSC, cscOutput);
+        blackboard.post(this, SaraCons.MSG_CSC, cscOutput);
     }
 
 }

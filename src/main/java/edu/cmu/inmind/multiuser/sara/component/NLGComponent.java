@@ -3,9 +3,10 @@ package edu.cmu.inmind.multiuser.sara.component;
 import beat.BEAT;
 import beat.BeatCallback;
 import beat.bson.BSON;
-import edu.cmu.inmind.multiuser.common.Constants;
+import edu.cmu.inmind.multiuser.controller.blackboard.Blackboard;
+import edu.cmu.inmind.multiuser.controller.common.Constants;
 import edu.cmu.inmind.multiuser.common.SaraCons;
-import edu.cmu.inmind.multiuser.common.Utils;
+import edu.cmu.inmind.multiuser.controller.common.Utils;
 import edu.cmu.inmind.multiuser.common.model.SROutput;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardSubscription;
@@ -47,12 +48,18 @@ public class NLGComponent extends PluggableComponent implements BeatCallback {
     @Override
     public void execute() {
         Log4J.info(this, "NLGComponent: " + hashCode());
-        extractAndProcess();
+        extractAndProcess(getBlackBoard(getSessionId()));
     }
 
     @Loggable
-    private void extractAndProcess() {
-        SROutput srOutput = (SROutput) blackboard().get(SaraCons.MSG_SR);
+    private void extractAndProcess(Blackboard blackboard) {
+        SROutput srOutput = null;
+        try {
+            srOutput = (SROutput) blackboard.get(SaraCons.MSG_SR);
+        }catch (Throwable t)
+        {
+            t.printStackTrace();
+        }
         /**
          * generation
          */
@@ -78,10 +85,10 @@ public class NLGComponent extends PluggableComponent implements BeatCallback {
      * processes in parallel rather than sequentially.
      */
     @Override
-    public void onEvent(BlackboardEvent event) throws Exception
+    public void onEvent(Blackboard blackboard, BlackboardEvent event) throws Exception
     {
         if(event.getId().equals(SaraCons.MSG_SR)) {
-            extractAndProcess();
+            extractAndProcess(blackboard);
         }
     }
 
@@ -98,7 +105,12 @@ public class NLGComponent extends PluggableComponent implements BeatCallback {
          * update the blackboard
          */
         Log4J.info(this, "SessionID: " + this.getSessionId() + "Output: " +bson.getSpeech());
-        blackboard().post( this, SaraCons.MSG_NLG, bson );
+        try {
+            getBlackBoard(getSessionId()).post(this, SaraCons.MSG_NLG, bson);
+        }catch (Throwable t)
+        {
+            t.printStackTrace();
+        }
         Log4J.info(this, "BSON to Android: " + Utils.toJson(bson));
     }
 }

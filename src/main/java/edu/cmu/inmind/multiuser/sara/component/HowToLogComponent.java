@@ -1,6 +1,7 @@
 package edu.cmu.inmind.multiuser.sara.component;
 
-import edu.cmu.inmind.multiuser.common.Constants;
+import edu.cmu.inmind.multiuser.controller.blackboard.Blackboard;
+import edu.cmu.inmind.multiuser.controller.common.Constants;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
 import edu.cmu.inmind.multiuser.controller.log.Loggable;
 import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
@@ -24,7 +25,7 @@ public class HowToLogComponent extends PluggableComponent {
     }
 
     @Override
-    public void onEvent(BlackboardEvent event) throws Exception
+    public void onEvent(Blackboard blackboard, BlackboardEvent event) throws Exception
     {
     }
 }

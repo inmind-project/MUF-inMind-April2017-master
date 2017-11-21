@@ -2,9 +2,10 @@ package edu.cmu.inmind.multiuser.sara.component;
 
 import java.io.IOException;
 
-import edu.cmu.inmind.multiuser.common.Constants;
+import edu.cmu.inmind.multiuser.controller.blackboard.Blackboard;
+import edu.cmu.inmind.multiuser.controller.common.Constants;
 import edu.cmu.inmind.multiuser.common.SaraCons;
-import edu.cmu.inmind.multiuser.common.Utils;
+import edu.cmu.inmind.multiuser.controller.common.Utils;
 import edu.cmu.inmind.multiuser.common.model.NonVerbalOutput;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardSubscription;
@@ -40,7 +41,7 @@ public class OpenFaceComponent extends PluggableComponent {
 	} // we do the heavy lifting from an event, rather than in execute()
 
 	@Override
-	public void onEvent(BlackboardEvent event) throws Exception
+	public void onEvent(Blackboard blackboard, BlackboardEvent event) throws Exception
 	{
 		Log4J.debug(this, "received " + event.toString());
 		if( event.getId().equals(SaraCons.R5STREAM_STARTED)) {
@@ -85,7 +86,11 @@ public class OpenFaceComponent extends PluggableComponent {
 				NonVerbalOutput nvb = new NonVerbalOutput();
 				nvb.setSmiling(e.getSmile());
 				nvb.setGazeAtPartner(e.getGaze());
-				OpenFaceComponent.this.blackboard().post(OpenFaceComponent.this, SaraCons.MSG_NVB, nvb);
+				try {
+					getBlackBoard(getSessionId()).post(OpenFaceComponent.this, SaraCons.MSG_NVB, nvb);
+				} catch (Throwable throwable) {
+					throwable.printStackTrace();
+				}
 			}
 		}
 	}

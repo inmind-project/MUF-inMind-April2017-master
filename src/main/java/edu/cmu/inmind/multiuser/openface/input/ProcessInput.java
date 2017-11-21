@@ -1,6 +1,6 @@
 package edu.cmu.inmind.multiuser.openface.input;
 
-import edu.cmu.inmind.multiuser.common.Utils;
+import edu.cmu.inmind.multiuser.controller.common.Utils;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 
 import java.io.*;
