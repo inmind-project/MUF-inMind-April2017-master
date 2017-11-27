@@ -25,7 +25,7 @@ public class SaraServerMainClass extends MainClassBase {
 
     public static void main(String args[]) throws Throwable {
 
-        //ConversationalStrategyUtil.preloadRecipes();
+       // ConversationalStrategyUtil.preloadRecipes();
 
         List<ShutdownHook> hooks = new ArrayList<>();
         // You can add hooks that will be executed when the MUF is stopped
@@ -42,13 +42,13 @@ public class SaraServerMainClass extends MainClassBase {
     protected PluginModule[] createModules() {
         return new PluginModule[]{
                 new PluginModule.Builder(SaraOrchestrator.class, UserModelComponent.class, SaraCons.ID_UM)
-                        //.addPlugin(UserModelComponent.class, SaraCons.ID_UM)
+                        .addPlugin(UserModelComponent.class, SaraCons.ID_UM)
 
-                        .addPlugin(FakeNLUComponent.class, SaraCons.ID_NLU)
-                        .addPlugin(FakeTaskReasonerComponent.class, SaraCons.ID_DM)
-                        //.addPlugin(NLU_DMComponent.class, SaraCons.ID_NLU)
+                        /*.addPlugin(FakeNLUComponent.class, SaraCons.ID_NLU)
+                        .addPlugin(FakeTaskReasonerComponent.class, SaraCons.ID_DM)*/
+                        .addPlugin(NLU_DMComponent.class, SaraCons.ID_NLU)
 
-                        //.addPlugin(NLGComponent.class, SaraCons.ID_NLG)
+                        .addPlugin(NLGComponent.class, SaraCons.ID_NLG)
 
                         //.addPlugin(CSCComponent.class, SaraCons.ID_CSC)
                         .addPlugin(FakeCSCComponent.class, SaraCons.ID_CSC)
@@ -62,7 +62,7 @@ public class SaraServerMainClass extends MainClassBase {
 
     @Override
     protected Config createConfig() {
-        return super.createConfig();
-                //.setJsonServicesConfig("services.json");
+        return super.createConfig()
+                .setJsonServicesConfig("services.json");
     }
 }

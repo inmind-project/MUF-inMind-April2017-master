@@ -7,10 +7,13 @@ stderr.*
 .DS_Store
 /build
 /saracommons/build
+saracommons/out/
 /saracsc/build
 /sarabeat/build
 /captures
 /.gradle
+build/
+build/**
 /output
 # idea files
 .idea/
