@@ -97,12 +97,12 @@ public class NLU_DMComponent extends PluggableComponent {
         if (blackboardEvent.getId().equals(SaraCons.MSG_START_DM)){
             processStartDM();
         } else if (blackboardEvent.getId().equals(SaraCons.MSG_UM)) {
-	        processUserModel(blackboardEvent.getElement());
+            processUserModel(blackboardEvent.getElement());
         } else if (blackboardEvent.getId().equals(SaraCons.MSG_QUERY_RESPONSE)) {
             processQueryResponse(blackboardEvent.getElement().toString());
         } else if (blackboardEvent.getId().equals(SaraCons.MSG_ASR_DM_RESPONSE)) {
             new Thread(() ->
-                processDMIntent(blackboardEvent.getElement().toString()),
+                    processDMIntent(blackboardEvent.getElement().toString()),
                     "DM intent process thread").start();
         } else if (blackboardEvent.getId().equals(SaraCons.MSG_ASR)) {
             Log4J.debug(this, "sending on " + blackboardEvent.toString());
@@ -159,7 +159,7 @@ public class NLU_DMComponent extends PluggableComponent {
     }
 
     private void processQueryResponse(String message) {
-    Log4J.debug(this, "I've received a query response: " + message);
+        Log4J.debug(this, "I've received a query response: " + message);
         // set recommendation to newly found value
         dmOutput.plainGetRecommendation().setRexplanations(Utils.fromJson(message, DMOutput.class).getRecommendation().getRexplanations());
         Log4J.info(this, "received recommendation specification: " + message);
@@ -188,7 +188,7 @@ public class NLU_DMComponent extends PluggableComponent {
         }
 
         @Override public synchronized Recommendation getRecommendation() {
-            
+
             if (!hasFullContent()) {
                 // System.err.println(recommendation.toString());
                 fillInRecommendationTitle();

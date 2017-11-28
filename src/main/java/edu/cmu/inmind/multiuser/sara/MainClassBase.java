@@ -63,7 +63,7 @@ public class MainClassBase {
     protected Config createConfig() {
         return new Config.Builder()
                 // you can add values directly like this:
-                .setSessionManagerPort(5556)
+                .setSessionManagerPort(Integer.valueOf(Utils.getProperty("SessionManagerPort")))
                 .setDefaultNumOfPoolInstances(10)
                 .setNumOfSockets(1)
                         // or you can refer to values in your config.properties file:

@@ -12,6 +12,8 @@ saracommons/out/
 /sarabeat/build
 /captures
 /.gradle
+saracommons/out
+saracommons/out/*
 build/
 build/**
 /output
