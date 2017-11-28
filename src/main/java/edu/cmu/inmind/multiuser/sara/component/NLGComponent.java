@@ -25,6 +25,7 @@ import java.util.List;
 @BlackboardSubscription( messages = {SaraCons.MSG_SR})
 public class NLGComponent extends PluggableComponent implements BeatCallback {
     SentenceGeneratorTemplate gen;
+    protected static Blackboard blackboard;
     BEAT beat;
 
     public NLGComponent() {
@@ -86,6 +87,10 @@ public class NLGComponent extends PluggableComponent implements BeatCallback {
     @Override
     public void onEvent(Blackboard blackboard, BlackboardEvent event) throws Exception
     {
+        if(blackboard!=null) {
+            //Log4J.info(this, "blackboard is not null");
+            NLGComponent.blackboard = blackboard;
+        }
         if(event.getId().equals(SaraCons.MSG_SR)) {
             extractAndProcess(blackboard);
         }

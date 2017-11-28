@@ -48,9 +48,11 @@ public class MainClassBase {
         while (!command.equals("shutdown")) {
             System.err.println("Type \"shutdown\" to stop:");
             Scanner scanner = new Scanner(System.in);
-            command = scanner.nextLine();
-            if (command.equals(SaraCons.SHUTDOWN)) {
-                MUFLifetimeManager.stopFramework( muf );
+            if(scanner.hasNextLine()) {
+                command = scanner.nextLine();
+                if (command.equals(SaraCons.SHUTDOWN)) {
+                    MUFLifetimeManager.stopFramework(muf);
+                }
             }
         }
     }
