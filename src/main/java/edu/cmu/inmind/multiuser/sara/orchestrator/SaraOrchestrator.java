@@ -75,14 +75,14 @@ public class SaraOrchestrator extends ProcessOrchestratorImpl {
      */
     public void onEvent(Blackboard blackboard, BlackboardEvent event) throws Throwable{
         if(event.getId().equals(SaraCons.MSG_NLG)) {
-            response = (BSON) blackboard.get(SaraCons.MSG_NLG);
+            response = (BSON) event.getElement();
             Log4J.debug(this, "sending out to client: " + Utils.toJson(response));
             sendResponse(new SessionMessage(SaraCons.MSG_NLG, Utils.toJson(response)));
             Log4J.error(this, "TIME FOR PROCESSING WHOLE PIPELINE: " + (System.currentTimeMillis() - time));
             resetCrono = true;
             //sendResponse(new SessionMessage("test", "test"));
         } else if(event.getId().equals(SaraCons.MSG_START_STREAMING)) {
-            r5StreamListener = (R5StreamListener) blackboard.get(SaraCons.MSG_START_STREAMING);
+            r5StreamListener = (R5StreamListener) event.getElement();
             Log4J.info(this, "Message from MUF to Start Streaming " + r5StreamListener.toString());
             sendResponse((new SessionMessage(SaraCons.MSG_START_STREAMING, Utils.toJson(r5StreamListener))));
             Log4J.error(this, "TIME FOR PROCESSING WHOLE PIPELINE: " + (System.currentTimeMillis() - time));

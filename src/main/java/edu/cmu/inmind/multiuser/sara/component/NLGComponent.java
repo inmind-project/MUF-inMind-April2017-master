@@ -26,6 +26,7 @@ import java.util.List;
 public class NLGComponent extends PluggableComponent implements BeatCallback {
     SentenceGeneratorTemplate gen;
     protected static Blackboard blackboard;
+    protected  static BlackboardEvent blackboardEvent;
     BEAT beat;
 
     public NLGComponent() {
@@ -48,14 +49,14 @@ public class NLGComponent extends PluggableComponent implements BeatCallback {
     @Override
     public void execute() {
         Log4J.info(this, "NLGComponent: " + hashCode());
-        extractAndProcess(getBlackBoard(getSessionId()));
+        extractAndProcess();
     }
 
     @Loggable
-    private void extractAndProcess(Blackboard blackboard) {
+    private void extractAndProcess() {
         SROutput srOutput = null;
         try {
-            srOutput = (SROutput) blackboard.get(SaraCons.MSG_SR);
+            srOutput = (SROutput) blackboardEvent.getElement();
         }catch (Throwable t)
         {
             t.printStackTrace();
@@ -90,9 +91,10 @@ public class NLGComponent extends PluggableComponent implements BeatCallback {
         if(blackboard!=null) {
             //Log4J.info(this, "blackboard is not null");
             NLGComponent.blackboard = blackboard;
+            NLGComponent.blackboardEvent = event;
         }
         if(event.getId().equals(SaraCons.MSG_SR)) {
-            extractAndProcess(blackboard);
+            extractAndProcess();
         }
     }
 
