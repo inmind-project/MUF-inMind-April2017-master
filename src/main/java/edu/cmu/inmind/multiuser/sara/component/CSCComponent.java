@@ -82,7 +82,7 @@ public class CSCComponent extends PluggableComponent {
         List<Strategy> strategies = new ArrayList<Strategy>();
 
         for (ConversationalStrategy cs : EnumSet.of(SD, SE, Praise, QESD, VSN, ASN)) {
-            strategies.add(new Strategy(cs.name(), strategyList.get(cs)));
+            strategies.add(new Strategy(cs.shortName(), strategyList.get(cs)));
         }
         cscOutput.setUserStrategies(strategies);
 

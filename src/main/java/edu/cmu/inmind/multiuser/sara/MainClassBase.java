@@ -46,8 +46,7 @@ public class MainClassBase {
         // you can use a loop like this in order to gracefully shutdown the system.
         String command = "";
         while (!command.equals("shutdown")) {
-            System.err.println("Type \"shutdown\" to stop:");
-            Scanner scanner = new Scanner(System.in);
+            System.err.println("Type " + SaraCons.SHUTDOWN + " to stop:");            Scanner scanner = new Scanner(System.in);
             if(scanner.hasNextLine()) {
                 command = scanner.nextLine();
                 if (command.equals(SaraCons.SHUTDOWN)) {
