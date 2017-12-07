@@ -132,7 +132,7 @@ public class NLU_DMComponent extends PluggableComponent {
         final UserModel userModel = (UserModel) element;
         Log4J.info(this, "Received user model");
         if (userModel.getUserFrame() != null) {
-            Log4J.info(this, "Sending user frame to python: " + edu.cmu.inmind.multiuser.controller.common.Utils.toJson(userModel.getUserFrame()));
+            Log4J.info(this, "Sending user frame to python: " + Utils.toJson(userModel.getUserFrame()));
             // no reply for user model stuff
             try {
                 NLU_DMComponent.blackboard.post(this, SaraCons.MSG_USER_FRAME, userModel.getUserFrame());
@@ -148,7 +148,7 @@ public class NLU_DMComponent extends PluggableComponent {
     private void processDMIntent(String message) {
         Log4J.debug(NLU_DMComponent.this, "I've received python response: " + message);
         // store user's utterance (for NLG)
-        dmOutput = edu.cmu.inmind.multiuser.controller.common.Utils.fromJson(message, ActiveDMOutput.class);
+        dmOutput = Utils.fromJson(message, ActiveDMOutput.class);
         /* uncomment the next two lines for incrementality: */
         if (dmOutput.plainGetRecommendation() != null)
             dmOutput.plainGetRecommendation().setRexplanations(null);

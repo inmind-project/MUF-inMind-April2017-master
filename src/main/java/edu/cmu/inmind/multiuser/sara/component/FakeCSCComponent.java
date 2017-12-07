@@ -48,7 +48,7 @@ public class FakeCSCComponent extends PluggableComponent {
         List<Strategy> strategyList = new ArrayList<Strategy>();
 
         for (ConversationalStrategy cs : EnumSet.of(SD, SE, Praise, QESD, VSN, ASN)) {
-            strategyList.add(new Strategy(cs.name(), r.nextDouble()));
+            strategyList.add(new Strategy(cs.shortName(), r.nextDouble()));
         }
         cscOutput.setUserStrategies(strategyList);
 

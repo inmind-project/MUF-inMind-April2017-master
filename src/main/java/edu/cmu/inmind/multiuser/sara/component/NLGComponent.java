@@ -24,10 +24,10 @@ import java.util.List;
 @StateType( state = Constants.STATEFULL)
 @BlackboardSubscription( messages = {SaraCons.MSG_SR})
 public class NLGComponent extends PluggableComponent implements BeatCallback {
-    SentenceGeneratorTemplate gen;
-    protected static Blackboard blackboard;
-    protected  static BlackboardEvent blackboardEvent;
-    BEAT beat;
+     SentenceGeneratorTemplate gen;
+     Blackboard blackboard;
+     BlackboardEvent blackboardEvent;
+     BEAT beat;
 
     public NLGComponent() {
         try {
@@ -64,20 +64,26 @@ public class NLGComponent extends PluggableComponent implements BeatCallback {
         /**
          * generation
          */
-        Log4J.info(this, "NLG srOutput: " + srOutput.toString());
-        List<String> sentences = gen.generateAsList(srOutput);
-        Log4J.info(this, "NLG generated: " + sentences);
-        for (String sentence : sentences) {
-            Log4J.info(this, "for sentence pattern: " + sentence);
-            sentence = gen.replacePatterns(sentence, srOutput);
-            assert sentence != null : "I haven't been able to fill in any pattern. Duh.";
-            Log4J.info(this, "replaced pattern to: " + sentence);
-            /**
-             * send sentence to BEAT
-             */
-            beat.getBsonCompiler().setPlainText(sentence);
-            beat.startProcess(sentence);
-            Log4J.info(this, "NLG sentence: " + sentence);
+        if(srOutput!=null) {
+            Log4J.info(this, "NLG srOutput: " + srOutput.toString());
+            List<String> sentences = gen.generateAsList(srOutput);
+            Log4J.info(this, "NLG generated: " + sentences);
+            for (String sentence : sentences) {
+                Log4J.info(this, "for sentence pattern: " + sentence);
+                sentence = gen.replacePatterns(sentence, srOutput);
+                assert sentence != null : "I haven't been able to fill in any pattern. Duh.";
+                Log4J.info(this, "replaced pattern to: " + sentence);
+                /**
+                 * send sentence to BEAT
+                 */
+                beat.getBsonCompiler().setPlainText(sentence);
+                beat.startProcess(sentence);
+                Log4J.info(this, "NLG sentence: " + sentence);
+            }
+        }
+        else
+        {
+            Log4J.error(this, "SROutput value is NULL. ");
         }
     }
 
@@ -88,11 +94,9 @@ public class NLGComponent extends PluggableComponent implements BeatCallback {
     @Override
     public void onEvent(Blackboard blackboard, BlackboardEvent event) throws Exception
     {
-        if(blackboard!=null) {
             //Log4J.info(this, "blackboard is not null");
-            NLGComponent.blackboard = blackboard;
-            NLGComponent.blackboardEvent = event;
-        }
+            NLGComponent.this.blackboard = blackboard;
+            NLGComponent.this.blackboardEvent = event;
         if(event.getId().equals(SaraCons.MSG_SR)) {
             extractAndProcess();
         }
@@ -116,7 +120,6 @@ public class NLGComponent extends PluggableComponent implements BeatCallback {
         }catch (Throwable t)
         {
             t.printStackTrace();
-
         }
         Log4J.info(this, "BSON to Android: " + Utils.toJson(bson));
     }

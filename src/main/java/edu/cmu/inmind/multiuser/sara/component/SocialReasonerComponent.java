@@ -48,11 +48,18 @@ public class SocialReasonerComponent extends PluggableComponent {
             throwable.printStackTrace();
         }
 
-        rapport = rapportOutput.getRapportScore();
-        socialController.setRapportScore(rapport);
-        socialController.addContinousStates(null);
+        if(rapportOutput!=null) {
 
-        Log4J.info(this,"RapporEstimator : " + rapport );
+            rapport = rapportOutput.getRapportScore();
+            socialController.setRapportScore(rapport);
+            socialController.addContinousStates(null);
+
+            Log4J.info(this, "RapporEstimator : " + rapport);
+        }
+        else
+        {
+            Log4J.error(this, "RapporEstimator : RapportOutput is null");
+        }
     }
 
     private void updateStrategy(BlackboardEvent event){
@@ -62,10 +69,16 @@ public class SocialReasonerComponent extends PluggableComponent {
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
-        userCS = csc.getBest().getName();
-        Log4J.info(this,"User's strategy updated : " + userCS );
-        socialController.setUserConvStrategy(userCS);
-        socialController.addContinousStates(null);
+        if(csc!=null) {
+            userCS = csc.getBest().getName();
+            Log4J.info(this, "User's strategy updated : " + userCS);
+            socialController.setUserConvStrategy(userCS);
+            socialController.addContinousStates(null);
+        }
+         else
+        {
+            Log4J.error(this, "CSC: CSCOutput is null");
+        }
     }
 
     private void updateNVB(BlackboardEvent blackboardEvent){
@@ -75,11 +88,17 @@ public class SocialReasonerComponent extends PluggableComponent {
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
-        isGazing = nvbOutput.isGazeAtPartner();
-        isSmiling = nvbOutput.isSmiling();
+        if(nvbOutput!=null) {
+            isGazing = nvbOutput.isGazeAtPartner();
+            isSmiling = nvbOutput.isSmiling();
 
-        socialController.setNonVerbals(isSmiling, isGazing);
-        socialController.addContinousStates(null);
+            socialController.setNonVerbals(isSmiling, isGazing);
+            socialController.addContinousStates(null);
+        }
+        else
+        {
+            Log4J.error(this, "NVB : NVBOutput is null");
+        }
     }
 
     private void updateUserModel(final UserModel model) {
@@ -95,31 +114,38 @@ public class SocialReasonerComponent extends PluggableComponent {
     private SROutput selectStrategy(BlackboardEvent event){
 
         long time = System.nanoTime();
-        DMOutput dmOutput = null;
+        SROutput srOutput =null;
+                DMOutput dmOutput = null;
         try {
             dmOutput = (DMOutput) event.getElement();
                     //blackboard.get(SaraCons.MSG_DM);
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
-        Log4J.info(this,"dmOutput : "+dmOutput.toString() );
-        SROutput srOutput = new SROutput(dmOutput);
-        // temporary: fix this while fixing incremental system
-        srOutput.setRapport(rapport);
+        if(dmOutput!=null) {
+            Log4J.info(this, "dmOutput : " + dmOutput.toString());
+             srOutput = new SROutput(dmOutput);
+            // temporary: fix this while fixing incremental system
+            srOutput.setRapport(rapport);
 
-        if (dmOutput.getAction() != null) {
-            SystemIntent systemIntent =  new SystemIntent( );
-            systemIntent.setIntent(dmOutput.getAction());
-            //systemIntent.setRecommendationResults( Utils.toJson(dmOutput.getRecommendation()));
-            socialController.addSystemIntent( systemIntent );
-            systemStrategy = socialController.getConvStrategyFormatted();
-            srOutput.setStrategy(systemStrategy);
-            srOutput.setStates(socialController.getSocialReasoner().getNetwork().getState());
+            if (dmOutput.getAction() != null) {
+                SystemIntent systemIntent = new SystemIntent();
+                systemIntent.setIntent(dmOutput.getAction());
+                //systemIntent.setRecommendationResults( Utils.toJson(dmOutput.getRecommendation()));
+                socialController.addSystemIntent(systemIntent);
+                systemStrategy = socialController.getConvStrategyFormatted();
+                srOutput.setStrategy(systemStrategy);
+                srOutput.setStates(socialController.getSocialReasoner().getNetwork().getState());
 
-            //System.out.println("---------------- System Strategy : " + systemStrategy);
-            Log4J.info(this, "Input: " + dmOutput.getAction() + ", Output: " + srOutput.getStrategy() + "\n");
-        } else {
-            System.out.println("null");
+                //System.out.println("---------------- System Strategy : " + systemStrategy);
+                Log4J.info(this, "Input: " + dmOutput.getAction() + ", Output: " + srOutput.getStrategy() + "\n");
+            } else {
+                System.out.println("null");
+            }
+        }
+        else
+        {
+            Log4J.error(this, "SROutput : SROutput is null");
         }
 
         return srOutput;
@@ -153,7 +179,7 @@ public class SocialReasonerComponent extends PluggableComponent {
             updateUserModel(((UserModel) event.getElement()));
         }
         if (event.getId().equals(SaraCons.MSG_DM)) {
-            if(blackboard!=null)
+            //if(blackboard!=null)
                 sendToNLG = selectStrategy( event);
 
             blackboard.post(this, SaraCons.MSG_SR, sendToNLG);
