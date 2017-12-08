@@ -95,8 +95,8 @@ public class NLGComponent extends PluggableComponent implements BeatCallback {
     public void onEvent(Blackboard blackboard, BlackboardEvent event) throws Exception
     {
             //Log4J.info(this, "blackboard is not null");
-            NLGComponent.this.blackboard = blackboard;
-            NLGComponent.this.blackboardEvent = event;
+            this.blackboard = blackboard;
+            this.blackboardEvent = event;
         if(event.getId().equals(SaraCons.MSG_SR)) {
             extractAndProcess();
         }
@@ -115,12 +115,7 @@ public class NLGComponent extends PluggableComponent implements BeatCallback {
          * update the blackboard
          */
         Log4J.info(this, "SessionID: " + this.getSessionId() + "Output: " +bson.getSpeech());
-        try {
-            getBlackBoard(getSessionId()).post(this, SaraCons.MSG_NLG, bson);
-        }catch (Throwable t)
-        {
-            t.printStackTrace();
-        }
+        this.blackboard.post(this, SaraCons.MSG_NLG, bson);
         Log4J.info(this, "BSON to Android: " + Utils.toJson(bson));
     }
 }

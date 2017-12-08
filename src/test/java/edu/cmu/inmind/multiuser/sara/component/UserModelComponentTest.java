@@ -58,12 +58,8 @@ public class UserModelComponentTest {
     public void readsModelWhenSessionStarted() throws Exception {
        // component.onEvent(new BlackboardEvent("status", SaraCons.MSG_START_SESSION, null));
         verify(repo).readModel();
+        verify(blackboard).post(component, SaraCons.MSG_UM, model);
 
-        try {
-            verify(blackboard).post(component, SaraCons.MSG_UM, model);
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        }
     }
 
     @Test
@@ -72,12 +68,7 @@ public class UserModelComponentTest {
         assertEquals(userFrame, model.getUserFrame());
         assertFalse(userFrame.getFrame().getActors().getLike().isEmpty());
         assertEquals(ImmutableList.of(), model.getBehaviorNetworkStates());
-
-        try {
-            verify(blackboard).post(component, SaraCons.MSG_UM, model);
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        }
+        verify(blackboard).post(component, SaraCons.MSG_UM, model);
     }
 
     @Test
@@ -85,12 +76,7 @@ public class UserModelComponentTest {
         //component.onEvent(new BlackboardEvent("status", SaraCons.MSG_START_SESSION, UserModelComponent.ResetOptions.SEMANTIC));
         assertTrue(userFrame.getFrame().getActors().getLike().isEmpty());
         assertEquals(behaviorNetworkStates, model.getBehaviorNetworkStates());
-
-        try {
-            verify(blackboard).post(component, SaraCons.MSG_UM, model);
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        }
+        verify(blackboard).post(component, SaraCons.MSG_UM, model);
     }
 
     @Test
@@ -98,11 +84,7 @@ public class UserModelComponentTest {
        // component.onEvent(new BlackboardEvent("status", SaraCons.MSG_START_SESSION, UserModelComponent.ResetOptions.ALL));
 
         final ArgumentCaptor<UserModel> captor = ArgumentCaptor.forClass(UserModel.class);
-        try {
-            verify(blackboard).post(eq(component), eq(SaraCons.MSG_UM), captor.capture());
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        }
+        verify(blackboard).post(eq(component), eq(SaraCons.MSG_UM), captor.capture());
         final UserModel captured = captor.getValue();
         assertTrue(userFrame.getFrame().getActors().getLike().isEmpty());
         assertEquals(ImmutableList.of(), captured.getBehaviorNetworkStates());
