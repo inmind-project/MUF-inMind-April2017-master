@@ -7,10 +7,6 @@ sourceCompatibility = 1.7
 
 repositories {
     mavenCentral()
-    flatDir {
-        dirs 'libs'
-    }
-
 }
 
 configurations {
@@ -27,7 +23,6 @@ task sourceJar(type: Jar) {
     from sourceSets.main.allJava
     classifier "sources"
 }
-
 
 apply plugin: 'maven'
 
