@@ -20,8 +20,8 @@ import java.util.Map;
  * Created by oscarr on 3/7/17.
  */
 @StateType( state = Constants.STATEFULL)
-@BlackboardSubscription( messages = {SaraCons.MSG_ASR, SaraCons.MSG_START_DM, SaraCons.MSG_UM,
-        SaraCons.MSG_RESPONSE_START_PYTHON, SaraCons.MSG_QUERY_RESPONSE, SaraCons.MSG_ASR_DM_RESPONSE} )
+@BlackboardSubscription( messages = {SaraCons.MSG_ASR, "MSG_ASR_NLU_RESPONSE", SaraCons.MSG_START_DM, SaraCons.MSG_UM,
+        SaraCons.MSG_RESPONSE_START_PYTHON, SaraCons.MSG_QUERY_RESPONSE} )
 public class NLU_DMComponent extends PluggableComponent {
     private ActiveDMOutput dmOutput;
 
@@ -81,15 +81,12 @@ public class NLU_DMComponent extends PluggableComponent {
     public void onEvent(Blackboard blackboard, BlackboardEvent blackboardEvent) throws Throwable {
         // print full event
         Log4J.debug(this, "received " + blackboardEvent.toString());
-        if(blackboard!=null) {
-            //Log4J.info(this, "blackboard is not null");
-            NLU_DMComponent.blackboard = blackboard;
-        }
+        Log4J.debug(this, "my blackboard is " + blackboard);
         // store user's latest utterance
         // let's forward the ASR message to DialoguePython:
         /** should be set to true if we expect a response from python */
         if (blackboardEvent.getId().equals(SaraCons.MSG_START_DM)){
-            processStartDM();
+//            processStartDM();
         } else if (blackboardEvent.getId().equals(SaraCons.MSG_UM)) {
 	        processUserModel(blackboardEvent.getElement());
         } else if (blackboardEvent.getId().equals(SaraCons.MSG_QUERY_RESPONSE)) {
@@ -98,10 +95,11 @@ public class NLU_DMComponent extends PluggableComponent {
             new Thread(() ->
                 processDMIntent(blackboardEvent.getElement().toString()),
                     "DM intent process thread").start();
+        } else if (blackboardEvent.getId().equals("MSG_ASR_NLU_RESPONSE")) {
+            blackboard.post(this, SaraCons.MSG_NLU, blackboardEvent.getElement());
         } else if (blackboardEvent.getId().equals(SaraCons.MSG_ASR)) {
             Log4J.debug(this, "sending on " + blackboardEvent.toString());
-            NLU_DMComponent.blackboard.post(this, SaraCons.MSG_ASR_DM, blackboardEvent.getElement());
-
+            blackboard.post(this, "MSG_ASR_NLU", blackboardEvent.getElement());
         } else {
             Log4J.error(this, "got a message I could not understand: " + blackboardEvent.toString());
         }
@@ -111,7 +109,6 @@ public class NLU_DMComponent extends PluggableComponent {
         Log4J.debug(this, "about to send initial greeting ...");
 
         NLU_DMComponent.blackboard.post(this, SaraCons.MSG_START_DM_PYTHON, "");
-
         Log4J.debug(this, "Sent Initial Greeting");
     }
 

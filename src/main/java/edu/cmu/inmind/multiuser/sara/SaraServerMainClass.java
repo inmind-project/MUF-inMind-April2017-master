@@ -6,7 +6,9 @@ import edu.cmu.inmind.multiuser.controller.plugin.PluginModule;
 import edu.cmu.inmind.multiuser.controller.resources.Config;
 import edu.cmu.inmind.multiuser.sara.component.*;
 import edu.cmu.inmind.multiuser.sara.orchestrator.SaraOrchestrator;
+import edu.cmu.lti.articulab.movies.muf.DialogOSComponent;
 import edu.cmu.lti.rapport.pipline.csc.ConversationalStrategyUtil;
+//import edu.cmu.lti.rapport.pipline.csc.ConversationalStrategyUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +49,7 @@ public class SaraServerMainClass extends MainClassBase {
                         /*.addPlugin(FakeNLUComponent.class, SaraCons.ID_NLU)
                         .addPlugin(FakeTaskReasonerComponent.class, SaraCons.ID_DM)*/
                         .addPlugin(NLU_DMComponent.class, SaraCons.ID_NLU)
-
+                        .addPlugin(DialogOSComponent.class, SaraCons.ID_DM)
                         .addPlugin(NLGComponent.class, SaraCons.ID_NLG)
 
                         //.addPlugin(CSCComponent.class, SaraCons.ID_CSC)
