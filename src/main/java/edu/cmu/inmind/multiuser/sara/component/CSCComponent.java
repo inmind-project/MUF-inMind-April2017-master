@@ -61,12 +61,12 @@ public class CSCComponent extends PluggableComponent {
 
         Log4J.info(this, "CSCComponent: starting classifying.");
 
-        Object input = blackboard.get("MSG_ASR");
+        Object input = blackboardEvent.getElement();
 
         if (input instanceof ASROutput) {
             csc.setNewASRResult(((ASROutput) input).getUtterance());
         } else {
-            throw new IllegalArgumentException("I only eat ASROutput");
+            throw new IllegalArgumentException("I only eat ASROutput but I got " + input.getClass());
         }
 
         Log4J.info(this, "CSCComponent: Utterance set." + ((ASROutput) input).getUtterance());

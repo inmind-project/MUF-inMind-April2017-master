@@ -2,6 +2,7 @@ package edu.cmu.inmind.multiuser.sara.component;
 
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.common.model.*;
+import static edu.cmu.inmind.multiuser.common.model.ConversationalStrategy.*;
 import edu.cmu.inmind.multiuser.controller.blackboard.Blackboard;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardSubscription;
@@ -9,14 +10,11 @@ import edu.cmu.inmind.multiuser.controller.common.Constants;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
 import edu.cmu.inmind.multiuser.controller.plugin.StateType;
-import edu.cmu.lti.rapport.pipline.csc.ConversationalStrategy;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Random;
-
-import static edu.cmu.lti.rapport.pipline.csc.ConversationalStrategy.*;
 
 @StateType( state = Constants.STATELESS)
 @BlackboardSubscription( messages = {SaraCons.MSG_ASR} )
@@ -47,8 +45,8 @@ public class FakeCSCComponent extends PluggableComponent {
 
         List<Strategy> strategyList = new ArrayList<Strategy>();
 
-        for (ConversationalStrategy cs : EnumSet.of(SD, SE, Praise, QESD, VSN, ASN)) {
-            strategyList.add(new Strategy(cs.shortName(), r.nextDouble()));
+        for (ConversationalStrategy cs : EnumSet.of(SD, SE, QESD, VSN, ASN)) {
+            strategyList.add(new Strategy(cs.name(), r.nextDouble()));
         }
         cscOutput.setUserStrategies(strategyList);
 

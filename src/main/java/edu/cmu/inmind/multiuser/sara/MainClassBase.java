@@ -46,18 +46,16 @@ public class MainClassBase {
         // you can use a loop like this in order to gracefully shutdown the system.
         String command = "";
         Scanner scanner = new Scanner(System.in);
-        while (!command.equals("shutdown")) {
+        System.err.println("Type " + SaraCons.SHUTDOWN + " to stop:");
+        while (!command.equals(SaraCons.SHUTDOWN)) {
             if(scanner.hasNextLine()) {
                 command = scanner.nextLine();
                 if (command.equals(SaraCons.SHUTDOWN)) {
                     MUFLifetimeManager.stopFramework(muf);
                 }
                 System.err.println("Type " + SaraCons.SHUTDOWN + " to stop:");
-            }
-            else
-            {
+            } else {
                 Utils.sleep(300);
-                System.err.println("Type " + SaraCons.SHUTDOWN + " to stop:");
             }
         }
     }
