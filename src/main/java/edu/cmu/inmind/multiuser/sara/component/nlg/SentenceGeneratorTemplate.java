@@ -21,7 +21,7 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
     private final Map<String,Map<String, List<Template>>> templateMap = new HashMap<>();
     // maps from entity to list of SARA's preferences for that entity
     //private final Map<String,ArrayList<String>> preferencesMap = new HashMap<>();
-    private final UserFrame.Frame systemPreferences;
+    private final UserFrame systemPreferences;
     private static final String ANY_STRATEGY = "ANY";
 
     /** sentence DB to be loaded by default */
@@ -69,20 +69,20 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
         if (intentMap == null)
             throw new IllegalArgumentException("you're querying an unknown intent: " + intent);
         // get the sentence candidates that match the intent and strategy
-        List<WeightedCandidate> candidates = filterFillable(intentMap.get(strategy), srOutput, systemPreferences);
+        List<WeightedCandidate> candidates = filterFillable(intentMap.get(strategy), srOutput);
         // if no strategy is known, try "NONE" as strategy
         if (candidates == null || candidates.isEmpty()) {
-            candidates = filterFillable(intentMap.get("NONE"), srOutput, systemPreferences);
+            candidates = filterFillable(intentMap.get("NONE"), srOutput);
         }
         // if none does not exist either, use all available social strategies
         if (candidates == null || candidates.isEmpty()) {
-            candidates = filterFillable(intentMap.get(ANY_STRATEGY), srOutput, systemPreferences);
+            candidates = filterFillable(intentMap.get(ANY_STRATEGY), srOutput);
         }
         assert candidates != null && !candidates.isEmpty() : "could not find any intent for " + intent + "+" + strategy;
         return candidates;
     }
 
-    private static List<WeightedCandidate> filterFillable(List<Template> candidates, SROutput srOutput, UserFrame.Frame systemPreferences) {
+    private static List<WeightedCandidate> filterFillable(List<Template> candidates, SROutput srOutput) {
         List<WeightedCandidate> filteredCandidates = new ArrayList<>();
         if (candidates != null) {
             for (Template template : candidates) {
@@ -116,22 +116,15 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
     }
 
     private static Random r = new Random();
-    private String getAnyOf(List<?> list) {
+    private String getAnyOf(List<String> list) {
         if (list.isEmpty())
             return null;
-        Object selected = list.get(r.nextInt(list.size()));
-        if (selected instanceof Entity)
-            return ((Entity) selected).getValue();
-        else
-            return selected.toString();
+        String selected = list.get(r.nextInt(list.size()));
+        return selected;
     }
 
     /**
      * Check whether the entity detected from the user (actor, director, genre) is in SARA's preferences as a like or dislike
-     * @param srOutput
-     * @param valence
-     * @return
-     * @throws IOException
      */
     public boolean containEntity(SROutput srOutput, float valence) throws IOException {
         String latestEntityValue, latestEntityType;
@@ -140,10 +133,10 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
         latestEntityType = getLatestEntityType(srOutput).toLowerCase();
         // Test if entity is part of SARA likes
         if (valence>0) {
-            for (Entity entity : systemPreferences.getList(latestEntityType).getLike()) {
-                System.out.println("---------------------- SARA" + entity.getEntity());
+            for (String entity : systemPreferences.getList(latestEntityType).getLike()) {
+                System.out.println("---------------------- SARA" + entity);
                 System.out.println("---------------------- User" + latestEntityValue);
-                if (entity.getEntity().equals(latestEntityValue)) {
+                if (entity.equals(latestEntityValue)) {
                     systemPreferences.getGenres().getLike().toString();
                     System.out.println("---------------------- SARA likes " + latestEntityValue);
                     return true;
@@ -152,10 +145,10 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
         }
         // Test if entity is part of SARA dislikes
         if (valence<0) {
-            for (Entity entity : systemPreferences.getList(latestEntityType).getDislike()) {
-                System.out.println("---------------------- SARA" + entity.getEntity());
+            for (String entity : systemPreferences.getList(latestEntityType).getDislike()) {
+                System.out.println("---------------------- SARA" + entity);
                 System.out.println("---------------------- User" + latestEntityValue);
-                if (entity.getEntity().equals(latestEntityValue)) {
+                if (entity.equals(latestEntityValue)) {
                     systemPreferences.getGenres().getLike().toString();
                     System.out.println("---------------------- SARA dislikes " + latestEntityValue);
                     return true;
@@ -177,7 +170,7 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
             String slotName = m.group(1);
             String value = null, latestEntityValue, latestUtterance;
             float latestEntityValence = 0;
-            UserFrame.Frame frame = srOutput.getDMOutput().getUserFrame().getFrame();
+            UserFrame frame = srOutput.getDMOutput().getUserFrame();
             DMOutput dmOutput = srOutput.getDMOutput();
             try {
                 switch (slotName) {
@@ -227,14 +220,12 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
                             value = latestEntityValue;
                         }
                         break;
-                    case "#agree":
+/*                    case "#agree":
                         // if SARA shares the same positive preference (Both user and SARA like it)
                         latestEntityValue = getLatestEntityValue(srOutput);
                         latestEntityValence = getLatestEntityValence(srOutput);
                         latestUtterance = dmOutput.getUtterance().toLowerCase();
-			System.out.println("--------------Agree Testing on " + latestEntityValue + "--------------- in " + latestUtterance);
                         if (latestUtterance.contains(latestEntityValue)){
-				System.out.println("-----------Contained --------------");
                             if (containEntity(srOutput, 1) && latestEntityValence >0){
                                 value = latestEntityValue;
                             }
@@ -272,7 +263,7 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
                                 value = latestEntityValue;
                             }
                         }
-                        break;
+                        break; */
                     case "#different":
                         // if SARA has different preferences (User likes, but SARA neither likes or dislikes)
                         latestEntityValue = getLatestEntityValue(srOutput);
@@ -346,14 +337,14 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
         try {
             switch(srOutput.getDMOutput().getAction()) {
                 case "ask_directors": // refer to genre
-                    latestEntityIndex = srOutput.getDMOutput().getUserFrame().getFrame().getGenres().getLike().size() - 1;
-                    return srOutput.getDMOutput().getUserFrame().getFrame().getGenres().getLike().get(latestEntityIndex).getValue();
+                    latestEntityIndex = srOutput.getDMOutput().getUserFrame().getGenres().getLike().size() - 1;
+                    return srOutput.getDMOutput().getUserFrame().getGenres().getLike().get(latestEntityIndex);
                 case "ask_actors": // refer to director
-                    latestEntityIndex = srOutput.getDMOutput().getUserFrame().getFrame().getDirectors().getLike().size() - 1;
-                    return srOutput.getDMOutput().getUserFrame().getFrame().getDirectors().getLike().get(latestEntityIndex).getValue();
+                    latestEntityIndex = srOutput.getDMOutput().getUserFrame().getDirectors().getLike().size() - 1;
+                    return srOutput.getDMOutput().getUserFrame().getDirectors().getLike().get(latestEntityIndex);
                 case "recommend": // refer to actor
-                    latestEntityIndex = srOutput.getDMOutput().getUserFrame().getFrame().getActors().getLike().size() - 1;
-                    return srOutput.getDMOutput().getUserFrame().getFrame().getActors().getLike().get(latestEntityIndex).getValue();
+                    latestEntityIndex = srOutput.getDMOutput().getUserFrame().getActors().getLike().size() - 1;
+                    return srOutput.getDMOutput().getUserFrame().getActors().getLike().get(latestEntityIndex);
                 default:
                     return null;
             }
@@ -363,26 +354,26 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
         }
     }
 
-    private static float getLatestEntityValence(SROutput srOutput) {
+/*    private static float getLatestEntityValence(SROutput srOutput) {
         int latestEntityIndex = 0;
         try {
             switch(srOutput.getDMOutput().getAction()) {
                 case "ask_directors": // refer to genre
-                    latestEntityIndex = srOutput.getDMOutput().getUserFrame().getFrame().getGenres().getLike().size() - 1;
-                    return srOutput.getDMOutput().getUserFrame().getFrame().getGenres().getLike().get(latestEntityIndex).getPolarity();
+                    latestEntityIndex = srOutput.getDMOutput().getUserFrame().getGenres().getLike().size() - 1;
+                    return srOutput.getDMOutput().getUserFrame().getGenres().getLike().get(latestEntityIndex).getPolarity();
                 case "ask_actors": // refer to director
-                    latestEntityIndex = srOutput.getDMOutput().getUserFrame().getFrame().getDirectors().getLike().size() - 1;
-                    return srOutput.getDMOutput().getUserFrame().getFrame().getDirectors().getLike().get(latestEntityIndex).getPolarity();
+                    latestEntityIndex = srOutput.getDMOutput().getUserFrame().getDirectors().getLike().size() - 1;
+                    return srOutput.getDMOutput().getUserFrame().getDirectors().getLike().get(latestEntityIndex).getPolarity();
                 case "recommend": // refer to actor
-                    latestEntityIndex = srOutput.getDMOutput().getUserFrame().getFrame().getActors().getLike().size() - 1;
-                    return srOutput.getDMOutput().getUserFrame().getFrame().getActors().getLike().get(latestEntityIndex).getPolarity();
+                    latestEntityIndex = srOutput.getDMOutput().getUserFrame().getActors().getLike().size() - 1;
+                    return srOutput.getDMOutput().getUserFrame().getActors().getLike().get(latestEntityIndex).getPolarity();
                 default:
                     return 0;
             }
         } catch (NullPointerException npe) {
             throw new NullPointerException();
         }
-    }
+    } */
 
     /**
      * Uses latest intent to get latest entity type.
@@ -404,8 +395,6 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
             throw new NullPointerException();
         }
     }
-
-
 
     /**
      * Created by yoichimatsuyama on 4/12/17.
@@ -482,8 +471,8 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
     /**
      * Load SARA's preferences
      */
-    static UserFrame.Frame loadSARAPreferences(InputStream saraDB) {
-        UserFrame.Frame systemPreferences = new UserFrame.Frame();
+    static UserFrame loadSARAPreferences(InputStream saraDB) {
+        UserFrame systemPreferences = new UserFrame();
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(saraDB));
             String line = null;
@@ -493,13 +482,6 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
                     String entity = tokens[0], valence = tokens[1], preference = tokens[2];
                     Utils.checkContents(entity, "genre", "director", "actor");
                     Utils.checkContents(valence, "liked", "disliked");
-
-                    UserFrame.PreferenceList prefList = systemPreferences.getList(entity);
-                    // polarity is positive for liked, negative otherwise (must be disliked)
-                    int polarity = "liked".equals(valence) ? 1 : -1;
-                    List<Entity> valenceList = "liked".equals(valence) ? prefList.getLike() : prefList.getDislike();
-                    // Create UserFrame-like object to store system's preferences
-                    valenceList.add(new Entity(preference, polarity));
                 } else
                     throw new IOException(line);
             }

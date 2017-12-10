@@ -59,7 +59,7 @@ public class SentenceGeneratorTemplateTest {
     }
 
     @Test public void testSaraFrameLoading() throws FileNotFoundException {
-        UserFrame.Frame frame = SentenceGeneratorTemplate.loadSARAPreferences(new FileInputStream("resources/nlg/sara_preferences_db.tsv"));
+        UserFrame frame = SentenceGeneratorTemplate.loadSARAPreferences(new FileInputStream("resources/nlg/sara_preferences_db.tsv"));
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         System.err.println(gson.toJson(frame));
     }

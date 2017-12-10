@@ -7,7 +7,6 @@ import java.util.List;
  */
 public class DMOutput {
     String action;
-    List<Entity> entities;
     protected Recommendation recommendation;
     UserFrame frame;
     String utterance;
@@ -17,13 +16,6 @@ public class DMOutput {
     }
     public void setAction(String action) {
         this.action = action;
-    }
-
-    public List<Entity> getEntities() {
-        return entities;
-    }
-    public void setEntities(List<Entity> entities) {
-        this.entities = entities;
     }
 
     public Recommendation getRecommendation() {

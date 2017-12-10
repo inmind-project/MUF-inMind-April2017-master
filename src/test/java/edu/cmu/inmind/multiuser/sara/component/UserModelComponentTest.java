@@ -66,7 +66,7 @@ public class UserModelComponentTest {
     public void handlesClearEpisodic() throws Exception {
         //component.onEvent(new BlackboardEvent("status", SaraCons.MSG_START_SESSION, UserModelComponent.ResetOptions.EPISODIC));
         assertEquals(userFrame, model.getUserFrame());
-        assertFalse(userFrame.getFrame().getActors().getLike().isEmpty());
+        assertFalse(userFrame.getActors().getLike().isEmpty());
         assertEquals(ImmutableList.of(), model.getBehaviorNetworkStates());
         verify(blackboard).post(component, SaraCons.MSG_UM, model);
     }
@@ -74,7 +74,7 @@ public class UserModelComponentTest {
     @Test
     public void handlesClearSemantic() throws Exception {
         //component.onEvent(new BlackboardEvent("status", SaraCons.MSG_START_SESSION, UserModelComponent.ResetOptions.SEMANTIC));
-        assertTrue(userFrame.getFrame().getActors().getLike().isEmpty());
+        assertTrue(userFrame.getActors().getLike().isEmpty());
         assertEquals(behaviorNetworkStates, model.getBehaviorNetworkStates());
         verify(blackboard).post(component, SaraCons.MSG_UM, model);
     }
@@ -86,7 +86,7 @@ public class UserModelComponentTest {
         final ArgumentCaptor<UserModel> captor = ArgumentCaptor.forClass(UserModel.class);
         verify(blackboard).post(eq(component), eq(SaraCons.MSG_UM), captor.capture());
         final UserModel captured = captor.getValue();
-        assertTrue(userFrame.getFrame().getActors().getLike().isEmpty());
+        assertTrue(userFrame.getActors().getLike().isEmpty());
         assertEquals(ImmutableList.of(), captured.getBehaviorNetworkStates());
     }
 

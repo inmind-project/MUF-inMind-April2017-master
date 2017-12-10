@@ -54,7 +54,7 @@ public class UserModelComponent extends PluggableComponent {
 
     private static void resetSemanticState(final UserModel model) {
         if (model.getUserFrame() != null) {
-            model.getUserFrame().setFrame(new UserFrame.Frame());
+            model.setUserFrame(new UserFrame());
         }
     }
 
