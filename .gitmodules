@@ -6,3 +6,7 @@
 	path = sarabeat
 	url = https://github.com/mmasley/InMind-April2017-BEAT
 	branch = deployment-may2017
+[submodule "dialogos"]
+	path = dialogos
+	url = https://bitbucket.org/timobaumann/dialogosscratch
+        branch = timo-movies-embeddable
