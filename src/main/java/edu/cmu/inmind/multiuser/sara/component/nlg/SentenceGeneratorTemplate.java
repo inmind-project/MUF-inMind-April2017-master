@@ -220,8 +220,8 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
                             value = latestEntityValue;
                         }
                         break;
-/*                    case "#agree":
-                        // if SARA shares the same positive preference (Both user and SARA like it)
+                    case "#agree":
+/*                        // if SARA shares the same positive preference (Both user and SARA like it)
                         latestEntityValue = getLatestEntityValue(srOutput);
                         latestEntityValence = getLatestEntityValence(srOutput);
                         latestUtterance = dmOutput.getUtterance().toLowerCase();
@@ -230,9 +230,9 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
                                 value = latestEntityValue;
                             }
                         }
-                        break;
+                        break; */
                     case "#agreeOnDislike":
-                        // if SARA shares the same negative preference (Both user and SARA dislike it)
+/*                        // if SARA shares the same negative preference (Both user and SARA dislike it)
                         latestEntityValue = getLatestEntityValue(srOutput);
                         latestEntityValence = getLatestEntityValence(srOutput);
                         latestUtterance = dmOutput.getUtterance().toLowerCase();
@@ -241,9 +241,9 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
                                 value = latestEntityValue;
                             }
                         }
-                        break;
+                        break; */
                     case "#disagree":
-                        // if SARA has opposite preference (User likes but SARA dislikes)
+/*                        // if SARA has opposite preference (User likes but SARA dislikes)
                         latestEntityValue = getLatestEntityValue(srOutput);
 			latestEntityValence = getLatestEntityValence(srOutput);
                         latestUtterance = dmOutput.getUtterance().toLowerCase();
@@ -252,9 +252,9 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
                                 value = latestEntityValue;
                             }
                         }
-                        break;
+                        break; */
                     case "#disagreeOnDislike":
-                        // if SARA shares the same negative preference (Both user and SARA dislike it)
+/*                        // if SARA shares the same negative preference (Both user and SARA dislike it)
                         latestEntityValue = getLatestEntityValue(srOutput);
                         latestEntityValence = getLatestEntityValence(srOutput);
                         latestUtterance = dmOutput.getUtterance().toLowerCase();
