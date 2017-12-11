@@ -46,12 +46,13 @@ public class SaraServerMainClass extends MainClassBase {
 
                         /*.addPlugin(FakeNLUComponent.class, SaraCons.ID_NLU)
                         .addPlugin(FakeTaskReasonerComponent.class, SaraCons.ID_DM)*/
-                        .addPlugin(NLU_DMComponent.class, SaraCons.ID_NLU)
+                        //.addPlugin(NLU_DMComponent.class, SaraCons.ID_NLU)
 
                         .addPlugin(NLGComponent.class, SaraCons.ID_NLG)
 
                         //.addPlugin(CSCComponent.class, SaraCons.ID_CSC)
-                        .addPlugin(FakeCSCComponent.class, SaraCons.ID_CSC)
+                        //.addPlugin(FakeCSCComponent.class, SaraCons.ID_CSC)
+                        .addPlugin(RemoteCSCComponent.class, SaraCons.ID_CSC)
 
                         .addPlugin(SocialReasonerComponent.class, SaraCons.ID_SR)
 
