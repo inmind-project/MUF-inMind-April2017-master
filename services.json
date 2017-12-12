@@ -16,7 +16,6 @@
       "masterMUFAddress": "tcp://127.0.0.1:5590",
       "msgSubscriptions": [
         "MSG_START_DM_PYTHON",
-        "MSG_USER_FRAME",
         "MSG_ASR_NLU"
       ]
     }

@@ -1,6 +1,5 @@
 package edu.cmu.inmind.multiuser.common.model;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,15 +14,15 @@ public class UserFrame {
     private PreferenceList directors = new PreferenceList();
     private PreferenceList movies = new PreferenceList();
 
-    public PreferenceList getList(String listName) throws IOException {
-        Utils.checkContents(listName, "genre", "director", "actor");
-        switch (listName) {
+    public PreferenceList getList(String listName) {
+        Utils.checkContents(listName.toLowerCase(), "genre", "director", "actor");
+        switch (listName.toLowerCase()) {
             case "genre": return getGenres();
             case "director": return getDirectors();
             case "actor": return getActors();
-            case "movies": return getActors();
+            case "movies": return getMovies();
             default:
-                throw new RuntimeException("you're kidding me.");
+                throw new IllegalArgumentException("you're kidding me.");
         }
     }
 

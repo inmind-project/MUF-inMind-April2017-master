@@ -8,9 +8,9 @@ import java.util.Arrays;
  */
 public class Utils {
 
-    public static void checkContents(String variable, String... values) throws IOException {
+    public static void checkContents(String variable, String... values) throws IllegalArgumentException {
         if (!Arrays.asList(values).contains(variable))
-            throw new IOException(variable);
+            throw new IllegalArgumentException(variable);
     }
 
 
