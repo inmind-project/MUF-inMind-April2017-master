@@ -108,13 +108,15 @@ public class UserModelComponent extends PluggableComponent {
     private void handleMsgSR(BlackboardEvent event)
     {
         final SROutput srOutput = (SROutput) event.getElement();
-        final List<String> states = new ArrayList<>(srOutput.getStates());
-        // The social reasoner states include the current stage of the dialog. We do not want to store this
-        // across interactions as it is not expected to stay the same. Remove it from the list
-        states.remove(srOutput.getDMOutput().getAction());
-        userModel.updateBehaviorNetworkStates(states);
+        if (srOutput.getStates() != null) {
+            final List<String> states = new ArrayList<>(srOutput.getStates());
+            // The social reasoner states include the current stage of the dialog. We do not want to store this
+            // across interactions as it is not expected to stay the same. Remove it from the list
+            states.remove(srOutput.getDMOutput().getAction());
+            userModel.updateBehaviorNetworkStates(states);
+            userModel.setRapport(srOutput.getRapport());
+        }
         userModel.setUserFrame(srOutput.getDMOutput().getUserFrame());
-        userModel.setRapport(srOutput.getRapport());
         repository.writeModel(userModel);
     }
 
