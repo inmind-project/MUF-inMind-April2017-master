@@ -15,14 +15,22 @@ public class UserFrame {
     private PreferenceList movies = new PreferenceList();
 
     public PreferenceList getList(String listName) {
-        Utils.checkContents(listName.toLowerCase(), "genre", "director", "actor");
+        Utils.checkContents(listName.toLowerCase(), "genre", "director", "actor", "movie", "genres", "directors", "actors", "movies");
         switch (listName.toLowerCase()) {
-            case "genre": return getGenres();
-            case "director": return getDirectors();
-            case "actor": return getActors();
-            case "movies": return getMovies();
+            case "genre":
+            case "genres":
+                return getGenres();
+            case "director":
+            case "directors":
+                return getDirectors();
+            case "actor":
+            case "actors":
+                return getActors();
+            case "movie":
+            case "movies":
+                return getMovies();
             default:
-                throw new IllegalArgumentException("you're kidding me.");
+                throw new IllegalArgumentException("you're kidding me, searching for " + listName);
         }
     }
 

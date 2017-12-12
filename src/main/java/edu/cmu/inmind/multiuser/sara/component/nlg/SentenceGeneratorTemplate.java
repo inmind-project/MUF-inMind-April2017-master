@@ -334,23 +334,18 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
      */
     private static String getLatestEntityValue(SROutput srOutput) {
         int latestEntityIndex = 0;
-        try {
-            switch(srOutput.getDMOutput().getAction()) {
-                case "ask_directors": // refer to genre
-                    latestEntityIndex = srOutput.getDMOutput().getUserFrame().getGenres().getLike().size() - 1;
-                    return srOutput.getDMOutput().getUserFrame().getGenres().getLike().get(latestEntityIndex);
-                case "ask_actors": // refer to director
-                    latestEntityIndex = srOutput.getDMOutput().getUserFrame().getDirectors().getLike().size() - 1;
-                    return srOutput.getDMOutput().getUserFrame().getDirectors().getLike().get(latestEntityIndex);
-                case "recommend": // refer to actor
-                    latestEntityIndex = srOutput.getDMOutput().getUserFrame().getActors().getLike().size() - 1;
-                    return srOutput.getDMOutput().getUserFrame().getActors().getLike().get(latestEntityIndex);
-                default:
-                    return null;
-            }
-        } catch (NullPointerException npe) {
-            npe.printStackTrace();
-            throw new NullPointerException();
+        switch(srOutput.getDMOutput().getAction()) {
+            case "ask_directors": // refer to genre
+                latestEntityIndex = srOutput.getDMOutput().getUserFrame().getGenres().getLike().size() - 1;
+                return srOutput.getDMOutput().getUserFrame().getGenres().getLike().get(latestEntityIndex);
+            case "ask_actors": // refer to director
+                latestEntityIndex = srOutput.getDMOutput().getUserFrame().getDirectors().getLike().size() - 1;
+                return srOutput.getDMOutput().getUserFrame().getDirectors().getLike().get(latestEntityIndex);
+            case "recommend": // refer to actor
+                latestEntityIndex = srOutput.getDMOutput().getUserFrame().getActors().getLike().size() - 1;
+                return srOutput.getDMOutput().getUserFrame().getActors().getLike().get(latestEntityIndex);
+            default:
+                return null;
         }
     }
 
@@ -373,26 +368,22 @@ public class SentenceGeneratorTemplate implements SentenceGenerator {
         } catch (NullPointerException npe) {
             throw new NullPointerException();
         }
-    } */
+    } /* */
 
     /**
      * Uses latest intent to get latest entity type.
      */
     private static String getLatestEntityType(SROutput srOutput) {
         int latestEntityIndex = 0;
-        try {
-            switch(srOutput.getDMOutput().getAction()) {
-                case "ask_directors": // refer to genre
-                    return "genre";
-                case "ask_actors": // refer to director
-                    return "director";
-                case "recommend": // refer to actor
-                    return "actor";
-                default:
-                    return null;
-            }
-        } catch (NullPointerException npe) {
-            throw new NullPointerException();
+        switch(srOutput.getDMOutput().getAction()) {
+            case "ask_directors": // refer to genre
+                return "genre";
+            case "ask_actors": // refer to director
+                return "director";
+            case "recommend": // refer to actor
+                return "actor";
+            default:
+                return null;
         }
     }
 
