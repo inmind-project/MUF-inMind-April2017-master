@@ -92,7 +92,7 @@ public class NLGComponent extends PluggableComponent implements BeatCallback {
      * processes in parallel rather than sequentially.
      */
     @Override
-    public void onEvent(Blackboard blackboard, BlackboardEvent event) throws Exception
+    public synchronized void onEvent(Blackboard blackboard, BlackboardEvent event) throws Exception
     {
             //Log4J.info(this, "blackboard is not null");
             this.blackboard = blackboard;

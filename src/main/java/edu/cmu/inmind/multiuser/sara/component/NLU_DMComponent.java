@@ -20,7 +20,7 @@ import java.util.Map;
  * Created by oscarr on 3/7/17.
  */
 @StateType( state = Constants.STATEFULL)
-@BlackboardSubscription( messages = {SaraCons.MSG_ASR, "MSG_ASR_NLU_RESPONSE", SaraCons.MSG_START_DM, SaraCons.MSG_UM,
+@BlackboardSubscription( messages = {SaraCons.MSG_ASR, "MSG_ASR_NLU_RESPONSE", SaraCons.MSG_START_DM,
         SaraCons.MSG_RESPONSE_START_PYTHON, SaraCons.MSG_QUERY_RESPONSE} )
 public class NLU_DMComponent extends PluggableComponent {
     private ActiveDMOutput dmOutput;
