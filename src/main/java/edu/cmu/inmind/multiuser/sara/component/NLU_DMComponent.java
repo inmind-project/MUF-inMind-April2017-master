@@ -25,17 +25,18 @@ import java.util.Map;
 public class NLU_DMComponent extends PluggableComponent {
     private ActiveDMOutput dmOutput;
 
-    protected static Blackboard blackboard;
+    private Blackboard blackboard;
 
     private static Map<String, NLU_DMComponent> components;
     static {
         components = new HashMap<>();
     }
+
     static void sendToBBforSession(String sessionID, String msgId, ActiveDMOutput dmoutput) {
         NLU_DMComponent nluc = components.get(sessionID);
         nluc.dmOutput = dmoutput;
         Log4J.debug(nluc, "the local activedmoutput is " + nluc.dmOutput.hashCode());
-        NLU_DMComponent.blackboard.post(nluc, msgId, "query");
+        nluc.blackboard.post(nluc, msgId, "query");
     }
 
     @Override
@@ -47,7 +48,7 @@ public class NLU_DMComponent extends PluggableComponent {
     @Override
     public void postCreate() {
         components.put(getSessionId(), this);
-        NLU_DMComponent.blackboard = getBlackBoard(getSessionId());
+        this.blackboard = getBlackBoard(getSessionId());
 
     }
 
@@ -61,13 +62,13 @@ public class NLU_DMComponent extends PluggableComponent {
             throwable.printStackTrace();
         }
         //update the blackboard
-        NLU_DMComponent.blackboard.post(this, SaraCons.MSG_NLU, saraOutput );
+        this.blackboard.post(this, SaraCons.MSG_NLU, saraOutput );
     }
 
     private SaraOutput extractAndProcess() {
         SaraInput saraInput = null;
         try {
-            saraInput = (SaraInput) NLU_DMComponent.blackboard.get(SaraCons.MSG_ASR);
+            saraInput = (SaraInput) this.blackboard.get(SaraCons.MSG_ASR);
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
@@ -83,7 +84,7 @@ public class NLU_DMComponent extends PluggableComponent {
         Log4J.debug(this, "received " + blackboardEvent.toString());
         if(blackboard!=null) {
             //Log4J.info(this, "blackboard is not null");
-            NLU_DMComponent.blackboard = blackboard;
+            this.blackboard = blackboard;
         }
         // store user's latest utterance
         // let's forward the ASR message to DialoguePython:
@@ -100,7 +101,7 @@ public class NLU_DMComponent extends PluggableComponent {
                     "DM intent process thread").start();
         } else if (blackboardEvent.getId().equals(SaraCons.MSG_ASR)) {
             Log4J.debug(this, "sending on " + blackboardEvent.toString());
-            NLU_DMComponent.blackboard.post(this, SaraCons.MSG_ASR_DM, blackboardEvent.getElement());
+            this.blackboard.post(this, SaraCons.MSG_ASR_DM, blackboardEvent.getElement());
 
         } else {
             Log4J.error(this, "got a message I could not understand: " + blackboardEvent.toString());
@@ -110,7 +111,7 @@ public class NLU_DMComponent extends PluggableComponent {
     private void processStartDM() {
         Log4J.debug(this, "about to send initial greeting ...");
 
-        NLU_DMComponent.blackboard.post(this, SaraCons.MSG_START_DM_PYTHON, "");
+        this.blackboard.post(this, SaraCons.MSG_START_DM_PYTHON, "");
 
         Log4J.debug(this, "Sent Initial Greeting");
     }
@@ -121,7 +122,7 @@ public class NLU_DMComponent extends PluggableComponent {
         if (userModel.getUserFrame() != null) {
             Log4J.info(this, "Sending user frame to python: " + Utils.toJson(userModel.getUserFrame()));
             // no reply for user model stuff
-            NLU_DMComponent.blackboard.post(this, SaraCons.MSG_USER_FRAME, userModel.getUserFrame());
+            this.blackboard.post(this, SaraCons.MSG_USER_FRAME, userModel.getUserFrame());
         } else {
             Log4J.info(this, "User frame was empty");
         }
@@ -136,7 +137,7 @@ public class NLU_DMComponent extends PluggableComponent {
             dmOutput.plainGetRecommendation().setRexplanations(null);
         dmOutput.sessionID = getSessionId();
         // post to Blackboard
-        NLU_DMComponent.blackboard.post(NLU_DMComponent.this, SaraCons.MSG_DM, dmOutput);
+        this.blackboard.post(NLU_DMComponent.this, SaraCons.MSG_DM, dmOutput);
     }
 
     private void processQueryResponse(String message) {
