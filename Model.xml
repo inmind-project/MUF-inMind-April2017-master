@@ -146,11 +146,11 @@
 						<att name="sendConversationalStrategy" type="boolean" value="1"/>
 					</node>
 					<node uid="9483b184-0e2a-490a-afb4-d449fa08dc12" class="edu.cmu.lti.articulab.movies.IMAInputNode">
-						<graphics x="371" y="191" fill="#cc9900"/>
+						<graphics x="371" y="159" fill="#cc9900"/>
 						<att name="title" type="string" value="IMAInput"/>
 					</node>
 					<node uid="a4d916f0-1dcb-4de8-842a-30af37e6a850" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
-						<graphics x="346" y="122" fill="#c0c0c0"/>
+						<graphics x="346" y="98" fill="#c0c0c0"/>
 						<att name="title" type="string" value="Specific_needs_elicitation"/>
 						<att name="selectedIntent" type="string" value="specific_needs_elicitation"/>
 						<att name="selectedConvStat" type="string" value="SD"/>
@@ -272,7 +272,7 @@
 					<edge src="546d10e5-2388-4cc7-a4ad-c4baa7514a42" tgt="d012c0f5-d21b-4443-8f4d-c03448255123">
 						<att name="condition" type="string" value="intent == &quot;no&quot;"/>
 					</edge>
-					<edge type="catch all" src="546d10e5-2388-4cc7-a4ad-c4baa7514a42">
+					<edge type="catch all" src="546d10e5-2388-4cc7-a4ad-c4baa7514a42" tgt="292cf098-c5bc-4d8b-aa4e-893f2fb86a8c">
 						<att name="condition" type="string" value="&quot;All other values&quot;"/>
 					</edge>
 					<edge src="64098f55-c6e7-48ee-9145-745e70b2acbb" tgt="292cf098-c5bc-4d8b-aa4e-893f2fb86a8c">
@@ -329,7 +329,7 @@
 						<att name="title" type="string" value="Ask_actors"/>
 						<att name="selectedIntent" type="string" value="ask_actors"/>
 						<att name="selectedConvStat" type="string" value="SD"/>
-						<att name="sendConversationalStrategy" type="boolean" value="1"/>
+						<att name="sendConversationalStrategy" type="boolean" value="0"/>
 					</node>
 					<node uid="3bc30b27-a41d-4db2-b145-ad23430c1030" class="com.clt.diamant.graph.nodes.ReturnNode">
 						<graphics x="195" y="477" fill="#9999ff"/>
@@ -340,7 +340,7 @@
 						<att name="title" type="string" value="Ask_directors"/>
 						<att name="selectedIntent" type="string" value="ask_directors"/>
 						<att name="selectedConvStat" type="string" value="SD"/>
-						<att name="sendConversationalStrategy" type="boolean" value="1"/>
+						<att name="sendConversationalStrategy" type="boolean" value="0"/>
 					</node>
 					<node uid="51f7572a-c2bd-4a43-947e-2c173771e721" class="edu.cmu.lti.articulab.movies.IMAInputNode">
 						<graphics x="187" y="272" fill="#cc9900"/>
@@ -371,15 +371,15 @@
 						<att name="title" type="string" value="Ask_genres"/>
 						<att name="selectedIntent" type="string" value="ask_genres"/>
 						<att name="selectedConvStat" type="string" value="SD"/>
-						<att name="sendConversationalStrategy" type="boolean" value="1"/>
+						<att name="sendConversationalStrategy" type="boolean" value="0"/>
 					</node>
 					<node uid="a212a99b-ae80-47e3-8ef3-036fc8c8d020" class="edu.cmu.lti.articulab.movies.IMAInputNode">
-						<graphics x="189" y="407" fill="#cc9900"/>
+						<graphics x="188" y="399" fill="#cc9900"/>
 						<att name="title" type="string" value="IMAInput"/>
 						<att name="else_edge" type="boolean" value="1"/>
 					</node>
 					<node uid="a5b5175b-26ab-4267-b2ac-355e51c6549e" class="com.clt.diamant.graph.nodes.ScriptNode">
-						<graphics x="307" y="437" fill="#99ffff"/>
+						<graphics x="353" y="423" fill="#99ffff"/>
 						<att name="title" type="string" value="Store Actor"/>
 						<att name="script" type="text">
 							<value>likedActors = append(likedActors, [entity]);</value>
@@ -402,7 +402,7 @@
 						</att>
 					</node>
 					<node uid="b7dadfc3-77f7-4fb0-8915-cd974d71c85e" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
-						<graphics x="42" y="424" fill="#c0c0c0"/>
+						<graphics x="38" y="426" fill="#c0c0c0"/>
 						<att name="title" type="string" value="No_Pref_Actor"/>
 						<att name="selectedIntent" type="string" value="no_pref_actor"/>
 						<att name="selectedConvStat" type="string"/>
@@ -432,10 +432,10 @@
 					<edge src="431e52db-b61b-409c-b9d9-0d0b5af8ebe3" tgt="51f7572a-c2bd-4a43-947e-2c173771e721">
 					</edge>
 					<edge src="51f7572a-c2bd-4a43-947e-2c173771e721" tgt="b6747b54-0d37-406b-8f27-f33c4cc03452">
-						<att name="condition" type="string" value="intent == &quot;inform&quot; &amp;&amp; entity != undefined"/>
+						<att name="condition" type="string" value="entity != undefined"/>
 					</edge>
 					<edge src="51f7572a-c2bd-4a43-947e-2c173771e721" tgt="0d535195-0e1c-4ed4-8b14-7015b7929e15">
-						<att name="condition" type="string" value="intent == &quot;inform&quot; &amp;&amp; entity == undefined"/>
+						<att name="condition" type="string" value="entity == undefined"/>
 					</edge>
 					<edge type="catch all" src="51f7572a-c2bd-4a43-947e-2c173771e721" tgt="431e52db-b61b-409c-b9d9-0d0b5af8ebe3">
 						<att name="condition" type="string" value="&quot;All other values&quot;"/>
@@ -453,10 +453,10 @@
 					<edge src="7914ec6f-3372-4f8d-821c-81fcb579ab13" tgt="a67e832d-38b2-45dd-a085-71960385e536">
 					</edge>
 					<edge src="a212a99b-ae80-47e3-8ef3-036fc8c8d020" tgt="a5b5175b-26ab-4267-b2ac-355e51c6549e">
-						<att name="condition" type="string" value="intent == &quot;inform&quot; &amp;&amp; entity != undefined"/>
+						<att name="condition" type="string" value="entity != undefined"/>
 					</edge>
 					<edge src="a212a99b-ae80-47e3-8ef3-036fc8c8d020" tgt="b7dadfc3-77f7-4fb0-8915-cd974d71c85e">
-						<att name="condition" type="string" value="intent == &quot;inform&quot; &amp;&amp; entity == undefined"/>
+						<att name="condition" type="string" value="entity == undefined"/>
 					</edge>
 					<edge type="catch all" src="a212a99b-ae80-47e3-8ef3-036fc8c8d020" tgt="31434d93-7065-4534-9c51-124e5d82e1de">
 						<att name="condition" type="string" value="&quot;All other values&quot;"/>
@@ -464,10 +464,10 @@
 					<edge src="a5b5175b-26ab-4267-b2ac-355e51c6549e" tgt="3bc30b27-a41d-4db2-b145-ad23430c1030">
 					</edge>
 					<edge src="a67e832d-38b2-45dd-a085-71960385e536" tgt="d0f51d2b-6a65-4ca3-8693-f695a0bbe0c2">
-						<att name="condition" type="string" value="intent == &quot;inform&quot; &amp;&amp; entity != undefined"/>
+						<att name="condition" type="string" value="entity != undefined"/>
 					</edge>
 					<edge src="a67e832d-38b2-45dd-a085-71960385e536" tgt="5bd397fb-bfe0-4d0b-bbc4-869faac645a5">
-						<att name="condition" type="string" value="intent == &quot;inform&quot; &amp;&amp; entity == undefined"/>
+						<att name="condition" type="string" value="entity == undefined"/>
 					</edge>
 					<edge type="catch all" src="a67e832d-38b2-45dd-a085-71960385e536" tgt="7914ec6f-3372-4f8d-821c-81fcb579ab13">
 						<att name="condition" type="string" value="&quot;All other values&quot;"/>
@@ -526,12 +526,22 @@
 						<att name="selectedConvStat" type="string" value="SD"/>
 						<att name="sendConversationalStrategy" type="boolean" value="1"/>
 					</node>
+					<node uid="3978e0cc-81e3-421e-83df-ddbb2e475cc1" class="edu.cmu.lti.articulab.movies.IMAInputNode">
+						<graphics x="503" y="293" fill="#cc9900"/>
+						<att name="title" type="string" value="IMAInput"/>
+						<att name="else_edge" type="boolean" value="1"/>
+					</node>
 					<node uid="4d5cdaec-dedd-4297-9598-8dbe99c6c2a6" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
 						<graphics x="256" y="238" fill="#c0c0c0"/>
 						<att name="title" type="string" value="Frequent_movie_positive_feedback"/>
 						<att name="selectedIntent" type="string" value="frequent_movies_pos_feed"/>
 						<att name="selectedConvStat" type="string" value="SD"/>
 						<att name="sendConversationalStrategy" type="boolean" value="1"/>
+					</node>
+					<node uid="5fbd69ec-7576-470f-9c06-08aaf1eb731a" class="edu.cmu.lti.articulab.movies.IMAInputNode">
+						<graphics x="391" y="184" fill="#cc9900"/>
+						<att name="title" type="string" value="IMAInput"/>
+						<att name="else_edge" type="boolean" value="1"/>
 					</node>
 					<node uid="711a2e1a-befc-4387-8de4-68230bad21b7" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
 						<graphics x="254" y="355" fill="#c0c0c0"/>
@@ -545,10 +555,6 @@
 						<att name="title" type="string" value="IMAInput"/>
 						<att name="else_edge" type="boolean" value="1"/>
 					</node>
-					<node uid="7a995950-3eb4-42fb-b389-7c15b0a613b4" class="edu.cmu.lti.articulab.movies.IMAInputNode">
-						<graphics x="500" y="293" fill="#cc9900"/>
-						<att name="title" type="string" value="IMAInput"/>
-					</node>
 					<node uid="db7b3d76-58ba-4dae-8f62-851fcc894ff1" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
 						<graphics x="405" y="356" fill="#c0c0c0"/>
 						<att name="title" type="string" value="Unfrequent_movie_positive_feedback"/>
@@ -559,11 +565,6 @@
 					<node uid="e8b1554f-e0a5-486b-8c0b-7a18466dfcca" class="com.clt.diamant.graph.nodes.StartNode">
 						<graphics x="391" y="3" fill="#9999ff"/>
 						<att name="title" type="string" value="Start"/>
-					</node>
-					<node uid="feb9a945-df05-4a42-b4db-13468ac0b386" class="edu.cmu.lti.articulab.movies.IMAInputNode">
-						<graphics x="391" y="180" fill="#cc9900"/>
-						<att name="title" type="string" value="IMAInput"/>
-						<att name="else_edge" type="boolean" value="1"/>
 					</node>
 					<node uid="febe7e87-fa39-41cd-ae82-61752dec8902" class="com.clt.diamant.graph.nodes.ReturnNode">
 						<graphics x="434" y="472" fill="#9999ff"/>
@@ -577,32 +578,32 @@
 					<edge src="2b96d883-5ecd-4e5b-874d-108ac67377e0" tgt="febe7e87-fa39-41cd-ae82-61752dec8902">
 						<att name="condition" type="string" value="else"/>
 					</edge>
-					<edge src="2c1576b2-3c0c-4664-b2ef-d90179b75de5" tgt="7a995950-3eb4-42fb-b389-7c15b0a613b4">
+					<edge src="2c1576b2-3c0c-4664-b2ef-d90179b75de5" tgt="3978e0cc-81e3-421e-83df-ddbb2e475cc1">
 					</edge>
-					<edge src="3286bbee-ef38-4f3f-8dc9-9f6312128c52" tgt="feb9a945-df05-4a42-b4db-13468ac0b386">
+					<edge src="3286bbee-ef38-4f3f-8dc9-9f6312128c52" tgt="5fbd69ec-7576-470f-9c06-08aaf1eb731a">
+					</edge>
+					<edge src="3978e0cc-81e3-421e-83df-ddbb2e475cc1" tgt="1c8676d1-7659-4dd2-a05e-06bf0d71b057">
+						<att name="condition" type="string" value="intent == &quot;no&quot;"/>
+					</edge>
+					<edge type="catch all" src="3978e0cc-81e3-421e-83df-ddbb2e475cc1" tgt="db7b3d76-58ba-4dae-8f62-851fcc894ff1">
+						<att name="condition" type="string" value="&quot;All other values&quot;"/>
 					</edge>
 					<edge src="4d5cdaec-dedd-4297-9598-8dbe99c6c2a6" tgt="74c055d2-0c72-4e6c-a3df-745a9edc8a4b">
+					</edge>
+					<edge src="5fbd69ec-7576-470f-9c06-08aaf1eb731a" tgt="2c1576b2-3c0c-4664-b2ef-d90179b75de5">
+						<att name="condition" type="string" value="intent == &quot;no&quot;"/>
+					</edge>
+					<edge type="catch all" src="5fbd69ec-7576-470f-9c06-08aaf1eb731a" tgt="4d5cdaec-dedd-4297-9598-8dbe99c6c2a6">
+						<att name="condition" type="string" value="&quot;All other values&quot;"/>
 					</edge>
 					<edge src="711a2e1a-befc-4387-8de4-68230bad21b7" tgt="febe7e87-fa39-41cd-ae82-61752dec8902">
 					</edge>
 					<edge type="catch all" src="74c055d2-0c72-4e6c-a3df-745a9edc8a4b" tgt="711a2e1a-befc-4387-8de4-68230bad21b7">
 						<att name="condition" type="string" value="&quot;All other values&quot;"/>
 					</edge>
-					<edge src="7a995950-3eb4-42fb-b389-7c15b0a613b4" tgt="db7b3d76-58ba-4dae-8f62-851fcc894ff1">
-						<att name="condition" type="string" value="intent == &quot;yes&quot;"/>
-					</edge>
-					<edge src="7a995950-3eb4-42fb-b389-7c15b0a613b4" tgt="1c8676d1-7659-4dd2-a05e-06bf0d71b057">
-						<att name="condition" type="string" value="intent == &quot;no&quot;"/>
-					</edge>
 					<edge src="db7b3d76-58ba-4dae-8f62-851fcc894ff1" tgt="febe7e87-fa39-41cd-ae82-61752dec8902">
 					</edge>
 					<edge src="e8b1554f-e0a5-486b-8c0b-7a18466dfcca" tgt="2b96d883-5ecd-4e5b-874d-108ac67377e0">
-					</edge>
-					<edge src="feb9a945-df05-4a42-b4db-13468ac0b386" tgt="2c1576b2-3c0c-4664-b2ef-d90179b75de5">
-						<att name="condition" type="string" value="intent == &quot;no&quot;"/>
-					</edge>
-					<edge type="catch all" src="feb9a945-df05-4a42-b4db-13468ac0b386" tgt="4d5cdaec-dedd-4297-9598-8dbe99c6c2a6">
-						<att name="condition" type="string" value="&quot;All other values&quot;"/>
 					</edge>
 				</graph>
 			</att>
@@ -890,6 +891,7 @@
 					<node uid="af0b8c8f-0cfc-4e04-9f2b-2fe7140d429f" class="edu.cmu.lti.articulab.movies.IMAInputNode">
 						<graphics x="619" y="279" fill="#cc9900"/>
 						<att name="title" type="string" value="IMAInput"/>
+						<att name="else_edge" type="boolean" value="1"/>
 					</node>
 					<node uid="d6fff912-5d74-4a30-a36d-2e0a294e3505" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
 						<graphics x="261" y="401" fill="#c0c0c0"/>
@@ -969,11 +971,11 @@
 					</edge>
 					<edge src="a86802d2-23e0-49ea-8460-e7ae7e32b44b" tgt="8afd001d-6333-498a-a54d-96b24e7cd439">
 					</edge>
-					<edge src="af0b8c8f-0cfc-4e04-9f2b-2fe7140d429f" tgt="9596f31d-75ae-429b-8b01-35fa9145b3d2">
-						<att name="condition" type="string" value="intent == &quot;yes&quot;"/>
-					</edge>
 					<edge src="af0b8c8f-0cfc-4e04-9f2b-2fe7140d429f" tgt="a7cd0f83-6c6a-4517-a65f-2707658a5796">
 						<att name="condition" type="string" value="intent == &quot;no&quot;"/>
+					</edge>
+					<edge type="catch all" src="af0b8c8f-0cfc-4e04-9f2b-2fe7140d429f" tgt="9596f31d-75ae-429b-8b01-35fa9145b3d2">
+						<att name="condition" type="string" value="&quot;All other values&quot;"/>
 					</edge>
 					<edge src="d6fff912-5d74-4a30-a36d-2e0a294e3505" tgt="8dc3006f-daeb-497d-8ba1-b68fcc086ca5">
 					</edge>
