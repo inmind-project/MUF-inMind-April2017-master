@@ -26,14 +26,14 @@ import java.util.function.Consumer;
 
 /**
  * ** Work in progress **
- *
+ * <p>
  * This component keeps track of all relevant data about the user & interactions we have had with her.
  * This includes both a semantic memory (e.g. user preferences) and a episodic memory (e.g. rapport)
- *
+ * <p>
  * This data is persisted across sessions
  */
 @StateType(state = Constants.STATEFULL)
-@BlackboardSubscription(messages = {SaraCons.MSG_SR, SaraCons.MSG_START_SESSION})
+@BlackboardSubscription(messages = {SaraCons.MSG_SR, SaraCons.MSG_START_SESSION, SaraCons.MSG_START_DM})
 public class UserModelComponent extends PluggableComponent {
 
     @VisibleForTesting
@@ -72,6 +72,10 @@ public class UserModelComponent extends PluggableComponent {
         final String eventId = event.getId();
         if (SaraCons.MSG_START_SESSION.equals(eventId)) {
             onStartSession(event, blackboard);
+        } else if (SaraCons.MSG_START_DM.equals(eventId) && userModel == null) {
+            // The conversation is starting. Make sure we're initialized
+            // Temporary work-around for issue where START_SESSION isn't sent
+            initializeUserModel(blackboard, "");
         } else if (userModel != null) {
             switch (eventId) {
                 case SaraCons.MSG_SR: {
@@ -89,10 +93,14 @@ public class UserModelComponent extends PluggableComponent {
     }
 
     private void onStartSession(BlackboardEvent event, Blackboard blackboard) {
-        Log4J.info(this, "Initializing user model component");
-        repository = createRepo();
-
         final String setting = event.getElement() instanceof String ? (String) event.getElement() : "";
+        initializeUserModel(blackboard, setting);
+    }
+
+    private void initializeUserModel(final Blackboard blackboard, final String setting) {
+        Log4J.info(this, "Initializing user model component");
+
+        repository = createRepo();
         userModel = getUserModel(setting, repository).orElseGet(() -> new UserModel(getSessionId()));
 
         Log4J.info(this, "Loaded user model: " + Utils.toJson(userModel));
@@ -105,8 +113,7 @@ public class UserModelComponent extends PluggableComponent {
         }
     }
 
-    private void handleMsgSR(BlackboardEvent event)
-    {
+    private void handleMsgSR(BlackboardEvent event) {
         final SROutput srOutput = (SROutput) event.getElement();
         if (srOutput.getStates() != null) {
             final List<String> states = new ArrayList<>(srOutput.getStates());
@@ -143,7 +150,8 @@ public class UserModelComponent extends PluggableComponent {
 
     private static Optional<UserModel> getUserModel(final String setting, final UserModelRepository repository) {
         final Optional<UserModel> result = repository.readModel();
-        result.ifPresent(USER_MODEL_RESETTERS.getOrDefault(setting, __ -> {}));
+        result.ifPresent(USER_MODEL_RESETTERS.getOrDefault(setting, __ -> {
+        }));
         return result;
     }
 }
