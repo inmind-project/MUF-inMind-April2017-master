@@ -80,7 +80,7 @@ compileJava {
 }
 
 mainClassName = 'edu.cmu.inmind.multiuser.sara.SaraServerMainClass'
-applicationDefaultJvmArgs = ["-ea"]
+applicationDefaultJvmArgs = ["-ea", "-Djava.awt.headless=true"]
 
 
 //create a single Jar with all dependencies

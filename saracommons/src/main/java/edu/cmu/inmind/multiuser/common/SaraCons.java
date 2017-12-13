@@ -45,9 +45,11 @@ public class SaraCons {
     public static final String MSG_START_DM_PYTHON = "MSG_START_DM_PYTHON";
     public static final String MSG_USER_FRAME = "MSG_USER_FRAME";
     public static final String MSG_ASR_DM = "MSG_ASR_DM";
+    public static final String MSG_ASR_CSC = "MSG_ASR_CSC";
     public static final String MSG_RESPONSE_START_PYTHON = "MSG_RESPONSE_START_PYTHON";
     public static final String MSG_QUERY_RESPONSE = "MSG_QUERY_RESPONSE";
     public static final String MSG_ASR_DM_RESPONSE = "MSG_ASR_DM_RESPONSE";
+    public static final String MSG_ASR_CSC_RESPONSE = "MSG_ASR_CSC_RESPONSE";
 
 
     //services

@@ -1,0 +1,1022 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE wizard SYSTEM "Wizard.dtd">
+
+<wizard>
+	<plugin type="minimalIO">
+	</plugin>
+	<plugin type="edu.cmu.lti.articulab.movies.movieAdapter">
+		<att name="address" type="string" value="http://sijo.ml.cmu.edu:8080/imdbnew/query.jsp"/>
+		<att name="outputIntent" type="string" value="overall_feedback_elicitation"/>
+		<att name="outputIntent" type="string" value="goodbye"/>
+		<att name="outputIntent" type="string" value="greeting"/>
+		<att name="outputIntent" type="string" value="ask_why"/>
+		<att name="outputIntent" type="string" value="pre_movie"/>
+		<att name="outputIntent" type="string" value="why"/>
+		<att name="outputIntent" type="string" value="recommend"/>
+		<att name="outputIntent" type="string" value="specific_needs_elicitation"/>
+		<att name="outputIntent" type="string" value="ask_directors"/>
+		<att name="outputIntent" type="string" value="ask_whynot_watched"/>
+		<att name="outputIntent" type="string" value="unfrequent_movies_neg_feed"/>
+		<att name="outputIntent" type="string" value="no_pref_actor"/>
+		<att name="outputIntent" type="string" value="frequent_movies_neg_feed"/>
+		<att name="outputIntent" type="string" value="question_watched_movie"/>
+		<att name="outputIntent" type="string" value="last_movie_watched"/>
+		<att name="outputIntent" type="string" value="greeting_QESD"/>
+		<att name="outputIntent" type="string" value="frequent_movies_pos_feed"/>
+		<att name="outputIntent" type="string" value="movie_disliked"/>
+		<att name="outputIntent" type="string" value="greeting_positive_feedback"/>
+		<att name="outputIntent" type="string" value="overall_feedback_good"/>
+		<att name="outputIntent" type="string" value="frequent_movies"/>
+		<att name="outputIntent" type="string" value="ask_actors"/>
+		<att name="outputIntent" type="string" value="movie_liked"/>
+		<att name="outputIntent" type="string" value="greeting_negative_feedback"/>
+		<att name="outputIntent" type="string" value="help"/>
+		<att name="outputIntent" type="string" value="feedback_time_movies"/>
+		<att name="outputIntent" type="string" value="ask_genres"/>
+		<att name="outputIntent" type="string" value="no_pref_director"/>
+		<att name="outputIntent" type="string" value="no_pref_genre"/>
+		<att name="outputIntent" type="string" value="unfrequent_movies_pos_feed"/>
+		<att name="outputIntent" type="string" value="ask_whynot"/>
+		<att name="outputIntent" type="string" value="additional_specific_needs_elicitation"/>
+		<att name="outputIntent" type="string" value="question_liked_movie"/>
+		<att name="outputIntent" type="string" value="movie_unsure"/>
+		<att name="outputIntent" type="string" value="greeting_hedge"/>
+		<att name="outputIntent" type="string" value="introduce_role"/>
+		<att name="outputIntent" type="string" value="overall_feedback_notgood"/>
+	</plugin>
+	<graph directed="1" Graphic="1" Layout="points">
+		<att name="width" type="integer" value="750"/>
+		<att name="height" type="integer" value="540"/>
+		<groovyFunctions></groovyFunctions>
+		<variable uid="d5eca05e-c69b-44e8-8063-f1944d371c28">
+			<name>intent</name>
+			<type>string</type>
+			<value>undefined</value>
+			<export/>
+		</variable>
+		<variable uid="79bdde5c-a000-46d5-abca-84be51ae132c">
+			<name>entity</name>
+			<type>string</type>
+			<value>undefined</value>
+			<export/>
+		</variable>
+		<variable uid="1d8911ea-345f-440b-984c-3b0c92e94ace">
+			<name>csc</name>
+			<type>string</type>
+			<value>undefined</value>
+			<export/>
+		</variable>
+		<variable uid="5a025304-a9ab-48c1-b493-566905901cca">
+			<name>likedGenres</name>
+			<type>list</type>
+			<value>[]</value>
+			<export/>
+		</variable>
+		<variable uid="634bfeb5-9f1f-4091-aca4-bd384e9b7382">
+			<name>dislikedGenres</name>
+			<type>list</type>
+			<value>[]</value>
+			<export/>
+		</variable>
+		<variable uid="5ad5cee4-f7c6-42fd-b53b-16fd68802c66">
+			<name>likedDirectors</name>
+			<type>list</type>
+			<value>[]</value>
+			<export/>
+		</variable>
+		<variable uid="9fde508b-cef5-4b34-97b2-9c672cc269fb">
+			<name>dislikedDirectors</name>
+			<type>list</type>
+			<value>[]</value>
+			<export/>
+		</variable>
+		<variable uid="2e058a0c-464a-4f23-8281-8741afbfe77e">
+			<name>likedActors</name>
+			<type>list</type>
+			<value>[]</value>
+			<export/>
+		</variable>
+		<variable uid="171668be-f20f-490f-a31f-c49bf5c087b8">
+			<name>dislikedActors</name>
+			<type>list</type>
+			<value>[]</value>
+			<export/>
+		</variable>
+		<variable uid="133ad3c2-62c7-40bf-987d-f61ce5cb2eba">
+			<name>likedMovies</name>
+			<type>list</type>
+			<value>[]</value>
+			<export/>
+		</variable>
+		<variable uid="439d1e2e-84c4-4d11-98ad-0d73571c33b0">
+			<name>dislikedMovies</name>
+			<type>list</type>
+			<value>[]</value>
+			<export/>
+		</variable>
+		<variable uid="3fde7684-cb56-424d-b16d-39758173f640">
+			<name>entityType</name>
+			<type>string</type>
+			<value></value>
+			<export/>
+		</variable>
+		<variable uid="652b5444-950e-4587-ba73-1e6d1c225cca">
+			<name>recommendation</name>
+			<type>struct</type>
+			<value>[]</value>
+			<export/>
+		</variable>
+		<node uid="0e73a0c5-ab91-46cf-84eb-3dacfb0bf92a" class="com.clt.diamant.graph.nodes.GraphNode">
+			<graphics x="352" y="332" fill="#ffc800"/>
+			<att name="title" type="string" value="Specific Interests"/>
+			<att name="graph" type="object">
+				<graph directed="1" Graphic="1" Layout="points">
+					<att name="width" type="integer" value="750"/>
+					<att name="height" type="integer" value="540"/>
+					<groovyFunctions></groovyFunctions>
+					<node uid="2dba7ee5-a1ab-4a76-be98-75e6afcf8e32" class="edu.cmu.lti.articulab.movies.IMAInputNode">
+						<graphics x="361" y="342" fill="#cc9900"/>
+						<att name="title" type="string" value="IMAInput"/>
+					</node>
+					<node uid="75c24b95-0946-4c8f-b407-e1de87d6f142" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="338" y="266" fill="#c0c0c0"/>
+						<att name="title" type="string" value="additional_specific_needs_elicitation"/>
+						<att name="selectedIntent" type="string" value="additional_specific_needs_elicitation"/>
+						<att name="selectedConvStat" type="string" value="SD"/>
+						<att name="sendConversationalStrategy" type="boolean" value="1"/>
+					</node>
+					<node uid="9483b184-0e2a-490a-afb4-d449fa08dc12" class="edu.cmu.lti.articulab.movies.IMAInputNode">
+						<graphics x="371" y="191" fill="#cc9900"/>
+						<att name="title" type="string" value="IMAInput"/>
+					</node>
+					<node uid="a4d916f0-1dcb-4de8-842a-30af37e6a850" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="346" y="122" fill="#c0c0c0"/>
+						<att name="title" type="string" value="Specific_needs_elicitation"/>
+						<att name="selectedIntent" type="string" value="specific_needs_elicitation"/>
+						<att name="selectedConvStat" type="string" value="SD"/>
+						<att name="sendConversationalStrategy" type="boolean" value="1"/>
+					</node>
+					<node uid="a67b70c0-f295-4fed-bc20-6bf76592d4e5" class="com.clt.diamant.graph.nodes.ReturnNode">
+						<graphics x="426" y="458" fill="#9999ff"/>
+						<att name="title" type="string" value="Return"/>
+					</node>
+					<node uid="f99c6cbd-231e-462d-96cb-5a7c8ce49be7" class="com.clt.diamant.graph.nodes.StartNode">
+						<graphics x="372" y="39" fill="#9999ff"/>
+						<att name="title" type="string" value="Start"/>
+					</node>
+					<edge src="2dba7ee5-a1ab-4a76-be98-75e6afcf8e32" tgt="75c24b95-0946-4c8f-b407-e1de87d6f142">
+						<att name="condition" type="string" value="intent == &quot;inform&quot;"/>
+					</edge>
+					<edge src="2dba7ee5-a1ab-4a76-be98-75e6afcf8e32" tgt="a67b70c0-f295-4fed-bc20-6bf76592d4e5">
+						<att name="condition" type="string" value="intent == &quot;no&quot;"/>
+					</edge>
+					<edge src="75c24b95-0946-4c8f-b407-e1de87d6f142" tgt="2dba7ee5-a1ab-4a76-be98-75e6afcf8e32">
+					</edge>
+					<edge src="9483b184-0e2a-490a-afb4-d449fa08dc12" tgt="75c24b95-0946-4c8f-b407-e1de87d6f142">
+						<att name="condition" type="string" value="intent == &quot;inform&quot;"/>
+					</edge>
+					<edge src="9483b184-0e2a-490a-afb4-d449fa08dc12" tgt="a67b70c0-f295-4fed-bc20-6bf76592d4e5">
+						<att name="condition" type="string" value="intent == &quot;no&quot;"/>
+					</edge>
+					<edge src="a4d916f0-1dcb-4de8-842a-30af37e6a850" tgt="9483b184-0e2a-490a-afb4-d449fa08dc12">
+					</edge>
+					<edge src="f99c6cbd-231e-462d-96cb-5a7c8ce49be7" tgt="a4d916f0-1dcb-4de8-842a-30af37e6a850">
+					</edge>
+				</graph>
+			</att>
+			<att name="endpoints" type="list">
+				<att name="0" type="string" value="a67b70c0-f295-4fed-bc20-6bf76592d4e5"/>
+			</att>
+		</node>
+		<node uid="27a6f5bf-fbf8-49c1-aa74-2d22e867e9ab" class="com.clt.diamant.graph.nodes.GraphNode">
+			<graphics x="369" y="98" fill="#ffc800"/>
+			<att name="title" type="string" value="Greeting"/>
+			<att name="graph" type="object">
+				<graph directed="1" Graphic="1" Layout="points">
+					<att name="width" type="integer" value="750"/>
+					<att name="height" type="integer" value="540"/>
+					<groovyFunctions></groovyFunctions>
+					<node uid="10545370-ac7a-4772-870d-f444b1914071" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="304" y="128" fill="#c0c0c0"/>
+						<att name="title" type="string" value="Greeting"/>
+						<att name="selectedIntent" type="string" value="greeting"/>
+						<att name="selectedConvStat" type="string" value="SD"/>
+						<att name="sendConversationalStrategy" type="boolean" value="1"/>
+					</node>
+					<node uid="292cf098-c5bc-4d8b-aa4e-893f2fb86a8c" class="com.clt.diamant.graph.nodes.ReturnNode">
+						<graphics x="402" y="429" fill="#9999ff"/>
+						<att name="title" type="string" value="Return"/>
+					</node>
+					<node uid="2ce95753-b193-494a-9132-86e0f054a6e4" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="442" y="130" fill="#c0c0c0"/>
+						<att name="title" type="string" value="Greeting_back"/>
+						<att name="selectedIntent" type="string" value="greeting"/>
+						<att name="selectedConvStat" type="string" value="RSE"/>
+						<att name="sendConversationalStrategy" type="boolean" value="1"/>
+					</node>
+					<node uid="546d10e5-2388-4cc7-a4ad-c4baa7514a42" class="edu.cmu.lti.articulab.movies.IMAInputNode">
+						<graphics x="357" y="197" fill="#cc9900"/>
+						<att name="title" type="string" value="IMAInput"/>
+						<att name="else_edge" type="boolean" value="1"/>
+					</node>
+					<node uid="64098f55-c6e7-48ee-9145-745e70b2acbb" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="245" y="286" fill="#c0c0c0"/>
+						<att name="title" type="string" value="Greeting_positive_feedback"/>
+						<att name="selectedIntent" type="string" value="greeting_positive_feedback"/>
+						<att name="selectedConvStat" type="string" value="SD"/>
+						<att name="sendConversationalStrategy" type="boolean" value="1"/>
+					</node>
+					<node uid="67d91b19-7f38-4a32-bcd1-aa97ba7d2070" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="67" y="287" fill="#c0c0c0"/>
+						<att name="title" type="string" value="Greeting_hedge"/>
+						<att name="selectedIntent" type="string" value="greeting_hedge"/>
+						<att name="selectedConvStat" type="string"/>
+						<att name="sendConversationalStrategy" type="boolean" value="0"/>
+					</node>
+					<node uid="6f7fcdf4-f7e5-4358-95cd-a11dba173878" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="632" y="283" fill="#c0c0c0"/>
+						<att name="title" type="string" value="Greeting_QESD"/>
+						<att name="selectedIntent" type="string" value="greeting_QESD"/>
+						<att name="selectedConvStat" type="string"/>
+						<att name="sendConversationalStrategy" type="boolean" value="0"/>
+					</node>
+					<node uid="a8237adf-18ff-4a7d-b264-a94f461be74a" class="com.clt.diamant.graph.nodes.ConditionalNode">
+						<graphics x="380" y="68" fill="#00cc5a"/>
+						<att name="title" type="string" value="Condition"/>
+						<att name="expression" type="string" value="likedGenres == [] &amp;&amp; likedActors == [] &amp;&amp; likedDirectors == []"/>
+					</node>
+					<node uid="d012c0f5-d21b-4443-8f4d-c03448255123" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="479" y="281" fill="#c0c0c0"/>
+						<att name="title" type="string" value="Greeting_negative_feedback"/>
+						<att name="selectedIntent" type="string" value="greeting_negative_feedback"/>
+						<att name="selectedConvStat" type="string" value="SD"/>
+						<att name="sendConversationalStrategy" type="boolean" value="1"/>
+					</node>
+					<node uid="ffae98a7-ecc7-4c6e-b87a-35cdd501d5dd" class="com.clt.diamant.graph.nodes.StartNode">
+						<graphics x="383" y="10" fill="#9999ff"/>
+						<att name="title" type="string" value="Start"/>
+					</node>
+					<edge src="10545370-ac7a-4772-870d-f444b1914071" tgt="546d10e5-2388-4cc7-a4ad-c4baa7514a42">
+					</edge>
+					<edge src="2ce95753-b193-494a-9132-86e0f054a6e4" tgt="546d10e5-2388-4cc7-a4ad-c4baa7514a42">
+					</edge>
+					<edge src="546d10e5-2388-4cc7-a4ad-c4baa7514a42" tgt="6f7fcdf4-f7e5-4358-95cd-a11dba173878">
+						<att name="condition" type="string" value="csc == &quot;QESD&quot;"/>
+					</edge>
+					<edge src="546d10e5-2388-4cc7-a4ad-c4baa7514a42" tgt="67d91b19-7f38-4a32-bcd1-aa97ba7d2070">
+						<att name="condition" type="string" value="csc == &quot;HE&quot;"/>
+					</edge>
+					<edge src="546d10e5-2388-4cc7-a4ad-c4baa7514a42" tgt="64098f55-c6e7-48ee-9145-745e70b2acbb">
+						<att name="condition" type="string" value="intent == &quot;yes&quot;"/>
+					</edge>
+					<edge src="546d10e5-2388-4cc7-a4ad-c4baa7514a42" tgt="d012c0f5-d21b-4443-8f4d-c03448255123">
+						<att name="condition" type="string" value="intent == &quot;no&quot;"/>
+					</edge>
+					<edge type="catch all" src="546d10e5-2388-4cc7-a4ad-c4baa7514a42">
+						<att name="condition" type="string" value="&quot;All other values&quot;"/>
+					</edge>
+					<edge src="64098f55-c6e7-48ee-9145-745e70b2acbb" tgt="292cf098-c5bc-4d8b-aa4e-893f2fb86a8c">
+					</edge>
+					<edge src="67d91b19-7f38-4a32-bcd1-aa97ba7d2070" tgt="546d10e5-2388-4cc7-a4ad-c4baa7514a42">
+					</edge>
+					<edge src="6f7fcdf4-f7e5-4358-95cd-a11dba173878" tgt="292cf098-c5bc-4d8b-aa4e-893f2fb86a8c">
+					</edge>
+					<edge src="a8237adf-18ff-4a7d-b264-a94f461be74a" tgt="10545370-ac7a-4772-870d-f444b1914071">
+						<att name="condition" type="string" value="likedGenres == [] &amp;&amp; likedActors == [] &amp;&amp; likedDirectors == []"/>
+					</edge>
+					<edge src="a8237adf-18ff-4a7d-b264-a94f461be74a" tgt="2ce95753-b193-494a-9132-86e0f054a6e4">
+						<att name="condition" type="string" value="else"/>
+					</edge>
+					<edge src="d012c0f5-d21b-4443-8f4d-c03448255123" tgt="292cf098-c5bc-4d8b-aa4e-893f2fb86a8c">
+					</edge>
+					<edge src="ffae98a7-ecc7-4c6e-b87a-35cdd501d5dd" tgt="a8237adf-18ff-4a7d-b264-a94f461be74a">
+					</edge>
+				</graph>
+			</att>
+			<att name="endpoints" type="list">
+				<att name="0" type="string" value="292cf098-c5bc-4d8b-aa4e-893f2fb86a8c"/>
+			</att>
+		</node>
+		<node uid="2b32b186-9c90-49b4-b85a-82ef96f9d1ff" class="com.clt.diamant.graph.nodes.GraphNode">
+			<graphics x="344" y="273" fill="#ffc800"/>
+			<att name="title" type="string" value="Preferences_Gathering"/>
+			<att name="graph" type="object">
+				<graph directed="1" Graphic="1" Layout="points">
+					<att name="width" type="integer" value="750"/>
+					<att name="height" type="integer" value="540"/>
+					<groovyFunctions></groovyFunctions>
+					<node uid="0d535195-0e1c-4ed4-8b14-7015b7929e15" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="36" y="307" fill="#c0c0c0"/>
+						<att name="title" type="string" value="No_Pref_Directors"/>
+						<att name="selectedIntent" type="string" value="no_pref_director"/>
+						<att name="selectedConvStat" type="string"/>
+						<att name="sendConversationalStrategy" type="boolean" value="0"/>
+					</node>
+					<node uid="25f44cf4-9083-4031-9846-354a1f55b485" class="edu.cmu.lti.articulab.movies.IMAInputNode">
+						<graphics x="454" y="141" fill="#cc9900"/>
+						<att name="title" type="string" value="IMAInput"/>
+						<att name="else_edge" type="boolean" value="1"/>
+					</node>
+					<node uid="2700e26e-2bfb-4a23-9f25-9d3bb0e007c2" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="445" y="305" fill="#c0c0c0"/>
+						<att name="title" type="string" value="Ask_actors_RSE"/>
+						<att name="selectedIntent" type="string" value="ask_actors"/>
+						<att name="selectedConvStat" type="string" value="RSE"/>
+						<att name="sendConversationalStrategy" type="boolean" value="1"/>
+					</node>
+					<node uid="31434d93-7065-4534-9c51-124e5d82e1de" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="186" y="338" fill="#c0c0c0"/>
+						<att name="title" type="string" value="Ask_actors"/>
+						<att name="selectedIntent" type="string" value="ask_actors"/>
+						<att name="selectedConvStat" type="string" value="SD"/>
+						<att name="sendConversationalStrategy" type="boolean" value="1"/>
+					</node>
+					<node uid="3bc30b27-a41d-4db2-b145-ad23430c1030" class="com.clt.diamant.graph.nodes.ReturnNode">
+						<graphics x="195" y="477" fill="#9999ff"/>
+						<att name="title" type="string" value="Return"/>
+					</node>
+					<node uid="431e52db-b61b-409c-b9d9-0d0b5af8ebe3" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="177" y="215" fill="#c0c0c0"/>
+						<att name="title" type="string" value="Ask_directors"/>
+						<att name="selectedIntent" type="string" value="ask_directors"/>
+						<att name="selectedConvStat" type="string" value="SD"/>
+						<att name="sendConversationalStrategy" type="boolean" value="1"/>
+					</node>
+					<node uid="51f7572a-c2bd-4a43-947e-2c173771e721" class="edu.cmu.lti.articulab.movies.IMAInputNode">
+						<graphics x="187" y="272" fill="#cc9900"/>
+						<att name="title" type="string" value="IMAInput"/>
+						<att name="else_edge" type="boolean" value="1"/>
+					</node>
+					<node uid="561168a1-6193-443f-ad9b-eb75825a4e18" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="431" y="74" fill="#c0c0c0"/>
+						<att name="title" type="string" value="Ask_Genres_RSE"/>
+						<att name="selectedIntent" type="string" value="ask_genres"/>
+						<att name="selectedConvStat" type="string" value="RSE"/>
+						<att name="sendConversationalStrategy" type="boolean" value="1"/>
+					</node>
+					<node uid="5bd397fb-bfe0-4d0b-bbc4-869faac645a5" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="43" y="155" fill="#c0c0c0"/>
+						<att name="title" type="string" value="No_Pref_Genre"/>
+						<att name="selectedIntent" type="string" value="no_pref_genre"/>
+						<att name="selectedConvStat" type="string"/>
+						<att name="sendConversationalStrategy" type="boolean" value="0"/>
+					</node>
+					<node uid="670191e6-047d-4817-b96b-85a24bfe5ee9" class="com.clt.diamant.graph.nodes.ConditionalNode">
+						<graphics x="440" y="8" fill="#00cc5a"/>
+						<att name="title" type="string" value="Condition"/>
+						<att name="expression" type="string" value="likedGenres == [] &amp;&amp; likedActors == [] &amp;&amp; likedDirectors == []"/>
+					</node>
+					<node uid="7914ec6f-3372-4f8d-821c-81fcb579ab13" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="181" y="72" fill="#c0c0c0"/>
+						<att name="title" type="string" value="Ask_genres"/>
+						<att name="selectedIntent" type="string" value="ask_genres"/>
+						<att name="selectedConvStat" type="string" value="SD"/>
+						<att name="sendConversationalStrategy" type="boolean" value="1"/>
+					</node>
+					<node uid="a212a99b-ae80-47e3-8ef3-036fc8c8d020" class="edu.cmu.lti.articulab.movies.IMAInputNode">
+						<graphics x="189" y="407" fill="#cc9900"/>
+						<att name="title" type="string" value="IMAInput"/>
+						<att name="else_edge" type="boolean" value="1"/>
+					</node>
+					<node uid="a5b5175b-26ab-4267-b2ac-355e51c6549e" class="com.clt.diamant.graph.nodes.ScriptNode">
+						<graphics x="307" y="437" fill="#99ffff"/>
+						<att name="title" type="string" value="Store Actor"/>
+						<att name="script" type="text">
+							<value>likedActors = append(likedActors, [entity]);</value>
+						</att>
+					</node>
+					<node uid="a67e832d-38b2-45dd-a085-71960385e536" class="edu.cmu.lti.articulab.movies.IMAInputNode">
+						<graphics x="186" y="128" fill="#cc9900"/>
+						<att name="title" type="string" value="IMAInput"/>
+						<att name="else_edge" type="boolean" value="1"/>
+					</node>
+					<node uid="b5640a88-b943-41ba-bddd-8280b50ea361" class="com.clt.diamant.graph.nodes.StartNode">
+						<graphics x="191" y="6" fill="#9999ff"/>
+						<att name="title" type="string" value="Start"/>
+					</node>
+					<node uid="b6747b54-0d37-406b-8f27-f33c4cc03452" class="com.clt.diamant.graph.nodes.ScriptNode">
+						<graphics x="302" y="307" fill="#99ffff"/>
+						<att name="title" type="string" value="Store Director"/>
+						<att name="script" type="text">
+							<value>likedDirectors = append(likedDirectors, [entity]);</value>
+						</att>
+					</node>
+					<node uid="b7dadfc3-77f7-4fb0-8915-cd974d71c85e" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="42" y="424" fill="#c0c0c0"/>
+						<att name="title" type="string" value="No_Pref_Actor"/>
+						<att name="selectedIntent" type="string" value="no_pref_actor"/>
+						<att name="selectedConvStat" type="string"/>
+						<att name="sendConversationalStrategy" type="boolean" value="0"/>
+					</node>
+					<node uid="c9a3a0c6-a1cd-417a-b5c3-fa3c9d6e70a8" class="com.clt.diamant.graph.nodes.ConditionalNode">
+						<graphics x="452" y="226" fill="#00cc5a"/>
+						<att name="title" type="string" value="Condition"/>
+						<att name="expression" type="string" value="likedActors == []"/>
+					</node>
+					<node uid="d0f51d2b-6a65-4ca3-8693-f695a0bbe0c2" class="com.clt.diamant.graph.nodes.ScriptNode">
+						<graphics x="310" y="149" fill="#99ffff"/>
+						<att name="title" type="string" value="Store Genre"/>
+						<att name="script" type="text">
+							<value>likedGenres = append(likedGenres, [entity]);</value>
+						</att>
+					</node>
+					<edge src="0d535195-0e1c-4ed4-8b14-7015b7929e15" tgt="31434d93-7065-4534-9c51-124e5d82e1de">
+					</edge>
+					<edge type="catch all" src="25f44cf4-9083-4031-9846-354a1f55b485" tgt="c9a3a0c6-a1cd-417a-b5c3-fa3c9d6e70a8">
+						<att name="condition" type="string" value="&quot;All other values&quot;"/>
+					</edge>
+					<edge src="2700e26e-2bfb-4a23-9f25-9d3bb0e007c2" tgt="a212a99b-ae80-47e3-8ef3-036fc8c8d020">
+					</edge>
+					<edge src="31434d93-7065-4534-9c51-124e5d82e1de" tgt="a212a99b-ae80-47e3-8ef3-036fc8c8d020">
+					</edge>
+					<edge src="431e52db-b61b-409c-b9d9-0d0b5af8ebe3" tgt="51f7572a-c2bd-4a43-947e-2c173771e721">
+					</edge>
+					<edge src="51f7572a-c2bd-4a43-947e-2c173771e721" tgt="b6747b54-0d37-406b-8f27-f33c4cc03452">
+						<att name="condition" type="string" value="intent == &quot;inform&quot; &amp;&amp; entity != undefined"/>
+					</edge>
+					<edge src="51f7572a-c2bd-4a43-947e-2c173771e721" tgt="0d535195-0e1c-4ed4-8b14-7015b7929e15">
+						<att name="condition" type="string" value="intent == &quot;inform&quot; &amp;&amp; entity == undefined"/>
+					</edge>
+					<edge type="catch all" src="51f7572a-c2bd-4a43-947e-2c173771e721" tgt="431e52db-b61b-409c-b9d9-0d0b5af8ebe3">
+						<att name="condition" type="string" value="&quot;All other values&quot;"/>
+					</edge>
+					<edge src="561168a1-6193-443f-ad9b-eb75825a4e18" tgt="25f44cf4-9083-4031-9846-354a1f55b485">
+					</edge>
+					<edge src="5bd397fb-bfe0-4d0b-bbc4-869faac645a5" tgt="c9a3a0c6-a1cd-417a-b5c3-fa3c9d6e70a8">
+					</edge>
+					<edge src="670191e6-047d-4817-b96b-85a24bfe5ee9" tgt="7914ec6f-3372-4f8d-821c-81fcb579ab13">
+						<att name="condition" type="string" value="likedGenres == [] &amp;&amp; likedActors == [] &amp;&amp; likedDirectors == []"/>
+					</edge>
+					<edge src="670191e6-047d-4817-b96b-85a24bfe5ee9" tgt="561168a1-6193-443f-ad9b-eb75825a4e18">
+						<att name="condition" type="string" value="else"/>
+					</edge>
+					<edge src="7914ec6f-3372-4f8d-821c-81fcb579ab13" tgt="a67e832d-38b2-45dd-a085-71960385e536">
+					</edge>
+					<edge src="a212a99b-ae80-47e3-8ef3-036fc8c8d020" tgt="a5b5175b-26ab-4267-b2ac-355e51c6549e">
+						<att name="condition" type="string" value="intent == &quot;inform&quot; &amp;&amp; entity != undefined"/>
+					</edge>
+					<edge src="a212a99b-ae80-47e3-8ef3-036fc8c8d020" tgt="b7dadfc3-77f7-4fb0-8915-cd974d71c85e">
+						<att name="condition" type="string" value="intent == &quot;inform&quot; &amp;&amp; entity == undefined"/>
+					</edge>
+					<edge type="catch all" src="a212a99b-ae80-47e3-8ef3-036fc8c8d020" tgt="31434d93-7065-4534-9c51-124e5d82e1de">
+						<att name="condition" type="string" value="&quot;All other values&quot;"/>
+					</edge>
+					<edge src="a5b5175b-26ab-4267-b2ac-355e51c6549e" tgt="3bc30b27-a41d-4db2-b145-ad23430c1030">
+					</edge>
+					<edge src="a67e832d-38b2-45dd-a085-71960385e536" tgt="d0f51d2b-6a65-4ca3-8693-f695a0bbe0c2">
+						<att name="condition" type="string" value="intent == &quot;inform&quot; &amp;&amp; entity != undefined"/>
+					</edge>
+					<edge src="a67e832d-38b2-45dd-a085-71960385e536" tgt="5bd397fb-bfe0-4d0b-bbc4-869faac645a5">
+						<att name="condition" type="string" value="intent == &quot;inform&quot; &amp;&amp; entity == undefined"/>
+					</edge>
+					<edge type="catch all" src="a67e832d-38b2-45dd-a085-71960385e536" tgt="7914ec6f-3372-4f8d-821c-81fcb579ab13">
+						<att name="condition" type="string" value="&quot;All other values&quot;"/>
+					</edge>
+					<edge src="b5640a88-b943-41ba-bddd-8280b50ea361" tgt="670191e6-047d-4817-b96b-85a24bfe5ee9">
+					</edge>
+					<edge src="b6747b54-0d37-406b-8f27-f33c4cc03452" tgt="31434d93-7065-4534-9c51-124e5d82e1de">
+					</edge>
+					<edge src="b7dadfc3-77f7-4fb0-8915-cd974d71c85e" tgt="3bc30b27-a41d-4db2-b145-ad23430c1030">
+					</edge>
+					<edge src="c9a3a0c6-a1cd-417a-b5c3-fa3c9d6e70a8" tgt="431e52db-b61b-409c-b9d9-0d0b5af8ebe3">
+						<att name="condition" type="string" value="likedActors == []"/>
+					</edge>
+					<edge src="c9a3a0c6-a1cd-417a-b5c3-fa3c9d6e70a8" tgt="2700e26e-2bfb-4a23-9f25-9d3bb0e007c2">
+						<att name="condition" type="string" value="else"/>
+					</edge>
+					<edge src="d0f51d2b-6a65-4ca3-8693-f695a0bbe0c2" tgt="c9a3a0c6-a1cd-417a-b5c3-fa3c9d6e70a8">
+					</edge>
+				</graph>
+			</att>
+			<att name="endpoints" type="list">
+				<att name="0" type="string" value="3bc30b27-a41d-4db2-b145-ad23430c1030"/>
+			</att>
+		</node>
+		<node uid="7b094f8d-e3ea-4787-85f5-f37dc2ee3286" class="com.clt.diamant.graph.nodes.GraphNode">
+			<graphics x="360" y="158" fill="#ffc800"/>
+			<att name="title" type="string" value="Introduction"/>
+			<att name="graph" type="object">
+				<graph directed="1" Graphic="1" Layout="points">
+					<att name="width" type="integer" value="750"/>
+					<att name="height" type="integer" value="540"/>
+					<groovyFunctions></groovyFunctions>
+					<node uid="1c8676d1-7659-4dd2-a05e-06bf0d71b057" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="541" y="356" fill="#c0c0c0"/>
+						<att name="title" type="string" value="Unfrequent_movie_negative_feedback"/>
+						<att name="selectedIntent" type="string" value="unfrequent_movies_neg_feed"/>
+						<att name="selectedConvStat" type="string" value="SD"/>
+						<att name="sendConversationalStrategy" type="boolean" value="1"/>
+					</node>
+					<node uid="2b96d883-5ecd-4e5b-874d-108ac67377e0" class="com.clt.diamant.graph.nodes.ConditionalNode">
+						<graphics x="388" y="65" fill="#00cc5a"/>
+						<att name="title" type="string" value="Condition"/>
+						<att name="expression" type="string" value="likedGenres == [] &amp;&amp; likedActors == [] &amp;&amp; likedDirectors == []"/>
+					</node>
+					<node uid="2c1576b2-3c0c-4664-b2ef-d90179b75de5" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="471" y="236" fill="#c0c0c0"/>
+						<att name="title" type="string" value="Frequent_movie_negative_feedback"/>
+						<att name="selectedIntent" type="string" value="frequent_movies_neg_feed"/>
+						<att name="selectedConvStat" type="string" value="SD"/>
+						<att name="sendConversationalStrategy" type="boolean" value="1"/>
+					</node>
+					<node uid="3286bbee-ef38-4f3f-8dc9-9f6312128c52" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="367" y="128" fill="#c0c0c0"/>
+						<att name="title" type="string" value="Frequent_movies"/>
+						<att name="selectedIntent" type="string" value="frequent_movies"/>
+						<att name="selectedConvStat" type="string" value="SD"/>
+						<att name="sendConversationalStrategy" type="boolean" value="1"/>
+					</node>
+					<node uid="4d5cdaec-dedd-4297-9598-8dbe99c6c2a6" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="256" y="238" fill="#c0c0c0"/>
+						<att name="title" type="string" value="Frequent_movie_positive_feedback"/>
+						<att name="selectedIntent" type="string" value="frequent_movies_pos_feed"/>
+						<att name="selectedConvStat" type="string" value="SD"/>
+						<att name="sendConversationalStrategy" type="boolean" value="1"/>
+					</node>
+					<node uid="711a2e1a-befc-4387-8de4-68230bad21b7" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="254" y="355" fill="#c0c0c0"/>
+						<att name="title" type="string" value="Feedback_time_movie"/>
+						<att name="selectedIntent" type="string" value="feedback_time_movies"/>
+						<att name="selectedConvStat" type="string" value="SD"/>
+						<att name="sendConversationalStrategy" type="boolean" value="1"/>
+					</node>
+					<node uid="74c055d2-0c72-4e6c-a3df-745a9edc8a4b" class="edu.cmu.lti.articulab.movies.IMAInputNode">
+						<graphics x="284" y="295" fill="#cc9900"/>
+						<att name="title" type="string" value="IMAInput"/>
+						<att name="else_edge" type="boolean" value="1"/>
+					</node>
+					<node uid="7a995950-3eb4-42fb-b389-7c15b0a613b4" class="edu.cmu.lti.articulab.movies.IMAInputNode">
+						<graphics x="500" y="293" fill="#cc9900"/>
+						<att name="title" type="string" value="IMAInput"/>
+					</node>
+					<node uid="db7b3d76-58ba-4dae-8f62-851fcc894ff1" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="405" y="356" fill="#c0c0c0"/>
+						<att name="title" type="string" value="Unfrequent_movie_positive_feedback"/>
+						<att name="selectedIntent" type="string" value="unfrequent_movies_pos_feed"/>
+						<att name="selectedConvStat" type="string" value="SD"/>
+						<att name="sendConversationalStrategy" type="boolean" value="1"/>
+					</node>
+					<node uid="e8b1554f-e0a5-486b-8c0b-7a18466dfcca" class="com.clt.diamant.graph.nodes.StartNode">
+						<graphics x="391" y="3" fill="#9999ff"/>
+						<att name="title" type="string" value="Start"/>
+					</node>
+					<node uid="feb9a945-df05-4a42-b4db-13468ac0b386" class="edu.cmu.lti.articulab.movies.IMAInputNode">
+						<graphics x="391" y="180" fill="#cc9900"/>
+						<att name="title" type="string" value="IMAInput"/>
+						<att name="else_edge" type="boolean" value="1"/>
+					</node>
+					<node uid="febe7e87-fa39-41cd-ae82-61752dec8902" class="com.clt.diamant.graph.nodes.ReturnNode">
+						<graphics x="434" y="472" fill="#9999ff"/>
+						<att name="title" type="string" value="Return"/>
+					</node>
+					<edge src="1c8676d1-7659-4dd2-a05e-06bf0d71b057" tgt="febe7e87-fa39-41cd-ae82-61752dec8902">
+					</edge>
+					<edge src="2b96d883-5ecd-4e5b-874d-108ac67377e0" tgt="3286bbee-ef38-4f3f-8dc9-9f6312128c52">
+						<att name="condition" type="string" value="likedGenres == [] &amp;&amp; likedActors == [] &amp;&amp; likedDirectors == []"/>
+					</edge>
+					<edge src="2b96d883-5ecd-4e5b-874d-108ac67377e0" tgt="febe7e87-fa39-41cd-ae82-61752dec8902">
+						<att name="condition" type="string" value="else"/>
+					</edge>
+					<edge src="2c1576b2-3c0c-4664-b2ef-d90179b75de5" tgt="7a995950-3eb4-42fb-b389-7c15b0a613b4">
+					</edge>
+					<edge src="3286bbee-ef38-4f3f-8dc9-9f6312128c52" tgt="feb9a945-df05-4a42-b4db-13468ac0b386">
+					</edge>
+					<edge src="4d5cdaec-dedd-4297-9598-8dbe99c6c2a6" tgt="74c055d2-0c72-4e6c-a3df-745a9edc8a4b">
+					</edge>
+					<edge src="711a2e1a-befc-4387-8de4-68230bad21b7" tgt="febe7e87-fa39-41cd-ae82-61752dec8902">
+					</edge>
+					<edge type="catch all" src="74c055d2-0c72-4e6c-a3df-745a9edc8a4b" tgt="711a2e1a-befc-4387-8de4-68230bad21b7">
+						<att name="condition" type="string" value="&quot;All other values&quot;"/>
+					</edge>
+					<edge src="7a995950-3eb4-42fb-b389-7c15b0a613b4" tgt="db7b3d76-58ba-4dae-8f62-851fcc894ff1">
+						<att name="condition" type="string" value="intent == &quot;yes&quot;"/>
+					</edge>
+					<edge src="7a995950-3eb4-42fb-b389-7c15b0a613b4" tgt="1c8676d1-7659-4dd2-a05e-06bf0d71b057">
+						<att name="condition" type="string" value="intent == &quot;no&quot;"/>
+					</edge>
+					<edge src="db7b3d76-58ba-4dae-8f62-851fcc894ff1" tgt="febe7e87-fa39-41cd-ae82-61752dec8902">
+					</edge>
+					<edge src="e8b1554f-e0a5-486b-8c0b-7a18466dfcca" tgt="2b96d883-5ecd-4e5b-874d-108ac67377e0">
+					</edge>
+					<edge src="feb9a945-df05-4a42-b4db-13468ac0b386" tgt="2c1576b2-3c0c-4664-b2ef-d90179b75de5">
+						<att name="condition" type="string" value="intent == &quot;no&quot;"/>
+					</edge>
+					<edge type="catch all" src="feb9a945-df05-4a42-b4db-13468ac0b386" tgt="4d5cdaec-dedd-4297-9598-8dbe99c6c2a6">
+						<att name="condition" type="string" value="&quot;All other values&quot;"/>
+					</edge>
+				</graph>
+			</att>
+			<att name="endpoints" type="list">
+				<att name="0" type="string" value="febe7e87-fa39-41cd-ae82-61752dec8902"/>
+			</att>
+		</node>
+		<node uid="84c9b4cd-04c0-45b2-a11c-76bff0c4b3b1" class="com.clt.diamant.graph.nodes.GraphNode">
+			<graphics x="339" y="395" fill="#ffc800"/>
+			<att name="title" type="string" value="Movie Recommendation"/>
+			<att name="graph" type="object">
+				<graph directed="1" Graphic="1" Layout="points">
+					<att name="width" type="integer" value="750"/>
+					<att name="height" type="integer" value="540"/>
+					<groovyFunctions></groovyFunctions>
+					<variable uid="6d2b486a-3d2f-4b10-a279-40efd47af922">
+						<name>rec</name>
+						<type>struct</type>
+						<value>undefined</value>
+					</variable>
+					<node uid="1a425434-facd-4989-87c2-24433ac7d7b1" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="365" y="245" fill="#c0c0c0"/>
+						<att name="title" type="string" value="IMAOutput"/>
+						<att name="selectedIntent" type="string" value="recommend"/>
+						<att name="selectedConvStat" type="string" value="PR"/>
+						<att name="sendConversationalStrategy" type="boolean" value="0"/>
+					</node>
+					<node uid="5d8cbf27-0167-407b-8f62-b3a0b6c6731a" class="edu.cmu.lti.articulab.movies.MovieNode">
+						<graphics x="370" y="180" fill="#c0c0c0"/>
+						<att name="title" type="string" value="Movie"/>
+						<att name="likedMovies" type="string" value="likedMovies"/>
+						<att name="likedEntities" type="string" value="append(likedGenres, append(likedDirectors, likedActors))"/>
+						<att name="dislikedMovies" type="string" value="dislikedMovies"/>
+						<att name="dislikedEntities" type="string" value="append(dislikedGenres, append(dislikedDirectors, dislikedActors))"/>
+						<att name="resultVar" type="string" value="recommendation"/>
+					</node>
+					<node uid="6e67ad14-ae75-4a58-8fbf-b5ef1bc4285f" class="com.clt.diamant.graph.nodes.StartNode">
+						<graphics x="369" y="42" fill="#9999ff"/>
+						<att name="title" type="string" value="Start"/>
+					</node>
+					<node uid="9e53f6ca-892d-47c3-8258-7426ae40c8ef" class="edu.cmu.lti.articulab.movies.IMAInputNode">
+						<graphics x="647" y="384" fill="#cc9900"/>
+						<att name="title" type="string" value="IMAInput"/>
+						<att name="else_edge" type="boolean" value="1"/>
+					</node>
+					<node uid="9e94442b-8fb7-44a2-ac1f-567e82223e03" class="edu.cmu.lti.articulab.movies.IMAInputNode">
+						<graphics x="365" y="313" fill="#cc9900"/>
+						<att name="title" type="string" value="IMAInput"/>
+						<att name="else_edge" type="boolean" value="1"/>
+					</node>
+					<node uid="cedb4764-10e9-46d0-847f-9a720a792875" class="com.clt.diamant.graph.nodes.ScriptNode">
+						<graphics x="410" y="402" fill="#99ffff"/>
+						<att name="title" type="string" value="Store_Movie"/>
+						<att name="script" type="text">
+							<value>dislikedMovies = append(dislikedMovies, [get(get(get(recommendation, &quot;rexplanations&quot;), 0), &quot;recommendation&quot;)]);</value>
+						</att>
+					</node>
+					<node uid="d5a6db14-228a-4a59-8d60-fc36ea1a67a0" class="com.clt.diamant.graph.nodes.ScriptNode">
+						<graphics x="486" y="280" fill="#99ffff"/>
+						<att name="title" type="string" value="Store_Movie"/>
+						<att name="script" type="text">
+							<value>dislikedMovies = append(dislikedMovies, [get(get(get(recommendation, &quot;rexplanations&quot;), 0), &quot;recommendation&quot;)]);</value>
+						</att>
+					</node>
+					<node uid="f70cd5c3-e900-45cc-9cea-e8e5c114d8c9" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="524" y="389" fill="#c0c0c0"/>
+						<att name="title" type="string" value="Ask_why"/>
+						<att name="selectedIntent" type="string" value="ask_whynot"/>
+						<att name="selectedConvStat" type="string"/>
+						<att name="sendConversationalStrategy" type="boolean" value="0"/>
+					</node>
+					<node uid="fc8d05b4-b6dc-414b-a310-e0110552da8b" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="364" y="113" fill="#c0c0c0"/>
+						<att name="title" type="string" value="IMAOutput"/>
+						<att name="selectedIntent" type="string" value="pre_movie"/>
+						<att name="selectedConvStat" type="string"/>
+						<att name="sendConversationalStrategy" type="boolean" value="0"/>
+					</node>
+					<node uid="fccb480e-4b2a-4a00-a21a-029ae17dc33f" class="com.clt.diamant.graph.nodes.ReturnNode">
+						<graphics x="361" y="475" fill="#9999ff"/>
+						<att name="title" type="string" value="Return"/>
+					</node>
+					<edge src="1a425434-facd-4989-87c2-24433ac7d7b1" tgt="9e94442b-8fb7-44a2-ac1f-567e82223e03">
+					</edge>
+					<edge src="5d8cbf27-0167-407b-8f62-b3a0b6c6731a" tgt="1a425434-facd-4989-87c2-24433ac7d7b1">
+					</edge>
+					<edge src="6e67ad14-ae75-4a58-8fbf-b5ef1bc4285f" tgt="fc8d05b4-b6dc-414b-a310-e0110552da8b">
+					</edge>
+					<edge type="catch all" src="9e53f6ca-892d-47c3-8258-7426ae40c8ef" tgt="5d8cbf27-0167-407b-8f62-b3a0b6c6731a">
+						<att name="condition" type="string" value="&quot;All other values&quot;"/>
+					</edge>
+					<edge src="9e94442b-8fb7-44a2-ac1f-567e82223e03" tgt="fccb480e-4b2a-4a00-a21a-029ae17dc33f">
+						<att name="condition" type="string" value="intent == &quot;yes&quot; || intent == &quot;goodbye&quot; || intent == &quot;thank&quot;"/>
+					</edge>
+					<edge src="9e94442b-8fb7-44a2-ac1f-567e82223e03" tgt="cedb4764-10e9-46d0-847f-9a720a792875">
+						<att name="condition" type="string" value="intent == &quot;no&quot; &amp;&amp; csc == &quot;SD&quot;"/>
+					</edge>
+					<edge type="catch all" src="9e94442b-8fb7-44a2-ac1f-567e82223e03" tgt="d5a6db14-228a-4a59-8d60-fc36ea1a67a0">
+						<att name="condition" type="string" value="&quot;All other values&quot;"/>
+					</edge>
+					<edge src="cedb4764-10e9-46d0-847f-9a720a792875" tgt="f70cd5c3-e900-45cc-9cea-e8e5c114d8c9">
+					</edge>
+					<edge src="d5a6db14-228a-4a59-8d60-fc36ea1a67a0" tgt="5d8cbf27-0167-407b-8f62-b3a0b6c6731a">
+					</edge>
+					<edge src="f70cd5c3-e900-45cc-9cea-e8e5c114d8c9" tgt="9e53f6ca-892d-47c3-8258-7426ae40c8ef">
+					</edge>
+					<edge src="fc8d05b4-b6dc-414b-a310-e0110552da8b" tgt="5d8cbf27-0167-407b-8f62-b3a0b6c6731a">
+					</edge>
+				</graph>
+			</att>
+			<att name="endpoints" type="list">
+				<att name="0" type="string" value="fccb480e-4b2a-4a00-a21a-029ae17dc33f"/>
+			</att>
+		</node>
+		<node uid="8a17b1fb-aec3-49f7-96f4-d975a72e03da" class="com.clt.diamant.graph.nodes.GraphNode">
+			<graphics x="373" y="460" fill="#ffc800"/>
+			<att name="title" type="string" value="Farewell"/>
+			<att name="graph" type="object">
+				<graph directed="1" Graphic="1" Layout="points">
+					<att name="width" type="integer" value="750"/>
+					<att name="height" type="integer" value="540"/>
+					<groovyFunctions></groovyFunctions>
+					<node uid="040dbac4-4a51-46d8-afa4-0cf823141802" class="com.clt.diamant.graph.nodes.StartNode">
+						<graphics x="370" y="40" fill="#9999ff"/>
+						<att name="title" type="string" value="Start"/>
+					</node>
+					<node uid="6968c9af-629a-4d0a-a329-fad41ad59ddf" class="com.clt.diamant.graph.nodes.ReturnNode">
+						<graphics x="374" y="463" fill="#9999ff"/>
+						<att name="title" type="string" value="Return"/>
+					</node>
+					<node uid="975c149e-356a-4916-9432-8aaa57763e63" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="373" y="387" fill="#c0c0c0"/>
+						<att name="title" type="string" value="Goodbye"/>
+						<att name="selectedIntent" type="string" value="goodbye"/>
+						<att name="selectedConvStat" type="string" value="SD"/>
+						<att name="sendConversationalStrategy" type="boolean" value="1"/>
+					</node>
+					<node uid="9fe79b67-c148-4024-b95b-a7345b65ae96" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="345" y="133" fill="#c0c0c0"/>
+						<att name="title" type="string" value="Overall_feedback_elicitation"/>
+						<att name="selectedIntent" type="string" value="overall_feedback_elicitation"/>
+						<att name="selectedConvStat" type="string" value="SD"/>
+						<att name="sendConversationalStrategy" type="boolean" value="1"/>
+					</node>
+					<node uid="cb47c1f9-e5a2-4bf6-aec5-105cd912cc4c" class="edu.cmu.lti.articulab.movies.IMAInputNode">
+						<graphics x="369" y="197" fill="#cc9900"/>
+						<att name="title" type="string" value="IMAInput"/>
+					</node>
+					<node uid="e8d2bdf7-bf5b-45fe-8a16-3f87dfe0b93d" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="219" y="267" fill="#c0c0c0"/>
+						<att name="title" type="string" value="overall_fedback_good"/>
+						<att name="selectedIntent" type="string" value="overall_feedback_good"/>
+						<att name="selectedConvStat" type="string" value="SD"/>
+						<att name="sendConversationalStrategy" type="boolean" value="1"/>
+					</node>
+					<node uid="ffbb4646-2c0d-4791-8a71-9b21dcbd4162" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="486" y="270" fill="#c0c0c0"/>
+						<att name="title" type="string" value="overall_feedback_notgood"/>
+						<att name="selectedIntent" type="string" value="overall_feedback_notgood"/>
+						<att name="selectedConvStat" type="string" value="SD"/>
+						<att name="sendConversationalStrategy" type="boolean" value="1"/>
+					</node>
+					<edge src="040dbac4-4a51-46d8-afa4-0cf823141802" tgt="9fe79b67-c148-4024-b95b-a7345b65ae96">
+					</edge>
+					<edge src="975c149e-356a-4916-9432-8aaa57763e63" tgt="6968c9af-629a-4d0a-a329-fad41ad59ddf">
+					</edge>
+					<edge src="9fe79b67-c148-4024-b95b-a7345b65ae96" tgt="cb47c1f9-e5a2-4bf6-aec5-105cd912cc4c">
+					</edge>
+					<edge src="cb47c1f9-e5a2-4bf6-aec5-105cd912cc4c" tgt="e8d2bdf7-bf5b-45fe-8a16-3f87dfe0b93d">
+						<att name="condition" type="string" value="intent == &quot;yes&quot;"/>
+					</edge>
+					<edge src="cb47c1f9-e5a2-4bf6-aec5-105cd912cc4c" tgt="ffbb4646-2c0d-4791-8a71-9b21dcbd4162">
+						<att name="condition" type="string" value="intent == &quot;no&quot;"/>
+					</edge>
+					<edge src="e8d2bdf7-bf5b-45fe-8a16-3f87dfe0b93d" tgt="975c149e-356a-4916-9432-8aaa57763e63">
+					</edge>
+					<edge src="ffbb4646-2c0d-4791-8a71-9b21dcbd4162" tgt="975c149e-356a-4916-9432-8aaa57763e63">
+					</edge>
+				</graph>
+			</att>
+			<att name="endpoints" type="list">
+				<att name="0" type="string" value="6968c9af-629a-4d0a-a329-fad41ad59ddf"/>
+			</att>
+		</node>
+		<node uid="9e8851cd-8ae5-4977-bec6-443597d6e4f4" class="com.clt.diamant.graph.nodes.GraphNode">
+			<graphics x="363" y="217" fill="#ffc800"/>
+			<att name="title" type="string" value="Movie_Talk"/>
+			<att name="graph" type="object">
+				<graph directed="1" Graphic="1" Layout="points">
+					<att name="width" type="integer" value="750"/>
+					<att name="height" type="integer" value="540"/>
+					<groovyFunctions></groovyFunctions>
+					<node uid="06d4a881-4a5e-493a-8210-4d66290ce859" class="edu.cmu.lti.articulab.movies.IMAInputNode">
+						<graphics x="352" y="233" fill="#cc9900"/>
+						<att name="title" type="string" value="IMAInput"/>
+						<att name="else_edge" type="boolean" value="1"/>
+					</node>
+					<node uid="087658eb-493d-416c-bf8f-a0f4d0230195" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="331" y="75" fill="#c0c0c0"/>
+						<att name="title" type="string" value="Last_movie_watched"/>
+						<att name="selectedIntent" type="string" value="last_movie_watched"/>
+						<att name="selectedConvStat" type="string" value="SD"/>
+						<att name="sendConversationalStrategy" type="boolean" value="1"/>
+					</node>
+					<node uid="52a7bdd3-b4c1-4f58-86c6-ecc52b56e391" class="com.clt.diamant.graph.nodes.StartNode">
+						<graphics x="359" y="14" fill="#9999ff"/>
+						<att name="title" type="string" value="Start"/>
+					</node>
+					<node uid="60113fe5-cf02-45e1-8458-597fbe27da76" class="edu.cmu.lti.articulab.movies.IMAInputNode">
+						<graphics x="473" y="341" fill="#cc9900"/>
+						<att name="title" type="string" value="IMAInput"/>
+						<att name="else_edge" type="boolean" value="1"/>
+					</node>
+					<node uid="672bf13a-837b-48f1-bbc3-84369e1b623b" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="508" y="404" fill="#c0c0c0"/>
+						<att name="title" type="string" value="Ask_why"/>
+						<att name="selectedIntent" type="string" value="why"/>
+						<att name="selectedConvStat" type="string"/>
+						<att name="sendConversationalStrategy" type="boolean" value="0"/>
+					</node>
+					<node uid="6cde9b87-0677-4c73-9529-f5b429323394" class="com.clt.diamant.graph.nodes.ConditionalNode">
+						<graphics x="605" y="28" fill="#00cc5a"/>
+						<att name="title" type="string" value="Condition"/>
+						<att name="expression" type="string" value="likedGenres == [] &amp;&amp; likedActors == [] &amp;&amp; likedDirectors == []"/>
+					</node>
+					<node uid="72c74af1-fff9-4f84-934b-03956ed11e47" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="591" y="217" fill="#c0c0c0"/>
+						<att name="title" type="string" value="Question_watched_it"/>
+						<att name="selectedIntent" type="string" value="question_watched_movie"/>
+						<att name="selectedConvStat" type="string"/>
+						<att name="sendConversationalStrategy" type="boolean" value="0"/>
+					</node>
+					<node uid="737517b2-aa5e-4dd3-bca2-830e3dc2897d" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="253" y="289" fill="#c0c0c0"/>
+						<att name="title" type="string" value="Movie_liked"/>
+						<att name="selectedIntent" type="string" value="movie_liked"/>
+						<att name="selectedConvStat" type="string" value="SD"/>
+						<att name="sendConversationalStrategy" type="boolean" value="1"/>
+					</node>
+					<node uid="807ed135-c05f-45f7-be27-fd28990e9c56" class="edu.cmu.lti.articulab.movies.IMAInputNode">
+						<graphics x="619" y="159" fill="#cc9900"/>
+						<att name="title" type="string" value="IMAInput"/>
+						<att name="else_edge" type="boolean" value="1"/>
+					</node>
+					<node uid="8afd001d-6333-498a-a54d-96b24e7cd439" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="373" y="401" fill="#c0c0c0"/>
+						<att name="title" type="string" value="Ask_whynot"/>
+						<att name="selectedIntent" type="string" value="ask_whynot"/>
+						<att name="selectedConvStat" type="string" value="SD"/>
+						<att name="sendConversationalStrategy" type="boolean" value="1"/>
+					</node>
+					<node uid="8dc3006f-daeb-497d-8ba1-b68fcc086ca5" class="edu.cmu.lti.articulab.movies.IMAInputNode">
+						<graphics x="373" y="467" fill="#cc9900"/>
+						<att name="title" type="string" value="IMAInput"/>
+						<att name="else_edge" type="boolean" value="1"/>
+					</node>
+					<node uid="9596f31d-75ae-429b-8b01-35fa9145b3d2" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="330" y="181" fill="#c0c0c0"/>
+						<att name="title" type="string" value="Question_like_movie"/>
+						<att name="selectedIntent" type="string" value="question_liked_movie"/>
+						<att name="selectedConvStat" type="string" value="SD"/>
+						<att name="sendConversationalStrategy" type="boolean" value="1"/>
+					</node>
+					<node uid="9d15ea46-81e6-4a6e-9570-a66ec4cdf87e" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="446" y="288" fill="#c0c0c0"/>
+						<att name="title" type="string" value="Movie_liked_unsure"/>
+						<att name="selectedIntent" type="string" value="movie_unsure"/>
+						<att name="selectedConvStat" type="string" value="SD"/>
+						<att name="sendConversationalStrategy" type="boolean" value="1"/>
+					</node>
+					<node uid="a7cd0f83-6c6a-4517-a65f-2707658a5796" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="600" y="347" fill="#c0c0c0"/>
+						<att name="title" type="string" value="Ask_whynot_watched"/>
+						<att name="selectedIntent" type="string" value="ask_whynot_watched"/>
+						<att name="selectedConvStat" type="string"/>
+						<att name="sendConversationalStrategy" type="boolean" value="0"/>
+					</node>
+					<node uid="a86802d2-23e0-49ea-8460-e7ae7e32b44b" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="341" y="289" fill="#c0c0c0"/>
+						<att name="title" type="string" value="Movie_disliked"/>
+						<att name="selectedIntent" type="string" value="movie_disliked"/>
+						<att name="selectedConvStat" type="string" value="SD"/>
+						<att name="sendConversationalStrategy" type="boolean" value="1"/>
+					</node>
+					<node uid="af0b8c8f-0cfc-4e04-9f2b-2fe7140d429f" class="edu.cmu.lti.articulab.movies.IMAInputNode">
+						<graphics x="619" y="279" fill="#cc9900"/>
+						<att name="title" type="string" value="IMAInput"/>
+					</node>
+					<node uid="d6fff912-5d74-4a30-a36d-2e0a294e3505" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="261" y="401" fill="#c0c0c0"/>
+						<att name="title" type="string" value="Ask_why"/>
+						<att name="selectedIntent" type="string" value="ask_why"/>
+						<att name="selectedConvStat" type="string" value="SD"/>
+						<att name="sendConversationalStrategy" type="boolean" value="1"/>
+					</node>
+					<node uid="d915c73d-3726-40b9-acfb-861e33397b83" class="edu.cmu.lti.articulab.movies.IMAInputNode">
+						<graphics x="631" y="410" fill="#cc9900"/>
+						<att name="title" type="string" value="IMAInput"/>
+						<att name="else_edge" type="boolean" value="1"/>
+					</node>
+					<node uid="dbbd4469-844c-4172-8127-f7a20cd92bda" class="edu.cmu.lti.articulab.movies.IMAOutputNode">
+						<graphics x="603" y="98" fill="#c0c0c0"/>
+						<att name="title" type="string" value="Previous_reco"/>
+						<att name="selectedIntent" type="string" value="last_movie_watched"/>
+						<att name="selectedConvStat" type="string" value="RSE"/>
+						<att name="sendConversationalStrategy" type="boolean" value="1"/>
+					</node>
+					<node uid="dda54292-efa2-4b04-87f2-71772a34621f" class="edu.cmu.lti.articulab.movies.IMAInputNode">
+						<graphics x="358" y="126" fill="#cc9900"/>
+						<att name="title" type="string" value="IMAInput"/>
+						<att name="else_edge" type="boolean" value="1"/>
+					</node>
+					<node uid="eb07004a-1cb9-4168-b9ac-c8bd51cc48bc" class="com.clt.diamant.graph.nodes.ReturnNode">
+						<graphics x="549" y="485" fill="#9999ff"/>
+						<att name="title" type="string" value="Return"/>
+					</node>
+					<edge src="06d4a881-4a5e-493a-8210-4d66290ce859" tgt="737517b2-aa5e-4dd3-bca2-830e3dc2897d">
+						<att name="condition" type="string" value="intent == &quot;yes&quot;"/>
+					</edge>
+					<edge src="06d4a881-4a5e-493a-8210-4d66290ce859" tgt="a86802d2-23e0-49ea-8460-e7ae7e32b44b">
+						<att name="condition" type="string" value="intent == &quot;no&quot;"/>
+					</edge>
+					<edge type="catch all" src="06d4a881-4a5e-493a-8210-4d66290ce859" tgt="9d15ea46-81e6-4a6e-9570-a66ec4cdf87e">
+						<att name="condition" type="string" value="&quot;All other values&quot;"/>
+					</edge>
+					<edge src="087658eb-493d-416c-bf8f-a0f4d0230195" tgt="dda54292-efa2-4b04-87f2-71772a34621f">
+					</edge>
+					<edge src="52a7bdd3-b4c1-4f58-86c6-ecc52b56e391" tgt="6cde9b87-0677-4c73-9529-f5b429323394">
+					</edge>
+					<edge src="60113fe5-cf02-45e1-8458-597fbe27da76" tgt="d6fff912-5d74-4a30-a36d-2e0a294e3505">
+						<att name="condition" type="string" value="intent == &quot;yes&quot;"/>
+					</edge>
+					<edge src="60113fe5-cf02-45e1-8458-597fbe27da76" tgt="8afd001d-6333-498a-a54d-96b24e7cd439">
+						<att name="condition" type="string" value="intent == &quot;no&quot;"/>
+					</edge>
+					<edge type="catch all" src="60113fe5-cf02-45e1-8458-597fbe27da76" tgt="672bf13a-837b-48f1-bbc3-84369e1b623b">
+						<att name="condition" type="string" value="&quot;All other values&quot;"/>
+					</edge>
+					<edge src="672bf13a-837b-48f1-bbc3-84369e1b623b" tgt="8dc3006f-daeb-497d-8ba1-b68fcc086ca5">
+					</edge>
+					<edge src="6cde9b87-0677-4c73-9529-f5b429323394" tgt="087658eb-493d-416c-bf8f-a0f4d0230195">
+						<att name="condition" type="string" value="likedGenres == [] &amp;&amp; likedActors == [] &amp;&amp; likedDirectors == []"/>
+					</edge>
+					<edge src="6cde9b87-0677-4c73-9529-f5b429323394" tgt="dbbd4469-844c-4172-8127-f7a20cd92bda">
+						<att name="condition" type="string" value="else"/>
+					</edge>
+					<edge src="72c74af1-fff9-4f84-934b-03956ed11e47" tgt="af0b8c8f-0cfc-4e04-9f2b-2fe7140d429f">
+					</edge>
+					<edge src="737517b2-aa5e-4dd3-bca2-830e3dc2897d" tgt="d6fff912-5d74-4a30-a36d-2e0a294e3505">
+					</edge>
+					<edge type="catch all" src="807ed135-c05f-45f7-be27-fd28990e9c56" tgt="72c74af1-fff9-4f84-934b-03956ed11e47">
+						<att name="condition" type="string" value="&quot;All other values&quot;"/>
+					</edge>
+					<edge src="8afd001d-6333-498a-a54d-96b24e7cd439" tgt="8dc3006f-daeb-497d-8ba1-b68fcc086ca5">
+					</edge>
+					<edge type="catch all" src="8dc3006f-daeb-497d-8ba1-b68fcc086ca5" tgt="eb07004a-1cb9-4168-b9ac-c8bd51cc48bc">
+						<att name="condition" type="string" value="&quot;All other values&quot;"/>
+					</edge>
+					<edge src="9596f31d-75ae-429b-8b01-35fa9145b3d2" tgt="06d4a881-4a5e-493a-8210-4d66290ce859">
+					</edge>
+					<edge src="9d15ea46-81e6-4a6e-9570-a66ec4cdf87e" tgt="60113fe5-cf02-45e1-8458-597fbe27da76">
+					</edge>
+					<edge src="a7cd0f83-6c6a-4517-a65f-2707658a5796" tgt="d915c73d-3726-40b9-acfb-861e33397b83">
+					</edge>
+					<edge src="a86802d2-23e0-49ea-8460-e7ae7e32b44b" tgt="8afd001d-6333-498a-a54d-96b24e7cd439">
+					</edge>
+					<edge src="af0b8c8f-0cfc-4e04-9f2b-2fe7140d429f" tgt="9596f31d-75ae-429b-8b01-35fa9145b3d2">
+						<att name="condition" type="string" value="intent == &quot;yes&quot;"/>
+					</edge>
+					<edge src="af0b8c8f-0cfc-4e04-9f2b-2fe7140d429f" tgt="a7cd0f83-6c6a-4517-a65f-2707658a5796">
+						<att name="condition" type="string" value="intent == &quot;no&quot;"/>
+					</edge>
+					<edge src="d6fff912-5d74-4a30-a36d-2e0a294e3505" tgt="8dc3006f-daeb-497d-8ba1-b68fcc086ca5">
+					</edge>
+					<edge type="catch all" src="d915c73d-3726-40b9-acfb-861e33397b83" tgt="eb07004a-1cb9-4168-b9ac-c8bd51cc48bc">
+						<att name="condition" type="string" value="&quot;All other values&quot;"/>
+					</edge>
+					<edge src="dbbd4469-844c-4172-8127-f7a20cd92bda" tgt="807ed135-c05f-45f7-be27-fd28990e9c56">
+					</edge>
+					<edge type="catch all" src="dda54292-efa2-4b04-87f2-71772a34621f" tgt="9596f31d-75ae-429b-8b01-35fa9145b3d2">
+						<att name="condition" type="string" value="&quot;All other values&quot;"/>
+					</edge>
+				</graph>
+			</att>
+			<att name="endpoints" type="list">
+				<att name="0" type="string" value="eb07004a-1cb9-4168-b9ac-c8bd51cc48bc"/>
+			</att>
+		</node>
+		<node uid="9f4e0c49-b5c3-490b-b88d-9e44330973f3" class="com.clt.diamant.graph.nodes.StartNode">
+			<graphics x="349" y="40" fill="#9999ff"/>
+			<att name="title" type="string" value="InMind Dialogue"/>
+		</node>
+		<edge src="0e73a0c5-ab91-46cf-84eb-3dacfb0bf92a" tgt="84c9b4cd-04c0-45b2-a11c-76bff0c4b3b1">
+			<att name="condition" type="string" value="Return"/>
+		</edge>
+		<edge src="27a6f5bf-fbf8-49c1-aa74-2d22e867e9ab" tgt="7b094f8d-e3ea-4787-85f5-f37dc2ee3286">
+			<att name="condition" type="string" value="Return"/>
+		</edge>
+		<edge src="2b32b186-9c90-49b4-b85a-82ef96f9d1ff" tgt="0e73a0c5-ab91-46cf-84eb-3dacfb0bf92a">
+			<att name="condition" type="string" value="Return"/>
+		</edge>
+		<edge src="7b094f8d-e3ea-4787-85f5-f37dc2ee3286" tgt="9e8851cd-8ae5-4977-bec6-443597d6e4f4">
+			<att name="condition" type="string" value="Return"/>
+		</edge>
+		<edge src="84c9b4cd-04c0-45b2-a11c-76bff0c4b3b1" tgt="8a17b1fb-aec3-49f7-96f4-d975a72e03da">
+			<att name="condition" type="string" value="Return"/>
+		</edge>
+		<edge src="8a17b1fb-aec3-49f7-96f4-d975a72e03da">
+			<att name="condition" type="string" value="Return"/>
+		</edge>
+		<edge src="9e8851cd-8ae5-4977-bec6-443597d6e4f4" tgt="2b32b186-9c90-49b4-b85a-82ef96f9d1ff">
+			<att name="condition" type="string" value="Return"/>
+		</edge>
+		<edge src="9f4e0c49-b5c3-490b-b88d-9e44330973f3" tgt="27a6f5bf-fbf8-49c1-aa74-2d22e867e9ab">
+		</edge>
+	</graph>
+</wizard>
