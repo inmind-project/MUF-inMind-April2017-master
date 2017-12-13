@@ -1,21 +1,21 @@
 {
   "services": [
     {
-      "serviceName": "RPT_SERVICE",
-      "clientAddress": "tcp://52.87.172.224:5580",
+      "serviceName": "CSC_SERVICE",
+      "slaveMUFAddress": "tcp://34.203.160.208:5570",
+      "masterMUFAddress": "tcp://127.0.0.1:5555",
       "msgSubscriptions": [
-        "MSG_CSC",
-        "MSG_SR",
-        "MSG_UM"
+        "MSG_ASR_CSC"
       ]
     },
     {
       "serviceName": "NLU_DM_SERVICE",
-      "__comment" : "set this address to where your python-dialogue manager lives.",
+      "__comment" : "set this address to where your python-NLU lives.",
       "slaveMUFAddress": "tcp://34.203.160.208:5590",
-      "masterMUFAddress": "tcp://127.0.0.1:5590",
+      "masterMUFAddress": "tcp://127.0.0.1:5555",
       "msgSubscriptions": [
         "MSG_START_DM_PYTHON",
+        "MSG_USER_FRAME",
         "MSG_ASR_NLU"
       ]
     }
