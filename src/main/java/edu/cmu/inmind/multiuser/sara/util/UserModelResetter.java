@@ -1,5 +1,6 @@
 package edu.cmu.inmind.multiuser.sara.util;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import edu.cmu.inmind.multiuser.common.model.UserFrame;
@@ -14,10 +15,11 @@ import java.util.function.Consumer;
  * semantic memory, or both.
  */
 public class UserModelResetter {
-    private static final class ResetOptions {
-        static final String EPISODIC = "RESET_USER_RAPPORT_HISTORY";
-        static final String SEMANTIC = "RESET_USER_CONTENT_HISTORY";
-        static final String ALL = "RESET_USER_ALL_HISTORY";
+    @VisibleForTesting
+    public static final class ResetOptions {
+        public static final String EPISODIC = "RESET_USER_RAPPORT_HISTORY";
+        public static final String SEMANTIC = "RESET_USER_CONTENT_HISTORY";
+        public static final String ALL = "RESET_USER_ALL_HISTORY";
     }
 
     private static final Consumer<UserModel> resetEpisodicState = model -> {
