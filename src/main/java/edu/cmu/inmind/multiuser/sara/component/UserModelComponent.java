@@ -1,11 +1,8 @@
 package edu.cmu.inmind.multiuser.sara.component;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.common.model.SROutput;
-import edu.cmu.inmind.multiuser.common.model.UserFrame;
 import edu.cmu.inmind.multiuser.common.model.UserModel;
 import edu.cmu.inmind.multiuser.controller.blackboard.Blackboard;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
@@ -16,16 +13,14 @@ import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
 import edu.cmu.inmind.multiuser.controller.plugin.StateType;
 import edu.cmu.inmind.multiuser.controller.session.Session;
 import edu.cmu.inmind.multiuser.sara.repo.UserModelRepository;
+import edu.cmu.inmind.multiuser.sara.util.UserModelResetter;
 import edu.cmu.inmind.multiuser.socialreasoner.control.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 /**
- * ** Work in progress **
  * <p>
  * This component keeps track of all relevant data about the user & interactions we have had with her.
  * This includes both a semantic memory (e.g. user preferences) and a episodic memory (e.g. rapport)
@@ -36,39 +31,11 @@ import java.util.function.Consumer;
 @BlackboardSubscription(messages = {SaraCons.MSG_SR, SaraCons.MSG_START_SESSION, SaraCons.MSG_START_DM})
 public class UserModelComponent extends PluggableComponent {
 
-    @VisibleForTesting
-    static final class ResetOptions {
-        static final String EPISODIC = "RESET_USER_RAPPORT_HISTORY";
-        static final String SEMANTIC = "RESET_USER_CONTENT_HISTORY";
-        static final String ALL = "RESET_USER_ALL_HISTORY";
-    }
-
-    private static final Consumer<UserModel> resetEpisodicState = UserModelComponent::resetEpisodicState;
-    private static final Consumer<UserModel> resetSemanticState = UserModelComponent::resetSemanticState;
-
-    private static final Map<String, Consumer<UserModel>> USER_MODEL_RESETTERS = ImmutableMap.of(
-            ResetOptions.EPISODIC, resetEpisodicState,
-            ResetOptions.SEMANTIC, resetSemanticState,
-            ResetOptions.ALL, resetEpisodicState.andThen(resetSemanticState)
-    );
-
-    private static void resetSemanticState(final UserModel model) {
-        if (model.getUserFrame() != null) {
-            model.setUserFrame(new UserFrame());
-        }
-    }
-
-    private static void resetEpisodicState(final UserModel model) {
-        model.updateBehaviorNetworkStates(ImmutableList.of());
-        model.setRapport(UserModel.RAPPORT_UNDEFINED);
-    }
-
     private UserModelRepository repository;
     private UserModel userModel;
 
     @Override
     public void onEvent(Blackboard blackboard, BlackboardEvent event) throws Throwable {
-
         final String eventId = event.getId();
         if (SaraCons.MSG_START_SESSION.equals(eventId)) {
             onStartSession(event, blackboard);
@@ -79,7 +46,7 @@ public class UserModelComponent extends PluggableComponent {
         } else if (userModel != null) {
             switch (eventId) {
                 case SaraCons.MSG_SR: {
-                    handleMsgSR(event);
+                    handleMsgSR((SROutput) event.getElement());
                     break;
                 }
                 default: {
@@ -93,28 +60,31 @@ public class UserModelComponent extends PluggableComponent {
     }
 
     private void onStartSession(BlackboardEvent event, Blackboard blackboard) {
-        final String setting = event.getElement() instanceof String ? (String) event.getElement() : "";
-        initializeUserModel(blackboard, setting);
+        final String resetOption = event.getElement() instanceof String ? (String) event.getElement() : "";
+        initializeUserModel(blackboard, resetOption);
     }
 
-    private void initializeUserModel(final Blackboard blackboard, final String setting) {
+    private void initializeUserModel(final Blackboard blackboard, final String resetOption) {
         Log4J.info(this, "Initializing user model component");
 
         repository = createRepo();
-        userModel = getUserModel(setting, repository).orElseGet(() -> new UserModel(getSessionId()));
+
+        final Optional<UserModel> userModelOpt = repository.readModel();
+        userModelOpt.ifPresent(model -> UserModelResetter.reset(model, resetOption));
+        userModel = userModelOpt.orElseGet(() -> new UserModel(getSessionId()));
 
         Log4J.info(this, "Loaded user model: " + Utils.toJson(userModel));
 
-        try {
-            blackboard.post(this, SaraCons.MSG_UM, userModel);
-
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        }
+        blackboard.post(this, SaraCons.MSG_UM, userModel);
     }
 
-    private void handleMsgSR(BlackboardEvent event) {
-        final SROutput srOutput = (SROutput) event.getElement();
+    /**
+     * The social reasoner is where the task and social pipelines converge so it contains all relevant information.
+     * Extract and store it in the user model.
+     */
+    private void handleMsgSR(SROutput srOutput) {
+        // Sometimes the dialog manager will bypass the social reasoner.
+        // In this case, it outputs a fake SROutput that doesn't contain social reasoner states
         if (srOutput.getStates() != null) {
             final List<String> states = new ArrayList<>(srOutput.getStates());
             // The social reasoner states include the current stage of the dialog. We do not want to store this
@@ -148,10 +118,4 @@ public class UserModelComponent extends PluggableComponent {
         throw new IllegalStateException("Tried to start UserModelComponent with uninitialized session");
     }
 
-    private static Optional<UserModel> getUserModel(final String setting, final UserModelRepository repository) {
-        final Optional<UserModel> result = repository.readModel();
-        result.ifPresent(USER_MODEL_RESETTERS.getOrDefault(setting, __ -> {
-        }));
-        return result;
-    }
 }
