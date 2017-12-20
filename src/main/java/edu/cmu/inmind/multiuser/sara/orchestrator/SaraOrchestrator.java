@@ -36,8 +36,15 @@ public class SaraOrchestrator extends ProcessOrchestratorImpl {
     }
 
     @Override
+    public void start() {
+
+        Log4J.info(this, "orchestrator start method  ");
+        super.start();
+    }
+
+    @Override
     public void process(String message) throws Throwable {
-        Log4J.debug(this, "orchestrator received message " + message);
+        Log4J.info(this, "orchestrator received message " + message);
         if( resetCrono ) {
             time = System.currentTimeMillis();
             resetCrono = false;

@@ -77,7 +77,7 @@ public class MainClassBase {
                 .setPathLogs(Utils.getProperty("pathLogs"))
                 .setCorePoolSize(1000)
                 .setSessionTimeout(5, TimeUnit.DAYS) // dirty workaround for broken close-session
-                .setServerAddress("tcp://127.0.0.1") //use IP instead of 'localhost'
+                .setServerAddress("tcp://192.168.0.24") //ALWAYS check to use IP and NOT 'localhost' or 127.0.0.1
                 .setExceptionTraceLevel( Constants.SHOW_ALL_EXCEPTIONS)
                 .setExceptionLogger( getExceptionLogger() )// MUF Exceptions/NON_MUF Exceptions
                 .build();

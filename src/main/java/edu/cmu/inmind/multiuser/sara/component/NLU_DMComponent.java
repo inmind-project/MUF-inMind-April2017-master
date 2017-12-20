@@ -9,8 +9,10 @@ import edu.cmu.inmind.multiuser.controller.blackboard.Blackboard;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardSubscription;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
+import edu.cmu.inmind.multiuser.controller.plugin.Pluggable;
 import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
 import edu.cmu.inmind.multiuser.controller.plugin.StateType;
+import edu.cmu.inmind.multiuser.controller.resources.ResourceLocator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,19 +26,13 @@ import java.util.Map;
         SaraCons.MSG_RESPONSE_START_PYTHON, SaraCons.MSG_QUERY_RESPONSE, SaraCons.MSG_ASR_DM_RESPONSE} )
 public class NLU_DMComponent extends PluggableComponent {
     private ActiveDMOutput dmOutput;
-
+    static NLU_DMComponent nlu_dmComponent ;
     private Blackboard blackboard;
 
-    private static Map<String, NLU_DMComponent> components;
-    static {
-        components = new HashMap<>();
-    }
-
     static void sendToBBforSession(String sessionID, String msgId, ActiveDMOutput dmoutput) {
-        NLU_DMComponent nluc = components.get(sessionID);
-        nluc.dmOutput = dmoutput;
-        Log4J.debug(nluc, "the local activedmoutput is " + nluc.dmOutput.hashCode());
-        nluc.blackboard.post(nluc, msgId, "query");
+        nlu_dmComponent.dmOutput = dmoutput;
+        Log4J.debug(nlu_dmComponent, "the local activedmoutput is " + nlu_dmComponent.dmOutput.hashCode());
+        nlu_dmComponent.blackboard.post(nlu_dmComponent, msgId, "query");
     }
 
     @Override
@@ -47,7 +43,9 @@ public class NLU_DMComponent extends PluggableComponent {
 
     @Override
     public void postCreate() {
-        components.put(getSessionId(), this);
+
+        Log4J.info(this,"postCreate NLU_DMComponent");
+
         this.blackboard = getBlackBoard(getSessionId());
 
     }
@@ -81,10 +79,15 @@ public class NLU_DMComponent extends PluggableComponent {
     @Override
     public void onEvent(Blackboard blackboard, BlackboardEvent blackboardEvent) throws Throwable {
         // print full event
-        Log4J.debug(this, "received " + blackboardEvent.toString());
+        Log4J.info(this, "received " + blackboardEvent.toString());
         if(blackboard!=null) {
             //Log4J.info(this, "blackboard is not null");
             this.blackboard = blackboard;
+        }
+        try {
+            nlu_dmComponent = (NLU_DMComponent) ResourceLocator.getComponent(getSessionId(), NLU_DMComponent.class);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         // store user's latest utterance
         // let's forward the ASR message to DialoguePython:
