@@ -44,9 +44,9 @@ public class SaraServerMainClass extends MainClassBase {
                 new PluginModule.Builder(SaraOrchestrator.class, UserModelComponent.class, SaraCons.ID_UM)
                         .addPlugin(UserModelComponent.class, SaraCons.ID_UM)
 
-                        .addPlugin(FakeNLUComponent.class, SaraCons.ID_NLU)
-                        .addPlugin(FakeTaskReasonerComponent.class, SaraCons.ID_DM)
-                        //.addPlugin(NLU_DMComponent.class, SaraCons.ID_NLU)
+                        /*.addPlugin(FakeNLUComponent.class, SaraCons.ID_NLU)
+                        .addPlugin(FakeTaskReasonerComponent.class, SaraCons.ID_DM)*/
+                        .addPlugin(NLU_DMComponent.class, SaraCons.ID_NLU)
 
                         .addPlugin(NLGComponent.class, SaraCons.ID_NLG)
 
@@ -62,7 +62,7 @@ public class SaraServerMainClass extends MainClassBase {
 
     @Override
     protected Config createConfig() {
-        return super.createConfig();
-                //.setJsonServicesConfig("services.json");
+        return super.createConfig()
+                .setJsonServicesConfig("services.json");
     }
 }
