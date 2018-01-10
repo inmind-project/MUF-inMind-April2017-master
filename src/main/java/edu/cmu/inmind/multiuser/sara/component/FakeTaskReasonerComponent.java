@@ -42,7 +42,7 @@ public class FakeTaskReasonerComponent extends PluggableComponent {
 
     private DMOutput sendToSR() {
         DMOutput dmOutput = new DMOutput();
-
+        Log4J.info(FakeTaskReasonerComponent.this, "cpt value: "+cpt );
         if (cpt == 0) {
             dmOutput.setAction("greeting");
             cpt++;
