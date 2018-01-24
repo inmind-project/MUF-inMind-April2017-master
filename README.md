@@ -6,6 +6,8 @@ and one of the submodules uses large-file-support.
 
  * before cloning, please make sure you have installed git large-file-support: https://git-lfs.github.com/
 
+ * to be able to clone the dialogOS submodule, you'll need to create a bitbucket account, and send a request to @tbaumann. You might have to enter your credentials during the cloning process.
+ 
  * clone by saying ```git clone --recursive git@github.com:fpecune/MUF-inMind-April2017-master.git```
    (or via https, whichever you prefer)
 
@@ -14,6 +16,21 @@ and one of the submodules uses large-file-support.
 git submodule init
 git submodule update
 ```
+
+ * the latest stable branch should always be the master branch. To be sure you are up-to-date and on the correct branch, use ```git status```
+ 
+## Building with Gradle
+Once you cloned the main repo and all its submodules (sara-csc, sara-beat, and dialoOS), you'll have to build the project with all its dependencies. 
+
+ * build by saying ```gradlew build -x test```
+ 
+ * for Windows users, you might need to check the path to your jdk in your environment variables so it actually matches your installation folder. This folder should be something like "C:\Program Files\Java\jdk1.8.0_121\bin".
+ 
+ ## Starting the MUF
+Once you cloned the main repo and all its submodules, and built the project succesfully, you should be able to start the server.
+
+ * start the MUF server by saying ```gradlew run```
+ 
 
 ## Contents:
 
