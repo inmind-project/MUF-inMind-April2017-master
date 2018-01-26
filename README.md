@@ -26,12 +26,24 @@ Once you cloned the main repo and all its submodules (sara-csc, sara-beat, and d
  
  * for Windows users, you might need to check the path to your jdk in your environment variables so it actually matches your installation folder. This folder should be something like "C:\Program Files\Java\jdk1.8.0_121\bin".
  
+ * if there are errors with the parser in DialogOS, compile DialogOS independently once (gradlew.bat in DialogOS directory, then gradlew.bat build from main MUF directory to create the missing classes). For Windows users, copy the XMLData folder from BEAT to main directory. This should replace the XMLData file already existing.
+ 
+## Starting the CSC and NLU
+To run the CSC and NLU, you will need to receive a .pem key to access the AWS. For windows users, you will need to transform .pem key into .ppk using PuttyGen using the following tutorial: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/putty.html.
+
+After transforming the key into .ppk format, open Putty. Under the category pane > Auth, browse for your key that prompts for a "Private key file for authentification". Return to the session pane and press "open".
+
+ * for Windows users, in order to simultaneously run the CSC and NLU through SSH, you will need to use TMux to have two SSH windows running at the same time.
+ 
+ * the CSC exists in the deployment folder. Once you navigate to the CSCPython directory, say ```./run.sh```
+ 
+ * the NLU also exists in the deployment folder. Navigate to dialogue-system and the DialoguePython directory. Once you are in the correct directory, say ```./run.sh```
+ 
  ## Starting the MUF
 Once you cloned the main repo and all its submodules, and built the project succesfully, you should be able to start the server.
 
  * start the MUF server by saying ```gradlew run```
  
-
 ## Contents:
 
 This repository contains:
@@ -99,7 +111,3 @@ How to run a minimal configuration:
 
 Type "shutdown" to stop:
 2017-05-01 17:06:36,663 INFO    SessionManager                 - Starting Multiuser framework...
-
-
-
-    
