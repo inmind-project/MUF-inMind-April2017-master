@@ -1,6 +1,6 @@
 rootProject.name = 'sara'
 include 'saracommons'
-include 'saracsc'
+//include 'saracsc'
 include 'sarabeat'
 //include 'MultiUserFramework'
 include 'dialogos:com.clt.base'

@@ -65,7 +65,7 @@ dependencies {
     // version
     compile project(":dialogos")
     compile project(":saracommons")
-    compile project(":saracsc")
+    //compile project(":saracsc")
     compile project(":sarabeat")
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
 }
