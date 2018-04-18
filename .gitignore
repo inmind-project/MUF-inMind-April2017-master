@@ -2,9 +2,7 @@
 
 stdout.*
 stderr.*
-/logs/stderr.*
-/logs/stdout.*
-/logs/user_models/*
+logs/
 
 /saracommons/build
 /saracsc/build
