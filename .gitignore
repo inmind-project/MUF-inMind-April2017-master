@@ -5,7 +5,7 @@ stderr.*
 logs/
 
 # For some reason, submodules aren't excluded by "normal" exclude
-/**/out/
+**/out/
 
 
 /captures
