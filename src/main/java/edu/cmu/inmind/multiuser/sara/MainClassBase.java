@@ -11,6 +11,11 @@ import edu.cmu.inmind.multiuser.controller.plugin.PluginModule;
 import edu.cmu.inmind.multiuser.controller.resources.Config;
 import edu.cmu.inmind.multiuser.sara.log.ExceptionLogger;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -66,13 +71,22 @@ public class MainClassBase {
     }
 
     protected Config createConfig() {
+        final String logDir = Utils.getProperty("pathLogs");
+        try {
+            Files.createDirectories(Paths.get(logDir));
+            System.err.println(String.format("WARNING: Log dir path \"%s\" did not exist; Created.", logDir));
+        } catch (FileAlreadyExistsException e) {
+            // Do nothing
+        } catch (IOException e) {
+           throw new UncheckedIOException(e);
+        }
         return new Config.Builder()
                 // you can add values directly like this:
                 .setSessionManagerPort(Integer.valueOf(Utils.getProperty("SessionManagerPort")))
                 .setDefaultNumOfPoolInstances(10)
                 .setNumOfSockets(1)
                         // or you can refer to values in your config.properties file:
-                .setPathLogs(Utils.getProperty("pathLogs"))
+                .setPathLogs(logDir)
                 .setCorePoolSize(1000)
                 .setSessionTimeout(5, TimeUnit.DAYS) // dirty workaround for broken close-session
                 .setServerAddress("tcp://127.0.0.1") //use IP instead of 'localhost'
