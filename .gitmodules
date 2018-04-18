@@ -1,7 +1,3 @@
-[submodule "saracsc"]
-	path = saracsc
-	url = https://github.com/articulab/SARA-WEF-Jan2017-UnderstandingModule
-	branch = InMind
 [submodule "sarabeat"]
 	path = sarabeat
 	url = https://github.com/articulab/InMind-April2017-BEAT
