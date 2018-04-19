@@ -3,6 +3,7 @@ package edu.cmu.inmind.multiuser.sara;
 import edu.cmu.inmind.multiuser.controller.common.Constants;
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.controller.common.Utils;
+import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.controller.log.MessageLog;
 import edu.cmu.inmind.multiuser.controller.muf.MUFLifetimeManager;
 import edu.cmu.inmind.multiuser.controller.muf.MultiuserController;
@@ -74,7 +75,7 @@ public class MainClassBase {
         final String logDir = Utils.getProperty("pathLogs");
         try {
             Files.createDirectories(Paths.get(logDir));
-            System.err.println(String.format("WARNING: Log dir path \"%s\" did not exist; Created.", logDir));
+            Log4J.warn(this, String.format("Log dir path \"%s\" did not exist; Created.", logDir));
         } catch (FileAlreadyExistsException e) {
             // Do nothing
         } catch (IOException e) {
