@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Scanner;
@@ -74,8 +75,8 @@ public class MainClassBase {
     protected Config createConfig() {
         final String logDir = Utils.getProperty("pathLogs");
         try {
-            Files.createDirectories(Paths.get(logDir));
-            Log4J.warn(this, String.format("Log dir path \"%s\" did not exist; Created.", logDir));
+            final Path absLogDir = Files.createDirectories(Paths.get(logDir).toAbsolutePath());
+            Log4J.warn(this, String.format("Log dir path \"%s\" did not exist; Created.", absLogDir));
         } catch (FileAlreadyExistsException e) {
             // Do nothing
         } catch (IOException e) {
