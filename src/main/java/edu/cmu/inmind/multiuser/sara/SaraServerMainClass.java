@@ -13,12 +13,9 @@ import org.apache.logging.log4j.core.config.Configurator;
 import java.util.ArrayList;
 import java.util.List;
 
-//import edu.cmu.lti.rapport.pipline.csc.ConversationalStrategyUtil;
-//import edu.cmu.lti.rapport.pipline.csc.ConversationalStrategyUtil;
-
 /**
  * Created by oscarr on 8/02/17.
- *
+ * <p>
  * This example illustrates the whole pipeline:
  * AndroidClient (ASR) -> DialogueSystem (NLU) -> TaskReasoner -> SocialReasoner -> NLG -> AndroidClient
  * This example is pretty similar to EX15_Wholepipeline, however, unlike Ex15_WholePipeline, in this example
@@ -28,54 +25,54 @@ import java.util.List;
  */
 public class SaraServerMainClass extends MainClassBase {
 
-    public static void main(String args[]) throws Throwable {
-        setLogLevel();
-       // ConversationalStrategyUtil.preloadRecipes();
+	public static void main(String args[]) throws Throwable {
+		setLogLevel();
+		// ConversationalStrategyUtil.preloadRecipes();
 
-        List<ShutdownHook> hooks = new ArrayList<>();
-        // You can add hooks that will be executed when the MUF is stopped
-        hooks.add( new ShutdownHook() {
-            @Override
-            public void execute() {
-                //TODO: do something
-            }
-        });
-        new SaraServerMainClass().execute( hooks );
-    }
+		List<ShutdownHook> hooks = new ArrayList<>();
+		// You can add hooks that will be executed when the MUF is stopped
+		hooks.add(new ShutdownHook() {
+			@Override
+			public void execute() {
+				//TODO: do something
+			}
+		});
+		new SaraServerMainClass().execute(hooks);
+	}
 
-    private static void setLogLevel() {
-        // https://stackoverflow.com/a/41993517/1391325
-        if (Boolean.getBoolean("log4j.debug")) {
-            Configurator.setLevel(null, Level.DEBUG);
-        }
-    }
+	private static void setLogLevel() {
+		// https://stackoverflow.com/a/41993517/1391325
+		if (Boolean.getBoolean("log4j.debug")) {
+			Configurator.setLevel(null, Level.DEBUG);
+		}
+	}
 
-    @Override
-    protected PluginModule[] createModules() {
-        return new PluginModule[]{
-                new PluginModule.Builder(SaraOrchestrator.class, UserModelComponent.class, SaraCons.ID_UM)
-                        .addPlugin(UserModelComponent.class, SaraCons.ID_UM)
+	@Override
+	protected PluginModule[] createModules() {
+		return new PluginModule[]{
+				new PluginModule.Builder(SaraOrchestrator.class, UserModelComponent.class, SaraCons.ID_UM)
+						.addPlugin(UserModelComponent.class, SaraCons.ID_UM)
 
-                        /*.addPlugin(FakeNLUComponent.class, SaraCons.ID_NLU)
-                        .addPlugin(FakeTaskReasonerComponent.class, SaraCons.ID_DM)*/
-                        .addPlugin(NLU_DMComponent.class, SaraCons.ID_NLU)
-                        .addPlugin(DialogOSComponent.class, SaraCons.ID_DM)
-                        .addPlugin(NLGComponent.class, SaraCons.ID_NLG)
+						/*.addPlugin(FakeNLUComponent.class, SaraCons.ID_NLU)
+						.addPlugin(FakeTaskReasonerComponent.class, SaraCons.ID_DM)*/
+						.addPlugin(NLU_DMComponent.class, SaraCons.ID_NLU)
+						.addPlugin(DialogOSComponent.class, SaraCons.ID_DM)
+						.addPlugin(NLGComponent.class, SaraCons.ID_NLG)
 
-                        //.addPlugin(CSCComponent.class, SaraCons.ID_CSC)
-                        //.addPlugin(FakeCSCComponent.class, SaraCons.ID_CSC)
-		        .addPlugin(RemoteCSCComponent.class, SaraCons.ID_CSC)
+						//.addPlugin(CSCComponent.class, SaraCons.ID_CSC)
+						//.addPlugin(FakeCSCComponent.class, SaraCons.ID_CSC)
+						.addPlugin(RemoteCSCComponent.class, SaraCons.ID_CSC)
 
-                        .addPlugin(SocialReasonerComponent.class, SaraCons.ID_SR)
+						.addPlugin(SocialReasonerComponent.class, SaraCons.ID_SR)
 
-                        //.addPlugin(R5StreamComponent.class, SaraCons.ID_R5)
-                        .build()
-        };
-    }
+						//.addPlugin(R5StreamComponent.class, SaraCons.ID_R5)
+						.build()
+		};
+	}
 
-    @Override
-    protected Config createConfig() {
-        return super.createConfig()
-                .setJsonServicesConfig("services.json");
-    }
+	@Override
+	protected Config createConfig() {
+		return super.createConfig()
+				.setJsonServicesConfig("services.json");
+	}
 }
