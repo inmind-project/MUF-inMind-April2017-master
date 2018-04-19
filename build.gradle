@@ -34,6 +34,19 @@ allprojects {
 			dirs "${rootDir}/dialogos/libs"
 		}
 	}
+
+	tasks.withType(JavaCompile) {
+		// https://guides.gradle.org/performance/#compiler_daemon
+		options.fork = true
+		// https://guides.gradle.org/performance/#incremental_compilation
+		options.incremental = true
+	}
+
+	// https://stackoverflow.com/a/23807352/1391325
+	// https://guides.gradle.org/performance/#parallel_test_execution
+	tasks.withType(Test) {
+		maxParallelForks = (int) (Runtime.runtime.availableProcessors().intdiv(2) ?: 1)
+	}
 }
 
 buildscript {
