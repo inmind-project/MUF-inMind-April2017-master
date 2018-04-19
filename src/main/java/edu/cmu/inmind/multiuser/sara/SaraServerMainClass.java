@@ -7,11 +7,14 @@ import edu.cmu.inmind.multiuser.controller.resources.Config;
 import edu.cmu.inmind.multiuser.sara.component.*;
 import edu.cmu.inmind.multiuser.sara.orchestrator.SaraOrchestrator;
 import edu.cmu.lti.articulab.movies.muf.DialogOSComponent;
-//import edu.cmu.lti.rapport.pipline.csc.ConversationalStrategyUtil;
-//import edu.cmu.lti.rapport.pipline.csc.ConversationalStrategyUtil;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.config.Configurator;
 
 import java.util.ArrayList;
 import java.util.List;
+
+//import edu.cmu.lti.rapport.pipline.csc.ConversationalStrategyUtil;
+//import edu.cmu.lti.rapport.pipline.csc.ConversationalStrategyUtil;
 
 /**
  * Created by oscarr on 8/02/17.
@@ -26,7 +29,7 @@ import java.util.List;
 public class SaraServerMainClass extends MainClassBase {
 
     public static void main(String args[]) throws Throwable {
-
+        setLogLevel();
        // ConversationalStrategyUtil.preloadRecipes();
 
         List<ShutdownHook> hooks = new ArrayList<>();
@@ -38,6 +41,13 @@ public class SaraServerMainClass extends MainClassBase {
             }
         });
         new SaraServerMainClass().execute( hooks );
+    }
+
+    private static void setLogLevel() {
+        // https://stackoverflow.com/a/41993517/1391325
+        if (Boolean.getBoolean("log4j.debug")) {
+            Configurator.setLevel(null, Level.DEBUG);
+        }
     }
 
     @Override
