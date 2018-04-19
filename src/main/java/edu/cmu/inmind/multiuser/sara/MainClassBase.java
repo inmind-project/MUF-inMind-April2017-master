@@ -75,7 +75,7 @@ public class MainClassBase {
     protected Config createConfig() {
         final String logDir = Utils.getProperty("pathLogs");
         try {
-            final Path absLogDir = Files.createDirectories(Paths.get(logDir).toAbsolutePath());
+            final Path absLogDir = Files.createDirectories(Paths.get(logDir).toAbsolutePath().normalize());
             Log4J.warn(this, String.format("Log dir path \"%s\" did not exist; Created.", absLogDir));
         } catch (FileAlreadyExistsException e) {
             // Do nothing
