@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="ClientInterface_main" target="1.8" />
+      <module name="ClientInterface_test" target="1.8" />
+      <module name="com.clt.audio_main" target="1.8" />
+      <module name="com.clt.audio_test" target="1.8" />
+      <module name="com.clt.base_main" target="1.8" />
+      <module name="com.clt.base_test" target="1.8" />
+      <module name="com.clt.mac_main" target="1.8" />
+      <module name="com.clt.mac_test" target="1.8" />
+      <module name="com.clt.script_main" target="1.8" />
+      <module name="com.clt.script_test" target="1.8" />
+      <module name="com.clt.speech_main" target="1.8" />
+      <module name="com.clt.speech_test" target="1.8" />
+      <module name="com.clt.xml_main" target="1.8" />
+      <module name="com.clt.xml_test" target="1.8" />
+      <module name="dialogos_main" target="1.8" />
+      <module name="DialogOS_MinimalInputOutput_main" target="1.8" />
+      <module name="DialogOS_MinimalInputOutput_test" target="1.8" />
+      <module name="dialogos_test" target="1.8" />
+      <module name="Diamant_main" target="1.8" />
+      <module name="Diamant_test" target="1.8" />
+      <module name="movieRecommendation_main" target="1.8" />
+      <module name="movieRecommendation_test" target="1.8" />
+      <module name="plugins_main" target="1.8" />
+      <module name="plugins_test" target="1.8" />
+      <module name="sara_main" target="1.8" />
+      <module name="sara_test" target="1.8" />
+      <module name="sarabeat_main" target="1.8" />
+      <module name="sarabeat_test" target="1.8" />
+      <module name="saracommons_main" target="1.8" />
+      <module name="saracommons_test" target="1.8" />
+      <module name="saracsc_main" target="1.8" />
+      <module name="saracsc_test" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

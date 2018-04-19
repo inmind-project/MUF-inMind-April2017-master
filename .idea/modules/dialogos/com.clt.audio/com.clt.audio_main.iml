@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id=":dialogos:com.clt.audio:main" external.linked.project.path="$MODULE_DIR$/../../../../dialogos/com.clt.audio" external.root.project.path="$MODULE_DIR$/../../../.." external.system.id="GRADLE" external.system.module.group="sara.dialogos" external.system.module.type="sourceSet" external.system.module.version="unspecified" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
+    <output url="file://$MODULE_DIR$/../../../../dialogos/com.clt.audio/out/production/classes" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../../../dialogos/com.clt.audio/src/main">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../dialogos/com.clt.audio/src/main/java" isTestSource="false" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="com.clt.base_main" />
+  </component>
+</module>

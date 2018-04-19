@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="ExternalSystem" externalSystem="GRADLE" externalSystemModuleGroup="sara.dialogos.plugins" externalSystemModuleVersion="unspecified" linkedProjectId=":dialogos:plugins:DialogOS_MinimalInputOutput" linkedProjectPath="$MODULE_DIR$/../../../../../dialogos/plugins/DialogOS_MinimalInputOutput" rootProjectPath="$MODULE_DIR$/../../../../.." />
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../../../../dialogos/plugins/DialogOS_MinimalInputOutput">
+      <excludeFolder url="file://$MODULE_DIR$/../../../../../dialogos/plugins/DialogOS_MinimalInputOutput/.gradle" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../../../dialogos/plugins/DialogOS_MinimalInputOutput/build" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../../../dialogos/plugins/DialogOS_MinimalInputOutput/out" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
