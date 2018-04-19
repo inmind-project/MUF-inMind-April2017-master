@@ -27,6 +27,7 @@ import java.util.concurrent.TimeUnit;
  * Main class for MUF 2.8+
  */
 public class MainClassBase {
+
     protected MultiuserController muf;
 
     protected void execute() throws Throwable{
@@ -74,14 +75,7 @@ public class MainClassBase {
 
     protected Config createConfig() {
         final String logDir = Utils.getProperty("pathLogs");
-        try {
-            final Path absLogDir = Files.createDirectories(Paths.get(logDir).toAbsolutePath().normalize());
-            Log4J.warn(this, String.format("Log dir path \"%s\" did not exist; Created.", absLogDir));
-        } catch (FileAlreadyExistsException e) {
-            // Do nothing
-        } catch (IOException e) {
-           throw new UncheckedIOException(e);
-        }
+        ensureExists(logDir, "Log dir path");
         return new Config.Builder()
                 // you can add values directly like this:
                 .setSessionManagerPort(Integer.valueOf(Utils.getProperty("SessionManagerPort")))
@@ -100,8 +94,22 @@ public class MainClassBase {
     protected MessageLog getExceptionLogger(){
         MessageLog log =  new ExceptionLogger();
         log.setId( String.valueOf(System.currentTimeMillis() ) );
-        log.setPath( Utils.getProperty("pathExceptionLog") );
+        // Ensure that the exception log exists
+        final String exLogDir = Utils.getProperty("pathExceptionLog");
+        ensureExists(exLogDir,"Exception log dir path");
+        log.setPath(exLogDir);
         return log;
+    }
+
+    private void ensureExists(final String dir, final String desc) {
+        try {
+            final Path absDirPath = Files.createDirectories(Paths.get(dir).toAbsolutePath().normalize());
+            Log4J.warn(this, String.format("%s \"%s\" did not exist; Created.", desc, absDirPath));
+        } catch (FileAlreadyExistsException e) {
+            // Do nothing
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
 }
