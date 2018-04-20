@@ -28,6 +28,9 @@ public class SaraCons {
     public static final String MSG_DM = "MSG_DM";
     public static final String MSG_QUERY = "MSG_QUERY";
     public static final String MSG_SR = "MSG_SR";
+    /**
+     * ID of messages from NLG module defining language which is to be sent by the MUF to the client for generation.
+     */
     public static final String MSG_NLG = "MSG_NLG";
     public static final String MSG_LOCAL = "MSG_LOCAL";
     public static final String MSG_ASR = "MSG_ASR";
