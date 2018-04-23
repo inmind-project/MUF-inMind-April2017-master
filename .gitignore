@@ -3,6 +3,7 @@
 stdout.*
 stderr.*
 logs/
+connection.properties
 
 
 /captures

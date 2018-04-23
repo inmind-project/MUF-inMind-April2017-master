@@ -101,12 +101,14 @@ o	Computes conversational strategy and sends it through MUF blackboard.
 
 How to run a minimal configuration:
 
--	Open the file edu.cmu.inmind.multiuser.sara.examples.Ex15_WholePipeline and make sure that only these lines are uncommented.
-.addPlugin(NLUComponent.class, SaraCons.ID_NLU)
-.addPlugin(TaskReasonerComponent.class, SaraCons.ID_DM)
-.addPlugin(SocialReasonerComponent.class, SaraCons.ID_SR)
-.addPlugin(NLGComponent.class, SaraCons.ID_NLG)
--	Run the main class edu.cmu.inmind.multiuser.sara.examples.Ex15_WholePipeline.
+Ensure the file `connection.properties` exists in the directory in which the application is found, wherein the property `hostname` denotes the host IP address the client should connect to.
+
+-	Open the file `edu.cmu.inmind.multiuser.sara.SaraServerMainClass` and make sure that only these lines are uncommented.
+`.addPlugin(NLUComponent.class, SaraCons.ID_NLU)`
+`.addPlugin(TaskReasonerComponent.class, SaraCons.ID_DM)`
+`.addPlugin(SocialReasonerComponent.class, SaraCons.ID_SR)`
+`.addPlugin(NLGComponent.class, SaraCons.ID_NLG)`
+-	Run the main class `edu.cmu.inmind.multiuser.sara.SaraServerMainClass`.
 -	You should see the following message in the console, meaning that the server is running and waiting for clients to connect:
 
 Type "shutdown" to stop:
