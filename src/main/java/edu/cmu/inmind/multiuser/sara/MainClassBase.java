@@ -144,7 +144,6 @@ public class MainClassBase {
 				result.store(os, "Programmatically-guessed connection properties; it's possible these don't work!");
 			}
 		}
-		assert result != null;
 		return result;
 	}
 
