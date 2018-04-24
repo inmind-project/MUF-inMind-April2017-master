@@ -1,7 +1,6 @@
 package edu.cmu.inmind.multiuser.sara;
 
 import edu.cmu.inmind.multiuser.common.SaraCons;
-import edu.cmu.inmind.multiuser.controller.muf.ShutdownHook;
 import edu.cmu.inmind.multiuser.controller.plugin.PluginModule;
 import edu.cmu.inmind.multiuser.controller.resources.Config;
 import edu.cmu.inmind.multiuser.sara.component.*;
@@ -11,8 +10,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.config.Configurator;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
 
 /**
  * Created by oscarr on 8/02/17.
@@ -30,15 +28,16 @@ public class SaraServerMainClass extends MainClassBase {
 		setLogLevel();
 		// ConversationalStrategyUtil.preloadRecipes();
 
-		List<ShutdownHook> hooks = new ArrayList<>();
+		//List<ShutdownHook> hooks = new ArrayList<>();
 		// You can add hooks that will be executed when the MUF is stopped
-		hooks.add(new ShutdownHook() {
-			@Override
-			public void execute() {
-				//TODO: do something
-			}
-		});
-		new SaraServerMainClass().execute(hooks);
+		//hooks.add(new ShutdownHook() {
+		//	@Override
+		//	public void execute() {
+		//		//do something here
+		//	}
+		//});
+		//new SaraServerMainClass().execute(hooks);
+		new SaraServerMainClass().execute(Collections.emptyList());
 	}
 
 	private static void setLogLevel() {
