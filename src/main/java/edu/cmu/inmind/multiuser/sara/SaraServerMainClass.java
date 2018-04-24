@@ -10,6 +10,7 @@ import edu.cmu.lti.articulab.movies.muf.DialogOSComponent;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.config.Configurator;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,7 +72,7 @@ public class SaraServerMainClass extends MainClassBase {
 	}
 
 	@Override
-	protected Config createConfig() {
+	protected Config createConfig() throws IOException {
 		return super.createConfig()
 				.setJsonServicesConfig("services.json");
 	}
