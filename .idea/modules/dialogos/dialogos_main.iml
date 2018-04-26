@@ -7,9 +7,8 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Gradle: edu.cmu.inmind.framework.multiuser:server:3.0-rc1" level="project" />
-    <orderEntry type="library" name="Gradle: org.json:json:20170516" level="project" />
     <orderEntry type="library" name="Gradle: nz.ac.waikato.cms.weka.thirdparty:java-cup-11b-runtime:2015.03.26" level="project" />
-    <orderEntry type="module" module-name="com.clt.base_main" />
+    <orderEntry type="library" name="Gradle: org.codehaus.groovy:groovy-all:2.4.10" level="project" />
     <orderEntry type="module" module-name="com.clt.xml_main" />
     <orderEntry type="module" module-name="com.clt.audio_main" />
     <orderEntry type="module" module-name="com.clt.speech_main" />
@@ -21,7 +20,7 @@
     <orderEntry type="library" name="Gradle: org.jdom:jdom2:2.0.6" level="project" />
     <orderEntry type="module" module-name="com.clt.script_main" />
     <orderEntry type="module" module-name="com.clt.mac_main" />
-    <orderEntry type="library" name="Gradle: org.codehaus.groovy:groovy-all:2.4.10" level="project" />
+    <orderEntry type="module" module-name="com.clt.base_main" />
     <orderEntry type="library" name="Gradle: com.apple:AppleJavaExtensions:1.4" level="project" />
     <orderEntry type="library" name="Gradle: mrj:MRJToolkitStubs:1.0" level="project" />
     <orderEntry type="library" name="Gradle: nz.ac.waikato.cms.weka.thirdparty:java-cup-11b:2015.03.26" level="project" />
@@ -31,7 +30,8 @@
     <orderEntry type="library" name="Gradle: org.apache.httpcomponents:httpcore:4.4.6" level="project" />
     <orderEntry type="module" module-name="ClientInterface_main" />
     <orderEntry type="module" module-name="plugins_main" />
-    <orderEntry type="library" name="Gradle: commons-logging:commons-logging:1.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.json:json:20170516" level="project" />
     <orderEntry type="library" name="Gradle: commons-codec:commons-codec:1.9" level="project" />
+    <orderEntry type="library" name="Gradle: commons-logging:commons-logging:1.2" level="project" />
   </component>
 </module>

@@ -12,7 +12,7 @@
     <orderEntry type="module" module-name="sara_main" />
     <orderEntry type="module" module-name="DialogOS_MinimalInputOutput_main" />
     <orderEntry type="module" module-name="movieRecommendation_main" />
-    <orderEntry type="library" name="Gradle: edu.cmu.inmind.framework.multiuser:server:all:3.0-rc1" level="project" />
+    <orderEntry type="library" name="Gradle: edu.cmu.inmind.framework.multiuser:server:all:3.0.9-rc1" level="project" />
     <orderEntry type="module" module-name="dialogos_main" />
     <orderEntry type="module" module-name="saracommons_main" />
     <orderEntry type="module" module-name="sarabeat_main" />
