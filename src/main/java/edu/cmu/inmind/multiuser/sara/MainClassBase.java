@@ -11,12 +11,15 @@ import edu.cmu.inmind.multiuser.controller.muf.ShutdownHook;
 import edu.cmu.inmind.multiuser.controller.plugin.PluginModule;
 import edu.cmu.inmind.multiuser.controller.resources.Config;
 import edu.cmu.inmind.multiuser.sara.log.ExceptionLogger;
+import edu.cmu.inmind.multiuser.sara.net.PreferredInetAddressFinder;
 
 import java.io.*;
 import java.net.InetAddress;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.file.*;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -109,17 +112,20 @@ public class MainClassBase {
 		return log;
 	}
 
-	private Properties createDefaultConnectionProperties() {
+	private Properties createDefaultConnectionProperties() throws SocketException {
 		final Properties result = new Properties();
-		String localAddress = FALLBACK_IP_ADDRESS;
-		try {
-			final InetAddress localHost = InetAddress.getLocalHost();
-			localAddress = localHost.getHostAddress();
-			Log4J.info(this, String.format("Configuring host IP address as \"%s\".", localAddress));
-		} catch (final UnknownHostException eHost) {
-			Log4J.warn(this, String.format("Could not programmatically find a local IP address; falling back to \"%s\".", FALLBACK_IP_ADDRESS));
-		}
-		result.setProperty(HOST_ADDRESS_PROP_NAME, localAddress);
+
+		final Optional<InetAddress> optPreferredAddr = new PreferredInetAddressFinder().get();
+		final String hostname = optPreferredAddr.map(preferredAddr -> {
+			final String addr = preferredAddr.getHostAddress();
+			Log4J.info(this, String.format("Configuring host IP address as \"%s\".", addr));
+			return addr;
+		}).orElseGet(() -> {
+			final String addr = FALLBACK_IP_ADDRESS;
+			Log4J.warn(this, String.format("Could not programmatically find a local IP address; falling back to \"%s\".", addr));
+			return addr;
+		});
+		result.setProperty(HOST_ADDRESS_PROP_NAME, hostname);
 		return result;
 	}
 
