@@ -72,8 +72,6 @@ configurations.all {
 }
 
 dependencies {
-	testCompile group: 'junit', name: 'junit', version: '4.+'
-	testCompile "org.mockito:mockito-core:1.+"
 	compile 'edu.cmu.inmind.framework.multiuser:server:3.0.9-rc1:all'
 	// version
 	compile project(":dialogos")
@@ -81,6 +79,9 @@ dependencies {
 	//compile project(":saracsc")
 	compile project(":sarabeat")
 	compile group: 'commons-io', name: 'commons-io', version: '2.6'
+
+	// TEST
+	testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
 task sourceJar(type: Jar) {
