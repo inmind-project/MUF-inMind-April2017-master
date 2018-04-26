@@ -131,11 +131,17 @@ public class MainClassBase {
 	}
 
 	private void ensureExists(final String dir, final String desc) throws IOException {
-		try {
-			final Path absDirPath = Files.createDirectories(Paths.get(dir).toAbsolutePath().normalize());
+		final Path normalizedAbsPath = Paths.get(dir).toAbsolutePath().normalize();
+		final boolean alreadyExists = Files.exists(normalizedAbsPath);
+		if (alreadyExists) {
+			if (Files.isDirectory(normalizedAbsPath)){
+				Log4J.debug(this, String.format("%s \"%s\" already exists; Skipping creation thereof.", desc, normalizedAbsPath));
+			} else {
+				throw new FileAlreadyExistsException(String.format("%s \"%s\" already exists but is not a directory.", desc, normalizedAbsPath));
+			}
+		} else {
+			final Path absDirPath = Files.createDirectories(normalizedAbsPath);
 			Log4J.warn(this, String.format("%s \"%s\" did not exist; Created.", desc, absDirPath));
-		} catch (FileAlreadyExistsException e) {
-			// Do nothing
 		}
 	}
 
