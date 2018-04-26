@@ -11,10 +11,7 @@ apply plugin: 'application'
 sourceCompatibility = 1.8
 
 repositories {
-	mavenCentral()
-	flatDir {
-		dirs 'lib'
-	}
+	jcenter()
 	maven {
 		credentials {
 			username 'inmind'
@@ -22,10 +19,7 @@ repositories {
 		}
 		url "http://www.cs.cmu.edu/afs/cs/project/inmind-cmu-yahoo/www/maven2"
 	}
-	jcenter()
-	maven {
-		url 'https://oss.jfrog.org/libs-snapshot'
-	}
+
 }
 
 allprojects {
