@@ -29,22 +29,12 @@ public final class PreferredInetAddressFinder {
 
 	private static final List<String> WIFI_KEYWORDS = Arrays.asList("wi-fi", "wifi", "wireless");
 
-	private final int socketTimeout;
-
-	public PreferredInetAddressFinder(final int socketTimeout){
-		this.socketTimeout = socketTimeout;
-	}
-
-	public PreferredInetAddressFinder(){
-		this(1000);
-	}
-
-	private static Comparator<NetworkInterface> LAN_NAME_COMPARATOR = (o1, o2) -> {
+	private static final Comparator<NetworkInterface> LAN_NAME_COMPARATOR = (o1, o2) -> {
 		final boolean b1 = isLANAdapter(o1);
 		final boolean b2 = isLANAdapter(o2);
 
 		final int result;
-		if (b1){
+		if (b1) {
 			if (b2) {
 				result = 0;
 			} else {
@@ -58,12 +48,12 @@ public final class PreferredInetAddressFinder {
 		return result;
 	};
 
-	private static Comparator<NetworkInterface> WIFI_NAME_COMPARATOR = (o1, o2) -> {
+	private static final Comparator<NetworkInterface> WIFI_NAME_COMPARATOR = (o1, o2) -> {
 		final boolean b1 = isWifiAdapter(o1);
 		final boolean b2 = isWifiAdapter(o2);
 
 		final int result;
-		if (b1){
+		if (b1) {
 			if (b2) {
 				result = 0;
 			} else {
@@ -111,7 +101,7 @@ public final class PreferredInetAddressFinder {
 			result = false;
 		} else {
 			final String substr = "ethernet";
-			if(normalizedDispName.contains(substr)) {
+			if (normalizedDispName.contains(substr)) {
 				result = true;
 			} else {
 				// Try looking at the adapter ID
@@ -135,6 +125,16 @@ public final class PreferredInetAddressFinder {
 
 	private static String normalizeDispName(final String name) {
 		return name.toLowerCase();
+	}
+
+	private final int socketTimeout;
+
+	public PreferredInetAddressFinder(final int socketTimeout) {
+		this.socketTimeout = socketTimeout;
+	}
+
+	public PreferredInetAddressFinder() {
+		this(1000);
 	}
 
 	/**
