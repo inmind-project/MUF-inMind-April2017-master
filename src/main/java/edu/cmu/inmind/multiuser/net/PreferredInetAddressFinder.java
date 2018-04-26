@@ -145,7 +145,7 @@ public final class PreferredInetAddressFinder {
 	public Optional<InetAddress> get() throws SocketException {
 		Optional<InetAddress> result = Optional.empty();
 		// https://docs.oracle.com/javase/tutorial/networking/nifs/listing.html
-		final NetworkInterface[] validNetInts = getValidInterfaces(NetworkInterface.getNetworkInterfaces()).sorted(INTERFACE_SORTER).toArray(NetworkInterface[]::new);
+		final Iterable<NetworkInterface> validNetInts = getValidInterfaces(NetworkInterface.getNetworkInterfaces()).sorted(INTERFACE_SORTER)::iterator;
 		for (final NetworkInterface netInt : validNetInts) {
 			final Stream<InetAddress> validAddrs = getValidAddresses(netInt.getInetAddresses());
 			// Currently, any valid IP address is accepted
