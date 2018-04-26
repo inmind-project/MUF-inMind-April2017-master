@@ -49,7 +49,7 @@ public class BehaviorNetworkController {
         return name;
     }
 
-    public String extractState( String state ){return null;};
+    public String extractState( String state ){return null;}
 
     public String removeState( String state ){return null;}
 
