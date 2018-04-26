@@ -11,7 +11,7 @@ import edu.cmu.inmind.multiuser.controller.muf.ShutdownHook;
 import edu.cmu.inmind.multiuser.controller.plugin.PluginModule;
 import edu.cmu.inmind.multiuser.controller.resources.Config;
 import edu.cmu.inmind.multiuser.sara.log.ExceptionLogger;
-import edu.cmu.inmind.multiuser.sara.net.PreferredInetAddressFinder;
+import edu.cmu.inmind.multiuser.net.PreferredInetAddressFinder;
 
 import java.io.IOException;
 import java.io.InputStream;

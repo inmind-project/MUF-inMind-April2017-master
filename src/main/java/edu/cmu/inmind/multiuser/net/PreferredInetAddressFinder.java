@@ -5,7 +5,7 @@
  * Written by members of the ArticuLab, directed by Justine Cassell, 2018.
  */
 
-package edu.cmu.inmind.multiuser.sara.net;
+package edu.cmu.inmind.multiuser.net;
 
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 
