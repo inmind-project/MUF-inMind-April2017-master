@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * Created by oscarr on 9/12/16.
  */
 public class Emulator{
-    private ArrayList<EmulationStep> steps = new ArrayList();
+    private ArrayList<EmulationStep> steps = new ArrayList<>();
     private boolean stop = false;
     private SocialReasonerController socialReasonerController;
     private int step;

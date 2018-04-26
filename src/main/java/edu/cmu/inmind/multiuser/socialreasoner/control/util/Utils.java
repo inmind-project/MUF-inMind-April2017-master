@@ -327,7 +327,7 @@ public class Utils {
 
     public static void exchange(String[] conversationalStrategies, String behaviorName) {
         if( !conversationalStrategies[0].equals(behaviorName) ) {
-            ArrayList<String> list = new ArrayList(Arrays.asList(conversationalStrategies));
+            ArrayList<String> list = new ArrayList<>(Arrays.asList(conversationalStrategies));
             list.remove(behaviorName);
             list.add(0, behaviorName);
             for (int i = 0; i < list.size(); i++) {
@@ -345,9 +345,9 @@ public class Utils {
         return cloner.deepClone(list);
     }
 
-    public static ArrayList cloneArray( ArrayList list ){
-        ArrayList result = new ArrayList(list.size());
-        for( Object element : list ){
+    public static <T> ArrayList<T> cloneArray( ArrayList<? extends T> list ){
+        ArrayList<T> result = new ArrayList<>(list.size());
+        for( T element : list ){
             result.add( cloner.deepClone(element) );
         }
         return result;
