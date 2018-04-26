@@ -44,9 +44,11 @@ public abstract class MainClassBase {
 	}
 
 	public void execute(List<ShutdownHook> hooks) throws Throwable {
+		final Config config = createConfig();
+		Log4J.info(this, String.format("Starting MUF listening on \"%s\".", config.getServerAddress()));
 		// starting the Multiuser framework
 		muf = MUFLifetimeManager.startFramework(
-				createModules(), createConfig(), null);
+				createModules(), config, null);
 		if (hooks != null) {
 			for (ShutdownHook hook : hooks) {
 				muf.addShutDownHook(hook);
