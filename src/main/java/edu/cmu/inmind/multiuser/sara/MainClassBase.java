@@ -37,7 +37,7 @@ public abstract class MainClassBase {
 
 	private static final String HOST_ADDRESS_PROP_NAME = "hostname";
 
-	protected MultiuserController muf;
+	private MultiuserController muf;
 
 	protected void execute() throws Throwable {
 		execute(null);
@@ -100,7 +100,7 @@ public abstract class MainClassBase {
 				.build();
 	}
 
-	protected MessageLog getExceptionLogger() throws IOException {
+	private MessageLog getExceptionLogger() throws IOException {
 		MessageLog log = new ExceptionLogger();
 		log.setId(String.valueOf(System.currentTimeMillis()));
 		// Ensure that the exception log exists
