@@ -1,10 +1,10 @@
 package edu.cmu.inmind.multiuser.openface.eventDetector;
 
-import java.util.Map;
-
-import edu.cmu.inmind.multiuser.openface.OpenFaceEvent;
 import edu.cmu.inmind.multiuser.openface.FeatureType;
+import edu.cmu.inmind.multiuser.openface.OpenFaceEvent;
 import edu.cmu.inmind.multiuser.openface.input.OpenFaceInput;
+
+import java.util.Map;
 
 public class RuleBasedEventDetector extends EventDetector {
 

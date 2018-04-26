@@ -1,5 +1,9 @@
 package edu.cmu.inmind.multiuser.sara.component.nlg;
-import edu.cmu.inmind.multiuser.common.model.*;
+
+import edu.cmu.inmind.multiuser.common.model.DMOutput;
+import edu.cmu.inmind.multiuser.common.model.SROutput;
+import edu.cmu.inmind.multiuser.common.model.UserFrame;
+import edu.cmu.inmind.multiuser.common.model.Utils;
 
 import java.io.*;
 import java.util.*;

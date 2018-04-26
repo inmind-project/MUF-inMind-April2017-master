@@ -1,13 +1,13 @@
 package edu.cmu.inmind.multiuser.socialreasoner.control.reasoners;
 
 import edu.cmu.inmind.multiuser.socialreasoner.control.SocialReasonerController;
+import edu.cmu.inmind.multiuser.socialreasoner.control.bn.Behavior;
 import edu.cmu.inmind.multiuser.socialreasoner.control.bn.BehaviorNetwork;
 import edu.cmu.inmind.multiuser.socialreasoner.control.bn.BehaviorNetworkController;
 import edu.cmu.inmind.multiuser.socialreasoner.control.util.Utils;
-import edu.cmu.inmind.multiuser.socialreasoner.model.intent.SystemIntent;
-import edu.cmu.inmind.multiuser.socialreasoner.control.bn.Behavior;
 import edu.cmu.inmind.multiuser.socialreasoner.model.blackboard.Blackboard;
 import edu.cmu.inmind.multiuser.socialreasoner.model.history.SocialHistory;
+import edu.cmu.inmind.multiuser.socialreasoner.model.intent.SystemIntent;
 
 import java.util.Arrays;
 import java.util.List;

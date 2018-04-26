@@ -1,7 +1,7 @@
 package edu.cmu.inmind.multiuser.sara.repo;
 
-import edu.cmu.inmind.multiuser.controller.common.Utils;
 import edu.cmu.inmind.multiuser.common.model.UserModel;
+import edu.cmu.inmind.multiuser.controller.common.Utils;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 
 import java.util.Optional;

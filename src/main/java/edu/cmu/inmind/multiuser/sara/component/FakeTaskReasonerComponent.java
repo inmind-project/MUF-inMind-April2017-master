@@ -10,7 +10,6 @@ import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
 import edu.cmu.inmind.multiuser.controller.plugin.StateType;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 

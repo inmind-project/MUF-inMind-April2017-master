@@ -1,15 +1,14 @@
 package edu.cmu.inmind.multiuser.openface.input;
 
+import edu.cmu.inmind.multiuser.openface.FeatureType;
+import org.apache.commons.io.input.Tailer;
+import org.apache.commons.io.input.TailerListenerAdapter;
+
 import java.io.File;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.SynchronousQueue;
-
-import org.apache.commons.io.input.Tailer;
-import org.apache.commons.io.input.TailerListenerAdapter;
-
-import edu.cmu.inmind.multiuser.openface.FeatureType;
 
 public class FileInput extends TailerListenerAdapter implements OpenFaceInput {
 
