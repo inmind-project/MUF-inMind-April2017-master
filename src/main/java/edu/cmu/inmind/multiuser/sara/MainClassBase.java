@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit;
  * Created by oscarr on 3/20/17.
  * Main class for MUF 2.8+
  */
-public class MainClassBase {
+public abstract class MainClassBase {
 
 	private static final Path CONNECTION_PROPS_FILE_PATH = Paths.get("connection.properties");
 
@@ -77,10 +77,7 @@ public class MainClassBase {
 		}
 	}
 
-	protected PluginModule[] createModules() {
-		//TODO
-		return null;
-	}
+	protected abstract PluginModule[] createModules();
 
 	protected Config createConfig() throws IOException {
 		final String logDir = Utils.getProperty("pathLogs");
