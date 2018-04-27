@@ -8,33 +8,34 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="sarabeat_main" />
-    <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.3.1" level="project" />
-    <orderEntry type="library" name="Gradle: edu.stanford.nlp:stanford-corenlp:3.6.0" level="project" />
-    <orderEntry type="library" name="Gradle: edu.stanford.nlp:stanford-corenlp:models:3.6.0" level="project" />
-    <orderEntry type="library" name="Gradle: org.slf4j:slf4j-simple:1.7.9" level="project" />
-    <orderEntry type="library" name="Gradle: net.sf.kxml:kxml2:2.3.0" level="project" />
-    <orderEntry type="library" name="Gradle: net.sf.kxml:kxml2-min:2.3.0" level="project" />
     <orderEntry type="library" name="Gradle: :jwnl:" level="project" />
-    <orderEntry type="library" name="Gradle: :xalan-2.7.0-wo-cup:" level="project" />
-    <orderEntry type="library" name="Gradle: nz.ac.waikato.cms.weka.thirdparty:java-cup-11b-runtime:2015.03.26" level="project" />
-    <orderEntry type="library" name="Gradle: :KQML:" level="project" />
-    <orderEntry type="library" name="Gradle: :grok/opennlp:" level="project" />
-    <orderEntry type="library" name="Gradle: :grok/grok-0.7.0:" level="project" />
-    <orderEntry type="library" name="Gradle: :grok/jdom:" level="project" />
-    <orderEntry type="library" name="Gradle: :grok/maxent:" level="project" />
-    <orderEntry type="library" name="Gradle: :grok/trove:" level="project" />
-    <orderEntry type="library" name="Gradle: junit:junit:4.12" level="project" />
+    <orderEntry type="library" name="Gradle: com.apple:AppleJavaExtensions:1.4" level="project" />
     <orderEntry type="library" name="Gradle: com.io7m.xom:xom:1.2.10" level="project" />
-    <orderEntry type="library" name="Gradle: joda-time:joda-time:2.9" level="project" />
-    <orderEntry type="library" name="Gradle: de.jollyday:jollyday:0.4.7" level="project" />
+    <orderEntry type="library" name="Gradle: junit:junit:4.12" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.lucene:lucene-analyzers-common:4.10.3" level="project" />
+    <orderEntry type="library" name="Gradle: de.jollyday:jollyday:0.4.9" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: nz.ac.waikato.cms.weka.thirdparty:java-cup-11b-runtime:2015.03.26" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.commons:commons-lang3:3.3.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.slf4j:slf4j-simple:1.7.25" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.lucene:lucene-queryparser:4.10.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.lucene:lucene-sandbox:4.10.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.lucene:lucene-queries:4.10.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.lucene:lucene-core:4.10.3" level="project" />
+    <orderEntry type="library" name="Gradle: javax.servlet:javax.servlet-api:3.0.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: edu.stanford.nlp:stanford-corenlp:models:3.9.1" level="project" />
+    <orderEntry type="library" name="Gradle: joda-time:joda-time:2.9.4" level="project" />
     <orderEntry type="library" name="Gradle: com.googlecode.efficient-java-matrix-library:ejml:0.23" level="project" />
-    <orderEntry type="library" name="Gradle: javax.json:javax.json-api:1.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.glassfish:javax.json:1.0.4" level="project" />
     <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.7.12" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.protobuf:protobuf-java:3.2.0" level="project" />
     <orderEntry type="library" name="Gradle: org.hamcrest:hamcrest-core:1.3" level="project" />
-    <orderEntry type="library" name="Gradle: xml-apis:xml-apis:1.3.03" level="project" />
-    <orderEntry type="library" name="Gradle: xerces:xercesImpl:2.8.0" level="project" />
     <orderEntry type="library" name="Gradle: javax.xml.bind:jaxb-api:2.2.7" level="project" />
+    <orderEntry type="library" name="Gradle: edu.stanford.nlp:stanford-corenlp:3.9.1" level="project" />
+    <orderEntry type="library" name="Gradle: xerces:xercesImpl:2.8.0" level="project" />
+    <orderEntry type="library" name="Gradle: xalan:xalan:2.7.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.8.2" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.slf4j:slf4j-api:1.7.25" level="project" />
+    <orderEntry type="library" name="Gradle: xml-apis:xml-apis:2.0.2" level="project" />
   </component>
   <component name="TestModuleProperties" production-module="sarabeat_main" />
 </module>
