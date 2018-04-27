@@ -1,5 +1,6 @@
 package edu.cmu.inmind.multiuser.sara.orchestrator;
 
+import beat.bson.BSON;
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.common.model.ASROutput;
 import edu.cmu.inmind.multiuser.common.model.R5StreamListener;
@@ -11,7 +12,6 @@ import edu.cmu.inmind.multiuser.controller.communication.SessionMessage;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.controller.orchestrator.ProcessOrchestratorImpl;
 import edu.cmu.inmind.multiuser.controller.session.Session;
-import edu.cmu.inmind.multiuser.sara.component.beat.bson.BSON;
 
 /**
  * Created by oscarr on 3/3/17.
