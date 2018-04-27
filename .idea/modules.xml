@@ -2,51 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogos/ClientInterface/ClientInterface.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogos/ClientInterface/ClientInterface.iml" group="dialogos/ClientInterface" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogos/ClientInterface/ClientInterface_main.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogos/ClientInterface/ClientInterface_main.iml" group="dialogos/ClientInterface" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogos/ClientInterface/ClientInterface_test.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogos/ClientInterface/ClientInterface_test.iml" group="dialogos/ClientInterface" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogos/plugins/DialogOS_MinimalInputOutput/DialogOS_MinimalInputOutput.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogos/plugins/DialogOS_MinimalInputOutput/DialogOS_MinimalInputOutput.iml" group="dialogos/plugins/DialogOS_MinimalInputOutput" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogos/plugins/DialogOS_MinimalInputOutput/DialogOS_MinimalInputOutput_main.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogos/plugins/DialogOS_MinimalInputOutput/DialogOS_MinimalInputOutput_main.iml" group="dialogos/plugins/DialogOS_MinimalInputOutput" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogos/plugins/DialogOS_MinimalInputOutput/DialogOS_MinimalInputOutput_test.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogos/plugins/DialogOS_MinimalInputOutput/DialogOS_MinimalInputOutput_test.iml" group="dialogos/plugins/DialogOS_MinimalInputOutput" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogos/Diamant/Diamant.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogos/Diamant/Diamant.iml" group="dialogos/Diamant" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogos/Diamant/Diamant_main.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogos/Diamant/Diamant_main.iml" group="dialogos/Diamant" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogos/Diamant/Diamant_test.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogos/Diamant/Diamant_test.iml" group="dialogos/Diamant" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogos/com.clt.audio/com.clt.audio.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogos/com.clt.audio/com.clt.audio.iml" group="dialogos/com.clt.audio" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogos/com.clt.audio/com.clt.audio_main.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogos/com.clt.audio/com.clt.audio_main.iml" group="dialogos/com.clt.audio" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogos/com.clt.audio/com.clt.audio_test.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogos/com.clt.audio/com.clt.audio_test.iml" group="dialogos/com.clt.audio" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogos/com.clt.base/com.clt.base.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogos/com.clt.base/com.clt.base.iml" group="dialogos/com.clt.base" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogos/com.clt.base/com.clt.base_main.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogos/com.clt.base/com.clt.base_main.iml" group="dialogos/com.clt.base" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogos/com.clt.base/com.clt.base_test.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogos/com.clt.base/com.clt.base_test.iml" group="dialogos/com.clt.base" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogos/com.clt.mac/com.clt.mac.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogos/com.clt.mac/com.clt.mac.iml" group="dialogos/com.clt.mac" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogos/com.clt.mac/com.clt.mac_main.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogos/com.clt.mac/com.clt.mac_main.iml" group="dialogos/com.clt.mac" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogos/com.clt.mac/com.clt.mac_test.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogos/com.clt.mac/com.clt.mac_test.iml" group="dialogos/com.clt.mac" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogos/com.clt.script/com.clt.script.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogos/com.clt.script/com.clt.script.iml" group="dialogos/com.clt.script" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogos/com.clt.script/com.clt.script_main.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogos/com.clt.script/com.clt.script_main.iml" group="dialogos/com.clt.script" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogos/com.clt.script/com.clt.script_test.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogos/com.clt.script/com.clt.script_test.iml" group="dialogos/com.clt.script" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogos/com.clt.speech/com.clt.speech.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogos/com.clt.speech/com.clt.speech.iml" group="dialogos/com.clt.speech" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogos/com.clt.speech/com.clt.speech_main.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogos/com.clt.speech/com.clt.speech_main.iml" group="dialogos/com.clt.speech" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogos/com.clt.speech/com.clt.speech_test.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogos/com.clt.speech/com.clt.speech_test.iml" group="dialogos/com.clt.speech" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogos/com.clt.xml/com.clt.xml.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogos/com.clt.xml/com.clt.xml.iml" group="dialogos/com.clt.xml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogos/com.clt.xml/com.clt.xml_main.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogos/com.clt.xml/com.clt.xml_main.iml" group="dialogos/com.clt.xml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogos/com.clt.xml/com.clt.xml_test.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogos/com.clt.xml/com.clt.xml_test.iml" group="dialogos/com.clt.xml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogos/dialogos.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogos/dialogos.iml" group="dialogos" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogos/dialogos_main.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogos/dialogos_main.iml" group="dialogos" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogos/dialogos_test.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogos/dialogos_test.iml" group="dialogos" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogos/plugins/movieRecommendation/movieRecommendation.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogos/plugins/movieRecommendation/movieRecommendation.iml" group="dialogos/plugins/movieRecommendation" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogos/plugins/movieRecommendation/movieRecommendation_main.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogos/plugins/movieRecommendation/movieRecommendation_main.iml" group="dialogos/plugins/movieRecommendation" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogos/plugins/movieRecommendation/movieRecommendation_test.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogos/plugins/movieRecommendation/movieRecommendation_test.iml" group="dialogos/plugins/movieRecommendation" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogos/plugins/plugins.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogos/plugins/plugins.iml" group="dialogos/plugins" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogos/plugins/plugins_main.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogos/plugins/plugins_main.iml" group="dialogos/plugins" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogos/plugins/plugins_test.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogos/plugins/plugins_test.iml" group="dialogos/plugins" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sara.iml" filepath="$PROJECT_DIR$/.idea/modules/sara.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sara_main.iml" filepath="$PROJECT_DIR$/.idea/modules/sara_main.iml" group="sara" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sara_test.iml" filepath="$PROJECT_DIR$/.idea/modules/sara_test.iml" group="sara" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sarabeat/sarabeat.iml" filepath="$PROJECT_DIR$/.idea/modules/sarabeat/sarabeat.iml" group="sarabeat" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sarabeat/sarabeat_main.iml" filepath="$PROJECT_DIR$/.idea/modules/sarabeat/sarabeat_main.iml" group="sarabeat" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sarabeat/sarabeat_test.iml" filepath="$PROJECT_DIR$/.idea/modules/sarabeat/sarabeat_test.iml" group="sarabeat" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/saracommons/saracommons.iml" filepath="$PROJECT_DIR$/.idea/modules/saracommons/saracommons.iml" group="saracommons" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/saracommons/saracommons_main.iml" filepath="$PROJECT_DIR$/.idea/modules/saracommons/saracommons_main.iml" group="saracommons" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/saracommons/saracommons_test.iml" filepath="$PROJECT_DIR$/.idea/modules/saracommons/saracommons_test.iml" group="saracommons" />
+      <module fileurl="file://$PROJECT_DIR$/MUF-inMind-April2017-master.iml" filepath="$PROJECT_DIR$/MUF-inMind-April2017-master.iml" />
     </modules>
   </component>
 </project>
