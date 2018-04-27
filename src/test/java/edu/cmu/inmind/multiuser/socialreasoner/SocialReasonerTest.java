@@ -33,12 +33,4 @@ public class SocialReasonerTest {
         //Assert.assertEquals(strat1, strat2);
     }
 
-    @Test public void testSocialReasonerReasonable() {
-
-    }
-
-    @Test public void testSocialReasonerSpeed() {
-        // test that speed across strategies is consistent (i.e., we don't see any flaws)
-    }
-
 }
