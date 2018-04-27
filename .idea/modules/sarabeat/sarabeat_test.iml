@@ -24,7 +24,7 @@
     <orderEntry type="library" name="Gradle: :grok/jdom:" level="project" />
     <orderEntry type="library" name="Gradle: :grok/maxent:" level="project" />
     <orderEntry type="library" name="Gradle: :grok/trove:" level="project" />
-    <orderEntry type="library" name="Gradle: junit:junit:4.11" level="project" />
+    <orderEntry type="library" name="Gradle: junit:junit:4.12" level="project" />
     <orderEntry type="library" name="Gradle: com.io7m.xom:xom:1.2.10" level="project" />
     <orderEntry type="library" name="Gradle: joda-time:joda-time:2.9" level="project" />
     <orderEntry type="library" name="Gradle: de.jollyday:jollyday:0.4.7" level="project" />
