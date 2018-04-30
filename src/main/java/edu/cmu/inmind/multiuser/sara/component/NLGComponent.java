@@ -1,20 +1,20 @@
 package edu.cmu.inmind.multiuser.sara.component;
 
-import beat.BEAT;
-import beat.BeatCallback;
-import beat.bson.BSON;
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.common.model.SROutput;
 import edu.cmu.inmind.multiuser.controller.blackboard.Blackboard;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardSubscription;
 import edu.cmu.inmind.multiuser.controller.common.Constants;
+import edu.cmu.inmind.multiuser.controller.common.Utils;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.controller.log.Loggable;
 import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
 import edu.cmu.inmind.multiuser.controller.plugin.StateType;
+import edu.cmu.inmind.multiuser.sara.component.beat.BEAT;
+import edu.cmu.inmind.multiuser.sara.component.beat.BeatCallback;
+import edu.cmu.inmind.multiuser.sara.component.beat.bson.BSON;
 import edu.cmu.inmind.multiuser.sara.component.nlg.SentenceGeneratorTemplate;
-import edu.cmu.inmind.multiuser.socialreasoner.control.util.Utils;
 
 import java.util.List;
 
