@@ -262,8 +262,7 @@ public class Utils {
 
 
     public static <T> T fromJson(String path, Class<T> clazz) {
-        try{
-            Scanner sc = new Scanner(new File(path));
+        try(Scanner sc = new Scanner(new File(path))){
             String json = "";
             while (sc.hasNextLine()) {
                 json += sc.nextLine();
@@ -287,7 +286,7 @@ public class Utils {
         }
     }
 
-    public static Object getJsonProperty(JSONObject object, String property, Class clazz){
+    public static Object getJsonProperty(JSONObject object, String property, Class<?> clazz){
         try{
             if( clazz == Long.class ) {
                 return Long.valueOf(object.getString(property));
@@ -348,7 +347,7 @@ public class Utils {
         return cloner.deepClone(object);
     }
 
-    public static <T extends List> T cloneList( T list ){
+    public static <T extends List<?>> T cloneList( T list ){
         return cloner.deepClone(list);
     }
 

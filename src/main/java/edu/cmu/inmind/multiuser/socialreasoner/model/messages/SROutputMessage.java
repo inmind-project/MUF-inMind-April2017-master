@@ -54,7 +54,7 @@ public class SROutputMessage {
         intents.add( new Intent( st.getIntent(), conversationalStrategy) );
     }
 
-    public void addFields(String recommendationType, List results) {
+    public void addFields(String recommendationType, List<?> results) {
         fields = new Fields( recommendationType, results );
     }
 

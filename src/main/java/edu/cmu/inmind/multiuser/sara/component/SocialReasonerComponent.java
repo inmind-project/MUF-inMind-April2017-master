@@ -44,6 +44,7 @@ public class SocialReasonerComponent extends PluggableComponent {
     }
 
 
+    @Loggable
     private void updateRapport(BlackboardEvent blackboardEvent){
         RapportOutput rapportOutput = null;
         try {
@@ -67,6 +68,7 @@ public class SocialReasonerComponent extends PluggableComponent {
         }
     }
 
+    @Loggable
     private void updateStrategy(BlackboardEvent event){
         CSCOutput csc = null;
         try {
@@ -77,7 +79,7 @@ public class SocialReasonerComponent extends PluggableComponent {
         if(csc!=null) {
             userCS = csc.getBest().getName();
             Log4J.info(this, "User's strategy updated : " + userCS);
-            socialController.setUserConvStrategy(userCS);
+            SocialReasonerController.setUserConvStrategy(userCS);
             socialController.addContinousStates(null);
         }
          else
@@ -86,6 +88,7 @@ public class SocialReasonerComponent extends PluggableComponent {
         }
     }
 
+    @Loggable
     private void updateNVB(BlackboardEvent blackboardEvent){
         NonVerbalOutput nvbOutput = null;
         try {
@@ -97,7 +100,7 @@ public class SocialReasonerComponent extends PluggableComponent {
             isGazing = nvbOutput.isGazeAtPartner();
             isSmiling = nvbOutput.isSmiling();
 
-            socialController.setNonVerbals(isSmiling, isGazing);
+            SocialReasonerController.setNonVerbals(isSmiling, isGazing);
             socialController.addContinousStates(null);
         }
         else
@@ -106,6 +109,7 @@ public class SocialReasonerComponent extends PluggableComponent {
         }
     }
 
+    @Loggable
     private void updateUserModel(final UserModel model) {
         Log4J.info(this, "Received user model");
         if (!model.getBehaviorNetworkStates().isEmpty()) {
@@ -116,6 +120,7 @@ public class SocialReasonerComponent extends PluggableComponent {
         }
     }
 
+    @Loggable
     private SROutput selectStrategy(BlackboardEvent event){
 
         long time = System.nanoTime();
@@ -145,7 +150,7 @@ public class SocialReasonerComponent extends PluggableComponent {
                 //System.out.println("---------------- System Strategy : " + systemStrategy);
                 Log4J.info(this, "Input: " + dmOutput.getAction() + ", Output: " + srOutput.getStrategy() + "\n");
             } else {
-                System.out.println("null");
+                Log4J.info(this,"dmoutput getAction is null");
             }
         }
         else
@@ -185,7 +190,8 @@ public class SocialReasonerComponent extends PluggableComponent {
         }
         if (event.getId().equals(SaraCons.MSG_DM)) {
             //if(blackboard!=null)
-                sendToNLG = selectStrategy( event);
+            Log4J.info(this, "MSG_DM dmOutput : " + event.getId());
+            sendToNLG = selectStrategy( event);
 
             blackboard.post(this, SaraCons.MSG_SR, sendToNLG);
         }
