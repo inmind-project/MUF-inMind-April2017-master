@@ -1,7 +1,6 @@
 package edu.cmu.inmind.multiuser.sara;
 
 import edu.cmu.inmind.multiuser.common.SaraCons;
-import edu.cmu.inmind.multiuser.controller.muf.ShutdownHook;
 import edu.cmu.inmind.multiuser.controller.plugin.PluginModule;
 import edu.cmu.inmind.multiuser.controller.resources.Config;
 import edu.cmu.inmind.multiuser.sara.component.*;
@@ -11,13 +10,11 @@ import org.apache.logging.log4j.core.config.Configurator;
 import org.apache.xpath.operations.String;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * Created by oscarr on 8/02/17.
- *
+ * <p>
  * This example illustrates the whole pipeline:
  * AndroidClient (ASR) -> DialogueSystem (NLU) -> TaskReasoner -> SocialReasoner -> NLG -> AndroidClient
  * This example is pretty similar to EX15_Wholepipeline, however, unlike Ex15_WholePipeline, in this example
