@@ -1,5 +1,14 @@
 package edu.cmu.inmind.multiuser.socialreasoner.control;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Properties;
+import java.util.Queue;
+import java.util.Scanner;
+
 import edu.cmu.inmind.multiuser.socialreasoner.control.bn.BehaviorNetworkController;
 import edu.cmu.inmind.multiuser.socialreasoner.control.bn.ConversationalStrategyBN;
 import edu.cmu.inmind.multiuser.socialreasoner.control.emulators.Emulator;
@@ -10,11 +19,6 @@ import edu.cmu.inmind.multiuser.socialreasoner.model.blackboard.Blackboard;
 import edu.cmu.inmind.multiuser.socialreasoner.model.history.SocialHistory;
 import edu.cmu.inmind.multiuser.socialreasoner.model.history.UserCSHistory;
 import edu.cmu.inmind.multiuser.socialreasoner.model.intent.SystemIntent;
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.*;
 
 /**
  * Created by oscarr on 4/22/16.

@@ -1,11 +1,11 @@
 package edu.cmu.inmind.multiuser.socialreasoner.control.emulators;
 
 
+import java.util.ArrayList;
+
 import edu.cmu.inmind.multiuser.socialreasoner.control.SocialReasonerController;
 import edu.cmu.inmind.multiuser.socialreasoner.model.Constants;
 import edu.cmu.inmind.multiuser.socialreasoner.model.intent.SystemIntent;
-
-import java.util.ArrayList;
 
 /**
  * Created by oscarr on 9/12/16.

@@ -1,8 +1,13 @@
 package edu.cmu.inmind.multiuser.openface.input;
 
-import edu.cmu.inmind.multiuser.openface.FeatureType;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
-import java.util.*;
+import edu.cmu.inmind.multiuser.openface.FeatureType;
 
 public class FeaturesFactory {
 

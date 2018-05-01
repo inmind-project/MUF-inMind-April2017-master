@@ -1,11 +1,11 @@
 package edu.cmu.inmind.multiuser.openface.output;
 
-import edu.cmu.inmind.multiuser.openface.FeatureType;
-
 import java.io.PrintStream;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import edu.cmu.inmind.multiuser.openface.FeatureType;
 
 public class CSVOutput  {
 

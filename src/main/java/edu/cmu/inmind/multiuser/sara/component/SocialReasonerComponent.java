@@ -1,7 +1,12 @@
 package edu.cmu.inmind.multiuser.sara.component;
 
 import edu.cmu.inmind.multiuser.common.SaraCons;
-import edu.cmu.inmind.multiuser.common.model.*;
+import edu.cmu.inmind.multiuser.common.model.CSCOutput;
+import edu.cmu.inmind.multiuser.common.model.DMOutput;
+import edu.cmu.inmind.multiuser.common.model.NonVerbalOutput;
+import edu.cmu.inmind.multiuser.common.model.RapportOutput;
+import edu.cmu.inmind.multiuser.common.model.SROutput;
+import edu.cmu.inmind.multiuser.common.model.UserModel;
 import edu.cmu.inmind.multiuser.controller.blackboard.Blackboard;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardSubscription;

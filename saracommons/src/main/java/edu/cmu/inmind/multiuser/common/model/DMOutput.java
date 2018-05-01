@@ -1,7 +1,5 @@
 package edu.cmu.inmind.multiuser.common.model;
 
-import java.util.List;
-
 /**
  * Created by yoichimatsuyama on 4/11/17.
  */

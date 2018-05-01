@@ -7,18 +7,22 @@
 
 package edu.cmu.inmind.multiuser.net;
 
-import edu.cmu.inmind.multiuser.controller.log.Log4J;
-
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
+
+import edu.cmu.inmind.multiuser.controller.log.Log4J;
 
 /**
  * Finds the preferred {@link InetAddress} found for the system, first preferring network interfaces with the word "Ethernet" in their name and then preferring those with the greatest MTU.

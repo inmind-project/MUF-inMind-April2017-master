@@ -1,5 +1,7 @@
 package edu.cmu.inmind.multiuser.sara.component;
 
+import java.io.IOException;
+
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.common.model.NonVerbalOutput;
 import edu.cmu.inmind.multiuser.controller.blackboard.Blackboard;
@@ -16,8 +18,6 @@ import edu.cmu.inmind.multiuser.openface.eventDetector.RuleBasedEventDetector;
 import edu.cmu.inmind.multiuser.openface.input.OpenFaceInput;
 import edu.cmu.inmind.multiuser.openface.input.ProcessInput;
 import edu.cmu.inmind.multiuser.openface.output.EventOutput;
-
-import java.io.IOException;
 
 @BlackboardSubscription(messages={SaraCons.R5STREAM_DISCONNECTED,
 		SaraCons.R5STREAM_CLOSE, SaraCons.R5STREAM_TIMEOUT, SaraCons.R5STREAM_ERROR, SaraCons.R5STREAM_STARTED})

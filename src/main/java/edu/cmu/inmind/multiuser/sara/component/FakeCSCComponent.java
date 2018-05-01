@@ -1,5 +1,16 @@
 package edu.cmu.inmind.multiuser.sara.component;
 
+import static edu.cmu.inmind.multiuser.common.model.ConversationalStrategy.ASN;
+import static edu.cmu.inmind.multiuser.common.model.ConversationalStrategy.QESD;
+import static edu.cmu.inmind.multiuser.common.model.ConversationalStrategy.SD;
+import static edu.cmu.inmind.multiuser.common.model.ConversationalStrategy.SE;
+import static edu.cmu.inmind.multiuser.common.model.ConversationalStrategy.VSN;
+
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Random;
+
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.common.model.CSCOutput;
 import edu.cmu.inmind.multiuser.common.model.ConversationalStrategy;
@@ -11,13 +22,6 @@ import edu.cmu.inmind.multiuser.controller.common.Constants;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
 import edu.cmu.inmind.multiuser.controller.plugin.StateType;
-
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Random;
-
-import static edu.cmu.inmind.multiuser.common.model.ConversationalStrategy.*;
 
 @StateType( state = Constants.STATELESS)
 @BlackboardSubscription( messages = {SaraCons.MSG_ASR} )

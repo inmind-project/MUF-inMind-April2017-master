@@ -1,5 +1,8 @@
 package edu.cmu.inmind.multiuser.sara.component;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.common.model.CSCOutput;
 import edu.cmu.inmind.multiuser.common.model.DMOutput;
@@ -12,9 +15,6 @@ import edu.cmu.inmind.multiuser.controller.common.Utils;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
 import edu.cmu.inmind.multiuser.controller.plugin.StateType;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by oscarr on 3/7/17.

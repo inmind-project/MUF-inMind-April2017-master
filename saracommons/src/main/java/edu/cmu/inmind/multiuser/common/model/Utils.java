@@ -1,6 +1,5 @@
 package edu.cmu.inmind.multiuser.common.model;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 /**

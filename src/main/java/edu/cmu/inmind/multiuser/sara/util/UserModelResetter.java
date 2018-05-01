@@ -1,13 +1,14 @@
 package edu.cmu.inmind.multiuser.sara.util;
 
+import java.util.Map;
+import java.util.function.Consumer;
+
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+
 import edu.cmu.inmind.multiuser.common.model.UserFrame;
 import edu.cmu.inmind.multiuser.common.model.UserModel;
-
-import java.util.Map;
-import java.util.function.Consumer;
 
 /**
  * When a client connects, it can send a reset option as part of the START_SESSION message.

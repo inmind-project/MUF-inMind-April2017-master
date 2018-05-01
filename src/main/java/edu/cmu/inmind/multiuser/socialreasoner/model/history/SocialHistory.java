@@ -1,11 +1,11 @@
 package edu.cmu.inmind.multiuser.socialreasoner.model.history;
 
 
-import edu.cmu.inmind.multiuser.socialreasoner.model.Constants;
-import edu.cmu.inmind.multiuser.socialreasoner.model.blackboard.Blackboard;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import edu.cmu.inmind.multiuser.socialreasoner.model.Constants;
+import edu.cmu.inmind.multiuser.socialreasoner.model.blackboard.Blackboard;
 
 /**
  * Created by oscarr on 4/29/16.
