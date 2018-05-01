@@ -44,7 +44,7 @@ public class SaraOrchestrator extends ProcessOrchestratorImpl {
 
     @Override
     public void process(String message) throws Throwable {
-        Log4J.info(this, "orchestrator received message " + message);
+        Log4J.debug(this, "orchestrator received message " + message);
         if( resetCrono ) {
             time = System.currentTimeMillis();
             resetCrono = false;
@@ -95,7 +95,7 @@ public class SaraOrchestrator extends ProcessOrchestratorImpl {
             Log4J.error(this, "TIME FOR PROCESSING WHOLE PIPELINE: " + (System.currentTimeMillis() - time));
             resetCrono = true;
         } else {
-            Log4J.info(this, "unexpected mMssage from MUF to Client: " + event.getElement());
+            Log4J.info(this, "unexpected message from MUF to Client: " + event.getElement());
         }
 
     }
