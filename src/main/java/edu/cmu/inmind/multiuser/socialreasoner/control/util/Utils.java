@@ -1,15 +1,22 @@
 package edu.cmu.inmind.multiuser.socialreasoner.control.util;
 
-import com.google.gson.Gson;
-import com.rits.cloning.Cloner;
-import org.json.JSONObject;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Scanner;
+import java.util.TimeZone;
+
+import org.json.JSONObject;
+
+import com.google.gson.Gson;
+import com.rits.cloning.Cloner;
 
 /**
  * Created by oscarr on 4/20/16.
@@ -255,8 +262,7 @@ public class Utils {
 
 
     public static <T> T fromJson(String path, Class<T> clazz) {
-        try{
-            Scanner sc = new Scanner(new File(path));
+        try(Scanner sc = new Scanner(new File(path))){
             String json = "";
             while (sc.hasNextLine()) {
                 json += sc.nextLine();
@@ -280,7 +286,7 @@ public class Utils {
         }
     }
 
-    public static Object getJsonProperty(JSONObject object, String property, Class clazz){
+    public static Object getJsonProperty(JSONObject object, String property, Class<?> clazz){
         try{
             if( clazz == Long.class ) {
                 return Long.valueOf(object.getString(property));
@@ -327,7 +333,7 @@ public class Utils {
 
     public static void exchange(String[] conversationalStrategies, String behaviorName) {
         if( !conversationalStrategies[0].equals(behaviorName) ) {
-            ArrayList<String> list = new ArrayList(Arrays.asList(conversationalStrategies));
+            ArrayList<String> list = new ArrayList<>(Arrays.asList(conversationalStrategies));
             list.remove(behaviorName);
             list.add(0, behaviorName);
             for (int i = 0; i < list.size(); i++) {
@@ -341,13 +347,13 @@ public class Utils {
         return cloner.deepClone(object);
     }
 
-    public static <T extends List> T cloneList( T list ){
+    public static <T extends List<?>> T cloneList( T list ){
         return cloner.deepClone(list);
     }
 
-    public static ArrayList cloneArray( ArrayList list ){
-        ArrayList result = new ArrayList(list.size());
-        for( Object element : list ){
+    public static <T> ArrayList<T> cloneArray( ArrayList<? extends T> list ){
+        ArrayList<T> result = new ArrayList<>(list.size());
+        for( T element : list ){
             result.add( cloner.deepClone(element) );
         }
         return result;

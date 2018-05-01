@@ -6,7 +6,6 @@ import edu.cmu.inmind.multiuser.controller.plugin.PluginModule;
 import edu.cmu.inmind.multiuser.controller.resources.Config;
 import edu.cmu.inmind.multiuser.sara.component.*;
 import edu.cmu.inmind.multiuser.sara.orchestrator.SaraOrchestrator;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,12 +41,18 @@ public class SaraServerMainClass extends MainClassBase {
         return new PluginModule[]{
                 new PluginModule.Builder(SaraOrchestrator.class, UserModelComponent.class, SaraCons.ID_UM)
                         .addPlugin(UserModelComponent.class, SaraCons.ID_UM)
+
                         .addPlugin(FakeNLUComponent.class, SaraCons.ID_NLU)
                         .addPlugin(FakeTaskReasonerComponent.class, SaraCons.ID_DM)
                         .addPlugin(NLU_DMComponent.class, SaraCons.ID_NLU)
+
                         .addPlugin(NLGComponent.class, SaraCons.ID_NLG)
+
+                        //.addPlugin(CSCComponent.class, SaraCons.ID_CSC)
                         .addPlugin(FakeCSCComponent.class, SaraCons.ID_CSC)
+
                         .addPlugin(SocialReasonerComponent.class, SaraCons.ID_SR)
+
                         //.addPlugin(R5StreamComponent.class, SaraCons.ID_R5)
                         .build()
         };

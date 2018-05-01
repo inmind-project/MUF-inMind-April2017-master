@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import edu.cmu.inmind.multiuser.openface.OpenFaceEvent;
 import edu.cmu.inmind.multiuser.openface.FeatureType;
+import edu.cmu.inmind.multiuser.openface.OpenFaceEvent;
 import edu.cmu.inmind.multiuser.openface.input.OpenFaceInput;
 import edu.cmu.inmind.multiuser.openface.output.EventOutput;
 

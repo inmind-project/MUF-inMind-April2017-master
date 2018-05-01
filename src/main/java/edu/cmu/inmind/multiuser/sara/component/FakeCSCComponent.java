@@ -11,8 +11,6 @@ import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
 import edu.cmu.inmind.multiuser.controller.plugin.StateType;
 import edu.cmu.lti.rapport.pipeline.csc.ConversationalStrategy;
 
-import static edu.cmu.lti.rapport.pipeline.csc.ConversationalStrategy.*;
-
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -47,7 +45,7 @@ public class FakeCSCComponent extends PluggableComponent {
 
         List<Strategy> strategyList = new ArrayList<Strategy>();
 
-        for (ConversationalStrategy cs : EnumSet.of(SD, SE, Praise, QESD, VSN, ASN)) {
+        for (ConversationalStrategy cs : EnumSet.of(ConversationalStrategy.SD, ConversationalStrategy.SE, ConversationalStrategy.Praise, ConversationalStrategy.QESD, ConversationalStrategy.VSN, ConversationalStrategy.ASN)) {
             strategyList.add(new Strategy(cs.shortName(), r.nextDouble()));
         }
         cscOutput.setUserStrategies(strategyList);

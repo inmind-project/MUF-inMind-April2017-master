@@ -1,11 +1,25 @@
 package edu.cmu.inmind.multiuser.sara.component.nlg;
-import edu.cmu.inmind.multiuser.common.model.*;
-
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import edu.cmu.inmind.multiuser.common.model.DMOutput;
+import edu.cmu.inmind.multiuser.common.model.Entity;
+import edu.cmu.inmind.multiuser.common.model.SROutput;
+import edu.cmu.inmind.multiuser.common.model.UserFrame;
+import edu.cmu.inmind.multiuser.common.model.Utils;
 
 /**
  * Created by yoichimatsuyama on 4/12/17.

@@ -1,7 +1,12 @@
 package edu.cmu.inmind.multiuser.sara.component;
 
 import edu.cmu.inmind.multiuser.common.SaraCons;
-import edu.cmu.inmind.multiuser.common.model.*;
+import edu.cmu.inmind.multiuser.common.model.CSCOutput;
+import edu.cmu.inmind.multiuser.common.model.DMOutput;
+import edu.cmu.inmind.multiuser.common.model.NonVerbalOutput;
+import edu.cmu.inmind.multiuser.common.model.RapportOutput;
+import edu.cmu.inmind.multiuser.common.model.SROutput;
+import edu.cmu.inmind.multiuser.common.model.UserModel;
 import edu.cmu.inmind.multiuser.controller.blackboard.Blackboard;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
 import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardSubscription;
@@ -79,7 +84,7 @@ public class SocialReasonerComponent extends PluggableComponent {
         if(csc!=null) {
             userCS = csc.getBest().getName();
             Log4J.info(this, "User's strategy updated : " + userCS);
-            socialController.setUserConvStrategy(userCS);
+            SocialReasonerController.setUserConvStrategy(userCS);
             socialController.addContinousStates(null);
         }
          else
@@ -100,7 +105,7 @@ public class SocialReasonerComponent extends PluggableComponent {
             isGazing = nvbOutput.isGazeAtPartner();
             isSmiling = nvbOutput.isSmiling();
 
-            socialController.setNonVerbals(isSmiling, isGazing);
+            SocialReasonerController.setNonVerbals(isSmiling, isGazing);
             socialController.addContinousStates(null);
         }
         else

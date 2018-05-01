@@ -1,12 +1,14 @@
 package edu.cmu.inmind.multiuser.socialreasoner.model.blackboard;
 
-import edu.cmu.inmind.multiuser.socialreasoner.control.bn.BehaviorNetworkController;
-import edu.cmu.inmind.multiuser.socialreasoner.model.Constants;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+
+import edu.cmu.inmind.multiuser.socialreasoner.control.bn.BehaviorNetworkController;
+import edu.cmu.inmind.multiuser.socialreasoner.model.Constants;
 
 /**
  * Created by oscarr on 4/29/16.
@@ -173,8 +175,8 @@ public class Blackboard {
             e.printStackTrace();
         }finally {
             lock.unlock();
-            return result;
         }
+        return result;
     }
 
 

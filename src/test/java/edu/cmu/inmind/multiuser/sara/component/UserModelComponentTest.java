@@ -1,14 +1,16 @@
 package edu.cmu.inmind.multiuser.sara.component;
 
-import com.google.common.collect.ImmutableList;
-import edu.cmu.inmind.multiuser.common.SaraCons;
-import edu.cmu.inmind.multiuser.controller.common.Utils;
-import edu.cmu.inmind.multiuser.common.model.SROutput;
-import edu.cmu.inmind.multiuser.common.model.UserFrame;
-import edu.cmu.inmind.multiuser.common.model.UserModel;
-import edu.cmu.inmind.multiuser.controller.blackboard.Blackboard;
-import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
-import edu.cmu.inmind.multiuser.sara.repo.UserModelRepository;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.Optional;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -17,10 +19,16 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
-import java.util.Optional;
+import com.google.common.collect.ImmutableList;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import edu.cmu.inmind.multiuser.common.SaraCons;
+import edu.cmu.inmind.multiuser.common.model.SROutput;
+import edu.cmu.inmind.multiuser.common.model.UserFrame;
+import edu.cmu.inmind.multiuser.common.model.UserModel;
+import edu.cmu.inmind.multiuser.controller.blackboard.Blackboard;
+import edu.cmu.inmind.multiuser.controller.blackboard.BlackboardEvent;
+import edu.cmu.inmind.multiuser.controller.common.Utils;
+import edu.cmu.inmind.multiuser.sara.repo.UserModelRepository;
 
 public class UserModelComponentTest {
     private static final String SESSION_ID = "session_id";

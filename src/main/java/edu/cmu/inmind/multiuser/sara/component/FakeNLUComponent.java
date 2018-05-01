@@ -1,5 +1,7 @@
 package edu.cmu.inmind.multiuser.sara.component;
 
+import java.util.ArrayList;
+
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.common.model.SaraOutput;
 import edu.cmu.inmind.multiuser.common.model.UserIntent;
@@ -10,8 +12,6 @@ import edu.cmu.inmind.multiuser.controller.common.Constants;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
 import edu.cmu.inmind.multiuser.controller.plugin.StateType;
-
-import java.util.ArrayList;
 
 /**
  * Created by oscarr on 3/7/17.

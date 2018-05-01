@@ -1,10 +1,10 @@
 package edu.cmu.inmind.multiuser.socialreasoner.control.bn;
 
-import edu.cmu.inmind.multiuser.socialreasoner.model.blackboard.Blackboard;
-
 import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import edu.cmu.inmind.multiuser.socialreasoner.model.blackboard.Blackboard;
 
 /**
  * Created by oscarr on 4/28/16.

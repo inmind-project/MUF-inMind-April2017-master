@@ -1,10 +1,10 @@
 package edu.cmu.inmind.multiuser.socialreasoner.control.bn;
 
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import edu.cmu.inmind.multiuser.socialreasoner.control.util.Utils;
 import edu.cmu.inmind.multiuser.socialreasoner.model.Constants;
 import edu.cmu.inmind.multiuser.socialreasoner.model.blackboard.BlackboardListener;
-
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by oscarr on 4/28/16.

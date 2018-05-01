@@ -1,9 +1,10 @@
 package edu.cmu.inmind.multiuser.socialreasoner;
 
-import edu.cmu.inmind.multiuser.socialreasoner.control.SocialReasonerController;
-import edu.cmu.inmind.multiuser.socialreasoner.model.intent.SystemIntent;
 import org.junit.Assert;
 import org.junit.Test;
+
+import edu.cmu.inmind.multiuser.socialreasoner.control.SocialReasonerController;
+import edu.cmu.inmind.multiuser.socialreasoner.model.intent.SystemIntent;
 
 /**
  * Created by timo on 2017-07-18
@@ -13,8 +14,8 @@ public class SocialReasonerTest {
     @Test public void testSocialReasonerBasic() {
         // startup social reasoner,
         SocialReasonerController socialController = new SocialReasonerController();
-        socialController.setNonVerbals(false, false);
-        socialController.setUserConvStrategy("ASN");
+        SocialReasonerController.setNonVerbals(false, false);
+        SocialReasonerController.setUserConvStrategy("ASN");
         socialController.setRapportScore(4);
         socialController.addContinousStates(null);
         // test that output strategy is consistent when running the SR multiple times

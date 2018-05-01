@@ -1,9 +1,9 @@
 package edu.cmu.inmind.multiuser.socialreasoner.model.messages;
 
-import edu.cmu.inmind.multiuser.socialreasoner.model.intent.SystemIntent;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import edu.cmu.inmind.multiuser.socialreasoner.model.intent.SystemIntent;
 
 /**
  * Created by oscarr on 6/3/16.
@@ -54,7 +54,7 @@ public class SROutputMessage {
         intents.add( new Intent( st.getIntent(), conversationalStrategy) );
     }
 
-    public void addFields(String recommendationType, List results) {
+    public void addFields(String recommendationType, List<?> results) {
         fields = new Fields( recommendationType, results );
     }
 

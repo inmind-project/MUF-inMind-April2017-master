@@ -1,10 +1,10 @@
 package edu.cmu.inmind.multiuser.sara.log;
 
-import edu.cmu.inmind.multiuser.controller.log.Log4J;
-import edu.cmu.inmind.multiuser.controller.log.MessageLog;
-
 import java.io.File;
 import java.io.PrintWriter;
+
+import edu.cmu.inmind.multiuser.controller.log.Log4J;
+import edu.cmu.inmind.multiuser.controller.log.MessageLog;
 
 /**
  * Created by oscarr on 8/23/17.
