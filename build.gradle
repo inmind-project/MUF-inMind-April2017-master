@@ -24,13 +24,6 @@ repositories {
     jcenter()
 }
 
-idea {
-    module {
-        downloadJavadoc = true
-        downloadSources = true
-    }
-}
-
 buildscript {
     repositories {
         jcenter()
