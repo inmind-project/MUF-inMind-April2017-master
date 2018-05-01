@@ -7,6 +7,7 @@ apply plugin: 'maven'
 apply plugin: 'com.github.johnrengelman.shadow'
 
 apply plugin: 'application'
+apply plugin: 'idea'
 
 sourceCompatibility = 1.8
 
@@ -22,6 +23,13 @@ repositories {
         url "http://www.cs.cmu.edu/afs/cs/project/inmind-cmu-yahoo/www/maven2"
     }
     jcenter()
+}
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
 }
 
 buildscript {
