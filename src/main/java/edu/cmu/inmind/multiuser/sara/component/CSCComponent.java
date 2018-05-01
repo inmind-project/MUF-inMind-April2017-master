@@ -1,6 +1,18 @@
 package edu.cmu.inmind.multiuser.sara.component;
 
 
+import static edu.cmu.lti.rapport.pipline.csc.ConversationalStrategy.ASN;
+import static edu.cmu.lti.rapport.pipline.csc.ConversationalStrategy.Praise;
+import static edu.cmu.lti.rapport.pipline.csc.ConversationalStrategy.QESD;
+import static edu.cmu.lti.rapport.pipline.csc.ConversationalStrategy.SD;
+import static edu.cmu.lti.rapport.pipline.csc.ConversationalStrategy.SE;
+import static edu.cmu.lti.rapport.pipline.csc.ConversationalStrategy.VSN;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.common.model.ASROutput;
 import edu.cmu.inmind.multiuser.common.model.CSCOutput;
@@ -15,13 +27,6 @@ import edu.cmu.inmind.multiuser.controller.plugin.StateType;
 import edu.cmu.lti.rapport.pipline.csc.ConversationalStrategy;
 import edu.cmu.lti.rapport.pipline.csc.ConversationalStrategyDistribution;
 import edu.cmu.lti.rapport.pipline.csc.MultiClassifier;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-
-import static edu.cmu.lti.rapport.pipline.csc.ConversationalStrategy.*;
 
 /**
  * Created by fpecune on 5/22/2017.

@@ -1,11 +1,16 @@
 package edu.cmu.inmind.multiuser.socialreasoner.control.bn;
 
-import edu.cmu.inmind.multiuser.socialreasoner.control.SocialReasonerController;
-
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Vector;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Pattern;
+
+import edu.cmu.inmind.multiuser.socialreasoner.control.SocialReasonerController;
 
 /**
  * @author oromero

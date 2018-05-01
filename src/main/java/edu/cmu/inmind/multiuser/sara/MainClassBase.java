@@ -1,7 +1,11 @@
 package edu.cmu.inmind.multiuser.sara;
 
-import edu.cmu.inmind.multiuser.controller.common.Constants;
+import java.util.List;
+import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
+
 import edu.cmu.inmind.multiuser.common.SaraCons;
+import edu.cmu.inmind.multiuser.controller.common.Constants;
 import edu.cmu.inmind.multiuser.controller.common.Utils;
 import edu.cmu.inmind.multiuser.controller.log.MessageLog;
 import edu.cmu.inmind.multiuser.controller.muf.MUFLifetimeManager;
@@ -10,10 +14,6 @@ import edu.cmu.inmind.multiuser.controller.muf.ShutdownHook;
 import edu.cmu.inmind.multiuser.controller.plugin.PluginModule;
 import edu.cmu.inmind.multiuser.controller.resources.Config;
 import edu.cmu.inmind.multiuser.sara.log.ExceptionLogger;
-
-import java.util.List;
-import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by oscarr on 3/20/17.

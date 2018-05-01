@@ -1,8 +1,15 @@
 package edu.cmu.inmind.multiuser.sara.component;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Consumer;
+
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+
 import edu.cmu.inmind.multiuser.common.SaraCons;
 import edu.cmu.inmind.multiuser.common.model.SROutput;
 import edu.cmu.inmind.multiuser.common.model.UserFrame;
@@ -17,12 +24,6 @@ import edu.cmu.inmind.multiuser.controller.plugin.StateType;
 import edu.cmu.inmind.multiuser.controller.session.Session;
 import edu.cmu.inmind.multiuser.sara.repo.UserModelRepository;
 import edu.cmu.inmind.multiuser.socialreasoner.control.util.Utils;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Consumer;
 
 /**
  * ** Work in progress **

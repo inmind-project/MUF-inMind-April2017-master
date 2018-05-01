@@ -2,8 +2,8 @@ package edu.cmu.inmind.multiuser.openface.eventDetector;
 
 import java.util.Map;
 
-import edu.cmu.inmind.multiuser.openface.OpenFaceEvent;
 import edu.cmu.inmind.multiuser.openface.FeatureType;
+import edu.cmu.inmind.multiuser.openface.OpenFaceEvent;
 import edu.cmu.inmind.multiuser.openface.input.OpenFaceInput;
 
 public class LinearClassifierDetector extends EventDetector {

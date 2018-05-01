@@ -1,18 +1,19 @@
 package edu.cmu.inmind.multiuser.sara.component.nlg;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import edu.cmu.inmind.multiuser.controller.common.Utils;
-import edu.cmu.inmind.multiuser.common.model.DMOutput;
-import edu.cmu.inmind.multiuser.common.model.SROutput;
-import edu.cmu.inmind.multiuser.common.model.UserFrame;
-import edu.cmu.lti.rapport.pipline.csc.ConversationalStrategy;
-import org.junit.Test;
-
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+
+import org.junit.Test;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import edu.cmu.inmind.multiuser.common.model.DMOutput;
+import edu.cmu.inmind.multiuser.common.model.SROutput;
+import edu.cmu.inmind.multiuser.common.model.UserFrame;
+import edu.cmu.inmind.multiuser.controller.common.Utils;
+import edu.cmu.lti.rapport.pipline.csc.ConversationalStrategy;
 
 /**
  * Created by timo on 18.08.17.

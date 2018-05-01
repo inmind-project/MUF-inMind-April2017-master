@@ -1,9 +1,12 @@
 package edu.cmu.inmind.multiuser.openface.input;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+
 import edu.cmu.inmind.multiuser.controller.common.Utils;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
-
-import java.io.*;
 
 /** 
  * start OpenFace as a separate process which writes to a temporary file
