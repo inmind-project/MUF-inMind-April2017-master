@@ -5,8 +5,6 @@ This repository contains submodules which you need to checkout in addition to th
 and one of the submodules uses large-file-support. 
 
  * before cloning, please make sure you have installed git large-file-support: https://git-lfs.github.com/
-
- * to be able to clone the dialogOS submodule, you'll need to create a bitbucket account, and send a request to @tbaumann. You might have to enter your credentials during the cloning process.
  
  * clone by saying ```git clone --recursive git@github.com:fpecune/MUF-inMind-April2017-master.git```
    (or via https, whichever you prefer)
@@ -26,7 +24,7 @@ Once you cloned the main repo and all its submodules (sara-csc, sara-beat, and d
  
  * for Windows users, you might need to check the path to your jdk in your environment variables so it actually matches your installation folder. This folder should be something like "C:\Program Files\Java\jdk1.8.0_121\bin".
  
- * if there are errors with the parser in DialogOS, compile DialogOS independently once (gradlew.bat in DialogOS directory, then gradlew.bat build from main MUF directory to create the missing classes). For Windows users, copy the XMLData folder from BEAT to main directory. This should replace the XMLData file already existing.
+ * For Windows users, copy the XMLData folder from BEAT to main directory. This should replace the XMLData file already existing.
  
 ## Starting the CSC and NLU
 To run the CSC and NLU, you will need to receive a .pem key to access the AWS. For windows users, you will need to transform .pem key into .ppk using PuttyGen using the following tutorial: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/putty.html.
