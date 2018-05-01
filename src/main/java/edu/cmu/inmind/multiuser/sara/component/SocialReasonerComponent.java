@@ -84,7 +84,7 @@ public class SocialReasonerComponent extends PluggableComponent {
         if(csc!=null) {
             userCS = csc.getBest().getName();
             Log4J.info(this, "User's strategy updated : " + userCS);
-            socialController.setUserConvStrategy(userCS);
+            SocialReasonerController.setUserConvStrategy(userCS);
             socialController.addContinousStates(null);
         }
          else
@@ -105,7 +105,7 @@ public class SocialReasonerComponent extends PluggableComponent {
             isGazing = nvbOutput.isGazeAtPartner();
             isSmiling = nvbOutput.isSmiling();
 
-            socialController.setNonVerbals(isSmiling, isGazing);
+            SocialReasonerController.setNonVerbals(isSmiling, isGazing);
             socialController.addContinousStates(null);
         }
         else

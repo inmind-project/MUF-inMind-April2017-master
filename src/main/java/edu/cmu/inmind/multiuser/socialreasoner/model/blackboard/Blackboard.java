@@ -175,8 +175,8 @@ public class Blackboard {
             e.printStackTrace();
         }finally {
             lock.unlock();
-            return result;
         }
+        return result;
     }
 
 
