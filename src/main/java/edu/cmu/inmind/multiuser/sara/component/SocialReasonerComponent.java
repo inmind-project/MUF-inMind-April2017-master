@@ -170,6 +170,7 @@ public class SocialReasonerComponent extends PluggableComponent {
      * If the blackboard model is modified externally, does SR have to do anything? this is useful when running multiple
      * processes in parallel rather than sequentially.
      */
+    @Loggable
     @Override
     public void onEvent(Blackboard blackboard, BlackboardEvent event) throws Throwable {
         //TODO: add code here

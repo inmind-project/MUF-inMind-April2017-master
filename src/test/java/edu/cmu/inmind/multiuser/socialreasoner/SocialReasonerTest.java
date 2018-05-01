@@ -25,19 +25,13 @@ public class SocialReasonerTest {
         systemIntent.setRecommendationResults("");
         socialController.addSystemIntent(si);
         String strat1 = socialController.getConvStrategyFormatted();
-        System.err.println(strat1);
+        Assert.assertNotEquals(strat1, "");
         socialController.addSystemIntent(si);
         String strat2 = socialController.getConvStrategyFormatted();
-        System.err.println(strat2);
-        Assert.assertEquals(strat1, strat2);
-    }
-
-    @Test public void testSocialReasonerReasonable() {
-
-    }
-
-    @Test public void testSocialReasonerSpeed() {
-        // test that speed across strategies is consistent (i.e., we don't see any flaws)
+        Assert.assertNotEquals(strat2, "");
+        // 2018-04-27: disabled this because it doesn't make sense that the social reasoner always has to output the same strategy given the same context
+        // --fpecune, tshore
+        //Assert.assertEquals(strat1, strat2);
     }
 
 }

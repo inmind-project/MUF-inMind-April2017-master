@@ -26,11 +26,10 @@ import edu.cmu.inmind.multiuser.sara.repo.UserModelRepository;
 import edu.cmu.inmind.multiuser.socialreasoner.control.util.Utils;
 
 /**
- * ** Work in progress **
- *
+ * <p>
  * This component keeps track of all relevant data about the user & interactions we have had with her.
  * This includes both a semantic memory (e.g. user preferences) and a episodic memory (e.g. rapport)
- *
+ * <p>
  * This data is persisted across sessions
  */
 @StateType(state = Constants.STATEFULL)

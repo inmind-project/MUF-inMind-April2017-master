@@ -4,6 +4,6 @@ import edu.cmu.inmind.multiuser.openface.OpenFaceEvent;
 
 public interface EventOutput {
 	
-	public void nextEvent(OpenFaceEvent e);
+	void nextEvent(OpenFaceEvent e);
 	
 }
