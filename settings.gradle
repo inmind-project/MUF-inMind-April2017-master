@@ -1,5 +1,3 @@
 rootProject.name = 'sara'
 include 'saracommons'
-include 'saracsc'
 include 'sarabeat'
-//include 'MultiUserFramework'

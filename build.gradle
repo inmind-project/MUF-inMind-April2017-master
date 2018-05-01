@@ -51,7 +51,6 @@ dependencies {
     compile 'edu.cmu.inmind.framework.multiuser:server:3.0.2-rc1:all'
     // version
     compile project(":saracommons")
-    compile project(":saracsc")
     compile project(":sarabeat")
     compile group: 'aopalliance', name: 'aopalliance', version: '1.0'
     compile group: 'uk.com.robust-it', name: 'cloning', version: '1.9.3'

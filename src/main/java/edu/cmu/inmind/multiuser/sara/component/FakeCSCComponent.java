@@ -9,14 +9,14 @@ import edu.cmu.inmind.multiuser.controller.common.Constants;
 import edu.cmu.inmind.multiuser.controller.log.Log4J;
 import edu.cmu.inmind.multiuser.controller.plugin.PluggableComponent;
 import edu.cmu.inmind.multiuser.controller.plugin.StateType;
-import edu.cmu.lti.rapport.pipline.csc.ConversationalStrategy;
+import edu.cmu.lti.rapport.pipeline.csc.ConversationalStrategy;
+
+import static edu.cmu.lti.rapport.pipeline.csc.ConversationalStrategy.*;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Random;
-
-import static edu.cmu.lti.rapport.pipline.csc.ConversationalStrategy.*;
 
 @StateType( state = Constants.STATELESS)
 @BlackboardSubscription( messages = {SaraCons.MSG_ASR} )
